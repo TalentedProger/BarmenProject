@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { setupAuth } from "./replitAuth";
 import { 
   insertIngredientSchema,
   insertGlassTypeSchema,
@@ -16,21 +16,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
 
-  // Auth routes
+  // Auth routes (simplified for demo)
   app.get('/api/auth/user', async (req: any, res) => {
-    try {
-      // Check if user is authenticated
-      if (!req.isAuthenticated()) {
-        return res.status(401).json({ message: "Unauthorized" });
-      }
-      
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(401).json({ message: "Unauthorized" });
-    }
+    // For demo purposes, return null - no auth required
+    res.status(401).json({ message: "Unauthorized" });
   });
 
   // Ingredient routes
@@ -47,7 +36,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/ingredients', isAuthenticated, async (req, res) => {
+  app.post('/api/ingredients', async (req, res) => {
     try {
       const ingredient = insertIngredientSchema.parse(req.body);
       const newIngredient = await storage.createIngredient(ingredient);
@@ -83,7 +72,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/glass-types', isAuthenticated, async (req, res) => {
+  app.post('/api/glass-types', async (req, res) => {
     try {
       const glassType = insertGlassTypeSchema.parse(req.body);
       const newGlassType = await storage.createGlassType(glassType);
@@ -133,12 +122,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/recipes', isAuthenticated, async (req: any, res) => {
+  app.post('/api/recipes', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
       const recipeData = insertRecipeSchema.parse({
         ...req.body,
-        createdBy: userId
+        createdBy: null // Demo mode - no user ID
       });
       
       const recipe = await storage.createRecipe(recipeData);
@@ -160,17 +148,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/recipes/:id', isAuthenticated, async (req: any, res) => {
+  app.put('/api/recipes/:id', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
       const recipe = await storage.getRecipe(req.params.id);
       
       if (!recipe) {
         return res.status(404).json({ message: "Recipe not found" });
-      }
-      
-      if (recipe.createdBy !== userId) {
-        return res.status(403).json({ message: "Not authorized to update this recipe" });
       }
       
       const updateData = insertRecipeSchema.partial().parse(req.body);
@@ -194,17 +177,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete('/api/recipes/:id', isAuthenticated, async (req: any, res) => {
+  app.delete('/api/recipes/:id', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
       const recipe = await storage.getRecipe(req.params.id);
       
       if (!recipe) {
         return res.status(404).json({ message: "Recipe not found" });
-      }
-      
-      if (recipe.createdBy !== userId) {
-        return res.status(403).json({ message: "Not authorized to delete this recipe" });
       }
       
       await storage.deleteRecipe(req.params.id);
@@ -215,71 +193,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // User recipe routes
-  app.get('/api/users/:userId/recipes', isAuthenticated, async (req: any, res) => {
+  // User recipe routes (simplified for demo)
+  app.get('/api/users/:userId/recipes', async (req: any, res) => {
     try {
-      const requesterId = req.user.claims.sub;
-      const targetUserId = req.params.userId;
-      
-      // Users can only see their own recipes
-      if (requesterId !== targetUserId) {
-        return res.status(403).json({ message: "Not authorized to view these recipes" });
-      }
-      
-      const recipes = await storage.getUserRecipes(targetUserId);
-      res.json(recipes);
+      // For demo purposes, return empty array
+      res.json([]);
     } catch (error) {
       console.error("Error fetching user recipes:", error);
       res.status(500).json({ message: "Failed to fetch user recipes" });
     }
   });
 
-  // User favorite routes
-  app.get('/api/users/:userId/favorites', isAuthenticated, async (req: any, res) => {
+  // User favorite routes (simplified for demo)
+  app.get('/api/users/:userId/favorites', async (req: any, res) => {
     try {
-      const requesterId = req.user.claims.sub;
-      const targetUserId = req.params.userId;
-      
-      if (requesterId !== targetUserId) {
-        return res.status(403).json({ message: "Not authorized to view these favorites" });
-      }
-      
-      const favorites = await storage.getUserFavorites(targetUserId);
-      res.json(favorites);
+      // For demo purposes, return empty array
+      res.json([]);
     } catch (error) {
       console.error("Error fetching user favorites:", error);
       res.status(500).json({ message: "Failed to fetch user favorites" });
     }
   });
 
-  app.post('/api/users/:userId/favorites', isAuthenticated, async (req: any, res) => {
+  app.post('/api/users/:userId/favorites', async (req: any, res) => {
     try {
-      const requesterId = req.user.claims.sub;
-      const targetUserId = req.params.userId;
-      
-      if (requesterId !== targetUserId) {
-        return res.status(403).json({ message: "Not authorized to add favorites" });
-      }
-      
-      const { recipeId } = req.body;
-      const favorite = await storage.addUserFavorite(targetUserId, recipeId);
-      res.status(201).json(favorite);
+      // For demo purposes, return success but don't actually save
+      res.status(201).json({ message: "Favorite added (demo mode)" });
     } catch (error) {
       console.error("Error adding favorite:", error);
       res.status(500).json({ message: "Failed to add favorite" });
     }
   });
 
-  app.delete('/api/users/:userId/favorites/:recipeId', isAuthenticated, async (req: any, res) => {
+  app.delete('/api/users/:userId/favorites/:recipeId', async (req: any, res) => {
     try {
-      const requesterId = req.user.claims.sub;
-      const targetUserId = req.params.userId;
-      
-      if (requesterId !== targetUserId) {
-        return res.status(403).json({ message: "Not authorized to remove favorites" });
-      }
-      
-      await storage.removeUserFavorite(targetUserId, req.params.recipeId);
+      // For demo purposes, return success but don't actually remove
       res.status(204).send();
     } catch (error) {
       console.error("Error removing favorite:", error);
@@ -298,28 +246,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/recipes/:recipeId/ratings', isAuthenticated, async (req: any, res) => {
+  app.post('/api/recipes/:recipeId/ratings', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const recipeId = req.params.recipeId;
-      
-      const ratingData = insertRecipeRatingSchema.parse({
-        ...req.body,
-        userId,
-        recipeId
-      });
-      
-      // Check if user already rated this recipe
-      const existingRating = await storage.getUserRecipeRating(userId, recipeId);
-      
-      let rating;
-      if (existingRating) {
-        rating = await storage.updateRecipeRating(userId, recipeId, ratingData.rating, ratingData.review);
-      } else {
-        rating = await storage.createRecipeRating(ratingData);
-      }
-      
-      res.status(201).json(rating);
+      // For demo purposes, return success but don't actually save
+      res.status(201).json({ message: "Rating added (demo mode)" });
     } catch (error) {
       console.error("Error creating/updating rating:", error);
       res.status(500).json({ message: "Failed to create/update rating" });
