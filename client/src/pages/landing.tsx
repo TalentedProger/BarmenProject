@@ -54,9 +54,10 @@ export default function Landing() {
               <Button 
                 variant="outline"
                 className="neon-border bg-transparent text-neon-turquoise px-8 py-4 text-lg hover:bg-neon-turquoise hover:text-night-blue"
+                onClick={() => window.location.href = "/catalog"}
               >
-                <Dice2 className="mr-2 h-5 w-5" />
-                Случайный рецепт
+                <BookOpen className="mr-2 h-5 w-5" />
+                Каталог рецептов
               </Button>
             </div>
           </div>
