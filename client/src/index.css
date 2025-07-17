@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --primary: hsl(180, 100%, 50%);
+  --primary-foreground: hsl(240, 23%, 11%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --ring: hsl(180, 100%, 50%);
+  --radius: 0.5rem;
+  
+  /* Custom nightclub theme colors */
+  --night-blue: hsl(240, 23%, 11%);
+  --graphite: hsl(0, 0%, 10%);
+  --charcoal: hsl(0, 0%, 18%);
+  --ice-white: hsl(0, 0%, 95%);
+  --cream: hsl(45, 100%, 96%);
+  --neon-turquoise: hsl(180, 100%, 50%);
+  --neon-purple: hsl(270, 62%, 72%);
+  --neon-amber: hsl(45, 100%, 52%);
+  --neon-pink: hsl(330, 100%, 66%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --primary: hsl(180, 100%, 50%);
+  --primary-foreground: hsl(240, 23%, 11%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --ring: hsl(180, 100%, 50%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .bg-night-blue {
+    background-color: var(--night-blue);
+  }
+  
+  .bg-graphite {
+    background-color: var(--graphite);
+  }
+  
+  .bg-charcoal {
+    background-color: var(--charcoal);
+  }
+  
+  .text-ice-white {
+    color: var(--ice-white);
+  }
+  
+  .text-cream {
+    color: var(--cream);
+  }
+  
+  .text-neon-turquoise {
+    color: var(--neon-turquoise);
+  }
+  
+  .text-neon-purple {
+    color: var(--neon-purple);
+  }
+  
+  .text-neon-amber {
+    color: var(--neon-amber);
+  }
+  
+  .text-neon-pink {
+    color: var(--neon-pink);
+  }
+  
+  .bg-neon-turquoise {
+    background-color: var(--neon-turquoise);
+  }
+  
+  .bg-neon-purple {
+    background-color: var(--neon-purple);
+  }
+  
+  .bg-neon-amber {
+    background-color: var(--neon-amber);
+  }
+  
+  .bg-neon-pink {
+    background-color: var(--neon-pink);
+  }
+  
+  .glass-effect {
+    background: rgba(26, 26, 26, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .glow-button {
+    box-shadow: 0 0 20px rgba(0, 255, 240, 0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .glow-button:hover {
+    box-shadow: 0 0 30px rgba(0, 255, 240, 0.6);
+    transform: translateY(-2px);
+  }
+  
+  .neon-border {
+    border: 2px solid rgba(0, 255, 240, 0.5);
+    box-shadow: 0 0 15px rgba(0, 255, 240, 0.3);
+  }
+  
+  .liquid-layer {
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer utilities {
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+}
+
+@keyframes glow {
+  from { 
+    box-shadow: 0 0 20px rgba(0, 255, 240, 0.5); 
+  }
+  to { 
+    box-shadow: 0 0 30px rgba(0, 255, 240, 0.8); 
+  }
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-10px); 
+  }
+}
