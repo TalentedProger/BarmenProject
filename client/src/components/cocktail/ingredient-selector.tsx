@@ -40,9 +40,10 @@ export default function IngredientSelector() {
   };
 
   return (
-    <Card className="glass-effect border-none">
-      <CardContent className="p-6">
-        <h3 className="text-2xl font-semibold mb-4 text-neon-pink">
+    <div className="space-y-6">
+      {/* Available Ingredients Section */}
+      <div className="bg-slate-900/50 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-6">
+        <h3 className="text-lg font-semibold mb-4 text-neon-pink">
           Ингредиенты
         </h3>
         
@@ -66,8 +67,8 @@ export default function IngredientSelector() {
         </div>
 
         {/* Available Ingredients */}
-        <div className="mb-6">
-          <h4 className="text-lg font-semibold mb-3 text-cream">Доступные ингредиенты</h4>
+        <div className="mb-4">
+          <h4 className="text-md font-semibold mb-3 text-cream">Доступные</h4>
           <ScrollArea className="h-40">
             {isLoading ? (
               <div className="space-y-2">
@@ -115,57 +116,57 @@ export default function IngredientSelector() {
             )}
           </ScrollArea>
         </div>
+      </div>
 
-        {/* Added Ingredients */}
-        <div>
-          <h4 className="text-lg font-semibold mb-3 text-cream">Добавленные ингредиенты</h4>
-          <ScrollArea className="h-40">
-            {ingredients.length === 0 ? (
-              <p className="text-center text-gray-400 py-4">Пока нет добавленных ингредиентов</p>
-            ) : (
-              <div className="space-y-2">
-                {ingredients.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 bg-charcoal rounded-lg"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div 
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: item.ingredient.color }}
-                      ></div>
-                      <div>
-                        <p className="font-semibold text-cream">{item.ingredient.name}</p>
-                        <Badge variant="outline" className={getCategoryColor(item.ingredient.category)}>
-                          {item.ingredient.category}
-                        </Badge>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        type="number"
-                        value={item.amount}
-                        onChange={(e) => handleUpdateAmount(index, e.target.value)}
-                        className="w-20 bg-night-blue border-gray-600 focus:border-neon-turquoise"
-                        min="0"
-                        step="0.1"
-                      />
-                      <span className="text-sm text-cream">{item.unit}</span>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() => removeIngredient(index)}
-                      >
-                        <Minus className="h-4 w-4" />
-                      </Button>
+      {/* Added Ingredients Section */}
+      <div className="bg-slate-900/50 backdrop-blur-sm border border-green-500/30 rounded-lg p-6">
+        <h3 className="text-lg font-semibold mb-4 text-green-400">Добавленные ингредиенты</h3>
+        <ScrollArea className="h-40">
+          {ingredients.length === 0 ? (
+            <p className="text-center text-gray-400 py-4">Пока нет добавленных ингредиентов</p>
+          ) : (
+            <div className="space-y-2">
+              {ingredients.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 bg-charcoal rounded-lg"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div 
+                      className="w-4 h-4 rounded-full"
+                      style={{ backgroundColor: item.ingredient.color }}
+                    ></div>
+                    <div>
+                      <p className="font-semibold text-cream">{item.ingredient.name}</p>
+                      <Badge variant="outline" className={getCategoryColor(item.ingredient.category)}>
+                        {item.ingredient.category}
+                      </Badge>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </ScrollArea>
-        </div>
-      </CardContent>
-    </Card>
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      type="number"
+                      value={item.amount}
+                      onChange={(e) => handleUpdateAmount(index, e.target.value)}
+                      className="w-20 bg-night-blue border-gray-600 focus:border-neon-turquoise"
+                      min="0"
+                      step="0.1"
+                    />
+                    <span className="text-sm text-cream">{item.unit}</span>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => removeIngredient(index)}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </ScrollArea>
+      </div>
+    </div>
   );
 }

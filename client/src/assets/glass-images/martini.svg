@@ -1,0 +1,27 @@
+<svg width="80" height="120" viewBox="0 0 80 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g opacity="0.8">
+    <!-- Glass bowl -->
+    <path d="M10 30 L70 30 L45 60 L35 60 Z" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+    <!-- Stem -->
+    <rect x="38" y="60" width="4" height="35" fill="url(#stemGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <!-- Base -->
+    <ellipse cx="40" cy="100" rx="15" ry="3" fill="url(#baseGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <!-- Glass shine -->
+    <path d="M15 35 L25 45 L20 50 L12 42 Z" fill="rgba(255,255,255,0.4)"/>
+  </g>
+  
+  <defs>
+    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="stemGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgba(255,255,255,0.08);stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="baseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:rgba(255,255,255,0.12);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgba(255,255,255,0.06);stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

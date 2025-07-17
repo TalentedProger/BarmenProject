@@ -6,10 +6,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
-import GlassSelector from "@/components/cocktail/glass-selector";
+import { CompactGlassSelector } from "@/components/cocktail/compact-glass-selector";
 import IngredientSelector from "@/components/cocktail/ingredient-selector";
 import DrinkVisualizer from "@/components/cocktail/drink-visualizer";
-import TasteBalance from "@/components/cocktail/taste-balance";
+import { CocktailMetrics } from "@/components/cocktail/cocktail-metrics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,7 +18,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Save, RotateCcw, Share2, AlertCircle } from "lucide-react";
 import { useCocktailStore } from "@/store/cocktail-store";
-import { generateCocktailName, validateCocktailIngredients } from "@/lib/cocktail-utils";
+import { generateCocktailName, validateCocktailIngredients, calculateCocktailStats } from "@/lib/cocktail-utils";
 import { useState } from "react";
 
 export default function Constructor() {
@@ -36,6 +36,8 @@ export default function Constructor() {
     clearIngredients,
     recalculateStats
   } = useCocktailStore();
+  
+  const currentStats = calculateCocktailStats(ingredients);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -114,10 +116,10 @@ export default function Constructor() {
       name: recipeName,
       description: recipeDescription,
       glassTypeId: selectedGlass?.id,
-      totalVolume: cocktailStats.totalVolume,
-      totalAbv: cocktailStats.totalAbv,
-      totalCost: cocktailStats.totalCost,
-      tasteBalance: cocktailStats.tasteBalance,
+      totalVolume: currentStats.totalVolume,
+      totalAbv: currentStats.totalAbv,
+      totalCost: currentStats.totalCost,
+      tasteBalance: currentStats.tasteBalance,
       category: "custom",
       difficulty: "easy",
       isPublic: true,
@@ -145,7 +147,7 @@ export default function Constructor() {
   const handleShare = async () => {
     const shareData = {
       title: recipeName || "Мой коктейль",
-      text: `Попробуйте этот коктейль: ${cocktailStats.totalVolume}ml, ${cocktailStats.totalAbv}% ABV`,
+      text: `Попробуйте этот коктейль: ${currentStats.totalVolume}ml, ${currentStats.totalAbv}% ABV`,
       url: window.location.href
     };
 
@@ -188,15 +190,25 @@ export default function Constructor() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
-            <GlassSelector />
-            <DrinkVisualizer />
-            <IngredientSelector />
-          </div>
+          <div className="grid lg:grid-cols-4 gap-8">
+            {/* Left Sidebar - Metrics and Recommendations */}
+            <div className="lg:col-span-1">
+              <CocktailMetrics />
+            </div>
 
-          {/* Taste Balance */}
-          <div className="mt-8">
-            <TasteBalance />
+            {/* Center Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Compact Glass Selector */}
+              <CompactGlassSelector />
+              
+              {/* Drink Visualizer */}
+              <DrinkVisualizer />
+            </div>
+
+            {/* Right Sidebar - Ingredients */}
+            <div className="lg:col-span-1">
+              <IngredientSelector />
+            </div>
           </div>
 
           {/* Validation Warnings */}
