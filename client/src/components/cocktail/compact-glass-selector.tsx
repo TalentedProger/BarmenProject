@@ -74,7 +74,7 @@ export function CompactGlassSelector() {
               <img
                 src={currentGlass.image}
                 alt={currentGlass.name}
-                className="max-w-full max-h-full filter drop-shadow-lg"
+                className="w-full h-full object-contain filter drop-shadow-lg"
               />
             </div>
           </div>
