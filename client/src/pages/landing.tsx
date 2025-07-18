@@ -199,23 +199,46 @@ export default function Landing() {
           <div className="absolute bottom-20 right-20 w-80 h-80 bg-cyan-400/10 rounded-full blur-3xl animate-pulse-slow"></div>
         </div>
         
-        <div className="container mx-auto px-4 text-center max-w-xl mx-auto relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#F1F1F1] mb-2" style={{ textShadow: '0 0 5px #00f7ef33' }}>
-            Будь в курсе новых рецептов и фишек
-          </h2>
-          <p className="text-sm md:text-base text-zinc-400 mt-2 mb-8">
-            Мы не спамим. Только крафтовые новости.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <input
-              type="email"
-              placeholder="Введи свой email"
-              className="rounded-full px-6 py-3 text-sm bg-[#1A1A1E] text-white border border-zinc-700 focus:border-cyan-500 focus:outline-none w-full sm:w-auto min-w-[280px]"
-            />
-            <Button className="rounded-full px-6 py-3 ml-0 sm:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30">
-              Подписаться
-            </Button>
+        <div className="container mx-auto px-6 max-w-6xl relative z-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+            {/* Left side - Newsletter content */}
+            <div className="flex-1 text-center md:text-left">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#F1F1F1] mb-2" style={{ textShadow: '0 0 5px #00f7ef33' }}>
+                Будь в курсе новых рецептов и фишек
+              </h2>
+              <p className="text-sm md:text-base text-zinc-400 mt-2 mb-8">
+                Мы не спамим. Только крафтовые новости.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <input
+                  type="email"
+                  placeholder="Введи свой email"
+                  className="rounded-full px-6 py-3 text-sm bg-[#1A1A1E] text-white border border-zinc-700 focus:border-cyan-500 focus:outline-none w-full sm:w-auto min-w-[280px]"
+                />
+                <Button className="rounded-full px-6 py-3 ml-0 sm:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30">
+                  Подписаться
+                </Button>
+              </div>
+            </div>
+            
+            {/* Right side - Bar photo */}
+            <div className="flex-1 flex justify-center md:justify-end">
+              <div className="relative">
+                <img 
+                  src="/attached_assets/Flux_Dev_a_lush_3d_render_of_A_dark_moody_digital_bar_counter__2_1752878512027.jpg"
+                  alt="Футуристичный бар с неоновой подсветкой"
+                  className="w-96 h-64 object-cover rounded-2xl hover:scale-105 transition-all duration-300 relative z-10 shadow-2xl"
+                  style={{
+                    boxShadow: '0 25px 50px -12px rgba(0, 255, 255, 0.25)'
+                  }}
+                  loading="lazy"
+                />
+                {/* Glow effects behind the image */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-cyan-400/20 to-purple-500/20 rounded-full blur-3xl -z-10"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-purple-400/10 to-cyan-400/10 rounded-full blur-[100px] -z-20"></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
