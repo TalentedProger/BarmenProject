@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -34,12 +34,8 @@ export default function Catalog() {
     }],
   });
 
-  // Fetch user favorites
-  const { data: favorites = [] } = useQuery({
-    queryKey: ["/api/users", user?.id, "favorites"],
-    enabled: isAuthenticated && !!user?.id,
-    select: (data: any[]) => data.map(fav => fav.recipeId),
-  });
+  // Demo mode - no user favorites (authentication removed)
+  const favorites: string[] = [];
 
   useEffect(() => {
     if (favorites) {
@@ -47,13 +43,12 @@ export default function Catalog() {
     }
   }, [favorites]);
 
+  // Demo mode - simulate favorite toggle without backend
   const favoriteMutation = useMutation({
     mutationFn: async ({ recipeId, isFavorite }: { recipeId: string; isFavorite: boolean }) => {
-      if (isFavorite) {
-        await apiRequest("DELETE", `/api/users/${user?.id}/favorites/${recipeId}`);
-      } else {
-        await apiRequest("POST", `/api/users/${user?.id}/favorites`, { recipeId });
-      }
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 300));
+      return { recipeId, isFavorite };
     },
     onSuccess: (_, { recipeId, isFavorite }) => {
       const newFavorites = new Set(userFavorites);
@@ -64,25 +59,12 @@ export default function Catalog() {
       }
       setUserFavorites(newFavorites);
       
-      queryClient.invalidateQueries({ queryKey: ["/api/users", user?.id, "favorites"] });
-      
       toast({
         title: isFavorite ? "Удалено из избранного" : "Добавлено в избранное",
-        description: isFavorite ? "Рецепт удален из избранного" : "Рецепт добавлен в избранное",
+        description: isFavorite ? "Рецепт удален из избранного (демо режим)" : "Рецепт добавлен в избранное (демо режим)",
       });
     },
     onError: (error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Ошибка авторизации",
-          description: "Выполняется перенаправление на страницу входа...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
       toast({
         title: "Ошибка",
         description: "Не удалось обновить избранное. Попробуйте еще раз.",
