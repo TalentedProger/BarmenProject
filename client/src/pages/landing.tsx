@@ -261,11 +261,12 @@ export default function Landing() {
                 <img 
                   src="/attached_assets/ChatGPT Image 18 июл. 2025 г., 23_50_01-Photoroom_1752872369395.png"
                   alt="Cocktailo mobile app with pineapple daiquiri"
-                  className="w-80 h-auto object-contain hover:scale-105 transition-all duration-300"
+                  className="w-96 h-auto object-contain hover:scale-105 transition-all duration-300 relative z-10"
                   loading="lazy"
                 />
-                {/* Subtle glow effect behind the image */}
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-purple-500/10 rounded-xl blur-xl -z-10"></div>
+                {/* Soft glow effects behind the image */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-cyan-400/15 to-purple-500/15 rounded-full blur-3xl -z-10"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-purple-400/8 to-cyan-400/8 rounded-full blur-[100px] -z-20"></div>
               </div>
             </div>
           </div>
