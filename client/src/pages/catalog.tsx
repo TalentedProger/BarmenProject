@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import Header from "@/components/layout/header";
@@ -16,7 +14,6 @@ import type { Recipe } from "@shared/schema";
 
 export default function Catalog() {
   const { toast } = useToast();
-  const { isAuthenticated, isLoading, user } = useAuth();
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -25,20 +22,6 @@ export default function Catalog() {
   const [userFavorites, setUserFavorites] = useState<Set<string>>(new Set());
 
   const ITEMS_PER_PAGE = 12;
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      toast({
-        title: "Необходима авторизация",
-        description: "Выполняется перенаправление на страницу входа...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-      return;
-    }
-  }, [isAuthenticated, isLoading, toast]);
 
   // Fetch recipes
   const { data: recipes = [], isLoading: recipesLoading, refetch } = useQuery<Recipe[]>({
@@ -49,7 +32,6 @@ export default function Catalog() {
       limit: ITEMS_PER_PAGE,
       offset: currentPage * ITEMS_PER_PAGE
     }],
-    enabled: isAuthenticated,
   });
 
   // Fetch user favorites

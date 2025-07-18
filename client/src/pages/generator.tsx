@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import Header from "@/components/layout/header";
@@ -76,25 +74,10 @@ const GENERATION_MODES = [
 
 export default function Generator() {
   const { toast } = useToast();
-  const { isAuthenticated, isLoading, user } = useAuth();
   const queryClient = useQueryClient();
   const [selectedMode, setSelectedMode] = useState('classic');
   const [generatedRecipe, setGeneratedRecipe] = useState<GeneratedRecipe | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      toast({
-        title: "Необходима авторизация",
-        description: "Выполняется перенаправление на страницу входа...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-      return;
-    }
-  }, [isAuthenticated, isLoading, toast]);
 
   const generateRecipeMutation = useMutation({
     mutationFn: async (mode: string) => {
@@ -111,17 +94,6 @@ export default function Generator() {
     },
     onError: (error) => {
       setIsGenerating(false);
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Ошибка авторизации",
-          description: "Выполняется перенаправление на страницу входа...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
       toast({
         title: "Ошибка генерации",
         description: "Не удалось создать рецепт. Попробуйте еще раз.",

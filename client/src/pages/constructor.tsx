@@ -1,7 +1,4 @@
-import { useEffect } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import Header from "@/components/layout/header";
@@ -23,7 +20,6 @@ import { useState } from "react";
 
 export default function Constructor() {
   const { toast } = useToast();
-  const { isAuthenticated, isLoading, user } = useAuth();
   const queryClient = useQueryClient();
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [recipeName, setRecipeName] = useState("");
@@ -38,20 +34,6 @@ export default function Constructor() {
   } = useCocktailStore();
   
   const currentStats = calculateCocktailStats(ingredients);
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      toast({
-        title: "Необходима авторизация",
-        description: "Выполняется перенаправление на страницу входа...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-      return;
-    }
-  }, [isAuthenticated, isLoading, toast]);
 
   const saveRecipeMutation = useMutation({
     mutationFn: async (recipeData: any) => {

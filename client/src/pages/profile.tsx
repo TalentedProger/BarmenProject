@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import Header from "@/components/layout/header";
@@ -25,35 +23,21 @@ import type { Recipe } from "@shared/schema";
 
 export default function Profile() {
   const { toast } = useToast();
-  const { isAuthenticated, isLoading, user } = useAuth();
   const queryClient = useQueryClient();
   const [userFavorites, setUserFavorites] = useState<Set<string>>(new Set());
+  
+  // Demo user data for public access
+  const demoUser = { id: 'demo', name: 'Demo User', email: 'demo@example.com' };
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      toast({
-        title: "Необходима авторизация",
-        description: "Выполняется перенаправление на страницу входа...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-      return;
-    }
-  }, [isAuthenticated, isLoading, toast]);
-
-  // Fetch user recipes
+  // Fetch user recipes (demo data)
   const { data: userRecipes = [], isLoading: recipesLoading } = useQuery<Recipe[]>({
-    queryKey: ["/api/users", user?.id, "recipes"],
-    enabled: isAuthenticated && !!user?.id,
+    queryKey: ["/api/recipes"],
   });
 
-  // Fetch user favorites
+  // Fetch user favorites (demo data)
   const { data: favoriteRecipes = [], isLoading: favoritesLoading } = useQuery({
-    queryKey: ["/api/users", user?.id, "favorites"],
-    enabled: isAuthenticated && !!user?.id,
-    select: (data: any[]) => data.map(fav => fav.recipe),
+    queryKey: ["/api/recipes"],
+    select: (data: any[]) => data.slice(0, 3), // Show first 3 as demo favorites
   });
 
   useEffect(() => {
@@ -74,20 +58,9 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["/api/users", user?.id, "recipes"] });
     },
     onError: (error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Ошибка авторизации",
-          description: "Выполняется перенаправление на страницу входа...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
       toast({
-        title: "Ошибка удаления",
-        description: "Не удалось удалить рецепт. Попробуйте еще раз.",
+        title: "Демо режим",
+        description: "В демо режиме нельзя удалять рецепты",
         variant: "destructive",
       });
     },

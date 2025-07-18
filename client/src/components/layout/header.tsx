@@ -1,15 +1,9 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Martini, Menu, User } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { Martini, Menu } from "lucide-react";
 
 export default function Header() {
-  const { user } = useAuth();
-
-  const handleLogout = () => {
-    window.location.href = "/api/logout";
-  };
 
   const NavItems = () => (
     <>
@@ -52,22 +46,6 @@ export default function Header() {
           </div>
           
           <div className="flex items-center space-x-4">
-            {user && (
-              <div className="hidden md:flex items-center space-x-2">
-                <span className="text-cream text-sm">
-                  {user.firstName || user.email}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="text-neon-turquoise hover:text-neon-pink"
-                >
-                  Выход
-                </Button>
-              </div>
-            )}
-            
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="md:hidden text-neon-turquoise">
@@ -77,20 +55,6 @@ export default function Header() {
               <SheetContent side="right" className="glass-effect border-none">
                 <div className="flex flex-col space-y-4 mt-8">
                   <NavItems />
-                  {user && (
-                    <div className="border-t border-gray-700 pt-4">
-                      <p className="text-cream text-sm mb-2">
-                        {user.firstName || user.email}
-                      </p>
-                      <Button
-                        variant="ghost"
-                        onClick={handleLogout}
-                        className="text-neon-turquoise hover:text-neon-pink w-full justify-start"
-                      >
-                        Выход
-                      </Button>
-                    </div>
-                  )}
                 </div>
               </SheetContent>
             </Sheet>
