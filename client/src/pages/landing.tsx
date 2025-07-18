@@ -222,15 +222,15 @@ export default function Landing() {
               </div>
             </div>
             
-            {/* Right side - Bar photo in glass shape */}
+            {/* Right side - Bar photo in wine glass shape */}
             <div className="flex-1 flex justify-center md:justify-end">
               <div className="relative hover:scale-105 transition-all duration-300">
-                {/* Glass shape container with clip-path */}
+                {/* Wine glass shape container with clip-path */}
                 <div 
                   className="w-64 h-96 relative overflow-hidden"
                   style={{
-                    clipPath: 'polygon(35% 0%, 65% 0%, 70% 25%, 75% 70%, 70% 85%, 65% 100%, 35% 100%, 30% 85%, 25% 70%, 30% 25%)',
-                    filter: 'drop-shadow(0 15px 30px rgba(0, 255, 255, 0.15))'
+                    clipPath: 'polygon(42% 0%, 58% 0%, 60% 5%, 85% 45%, 90% 65%, 85% 75%, 55% 85%, 54% 90%, 56% 100%, 44% 100%, 46% 90%, 45% 85%, 15% 75%, 10% 65%, 15% 45%, 40% 5%)',
+                    filter: 'drop-shadow(0 20px 40px rgba(0, 255, 255, 0.2))'
                   }}
                 >
                   <img 
@@ -239,20 +239,34 @@ export default function Landing() {
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
+                  
+                  {/* Glass highlight for 3D effect */}
+                  <div 
+                    className="absolute inset-0 opacity-30"
+                    style={{
+                      background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.2) 20%, transparent 40%, transparent 60%, rgba(255,255,255,0.1) 80%, transparent 100%)',
+                      clipPath: 'polygon(42% 0%, 58% 0%, 60% 5%, 85% 45%, 90% 65%, 85% 75%, 55% 85%, 54% 90%, 56% 100%, 44% 100%, 46% 90%, 45% 85%, 15% 75%, 10% 65%, 15% 45%, 40% 5%)'
+                    }}
+                  ></div>
                 </div>
                 
-                {/* Glass rim effect */}
+                {/* Glass rim and 3D edge effects */}
                 <div 
-                  className="absolute top-0 left-0 w-64 h-96 border-2 border-cyan-300/30"
+                  className="absolute top-0 left-0 w-64 h-96 border border-cyan-200/40"
                   style={{
-                    clipPath: 'polygon(35% 0%, 65% 0%, 70% 25%, 75% 70%, 70% 85%, 65% 100%, 35% 100%, 30% 85%, 25% 70%, 30% 25%)',
-                    boxShadow: 'inset 0 0 20px rgba(0, 255, 255, 0.2)'
+                    clipPath: 'polygon(42% 0%, 58% 0%, 60% 5%, 85% 45%, 90% 65%, 85% 75%, 55% 85%, 54% 90%, 56% 100%, 44% 100%, 46% 90%, 45% 85%, 15% 75%, 10% 65%, 15% 45%, 40% 5%)',
+                    boxShadow: 'inset 0 0 30px rgba(0, 255, 255, 0.15), inset -10px 0 20px rgba(255, 255, 255, 0.1)'
                   }}
                 ></div>
                 
+                {/* Stem shadow for depth */}
+                <div 
+                  className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-2 h-16 bg-gradient-to-b from-transparent to-black/20 blur-sm"
+                ></div>
+                
                 {/* Glow effects behind the glass */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-80 bg-gradient-to-r from-cyan-400/12 to-purple-500/12 rounded-full blur-3xl -z-10"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-96 bg-gradient-to-br from-purple-400/6 to-cyan-400/6 rounded-full blur-[100px] -z-20"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-cyan-400/15 to-purple-500/15 rounded-full blur-3xl -z-10"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-purple-400/8 to-cyan-400/8 rounded-full blur-[100px] -z-20"></div>
               </div>
             </div>
           </div>
