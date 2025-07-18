@@ -273,16 +273,186 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-graphite border-t border-border py-8">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <Martini className="text-electric text-2xl" />
-            <h3 className="text-xl font-bold text-platinum">Cocktailo Maker</h3>
+      {/* Footer with liquid wave effect */}
+      <footer className="relative bg-gradient-to-b from-slate-950 to-black overflow-hidden">
+        {/* Animated liquid wave at top */}
+        <div className="absolute top-0 left-0 w-full h-20 overflow-hidden">
+          <svg 
+            className="absolute w-full h-full animate-pulse" 
+            viewBox="0 0 1200 120" 
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#00ffff" stopOpacity="0.8">
+                  <animate attributeName="stop-color" values="#00ffff;#8f00ff;#ff00ff;#00ffff" dur="4s" repeatCount="indefinite" />
+                </stop>
+                <stop offset="50%" stopColor="#8f00ff" stopOpacity="0.9">
+                  <animate attributeName="stop-color" values="#8f00ff;#ff00ff;#00ffff;#8f00ff" dur="4s" repeatCount="indefinite" />
+                </stop>
+                <stop offset="100%" stopColor="#ff00ff" stopOpacity="0.8">
+                  <animate attributeName="stop-color" values="#ff00ff;#00ffff;#8f00ff;#ff00ff" dur="4s" repeatCount="indefinite" />
+                </stop>
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feMerge> 
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <path 
+              d="M0,40 C150,20 350,60 600,40 C850,20 1050,60 1200,40 L1200,0 L0,0 Z" 
+              fill="url(#waveGradient)" 
+              filter="url(#glow)"
+            >
+              <animateTransform
+                attributeName="transform"
+                type="translate"
+                values="0,0;50,0;0,0"
+                dur="6s"
+                repeatCount="indefinite"
+              />
+            </path>
+          </svg>
+        </div>
+
+        {/* Glass texture overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-50"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03)_0%,transparent_50%)]"></div>
+
+        <div className="relative z-10 pt-24 pb-12">
+          <div className="container mx-auto px-6 max-w-7xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              
+              {/* Block 1 - Logo and Quote */}
+              <div className="space-y-6">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-r from-cyan-400 to-purple-500 shadow-lg">
+                    <Martini className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white" style={{ textShadow: '0 0 8px #00ffff88' }}>
+                    Cocktailo
+                  </h3>
+                </div>
+                
+                <blockquote className="text-zinc-300 italic text-lg leading-relaxed">
+                  «Коктейли — это искусство, а ты — художник.»
+                </blockquote>
+                
+                <div className="flex items-center space-x-2 text-sm text-zinc-400">
+                  <svg className="w-4 h-4 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                  </svg>
+                  <span>Cocktailo создан с любовью барменами для барменов</span>
+                </div>
+              </div>
+
+              {/* Block 2 - Quick Links */}
+              <div className="space-y-6">
+                <h4 className="text-lg font-semibold text-white mb-4">Быстрые ссылки</h4>
+                <nav className="space-y-3">
+                  {[
+                    { label: 'О проекте', href: '/about' },
+                    { label: 'Курсы', href: '/courses' },
+                    { label: 'Мобильное приложение', href: '/mobile' },
+                    { label: 'Контакты', href: '/contact' }
+                  ].map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      className="block text-zinc-400 hover:text-cyan-300 transition-all duration-300 hover:translate-x-2 hover:shadow-lg"
+                      style={{ 
+                        textShadow: 'none',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.textShadow = '0 0 8px #00ffff88';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.textShadow = 'none';
+                      }}
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+
+              {/* Block 3 - Newsletter Subscription */}
+              <div className="space-y-6">
+                <h4 className="text-lg font-semibold text-white mb-4">Будь в курсе новых рецептов и фишек</h4>
+                
+                <form className="space-y-4">
+                  <input
+                    type="email"
+                    placeholder="Введи свой email"
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-zinc-500 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 focus:outline-none transition-all duration-300"
+                    style={{
+                      backdropFilter: 'blur(10px)',
+                    }}
+                  />
+                  
+                  <button
+                    type="submit"
+                    className="w-full px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-semibold rounded-lg hover:from-cyan-400 hover:to-purple-500 transition-all duration-300 transform hover:scale-105"
+                    style={{
+                      boxShadow: '0 4px 15px rgba(0, 255, 255, 0.3)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.boxShadow = '0 6px 20px rgba(0, 255, 255, 0.5)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.boxShadow = '0 4px 15px rgba(0, 255, 255, 0.3)';
+                    }}
+                  >
+                    Подписаться
+                  </button>
+                </form>
+                
+                <p className="text-xs text-zinc-500">
+                  Мы не спамим. Только крафтовые новости.
+                </p>
+              </div>
+            </div>
+
+            {/* Bottom section */}
+            <div className="mt-12 pt-8 border-t border-slate-800">
+              <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <p className="text-zinc-500 text-sm">
+                  &copy; 2024 Cocktailo. Все права защищены.
+                </p>
+                
+                {/* Social icons */}
+                <div className="flex space-x-6">
+                  {[
+                    { icon: '📱', label: 'Telegram' },
+                    { icon: '📘', label: 'Facebook' },
+                    { icon: '📸', label: 'Instagram' }
+                  ].map((social, index) => (
+                    <a
+                      key={index}
+                      href="#"
+                      className="w-10 h-10 flex items-center justify-center rounded-full border border-slate-700 text-zinc-400 hover:text-cyan-300 hover:border-cyan-400 transition-all duration-300 hover:scale-110"
+                      style={{
+                        backdropFilter: 'blur(10px)',
+                        backgroundColor: 'rgba(15, 23, 42, 0.5)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.4)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.boxShadow = 'none';
+                      }}
+                    >
+                      <span className="text-lg">{social.icon}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-zinc text-sm">
-            &copy; 2024 Cocktailo Maker. Все права защищены.
-          </p>
         </div>
       </footer>
     </div>
