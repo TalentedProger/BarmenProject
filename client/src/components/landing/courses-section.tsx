@@ -1,0 +1,179 @@
+import { BookOpen, Video, Flask, Award } from "lucide-react";
+
+const CoursesSection = () => {
+  const courses = [
+    {
+      title: "Основы миксологии",
+      level: "Новичок",
+      image: "/api/placeholder/240/160",
+      levelColor: "text-emerald-400",
+      bgGradient: "from-emerald-500/20 to-cyan-500/20"
+    },
+    {
+      title: "Креативный декор", 
+      level: "Средний",
+      image: "/api/placeholder/240/160",
+      levelColor: "text-amber-400",
+      bgGradient: "from-amber-500/20 to-orange-500/20"
+    },
+    {
+      title: "Продвинутые техники",
+      level: "Профи", 
+      image: "/api/placeholder/240/160",
+      levelColor: "text-purple-400",
+      bgGradient: "from-purple-500/20 to-pink-500/20"
+    }
+  ];
+
+  const features = [
+    {
+      icon: BookOpen,
+      text: "10+ курсов",
+      accent: "text-pink-400",
+      description: "от базовых до авторских техник"
+    },
+    {
+      icon: Video,
+      text: "Видео и инфографика", 
+      accent: "text-cyan-400",
+      description: "учись в любое время"
+    },
+    {
+      icon: Flask,
+      text: "Практика и рецепты",
+      accent: "text-amber-300", 
+      description: "собирай напитки в конструкторе"
+    },
+    {
+      icon: Award,
+      text: "Сертификат",
+      accent: "text-violet-300",
+      description: "подтверждай свои навыки"
+    }
+  ];
+
+  return (
+    <section className="py-16 bg-[#0C0C1C] relative overflow-hidden">
+      {/* Background glow effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+      </div>
+      
+      <div className="container mx-auto px-4 relative z-10 max-w-6xl">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Content Block */}
+          <div className="space-y-8">
+            <div>
+              <h2 className="text-4xl font-bold text-[#00FFF0] mb-4 leading-tight">
+                Стань мастером коктейлей
+              </h2>
+              <p className="text-lg text-gray-300 max-w-lg leading-relaxed">
+                Интерактивные мини-курсы по миксологии, техникам и креативу для барменов и ценителей напитков.
+              </p>
+            </div>
+
+            {/* Features List */}
+            <ul className="space-y-4">
+              {features.map((feature, index) => (
+                <li key={index} className="flex items-start space-x-3 text-base text-gray-300">
+                  <feature.icon className={`w-5 h-5 mt-1 ${feature.accent}`} />
+                  <span>
+                    <span className={`${feature.accent} font-medium`}>{feature.text}</span>
+                    {" — "}
+                    <span>{feature.description}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            {/* CTA Button */}
+            <div className="pt-4">
+              <button className="inline-block px-8 py-4 rounded-xl text-white bg-gradient-to-r from-[#FF4D9D] to-[#B388EB] hover:from-[#FF4D9D]/90 hover:to-[#B388EB]/90 shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 transition-all duration-300 font-medium text-lg">
+                Изучить курсы
+              </button>
+            </div>
+          </div>
+
+          {/* Right Visual Block */}
+          <div className="relative flex flex-col items-center space-y-8">
+            {/* Main Illustration Area */}
+            <div className="relative">
+              {/* Bartender Illustration Placeholder */}
+              <div className="relative w-80 h-96 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl border border-slate-700/50 flex items-center justify-center">
+                <div className="text-center space-y-4">
+                  {/* Cocktail Glass SVG */}
+                  <div className="mx-auto w-24 h-24 relative">
+                    <svg viewBox="0 0 100 100" className="w-full h-full">
+                      {/* Glass */}
+                      <path d="M20 30 L80 30 L60 70 L40 70 Z" fill="none" stroke="#00FFF0" strokeWidth="2" opacity="0.8"/>
+                      {/* Stem */}
+                      <line x1="50" y1="70" x2="50" y2="85" stroke="#00FFF0" strokeWidth="2" opacity="0.8"/>
+                      {/* Base */}
+                      <line x1="40" y1="85" x2="60" y2="85" stroke="#00FFF0" strokeWidth="3" opacity="0.8"/>
+                      {/* Liquid */}
+                      <path d="M25 35 L75 35 L60 65 L40 65 Z" fill="url(#cocktailGradient)" opacity="0.6"/>
+                      {/* Animated drop */}
+                      <circle cx="50" cy="20" r="2" fill="#00FFF0" opacity="0.8">
+                        <animate attributeName="cy" values="20;35;20" dur="2s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite"/>
+                      </circle>
+                    </svg>
+                    {/* Gradient definition */}
+                    <svg className="absolute inset-0 pointer-events-none">
+                      <defs>
+                        <linearGradient id="cocktailGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" style={{stopColor: '#FF4D9D', stopOpacity: 0.8}} />
+                          <stop offset="100%" style={{stopColor: '#00FFF0', stopOpacity: 0.4}} />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+                  
+                  {/* Glow effect around glass */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/20 to-pink-400/20 rounded-2xl blur-xl"></div>
+                  
+                  <div className="text-gray-400 text-sm">
+                    Интерактивное обучение
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Course Cards Section */}
+        <div className="mt-16">
+          <h3 className="text-2xl font-bold text-white text-center mb-8">Популярные курсы</h3>
+          
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {courses.map((course, index) => (
+              <div key={index} className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-xl p-6 border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-slate-900/20">
+                {/* Course Image Placeholder */}
+                <div className={`w-full h-32 bg-gradient-to-br ${course.bgGradient} rounded-lg mb-4 flex items-center justify-center`}>
+                  <Flask className="w-8 h-8 text-white/70" />
+                </div>
+                
+                {/* Course Content */}
+                <div className="space-y-3">
+                  <h4 className="text-white text-xl font-semibold group-hover:text-cyan-300 transition-colors">
+                    {course.title}
+                  </h4>
+                  <span className={`text-sm font-medium ${course.levelColor}`}>
+                    {course.level}
+                  </span>
+                  
+                  <button className="w-full mt-4 px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white rounded-lg transition-all duration-300 font-medium hover:shadow-lg hover:shadow-pink-500/25">
+                    Записаться
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default CoursesSection;
