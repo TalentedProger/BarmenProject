@@ -134,20 +134,7 @@ export function CocktailMetrics() {
           </div>
         )}
 
-        {/* Recommendations */}
-        <div className="mt-6">
-          <h4 className="text-md font-semibold text-foreground mb-3">Рекомендации</h4>
-          <div className="space-y-3">
-            {getTasteRecommendations().map((rec, index) => (
-              <div key={index} className={`flex items-start space-x-3 ${rec.color}`}>
-                <div className="flex-shrink-0 mt-0.5">
-                  {rec.icon}
-                </div>
-                <span className="text-sm">{rec.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+
       </div>
     </div>
   );

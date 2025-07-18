@@ -154,15 +154,15 @@ export default function Constructor() {
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8 min-h-[600px]">
-            {/* Left Sidebar - Added Ingredients */}
+            {/* Left Sidebar - Ingredient Recommendations Only */}
             <div className="lg:col-span-1 flex flex-col">
               <div className="bg-card border border-border rounded-lg p-6 flex-1">
-                <IngredientSelector />
+                <IngredientRecommendations />
               </div>
             </div>
 
             {/* Center Content */}
-            <div className="lg:col-span-1 flex flex-col space-y-8">
+            <div className="lg:col-span-1 flex flex-col space-y-6">
               {/* Glass Selector or Drink Visualizer */}
               <div className="bg-card border border-border rounded-lg p-8 flex-1">
                 {!selectedGlass ? (
@@ -172,16 +172,28 @@ export default function Constructor() {
                 )}
               </div>
               
-              {/* Ingredient Recommendations - moved below center */}
-              <div className="bg-card border border-border rounded-lg p-6">
-                <IngredientRecommendations />
+              {/* Small Recommendations Container */}
+              <div className="bg-card border border-border rounded-lg p-4 h-32">
+                <h4 className="text-sm font-semibold text-foreground mb-2">Быстрые советы</h4>
+                <p className="text-xs text-muted-foreground">
+                  {ingredients.length === 0 
+                    ? "Добавьте ингредиенты из левого меню для получения советов"
+                    : "Рецепт выглядит сбалансированно! Попробуйте добавить лед для охлаждения."
+                  }
+                </p>
               </div>
             </div>
 
-            {/* Right Sidebar - Cocktail Metrics */}
-            <div className="lg:col-span-1 flex flex-col">
+            {/* Right Sidebar - Metrics and Added Ingredients */}
+            <div className="lg:col-span-1 flex flex-col space-y-6">
+              {/* Cocktail Metrics */}
               <div className="bg-card border border-border rounded-lg p-6 flex-1">
                 <CocktailMetrics />
+              </div>
+              
+              {/* Added Ingredients */}
+              <div className="bg-card border border-border rounded-lg p-6 flex-1">
+                <IngredientSelector />
               </div>
             </div>
           </div>
