@@ -48,37 +48,16 @@ export default function Landing() {
               </p>
             </div>
             
-            {/* Right side - Cocktail glass image */}
+            {/* Right side - Interactive cocktail creation image */}
             <div className="flex justify-center items-center animate-slide-up">
               <div className="relative">
-                <svg className="w-64 h-64 relative z-10" viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  {/* Martini glass */}
-                  <path d="M50 50 L150 50 L100 150 L100 250 L80 250 L80 270 L120 270 L120 250 L100 250 L100 150 Z" 
-                        fill="url(#glassGradient)" 
-                        stroke="hsl(210, 100%, 65%)" 
-                        strokeWidth="1.5"/>
-                  
-                  {/* Cocktail liquid */}
-                  <path d="M55 55 L145 55 L100 145 Z" 
-                        fill="url(#liquidGradient)" 
-                        opacity="0.9"/>
-                  
-                  {/* Glass shine effect */}
-                  <path d="M60 60 L70 60 L65 90 Z" 
-                        fill="rgba(255,255,255,0.2)"/>
-                  
-                  <defs>
-                    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="rgba(66, 165, 245, 0.1)" />
-                      <stop offset="100%" stopColor="rgba(66, 165, 245, 0.2)" />
-                    </linearGradient>
-                    <linearGradient id="liquidGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="hsl(210, 100%, 65%)" />
-                      <stop offset="50%" stopColor="hsl(210, 40%, 45%)" />
-                      <stop offset="100%" stopColor="hsl(210, 30%, 25%)" />
-                    </linearGradient>
-                  </defs>
-                </svg>
+                <img 
+                  src="/attached_assets/Leonardo_Phoenix_10_A_futuristic_interactive_cocktail_creation_0_1752846048905.png"
+                  alt="Interactive cocktail creation with layered colors"
+                  className="w-72 h-72 object-contain relative z-10"
+                />
+                {/* Subtle glow effect behind the image */}
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/20 to-purple-400/20 rounded-full blur-2xl transform scale-75"></div>
               </div>
             </div>
           </div>
