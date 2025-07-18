@@ -219,23 +219,26 @@ export default function PopularRecipesSection() {
           grabCursor={true}
           centeredSlides={true}
           loop={true}
+          watchOverflow={true}
           autoplay={{
             delay: 5000,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
           }}
           slidesPerView={1}
-          spaceBetween={60}
+          spaceBetween={40}
           breakpoints={{
-            640: {
+            768: {
               slidesPerView: 2,
+              spaceBetween: 50,
+            },
+            1200: {
+              slidesPerView: 3,
               spaceBetween: 60,
             },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 80,
-            },
           }}
+          slidesPerGroup={1}
+          watchSlidesProgress={true}
           className="popular-recipes-swiper mb-8"
           style={{ overflow: 'visible' }}
         >
