@@ -37,9 +37,7 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  // Seed database with initial data
-  const { seedDatabase } = await import("./seed");
-  await seedDatabase();
+  // In-memory storage is already initialized with sample data
   
   const server = await registerRoutes(app);
 
