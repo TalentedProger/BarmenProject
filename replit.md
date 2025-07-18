@@ -200,7 +200,21 @@ The project has been successfully migrated from Replit Agent to the standard Rep
 - ✅ Removed the entire "Дополнительные возможности" section
 - ✅ Updated "Возможности платформы" section to display 6 cards in 3-column grid
 - ✅ Removed emoji from "Сообщество" card title
-- ✅ Updated background colors for last 3 cards with distinct colors:
-  - Сообщество: green (bg-green-500)
+- ✅ Updated background colors for cards with distinct colors:
+  - Сообщество: red (bg-red-500)
   - Магазин барного инвентаря: orange (bg-orange-500)
-  - Специальные курсы: purple (bg-purple-500)
+  - Специальные курсы: green (bg-green-500)
+
+### January 18, 2025 - New Landing Page Sections
+- ✅ Added Newsletter subscription section "Будь в курсе новых рецептов и фишек"
+  - Dark graphite background with neon gradients and glowing effects
+  - Email input field with dark styling and focus states
+  - Gradient subscription button with hover animations
+  - Responsive design for mobile devices
+- ✅ Added Mobile App section "Cocktailo — теперь в твоём кармане"
+  - Two-column layout with content and phone mockup
+  - App Store and Google Play download buttons with SVG icons
+  - Realistic smartphone mockup with app UI preview
+  - Floating animated icons (🍹🧪🍊) around the phone
+  - Glowing background effects and hover animations
+- ✅ Removed "Готовы начать миксологию?" CTA section
