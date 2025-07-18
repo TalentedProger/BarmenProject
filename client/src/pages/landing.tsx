@@ -255,35 +255,17 @@ export default function Landing() {
               </div>
             </div>
             
-            {/* Right side - Phone mockup */}
-            <div className="flex-1 flex justify-center md:justify-end">
+            {/* Right side - Phone image */}
+            <div className="flex-1 flex justify-center md:justify-end mr-16">
               <div className="relative">
-                {/* Phone mockup */}
-                <div className="w-64 h-96 bg-gradient-to-br from-gray-900 to-black rounded-[3rem] p-2 shadow-2xl relative overflow-hidden hover:scale-101 transition-all duration-300">
-                  <div className="w-full h-full bg-gradient-to-br from-purple-900 to-cyan-900 rounded-[2.5rem] p-8 flex flex-col items-center justify-center">
-                    <div className="text-white text-center space-y-4">
-                      <div className="w-16 h-16 bg-gradient-to-br from-neon-purple to-neon-turquoise rounded-full flex items-center justify-center mx-auto">
-                        <Martini className="text-white text-2xl" />
-                      </div>
-                      <h3 className="text-lg font-bold">Cocktailo</h3>
-                      <div className="space-y-2">
-                        <div className="w-32 h-20 bg-white/10 rounded-lg flex items-center justify-center">
-                          <span className="text-xs">🍹 Коктейль</span>
-                        </div>
-                        <Button className="w-32 bg-gradient-to-r from-purple-500 to-cyan-400 text-black text-xs py-2 rounded-lg">
-                          Создать
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-purple-500/20 rounded-[3rem] blur-lg -z-10"></div>
-                </div>
-                
-                {/* Floating icons */}
-                <div className="absolute -top-4 -right-4 text-2xl animate-bounce">🍹</div>
-                <div className="absolute -bottom-4 -left-4 text-2xl animate-bounce" style={{ animationDelay: '0.5s' }}>🧪</div>
-                <div className="absolute top-1/2 -right-8 text-2xl animate-bounce" style={{ animationDelay: '1s' }}>🍊</div>
+                <img 
+                  src="/attached_assets/ChatGPT Image 18 июл. 2025 г., 23_50_01-Photoroom_1752872369395.png"
+                  alt="Cocktailo mobile app with pineapple daiquiri"
+                  className="w-80 h-auto object-contain hover:scale-105 transition-all duration-300"
+                  loading="lazy"
+                />
+                {/* Subtle glow effect behind the image */}
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-purple-500/10 rounded-xl blur-xl -z-10"></div>
               </div>
             </div>
           </div>
