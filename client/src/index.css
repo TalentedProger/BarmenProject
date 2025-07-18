@@ -256,7 +256,7 @@
   }
 
   .popular-recipes-swiper .swiper-slide-active .recipe-card {
-    box-shadow: 0 0 30px rgba(143, 0, 255, 0.4), 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: 0 0 40px rgba(143, 0, 255, 0.4), 0 0 60px rgba(143, 0, 255, 0.2), 0 12px 40px rgba(0, 0, 0, 0.4) !important;
     border: 1px solid rgba(143, 0, 255, 0.3) !important;
   }
 

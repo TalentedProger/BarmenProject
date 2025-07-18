@@ -106,7 +106,16 @@ const popularRecipes: Recipe[] = [
 
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   return (
-    <div className="recipe-card bg-[#1A1A1E] rounded-2xl shadow-lg shadow-pink-500/20 hover:shadow-cyan-500/30 transition-all duration-300 overflow-hidden group h-[520px] flex flex-col">
+    <div className="recipe-card bg-[#1A1A1E] rounded-2xl transition-all duration-300 overflow-hidden group h-[520px] flex flex-col" 
+         style={{
+           boxShadow: '0 0 20px rgba(236, 72, 153, 0.2), 0 8px 32px rgba(0, 0, 0, 0.3)'
+         }}
+         onMouseEnter={(e) => {
+           e.currentTarget.style.boxShadow = '0 0 30px rgba(6, 182, 212, 0.3), 0 12px 40px rgba(0, 0, 0, 0.4)';
+         }}
+         onMouseLeave={(e) => {
+           e.currentTarget.style.boxShadow = '0 0 20px rgba(236, 72, 153, 0.2), 0 8px 32px rgba(0, 0, 0, 0.3)';
+         }}>
       {/* Image */}
       <div className="relative overflow-hidden">
         <img
