@@ -5,21 +5,21 @@ const CoursesSection = () => {
     {
       title: "Основы миксологии",
       level: "Новичок",
-      image: "/api/placeholder/240/160",
+      image: "/attached_assets/7b2e9f21-5799-4ec1-94a8-77404805e855_1752844481467.jpg",
       levelColor: "text-emerald-400",
       bgGradient: "from-emerald-500/20 to-cyan-500/20"
     },
     {
       title: "Креативный декор", 
       level: "Средний",
-      image: "/api/placeholder/240/160",
+      image: "/attached_assets/6d059335-5b16-412d-b1e0-9d4fdec2fabd_1752844498127.jpg",
       levelColor: "text-amber-400",
       bgGradient: "from-amber-500/20 to-orange-500/20"
     },
     {
       title: "Продвинутые техники",
       level: "Профи", 
-      image: "/api/placeholder/240/160",
+      image: "/attached_assets/Leonardo_Phoenix_10_A_modern_elegant_cocktail_in_a_coupe_glass_3_1752844509292.jpg",
       levelColor: "text-purple-400",
       bgGradient: "from-purple-500/20 to-pink-500/20"
     }
@@ -149,9 +149,13 @@ const CoursesSection = () => {
           <div className="grid md:grid-cols-3 gap-6 w-[90%] mx-auto">
             {courses.map((course, index) => (
               <div key={index} className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-xl p-6 border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-slate-900/20 flex flex-col">
-                {/* Course Image Placeholder */}
-                <div className={`w-full h-32 bg-gradient-to-br ${course.bgGradient} rounded-lg mb-4 flex items-center justify-center`}>
-                  <Beaker className="w-8 h-8 text-white/70" />
+                {/* Course Image */}
+                <div className="w-full h-32 rounded-lg mb-4 overflow-hidden">
+                  <img 
+                    src={course.image} 
+                    alt={course.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
                 </div>
                 
                 {/* Course Content */}
