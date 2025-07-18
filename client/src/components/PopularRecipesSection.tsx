@@ -108,13 +108,13 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   return (
     <div className="recipe-card bg-[#1A1A1E] rounded-2xl transition-all duration-300 overflow-hidden group h-[520px] flex flex-col" 
          style={{
-           boxShadow: '0 0 20px rgba(236, 72, 153, 0.2), 0 8px 32px rgba(0, 0, 0, 0.3)'
+           boxShadow: '0 0 12px rgba(236, 72, 153, 0.15), 0 0 12px rgba(236, 72, 153, 0.15), 0 4px 20px rgba(0, 0, 0, 0.25)'
          }}
          onMouseEnter={(e) => {
-           e.currentTarget.style.boxShadow = '0 0 30px rgba(6, 182, 212, 0.3), 0 12px 40px rgba(0, 0, 0, 0.4)';
+           e.currentTarget.style.boxShadow = '0 0 16px rgba(6, 182, 212, 0.2), 0 0 16px rgba(6, 182, 212, 0.2), 0 6px 24px rgba(0, 0, 0, 0.3)';
          }}
          onMouseLeave={(e) => {
-           e.currentTarget.style.boxShadow = '0 0 20px rgba(236, 72, 153, 0.2), 0 8px 32px rgba(0, 0, 0, 0.3)';
+           e.currentTarget.style.boxShadow = '0 0 12px rgba(236, 72, 153, 0.15), 0 0 12px rgba(236, 72, 153, 0.15), 0 4px 20px rgba(0, 0, 0, 0.25)';
          }}>
       {/* Image */}
       <div className="relative overflow-hidden">
@@ -223,15 +223,15 @@ export default function PopularRecipesSection() {
             pauseOnMouseEnter: true,
           }}
           slidesPerView={1}
-          spaceBetween={30}
+          spaceBetween={40}
           breakpoints={{
             640: {
               slidesPerView: 2,
-              spaceBetween: 30,
+              spaceBetween: 40,
             },
             1024: {
               slidesPerView: 3,
-              spaceBetween: 40,
+              spaceBetween: 50,
             },
           }}
           className="popular-recipes-swiper mb-8"
