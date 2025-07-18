@@ -9,6 +9,8 @@ This is a modern full-stack web application for bartenders and cocktail enthusia
 Preferred communication style: Simple, everyday language.
 User language: Russian
 Project state: Successfully migrated from Replit Agent to Replit environment
+Design preferences: Futuristic minimalism with Rubik + Montserrat fonts, uniform button colors without neon glows, reduced blue accent overload
+Project name: "Cocktailo Maker" (updated from "Конструктор Коктейлей")
 
 ## System Architecture
 

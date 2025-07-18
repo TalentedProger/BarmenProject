@@ -110,10 +110,10 @@ export default function Landing() {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="bg-card glass-effect hover:bg-accent/10 transition-all duration-300">
+            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
               <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Martini className="text-primary-foreground text-2xl" />
+                <div className="w-16 h-16 bg-neon-turquoise rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Martini className="text-night-blue text-2xl" />
                 </div>
                 <h3 className="text-xl font-bold text-platinum mb-2">Конструктор</h3>
                 <p className="text-zinc">
@@ -122,10 +122,10 @@ export default function Landing() {
               </CardContent>
             </Card>
             
-            <Card className="bg-card glass-effect hover:bg-accent/10 transition-all duration-300">
+            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
               <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-electric rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Dice2 className="text-background text-2xl" />
+                <div className="w-16 h-16 bg-neon-purple rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Dice2 className="text-night-blue text-2xl" />
                 </div>
                 <h3 className="text-xl font-bold text-platinum mb-2">Генератор</h3>
                 <p className="text-zinc">
@@ -134,10 +134,10 @@ export default function Landing() {
               </CardContent>
             </Card>
             
-            <Card className="bg-card glass-effect hover:bg-accent/10 transition-all duration-300">
+            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
               <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-accent rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <BookOpen className="text-accent-foreground text-2xl" />
+                <div className="w-16 h-16 bg-neon-amber rounded-full flex items-center justify-center mx-auto mb-4">
+                  <BookOpen className="text-night-blue text-2xl" />
                 </div>
                 <h3 className="text-xl font-bold text-platinum mb-2">Каталог</h3>
                 <p className="text-zinc">

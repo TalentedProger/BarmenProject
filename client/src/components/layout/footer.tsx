@@ -52,7 +52,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-border mt-8 pt-8 text-center">
-          <p className="text-zinc text-sm">&copy; 2024 Cocktailo Maker. Все права защищены.</p>
+          <p className="text-zinc text-sm">&copy; 2025 Cocktailo Maker. Все права защищены.</p>
         </div>
       </div>
     </footer>

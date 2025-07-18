@@ -31,6 +31,13 @@
   --platinum: hsl(0, 0%, 92%);
   --zinc: hsl(220, 5%, 55%);
   --electric: hsl(210, 100%, 65%);
+  
+  /* Neon background colors for containers */
+  --neon-turquoise: hsl(180, 100%, 50%);
+  --neon-purple: hsl(270, 62%, 72%);
+  --neon-amber: hsl(45, 100%, 52%);
+  --neon-pink: hsl(330, 100%, 66%);
+  --night-blue: hsl(240, 23%, 11%);
 }
 
 .dark {
@@ -94,6 +101,26 @@
   
   .text-electric {
     color: var(--electric);
+  }
+  
+  .bg-neon-turquoise {
+    background-color: var(--neon-turquoise);
+  }
+  
+  .bg-neon-purple {
+    background-color: var(--neon-purple);
+  }
+  
+  .bg-neon-amber {
+    background-color: var(--neon-amber);
+  }
+  
+  .bg-neon-pink {
+    background-color: var(--neon-pink);
+  }
+  
+  .text-night-blue {
+    color: var(--night-blue);
   }
   
   .glass-effect {
