@@ -43,7 +43,7 @@ export function CompactGlassSelector() {
   const isSelected = selectedGlass?.id === currentGlass.id;
 
   return (
-    <div className="flex flex-col items-center space-y-4 bg-slate-900/50 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-6">
+    <div className="flex flex-col items-center space-y-4">
       <h3 className="text-lg font-semibold text-cyan-400 mb-2">Выберите стакан</h3>
       
       {/* Glass Image with Navigation */}

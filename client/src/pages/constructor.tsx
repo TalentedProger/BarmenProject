@@ -46,20 +46,8 @@ export default function Constructor() {
       });
       setShowSaveDialog(false);
       queryClient.invalidateQueries({ queryKey: ["/api/recipes"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/users", user?.id, "recipes"] });
     },
     onError: (error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Ошибка авторизации",
-          description: "Выполняется перенаправление на страницу входа...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
       toast({
         title: "Ошибка сохранения",
         description: "Не удалось сохранить рецепт. Попробуйте еще раз.",
@@ -150,38 +138,43 @@ export default function Constructor() {
   };
 
   return (
-    <div className="min-h-screen bg-night-blue text-ice-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       
-      <section className="pt-20 pb-16 bg-gradient-to-b from-charcoal to-graphite">
+      <section className="pt-32 pb-16 bg-gradient-to-b from-charcoal to-graphite">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4 text-neon-amber">
-              <i className="fas fa-flask mr-3"></i>Конструктор Коктейлей
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-platinum">
+              Конструктор Коктейлей
             </h2>
-            <p className="text-xl text-cream max-w-2xl mx-auto">
+            <p className="text-xl text-zinc max-w-2xl mx-auto">
               Создавайте уникальные напитки слой за слоем с автоматическим расчетом параметров
             </p>
           </div>
 
           <div className="grid lg:grid-cols-4 gap-8">
-            {/* Left Sidebar - Metrics and Recommendations */}
+            {/* Left Sidebar - Added Ingredients */}
             <div className="lg:col-span-1">
-              <CocktailMetrics />
+              <IngredientSelector />
             </div>
 
             {/* Center Content */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Compact Glass Selector */}
-              <CompactGlassSelector />
-              
-              {/* Drink Visualizer */}
-              <DrinkVisualizer />
+              {/* Glass Selector or Drink Visualizer */}
+              {!selectedGlass ? (
+                <div className="bg-slate-900/50 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-8">
+                  <CompactGlassSelector />
+                </div>
+              ) : (
+                <div className="bg-slate-900/50 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-8">
+                  <DrinkVisualizer />
+                </div>
+              )}
             </div>
 
-            {/* Right Sidebar - Ingredients */}
+            {/* Right Sidebar - Metrics and Recommendations */}
             <div className="lg:col-span-1">
-              <IngredientSelector />
+              <CocktailMetrics />
             </div>
           </div>
 
@@ -191,8 +184,8 @@ export default function Constructor() {
               <Card className="glass-effect border-none">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-2 mb-4">
-                    <AlertCircle className="h-5 w-5 text-neon-amber" />
-                    <h3 className="text-lg font-semibold text-neon-amber">Анализ рецепта</h3>
+                    <AlertCircle className="h-5 w-5 text-amber-500" />
+                    <h3 className="text-lg font-semibold text-amber-500">Анализ рецепта</h3>
                   </div>
                   <div className="space-y-2">
                     {validateCocktailIngredients(ingredients).map((error, index) => (
@@ -213,7 +206,7 @@ export default function Constructor() {
               <Button
                 onClick={handleSaveRecipe}
                 disabled={ingredients.length === 0 || !selectedGlass || saveRecipeMutation.isPending}
-                className="glow-button bg-neon-turquoise text-night-blue px-8 py-3 hover:bg-neon-turquoise/90"
+                className="bg-primary text-primary-foreground px-8 py-3 hover:bg-primary/90"
               >
                 <Save className="mr-2 h-4 w-4" />
                 {saveRecipeMutation.isPending ? "Сохранение..." : "Сохранить рецепт"}
@@ -222,7 +215,7 @@ export default function Constructor() {
               <Button
                 onClick={handleReset}
                 variant="outline"
-                className="neon-border bg-transparent text-neon-amber px-8 py-3 hover:bg-neon-amber hover:text-night-blue"
+                className="px-8 py-3"
               >
                 <RotateCcw className="mr-2 h-4 w-4" />
                 Начать заново
@@ -231,7 +224,7 @@ export default function Constructor() {
               <Button
                 onClick={handleShare}
                 variant="outline"
-                className="neon-border bg-transparent text-neon-pink px-8 py-3 hover:bg-neon-pink hover:text-night-blue"
+                className="px-8 py-3"
               >
                 <Share2 className="mr-2 h-4 w-4" />
                 Поделиться
@@ -243,29 +236,29 @@ export default function Constructor() {
 
       {/* Save Recipe Dialog */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent className="glass-effect border-none">
+        <DialogContent className="bg-card border-border">
           <DialogHeader>
-            <DialogTitle className="text-neon-turquoise">Сохранить рецепт</DialogTitle>
+            <DialogTitle className="text-foreground">Сохранить рецепт</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="recipe-name" className="text-cream">Название коктейля</Label>
+              <Label htmlFor="recipe-name" className="text-foreground">Название коктейля</Label>
               <Input
                 id="recipe-name"
                 value={recipeName}
                 onChange={(e) => setRecipeName(e.target.value)}
                 placeholder="Введите название..."
-                className="bg-night-blue border-gray-600 focus:border-neon-turquoise"
+                className="bg-input border-border"
               />
             </div>
             <div>
-              <Label htmlFor="recipe-description" className="text-cream">Описание (необязательно)</Label>
+              <Label htmlFor="recipe-description" className="text-foreground">Описание (необязательно)</Label>
               <Textarea
                 id="recipe-description"
                 value={recipeDescription}
                 onChange={(e) => setRecipeDescription(e.target.value)}
                 placeholder="Опишите вкус и особенности коктейля..."
-                className="bg-night-blue border-gray-600 focus:border-neon-turquoise"
+                className="bg-input border-border"
                 rows={3}
               />
             </div>
