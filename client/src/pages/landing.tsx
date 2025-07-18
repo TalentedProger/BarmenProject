@@ -105,8 +105,14 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-gradient-to-b from-charcoal to-graphite">
-        <div className="container mx-auto px-4">
+      <section className="py-16 bg-gradient-to-br from-purple-900 to-night-blue relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-10 right-20 w-96 h-96 bg-neon-purple rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-20 w-80 h-80 bg-neon-turquoise rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4 text-neon-amber">Возможности платформы</h2>
             <p className="text-xl text-cream max-w-2xl mx-auto">
@@ -115,9 +121,9 @@ export default function Landing() {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
+            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300 shadow-lg shadow-neon-turquoise/20 hover:shadow-neon-turquoise/40 hover:shadow-xl">
               <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-neon-turquoise rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-neon-turquoise rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-neon-turquoise/30">
                   <Martini className="text-night-blue text-2xl" />
                 </div>
                 <h3 className="text-xl font-bold text-neon-turquoise mb-2">Конструктор</h3>
@@ -127,9 +133,9 @@ export default function Landing() {
               </CardContent>
             </Card>
             
-            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
+            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300 shadow-lg shadow-neon-purple/20 hover:shadow-neon-purple/40 hover:shadow-xl">
               <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-neon-purple rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-neon-purple rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-neon-purple/30">
                   <Dice2 className="text-night-blue text-2xl" />
                 </div>
                 <h3 className="text-xl font-bold text-neon-purple mb-2">Генератор</h3>
@@ -139,9 +145,9 @@ export default function Landing() {
               </CardContent>
             </Card>
             
-            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
+            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300 shadow-lg shadow-neon-amber/20 hover:shadow-neon-amber/40 hover:shadow-xl">
               <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-neon-amber rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-neon-amber rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-neon-amber/30">
                   <BookOpen className="text-night-blue text-2xl" />
                 </div>
                 <h3 className="text-xl font-bold text-neon-amber mb-2">Каталог</h3>

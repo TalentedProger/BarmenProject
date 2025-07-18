@@ -183,3 +183,16 @@
     transform: translateY(-10px); 
   }
 }
+
+/* Custom neon shadow effects */
+.shadow-neon-turquoise {
+  box-shadow: 0 0 20px var(--neon-turquoise);
+}
+
+.shadow-neon-purple {
+  box-shadow: 0 0 20px var(--neon-purple);
+}
+
+.shadow-neon-amber {
+  box-shadow: 0 0 20px var(--neon-amber);
+}
