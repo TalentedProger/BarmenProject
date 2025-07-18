@@ -158,6 +158,27 @@
   .animate-shimmer-shadow {
     animation: shimmer-shadow 4s ease-in-out infinite;
   }
+
+  /* Hero button pulse glow animation */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 
+        0 0 20px rgba(179, 136, 235, 0.4),
+        0 0 40px rgba(179, 136, 235, 0.2),
+        0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+      box-shadow: 
+        0 0 30px rgba(179, 136, 235, 0.6),
+        0 0 60px rgba(179, 136, 235, 0.3),
+        0 12px 30px rgba(0, 0, 0, 0.4);
+      transform: translateY(-2px) scale(1.02);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2.5s ease-in-out infinite;
+  }
   
   .bg-neon-turquoise {
     background-color: var(--neon-turquoise);
@@ -177,6 +198,30 @@
   
   .text-night-blue {
     color: var(--night-blue);
+  }
+
+  .text-neon-turquoise {
+    color: var(--neon-turquoise);
+  }
+
+  .text-neon-purple {
+    color: var(--neon-purple);
+  }
+
+  .text-electric {
+    color: var(--electric);
+  }
+
+  .border-neon-turquoise {
+    border-color: var(--neon-turquoise);
+  }
+
+  .shadow-neon-purple {
+    --tw-shadow-color: var(--neon-purple);
+  }
+
+  .shadow-neon-turquoise {
+    --tw-shadow-color: var(--neon-turquoise);
   }
   
   .glass-effect {

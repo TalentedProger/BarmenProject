@@ -63,20 +63,21 @@ export default function Landing() {
           </div>
           
           {/* Buttons at the bottom */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mt-8">
             <Button 
               onClick={handleGetStarted}
-              className="minimalist-button bg-primary text-primary-foreground px-8 py-4 text-lg hover:bg-primary/90"
+              className="hero-primary-button bg-gradient-to-r from-neon-purple to-electric text-white px-10 py-5 text-lg font-semibold rounded-xl shadow-lg shadow-neon-purple/30 hover:shadow-xl hover:shadow-neon-purple/50 transform hover:scale-105 transition-all duration-300 animate-pulse-glow relative overflow-hidden"
             >
-              <WandSparkles className="mr-2 h-5 w-5" />
+              <WandSparkles className="mr-2 h-6 w-6" />
               Начать создание
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform skew-x-12 translate-x-[-200%] hover:translate-x-[200%] transition-transform duration-1000"></div>
             </Button>
             <Button 
               variant="outline"
-              className="subtle-border bg-transparent text-zinc px-8 py-4 text-lg hover:bg-accent hover:text-accent-foreground"
+              className="hero-secondary-button bg-transparent border-2 border-neon-turquoise text-neon-turquoise px-10 py-5 text-lg font-semibold rounded-xl hover:bg-neon-turquoise hover:text-night-blue transform hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/20 hover:shadow-xl hover:shadow-neon-turquoise/40"
               onClick={() => window.location.href = "/catalog"}
             >
-              <BookOpen className="mr-2 h-5 w-5" />
+              <BookOpen className="mr-2 h-6 w-6" />
               Каталог рецептов
             </Button>
           </div>
