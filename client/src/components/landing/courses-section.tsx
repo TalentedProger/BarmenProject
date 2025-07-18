@@ -1,4 +1,4 @@
-import { BookOpen, Video, Flask, Award } from "lucide-react";
+import { BookOpen, Video, Beaker, Award } from "lucide-react";
 
 const CoursesSection = () => {
   const courses = [
@@ -39,7 +39,7 @@ const CoursesSection = () => {
       description: "учись в любое время"
     },
     {
-      icon: Flask,
+      icon: Beaker,
       text: "Практика и рецепты",
       accent: "text-amber-300", 
       description: "собирай напитки в конструкторе"
@@ -151,7 +151,7 @@ const CoursesSection = () => {
               <div key={index} className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-xl p-6 border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-slate-900/20">
                 {/* Course Image Placeholder */}
                 <div className={`w-full h-32 bg-gradient-to-br ${course.bgGradient} rounded-lg mb-4 flex items-center justify-center`}>
-                  <Flask className="w-8 h-8 text-white/70" />
+                  <Beaker className="w-8 h-8 text-white/70" />
                 </div>
                 
                 {/* Course Content */}
