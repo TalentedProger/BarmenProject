@@ -5,6 +5,7 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { CompactGlassSelector } from "@/components/cocktail/compact-glass-selector";
 import IngredientSelector from "@/components/cocktail/ingredient-selector";
+import IngredientRecommendations from "@/components/cocktail/ingredient-recommendations";
 import DrinkVisualizer from "@/components/cocktail/drink-visualizer";
 import { CocktailMetrics } from "@/components/cocktail/cocktail-metrics";
 import { Button } from "@/components/ui/button";
@@ -152,29 +153,36 @@ export default function Constructor() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-4 gap-8">
-            {/* Left Sidebar - Added Ingredients */}
-            <div className="lg:col-span-1">
-              <IngredientSelector />
+          <div className="grid lg:grid-cols-3 gap-8 min-h-[600px]">
+            {/* Left Sidebar - Ingredient Recommendations */}
+            <div className="lg:col-span-1 flex flex-col">
+              <div className="bg-card border border-border rounded-lg p-6 flex-1">
+                <IngredientRecommendations />
+              </div>
             </div>
 
             {/* Center Content */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-1 flex flex-col space-y-8">
               {/* Glass Selector or Drink Visualizer */}
-              {!selectedGlass ? (
-                <div className="bg-slate-900/50 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-8">
+              <div className="bg-card border border-border rounded-lg p-8 flex-1">
+                {!selectedGlass ? (
                   <CompactGlassSelector />
-                </div>
-              ) : (
-                <div className="bg-slate-900/50 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-8">
+                ) : (
                   <DrinkVisualizer />
-                </div>
-              )}
+                )}
+              </div>
+              
+              {/* Added Ingredients - moved below center */}
+              <div className="bg-card border border-border rounded-lg p-6">
+                <IngredientSelector />
+              </div>
             </div>
 
-            {/* Right Sidebar - Metrics and Recommendations */}
-            <div className="lg:col-span-1">
-              <CocktailMetrics />
+            {/* Right Sidebar - Cocktail Metrics */}
+            <div className="lg:col-span-1 flex flex-col">
+              <div className="bg-card border border-border rounded-lg p-6 flex-1">
+                <CocktailMetrics />
+              </div>
             </div>
           </div>
 

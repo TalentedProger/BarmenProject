@@ -82,38 +82,36 @@ export default function DrinkVisualizer() {
   };
 
   return (
-    <Card className="glass-effect border-none">
-      <CardContent className="p-6">
-        <h3 className="text-2xl font-semibold mb-4 text-neon-purple">
-          Визуализация
-        </h3>
-        
-        <div className="mb-6">
-          {renderGlass()}
+    <div className="flex flex-col h-full">
+      <h3 className="text-2xl font-semibold mb-4 text-foreground">
+        Визуализация
+      </h3>
+      
+      <div className="mb-6 flex-1 flex items-center justify-center">
+        {renderGlass()}
+      </div>
+      
+      {/* Drink Stats */}
+      <div className="space-y-3">
+        <div className="flex justify-between items-center">
+          <span className="text-muted-foreground">Объем:</span>
+          <span className="text-foreground font-semibold">
+            {cocktailStats.totalVolume}ml
+          </span>
         </div>
-        
-        {/* Drink Stats */}
-        <div className="space-y-3">
-          <div className="flex justify-between items-center">
-            <span className="text-cream">Объем:</span>
-            <span className="text-neon-turquoise font-semibold">
-              {cocktailStats.totalVolume}ml
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-cream">Крепость:</span>
-            <span className="text-neon-amber font-semibold">
-              {cocktailStats.totalAbv}%
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-cream">Стоимость:</span>
-            <span className="text-neon-pink font-semibold">
-              ₽{cocktailStats.totalCost}
-            </span>
-          </div>
+        <div className="flex justify-between items-center">
+          <span className="text-muted-foreground">Крепость:</span>
+          <span className="text-foreground font-semibold">
+            {cocktailStats.totalAbv}%
+          </span>
         </div>
-      </CardContent>
-    </Card>
+        <div className="flex justify-between items-center">
+          <span className="text-muted-foreground">Стоимость:</span>
+          <span className="text-foreground font-semibold">
+            ₽{cocktailStats.totalCost}
+          </span>
+        </div>
+      </div>
+    </div>
   );
 }
