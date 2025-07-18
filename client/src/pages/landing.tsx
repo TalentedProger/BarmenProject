@@ -234,8 +234,8 @@ export default function Landing() {
                   }}
                 >
                   <img 
-                    src="/attached_assets/Flux_Dev_a_lush_3d_render_of_A_dark_moody_digital_bar_counter__2_1752878512027.jpg"
-                    alt="Футуристичный бар с неоновой подсветкой"
+                    src="/attached_assets/Flux_Dev_a_lush_3d_render_of_A_stylized_artistic_illustration__3-Photoroom_1752879813613.png"
+                    alt="Стилизованный коктейль с градиентными эффектами"
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
