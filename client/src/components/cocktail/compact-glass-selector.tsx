@@ -44,11 +44,11 @@ export function CompactGlassSelector() {
 
   return (
     <div className="flex flex-col items-center h-full justify-between">
-      <div className="flex flex-col items-center space-y-4">
-        <h3 className="text-lg font-semibold text-foreground mb-2">Выберите стакан</h3>
+      <div className="flex flex-col items-center space-y-6">
+        <h3 className="text-lg font-semibold text-foreground mb-4">Выберите стакан</h3>
         
-        {/* Glass Image with Navigation */}
-        <div className="relative flex items-center justify-center w-full">
+        {/* Glass Image with Navigation - Arrows at extreme positions */}
+        <div className="relative flex items-center justify-center w-full px-8">
           <Button
             variant="ghost"
             size="icon"
@@ -58,18 +58,14 @@ export function CompactGlassSelector() {
             <ChevronLeft className="h-6 w-6" />
           </Button>
           
-          <div className="flex flex-col items-center space-y-3">
-            <div className="w-32 h-40 flex items-center justify-center">
+          <div className="flex flex-col items-center space-y-2">
+            {/* Enlarged glass image */}
+            <div className="w-48 h-56 flex items-center justify-center">
               <img
                 src={currentGlass.image}
                 alt={currentGlass.name}
                 className="max-w-full max-h-full filter drop-shadow-lg"
               />
-            </div>
-            
-            <div className="text-center">
-              <h4 className="text-foreground font-medium">{currentGlass.name}</h4>
-              <p className="text-muted-foreground text-sm">{currentGlass.capacity}ml</p>
             </div>
           </div>
 
@@ -83,8 +79,33 @@ export function CompactGlassSelector() {
           </Button>
         </div>
 
-        {/* Dots Indicator */}
-        <div className="flex space-x-2">
+        {/* Glass name closer to button */}
+        <div className="text-center">
+          <h4 className="text-foreground font-medium text-lg">{currentGlass.name}</h4>
+          <p className="text-muted-foreground text-sm">{currentGlass.capacity}ml</p>
+        </div>
+
+        {/* Selection Button - smaller width with glowing shadow */}
+        <Button
+          onClick={selectCurrentGlass}
+          className={`w-[70%] mt-4 transition-all duration-300 ${
+            isSelected
+              ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-500/50'
+              : 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/50 hover:shadow-primary/70'
+          }`}
+        >
+          {isSelected ? (
+            <>
+              <Check className="h-4 w-4 mr-2" />
+              Выбран
+            </>
+          ) : (
+            'Выбрать'
+          )}
+        </Button>
+
+        {/* Dots Indicator - moved below button */}
+        <div className="flex space-x-2 mt-4">
           {glassTypes.map((_, index) => (
             <button
               key={index}
@@ -98,25 +119,6 @@ export function CompactGlassSelector() {
           ))}
         </div>
       </div>
-
-      {/* Selection Button - positioned at bottom */}
-      <Button
-        onClick={selectCurrentGlass}
-        className={`w-full mt-8 ${
-          isSelected
-            ? 'bg-green-600 hover:bg-green-700 text-white'
-            : 'bg-primary hover:bg-primary/90 text-primary-foreground'
-        }`}
-      >
-        {isSelected ? (
-          <>
-            <Check className="h-4 w-4 mr-2" />
-            Выбран
-          </>
-        ) : (
-          'Выбрать'
-        )}
-      </Button>
     </div>
   );
 }

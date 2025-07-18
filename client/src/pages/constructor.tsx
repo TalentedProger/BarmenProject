@@ -145,7 +145,7 @@ export default function Constructor() {
       <section className="pt-32 pb-16 bg-gradient-to-b from-charcoal to-graphite">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-platinum">
+            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent animate-gradient-x">
               Конструктор Коктейлей
             </h2>
             <p className="text-xl text-zinc max-w-2xl mx-auto">
@@ -153,16 +153,16 @@ export default function Constructor() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-5 gap-6 min-h-[600px]">
-            {/* Left Sidebar - Ingredient Recommendations Only */}
-            <div className="lg:col-span-1 flex flex-col">
+          <div className="grid lg:grid-cols-12 gap-6 min-h-[600px]">
+            {/* Left Sidebar - Expanded by 15% */}
+            <div className="lg:col-span-3 flex flex-col">
               <div className="bg-card border border-border rounded-lg p-6 flex-1">
                 <IngredientRecommendations />
               </div>
             </div>
 
-            {/* Center Content - Wider */}
-            <div className="lg:col-span-3 flex flex-col space-y-6">
+            {/* Center Content - Reduced by 15% */}
+            <div className="lg:col-span-6 flex flex-col space-y-6">
               {/* Glass Selector or Drink Visualizer */}
               <div className="bg-card border border-border rounded-lg p-8 flex-1">
                 {!selectedGlass ? (
@@ -184,8 +184,8 @@ export default function Constructor() {
               </div>
             </div>
 
-            {/* Right Sidebar - Metrics and Added Ingredients - Smaller */}
-            <div className="lg:col-span-1 flex flex-col space-y-6">
+            {/* Right Sidebar - Expanded by 15% */}
+            <div className="lg:col-span-3 flex flex-col space-y-6">
               {/* Cocktail Metrics */}
               <div className="bg-card border border-border rounded-lg p-4 flex-1">
                 <CocktailMetrics />
