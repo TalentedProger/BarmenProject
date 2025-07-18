@@ -142,7 +142,7 @@ export default function Constructor() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       
-      <section className="pt-32 pb-16 bg-gradient-to-b from-charcoal to-graphite">
+      <section className="pt-32 pb-16 bg-gradient-to-br from-purple-900 via-purple-800 to-blue-900">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent animate-gradient-x">

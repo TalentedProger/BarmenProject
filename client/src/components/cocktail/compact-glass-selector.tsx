@@ -47,15 +47,15 @@ export function CompactGlassSelector() {
       <div className="flex flex-col items-center space-y-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">Выберите стакан</h3>
         
-        {/* Glass Image with Navigation - Arrows at extreme positions */}
-        <div className="relative flex items-center justify-center w-full px-8">
+        {/* Glass Image with Navigation - Arrows at container edges */}
+        <div className="relative flex items-center justify-center w-full">
           <Button
             variant="ghost"
             size="icon"
             onClick={prevGlass}
-            className="absolute left-0 text-primary hover:text-primary/80 hover:bg-primary/10"
+            className="absolute left-0 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-12 h-12"
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-12 w-12" />
           </Button>
           
           <div className="flex flex-col items-center space-y-2">
@@ -73,9 +73,9 @@ export function CompactGlassSelector() {
             variant="ghost"
             size="icon"
             onClick={nextGlass}
-            className="absolute right-0 text-primary hover:text-primary/80 hover:bg-primary/10"
+            className="absolute right-0 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-12 h-12"
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="h-12 w-12" />
           </Button>
         </div>
 
