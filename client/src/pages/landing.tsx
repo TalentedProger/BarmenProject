@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Martini, WandSparkles, Dice2, BookOpen, GraduationCap, ShoppingCart } from "lucide-react";
 import CoursesSection from "@/components/landing/courses-section";
+import PopularRecipesSection from "@/components/PopularRecipesSection";
 
 export default function Landing() {
   const handleGetStarted = () => {
@@ -141,6 +142,9 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Popular Recipes Section */}
+      <PopularRecipesSection />
 
       {/* Courses Section */}
       <CoursesSection />
