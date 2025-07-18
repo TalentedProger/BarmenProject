@@ -222,19 +222,35 @@ export default function Landing() {
               </div>
             </div>
             
-            {/* Right side - Bar photo */}
+            {/* Right side - Bar photo in glass shape */}
             <div className="flex-1 flex justify-center md:justify-end">
-              <div className="relative">
-                <img 
-                  src="/attached_assets/Flux_Dev_a_lush_3d_render_of_A_dark_moody_digital_bar_counter__2_1752878512027.jpg"
-                  alt="Футуристичный бар с неоновой подсветкой"
-                  className="w-64 h-96 object-cover rounded-2xl hover:scale-105 transition-all duration-300 relative z-10 shadow-2xl"
+              <div className="relative hover:scale-105 transition-all duration-300">
+                {/* Glass shape container with clip-path */}
+                <div 
+                  className="w-64 h-96 relative overflow-hidden"
                   style={{
-                    boxShadow: '0 15px 30px -8px rgba(0, 255, 255, 0.15)'
+                    clipPath: 'polygon(35% 0%, 65% 0%, 70% 25%, 75% 70%, 70% 85%, 65% 100%, 35% 100%, 30% 85%, 25% 70%, 30% 25%)',
+                    filter: 'drop-shadow(0 15px 30px rgba(0, 255, 255, 0.15))'
                   }}
-                  loading="lazy"
-                />
-                {/* Glow effects behind the image */}
+                >
+                  <img 
+                    src="/attached_assets/Flux_Dev_a_lush_3d_render_of_A_dark_moody_digital_bar_counter__2_1752878512027.jpg"
+                    alt="Футуристичный бар с неоновой подсветкой"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                
+                {/* Glass rim effect */}
+                <div 
+                  className="absolute top-0 left-0 w-64 h-96 border-2 border-cyan-300/30"
+                  style={{
+                    clipPath: 'polygon(35% 0%, 65% 0%, 70% 25%, 75% 70%, 70% 85%, 65% 100%, 35% 100%, 30% 85%, 25% 70%, 30% 25%)',
+                    boxShadow: 'inset 0 0 20px rgba(0, 255, 255, 0.2)'
+                  }}
+                ></div>
+                
+                {/* Glow effects behind the glass */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-80 bg-gradient-to-r from-cyan-400/12 to-purple-500/12 rounded-full blur-3xl -z-10"></div>
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-96 bg-gradient-to-br from-purple-400/6 to-cyan-400/6 rounded-full blur-[100px] -z-20"></div>
               </div>
