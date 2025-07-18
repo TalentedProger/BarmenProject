@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, EffectCoverflow } from 'swiper/modules';
+import { Navigation, Autoplay } from 'swiper/modules';
 import { ArrowLeft, ArrowRight, Star, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/effect-coverflow';
+import 'swiper/css/autoplay';
 
 interface Recipe {
   id: number;
@@ -125,17 +125,17 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
       {/* Content */}
       <div className="p-4 space-y-3">
         {/* Title */}
-        <h3 className="text-white text-xl font-semibold">{recipe.name}</h3>
+        <h3 className="text-white text-2xl font-semibold">{recipe.name}</h3>
         
         {/* Description */}
-        <p className="text-zinc-400 text-sm italic">{recipe.description}</p>
+        <p className="text-zinc-300 text-base italic">{recipe.description}</p>
 
         {/* Tags */}
         <div className="flex flex-wrap gap-2">
           {recipe.tags.map((tag, index) => (
             <span
               key={index}
-              className="text-xs bg-white/10 backdrop-blur-sm px-2 py-1 rounded-full text-zinc-300"
+              className="text-sm bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-zinc-200 font-medium"
             >
               {tag}
             </span>
@@ -143,27 +143,27 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
         </div>
 
         {/* Flavor Profile */}
-        <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className="grid grid-cols-2 gap-3 text-sm">
           <div className="flex items-center space-x-2">
-            <span>🍬 Сладкий</span>
+            <span className="text-zinc-200">🍬 Сладкий</span>
             <FlavorBar level={recipe.flavor.sweet} />
           </div>
           <div className="flex items-center space-x-2">
-            <span>🍋 Кислый</span>
+            <span className="text-zinc-200">🍋 Кислый</span>
             <FlavorBar level={recipe.flavor.sour} />
           </div>
           <div className="flex items-center space-x-2">
-            <span>🫖 Горький</span>
+            <span className="text-zinc-200">🫖 Горький</span>
             <FlavorBar level={recipe.flavor.bitter} />
           </div>
           <div className="flex items-center space-x-2">
-            <span>🌶️ Острый</span>
+            <span className="text-zinc-200">🌶️ Острый</span>
             <FlavorBar level={recipe.flavor.spicy} />
           </div>
         </div>
 
         {/* Stats */}
-        <div className="flex justify-between items-center text-sm text-zinc-300">
+        <div className="flex justify-between items-center text-base text-zinc-200 font-medium">
           <span>🍹 ABV: {recipe.abv}%</span>
           <span>💧 {recipe.volume} мл</span>
         </div>
@@ -182,7 +182,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
               />
             ))}
           </div>
-          <span className="text-sm text-zinc-400">({recipe.reviewCount})</span>
+          <span className="text-base text-zinc-300 font-medium">({recipe.reviewCount})</span>
         </div>
 
         {/* Buttons */}
@@ -225,54 +225,31 @@ export default function PopularRecipesSection() {
           <div className="h-1 w-24 mx-auto rounded-full bg-gradient-to-r from-purple-400 to-cyan-400 blur-sm" />
         </div>
 
-        {/* Navigation Arrows */}
-        <div className="flex justify-between items-center mb-8">
-          <button
-            onClick={() => swiperRef?.slidePrev()}
-            className="p-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30"
-          >
-            <ArrowLeft className="w-6 h-6 text-white" />
-          </button>
-          
-          <button
-            onClick={() => swiperRef?.slideNext()}
-            className="p-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30"
-          >
-            <ArrowRight className="w-6 h-6 text-white" />
-          </button>
-        </div>
-
         {/* Swiper Carousel */}
         <Swiper
           onSwiper={setSwiperRef}
-          modules={[Navigation, EffectCoverflow]}
-          effect="coverflow"
+          modules={[Navigation, Autoplay]}
           grabCursor={true}
-          centeredSlides={false}
-          slidesPerView={1.1}
-          spaceBetween={20}
-          coverflowEffect={{
-            rotate: 0,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: false,
+          centeredSlides={true}
+          loop={true}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
           }}
+          slidesPerView={1}
+          spaceBetween={30}
           breakpoints={{
             640: {
-              slidesPerView: 1.5,
-              spaceBetween: 20,
-            },
-            768: {
-              slidesPerView: 2.5,
-              spaceBetween: 24,
-            },
-            1024: {
-              slidesPerView: 3.5,
+              slidesPerView: 2,
               spaceBetween: 30,
             },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 40,
+            },
           }}
-          className="popular-recipes-swiper"
+          className="popular-recipes-swiper mb-8"
         >
           {popularRecipes.map((recipe) => (
             <SwiperSlide key={recipe.id}>
@@ -280,6 +257,23 @@ export default function PopularRecipesSection() {
             </SwiperSlide>
           ))}
         </Swiper>
+
+        {/* Navigation Arrows */}
+        <div className="flex justify-center items-center gap-6">
+          <button
+            onClick={() => swiperRef?.slidePrev()}
+            className="p-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30"
+          >
+            <ArrowLeft className="w-6 h-6 text-white" />
+          </button>
+          
+          <button
+            onClick={() => swiperRef?.slideNext()}
+            className="p-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30"
+          >
+            <ArrowRight className="w-6 h-6 text-white" />
+          </button>
+        </div>
       </div>
 
 
