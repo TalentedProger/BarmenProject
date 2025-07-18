@@ -26,6 +26,7 @@ interface Recipe {
     bitter: number;
     spicy: number;
   };
+  price?: number;
 }
 
 const popularRecipes: Recipe[] = [
@@ -40,7 +41,8 @@ const popularRecipes: Recipe[] = [
     rating: 4.2,
     reviewCount: 145,
     difficulty: "Легко",
-    flavor: { sweet: 4, sour: 3, bitter: 1, spicy: 0 }
+    flavor: { sweet: 4, sour: 3, bitter: 1, spicy: 0 },
+    price: 180
   },
   {
     id: 2,
@@ -53,7 +55,8 @@ const popularRecipes: Recipe[] = [
     rating: 4.7,
     reviewCount: 89,
     difficulty: "Средне",
-    flavor: { sweet: 1, sour: 2, bitter: 4, spicy: 2 }
+    flavor: { sweet: 1, sour: 2, bitter: 4, spicy: 2 },
+    price: 220
   },
   {
     id: 3,
@@ -66,7 +69,8 @@ const popularRecipes: Recipe[] = [
     rating: 4.5,
     reviewCount: 203,
     difficulty: "Сложно",
-    flavor: { sweet: 5, sour: 2, bitter: 0, spicy: 1 }
+    flavor: { sweet: 5, sour: 2, bitter: 0, spicy: 1 },
+    price: 250
   },
   {
     id: 4,
@@ -79,7 +83,8 @@ const popularRecipes: Recipe[] = [
     rating: 4.3,
     reviewCount: 167,
     difficulty: "Средне",
-    flavor: { sweet: 2, sour: 4, bitter: 1, spicy: 0 }
+    flavor: { sweet: 2, sour: 4, bitter: 1, spicy: 0 },
+    price: 200
   },
   {
     id: 5,
@@ -92,22 +97,12 @@ const popularRecipes: Recipe[] = [
     rating: 4.6,
     reviewCount: 124,
     difficulty: "Средне",
-    flavor: { sweet: 2, sour: 3, bitter: 2, spicy: 4 }
+    flavor: { sweet: 2, sour: 3, bitter: 2, spicy: 4 },
+    price: 190
   }
 ];
 
-const FlavorBar = ({ level, max = 5 }: { level: number; max?: number }) => (
-  <div className="flex space-x-1">
-    {Array.from({ length: max }, (_, i) => (
-      <div
-        key={i}
-        className={`w-2 h-2 rounded-full ${
-          i < level ? 'bg-neon-turquoise' : 'bg-gray-600'
-        }`}
-      />
-    ))}
-  </div>
-);
+
 
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   return (
@@ -118,6 +113,8 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           src={recipe.image}
           alt={recipe.name}
           className="w-full h-48 object-cover rounded-t-2xl transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
       </div>
@@ -142,61 +139,40 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           ))}
         </div>
 
-        {/* Flavor Profile */}
-        <div className="grid grid-cols-2 gap-3 text-sm">
-          <div className="flex items-center space-x-2">
-            <span className="text-zinc-200">🍬 Сладкий</span>
-            <FlavorBar level={recipe.flavor.sweet} />
+        {/* Stats in column */}
+        <div className="space-y-2 text-base text-zinc-200 font-medium">
+          <div className="flex items-center">
+            <span>🍹 ABV: {recipe.abv}%</span>
+          </div>
+          <div className="flex items-center">
+            <span>💧 Объем: {recipe.volume} мл</span>
+          </div>
+          <div className="flex items-center">
+            <span>💰 Цена: {recipe.price || '150'} ₽</span>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="text-zinc-200">🍋 Кислый</span>
-            <FlavorBar level={recipe.flavor.sour} />
-          </div>
-          <div className="flex items-center space-x-2">
-            <span className="text-zinc-200">🫖 Горький</span>
-            <FlavorBar level={recipe.flavor.bitter} />
-          </div>
-          <div className="flex items-center space-x-2">
-            <span className="text-zinc-200">🌶️ Острый</span>
-            <FlavorBar level={recipe.flavor.spicy} />
+            <div className="flex">
+              {Array.from({ length: 5 }, (_, i) => (
+                <Star
+                  key={i}
+                  className={`w-4 h-4 ${
+                    i < Math.floor(recipe.rating)
+                      ? 'fill-yellow-400 text-yellow-400'
+                      : 'text-gray-500'
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-base text-zinc-300 font-medium">({recipe.reviewCount})</span>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="flex justify-between items-center text-base text-zinc-200 font-medium">
-          <span>🍹 ABV: {recipe.abv}%</span>
-          <span>💧 {recipe.volume} мл</span>
-        </div>
-
-        {/* Rating */}
-        <div className="flex items-center space-x-2">
-          <div className="flex">
-            {Array.from({ length: 5 }, (_, i) => (
-              <Star
-                key={i}
-                className={`w-4 h-4 ${
-                  i < Math.floor(recipe.rating)
-                    ? 'fill-yellow-400 text-yellow-400'
-                    : 'text-gray-500'
-                }`}
-              />
-            ))}
-          </div>
-          <span className="text-base text-zinc-300 font-medium">({recipe.reviewCount})</span>
-        </div>
-
-        {/* Buttons */}
-        <div className="flex space-x-2 pt-2">
+        {/* Single centered button */}
+        <div className="flex justify-center pt-4">
           <Button
-            className="flex-1 bg-gradient-to-r from-purple-500 to-cyan-500 text-black font-medium rounded-full px-4 py-2 hover:from-purple-600 hover:to-cyan-600 transition-all duration-300"
+            className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
           >
             Открыть рецепт
-          </Button>
-          <Button
-            variant="outline"
-            className="px-3 py-2 border-neon-turquoise text-neon-turquoise hover:bg-neon-turquoise hover:text-night-blue rounded-full transition-all duration-300"
-          >
-            <RefreshCw className="w-4 h-4" />
           </Button>
         </div>
       </div>
@@ -233,7 +209,7 @@ export default function PopularRecipesSection() {
           centeredSlides={true}
           loop={true}
           autoplay={{
-            delay: 4000,
+            delay: 5000,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
           }}
