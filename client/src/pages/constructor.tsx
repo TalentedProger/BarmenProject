@@ -153,7 +153,7 @@ export default function Constructor() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8 min-h-[600px]">
+          <div className="grid lg:grid-cols-5 gap-6 min-h-[600px]">
             {/* Left Sidebar - Ingredient Recommendations Only */}
             <div className="lg:col-span-1 flex flex-col">
               <div className="bg-card border border-border rounded-lg p-6 flex-1">
@@ -161,8 +161,8 @@ export default function Constructor() {
               </div>
             </div>
 
-            {/* Center Content */}
-            <div className="lg:col-span-1 flex flex-col space-y-6">
+            {/* Center Content - Wider */}
+            <div className="lg:col-span-3 flex flex-col space-y-6">
               {/* Glass Selector or Drink Visualizer */}
               <div className="bg-card border border-border rounded-lg p-8 flex-1">
                 {!selectedGlass ? (
@@ -184,15 +184,15 @@ export default function Constructor() {
               </div>
             </div>
 
-            {/* Right Sidebar - Metrics and Added Ingredients */}
+            {/* Right Sidebar - Metrics and Added Ingredients - Smaller */}
             <div className="lg:col-span-1 flex flex-col space-y-6">
               {/* Cocktail Metrics */}
-              <div className="bg-card border border-border rounded-lg p-6 flex-1">
+              <div className="bg-card border border-border rounded-lg p-4 flex-1">
                 <CocktailMetrics />
               </div>
               
               {/* Added Ingredients */}
-              <div className="bg-card border border-border rounded-lg p-6 flex-1">
+              <div className="bg-card border border-border rounded-lg p-4 flex-1">
                 <IngredientSelector />
               </div>
             </div>

@@ -43,52 +43,69 @@ export function CompactGlassSelector() {
   const isSelected = selectedGlass?.id === currentGlass.id;
 
   return (
-    <div className="flex flex-col items-center space-y-4">
-      <h3 className="text-lg font-semibold text-cyan-400 mb-2">Выберите стакан</h3>
-      
-      {/* Glass Image with Navigation */}
-      <div className="relative flex items-center justify-center w-full">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={prevGlass}
-          className="absolute left-0 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10"
-        >
-          <ChevronLeft className="h-6 w-6" />
-        </Button>
+    <div className="flex flex-col items-center h-full justify-between">
+      <div className="flex flex-col items-center space-y-4">
+        <h3 className="text-lg font-semibold text-foreground mb-2">Выберите стакан</h3>
         
-        <div className="flex flex-col items-center space-y-3">
-          <div className="w-24 h-32 flex items-center justify-center">
-            <img
-              src={currentGlass.image}
-              alt={currentGlass.name}
-              className="max-w-full max-h-full filter drop-shadow-lg"
-            />
-          </div>
+        {/* Glass Image with Navigation */}
+        <div className="relative flex items-center justify-center w-full">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={prevGlass}
+            className="absolute left-0 text-primary hover:text-primary/80 hover:bg-primary/10"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </Button>
           
-          <div className="text-center">
-            <h4 className="text-white font-medium">{currentGlass.name}</h4>
-            <p className="text-cyan-400 text-sm">{currentGlass.capacity}ml</p>
+          <div className="flex flex-col items-center space-y-3">
+            <div className="w-32 h-40 flex items-center justify-center">
+              <img
+                src={currentGlass.image}
+                alt={currentGlass.name}
+                className="max-w-full max-h-full filter drop-shadow-lg"
+              />
+            </div>
+            
+            <div className="text-center">
+              <h4 className="text-foreground font-medium">{currentGlass.name}</h4>
+              <p className="text-muted-foreground text-sm">{currentGlass.capacity}ml</p>
+            </div>
           </div>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={nextGlass}
+            className="absolute right-0 text-primary hover:text-primary/80 hover:bg-primary/10"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </Button>
         </div>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={nextGlass}
-          className="absolute right-0 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10"
-        >
-          <ChevronRight className="h-6 w-6" />
-        </Button>
+        {/* Dots Indicator */}
+        <div className="flex space-x-2">
+          {glassTypes.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-2 h-2 rounded-full transition-colors ${
+                index === currentIndex
+                  ? 'bg-primary'
+                  : 'bg-muted-foreground hover:bg-muted-foreground/80'
+              }`}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Selection Button */}
+      {/* Selection Button - positioned at bottom */}
       <Button
         onClick={selectCurrentGlass}
-        className={`w-full ${
+        className={`w-full mt-8 ${
           isSelected
             ? 'bg-green-600 hover:bg-green-700 text-white'
-            : 'bg-cyan-600 hover:bg-cyan-700 text-white'
+            : 'bg-primary hover:bg-primary/90 text-primary-foreground'
         }`}
       >
         {isSelected ? (
@@ -100,21 +117,6 @@ export function CompactGlassSelector() {
           'Выбрать'
         )}
       </Button>
-
-      {/* Dots Indicator */}
-      <div className="flex space-x-2">
-        {glassTypes.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              index === currentIndex
-                ? 'bg-cyan-400'
-                : 'bg-gray-600 hover:bg-gray-500'
-            }`}
-          />
-        ))}
-      </div>
     </div>
   );
 }
