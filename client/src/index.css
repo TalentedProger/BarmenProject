@@ -177,7 +177,7 @@
   }
 
   .animate-pulse-glow {
-    animation: pulse-glow 2.5s ease-in-out infinite;
+    animation: pulse-glow 4s ease-in-out infinite;
   }
   
   .bg-neon-turquoise {
