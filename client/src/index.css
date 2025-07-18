@@ -116,6 +116,22 @@
       background-position: 100% 50%;
     }
   }
+
+  /* Breathing animation for title */
+  @keyframes breathing {
+    0%, 100% {
+      transform: scale(1) translateY(0px);
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.4);
+    }
+    50% {
+      transform: scale(1.02) translateY(-2px);
+      text-shadow: 0 6px 12px rgba(0, 0, 0, 0.8), 0 12px 24px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .animate-breathing {
+    animation: breathing 4s ease-in-out infinite;
+  }
   
   .bg-neon-turquoise {
     background-color: var(--neon-turquoise);

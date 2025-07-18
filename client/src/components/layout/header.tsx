@@ -8,22 +8,22 @@ export default function Header() {
   const NavItems = () => (
     <>
       <Link href="/constructor">
-        <Button variant="ghost" className="hover:text-electric text-zinc">
+        <Button variant="ghost" className="hover:text-white text-zinc">
           Конструктор
         </Button>
       </Link>
       <Link href="/generator">
-        <Button variant="ghost" className="hover:text-electric text-zinc">
+        <Button variant="ghost" className="hover:text-white text-zinc">
           Генератор
         </Button>
       </Link>
       <Link href="/catalog">
-        <Button variant="ghost" className="hover:text-electric text-zinc">
+        <Button variant="ghost" className="hover:text-white text-zinc">
           Каталог
         </Button>
       </Link>
       <Link href="/profile">
-        <Button variant="ghost" className="hover:text-electric text-zinc">
+        <Button variant="ghost" className="hover:text-white text-zinc">
           Профиль
         </Button>
       </Link>
@@ -31,7 +31,7 @@ export default function Header() {
   );
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-gray-800">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-graphite border-b border-border">
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link href="/">
