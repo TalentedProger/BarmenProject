@@ -55,7 +55,7 @@ export default function Profile() {
         title: "Рецепт удален",
         description: "Рецепт успешно удален из вашего профиля",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/users", user?.id, "recipes"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/recipes"] });
     },
     onError: (error) => {
       toast({
@@ -68,11 +68,8 @@ export default function Profile() {
 
   const favoriteMutation = useMutation({
     mutationFn: async ({ recipeId, isFavorite }: { recipeId: string; isFavorite: boolean }) => {
-      if (isFavorite) {
-        await apiRequest("DELETE", `/api/users/${user?.id}/favorites/${recipeId}`);
-      } else {
-        await apiRequest("POST", `/api/users/${user?.id}/favorites`, { recipeId });
-      }
+      // Demo mode - just show toast
+      return Promise.resolve();
     },
     onSuccess: (_, { recipeId, isFavorite }) => {
       const newFavorites = new Set(userFavorites);
@@ -83,7 +80,7 @@ export default function Profile() {
       }
       setUserFavorites(newFavorites);
       
-      queryClient.invalidateQueries({ queryKey: ["/api/users", user?.id, "favorites"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/recipes"] });
       
       toast({
         title: isFavorite ? "Удалено из избранного" : "Добавлено в избранное",
@@ -146,14 +143,6 @@ export default function Profile() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-night-blue flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-neon-turquoise"></div>
-      </div>
-    );
-  }
-
   const userLevel = getUserLevel(userRecipes.length);
 
   return (
@@ -180,7 +169,7 @@ export default function Profile() {
                       <User className="text-night-blue text-3xl" />
                     </div>
                     <h3 className="text-xl font-bold text-neon-turquoise mb-1">
-                      {user?.firstName || user?.email?.split('@')[0] || 'Пользователь'}
+                      {demoUser.name}
                     </h3>
                     <p className={`text-sm ${getLevelColor(userLevel)}`}>
                       {userLevel}

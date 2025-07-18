@@ -113,14 +113,6 @@ export default function Catalog() {
     setCurrentPage(prev => prev + 1);
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-night-blue flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-neon-turquoise"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-night-blue text-ice-white">
       <Header />
