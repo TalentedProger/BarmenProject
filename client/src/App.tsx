@@ -13,24 +13,14 @@ import Catalog from "@/pages/catalog";
 import Profile from "@/pages/profile";
 
 function Router() {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  // Show loading state while checking authentication
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-night-blue">
-        <div className="text-ice-white">Loading...</div>
-      </div>
-    );
-  }
-
   return (
     <Switch>
-      <Route path="/" component={isAuthenticated ? Home : Landing} />
+      <Route path="/" component={Landing} />
+      <Route path="/home" component={Home} />
       <Route path="/constructor" component={Constructor} />
       <Route path="/generator" component={Generator} />
       <Route path="/catalog" component={Catalog} />
-      <Route path="/profile" component={isAuthenticated ? Profile : Landing} />
+      <Route path="/profile" component={Profile} />
       <Route component={NotFound} />
     </Switch>
   );

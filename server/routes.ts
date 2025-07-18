@@ -13,14 +13,8 @@ import {
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
+  // Simplified auth setup (no authentication required)
   await setupAuth(app);
-
-  // Auth routes (simplified for demo)
-  app.get('/api/auth/user', async (req: any, res) => {
-    // For demo purposes, return null - no auth required
-    res.status(401).json({ message: "Unauthorized" });
-  });
 
   // Ingredient routes
   app.get('/api/ingredients', async (req, res) => {

@@ -1,17 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-
+// Simplified auth hook - no authentication required
 export function useAuth() {
-  const { data: user, isLoading, error } = useQuery({
-    queryKey: ["/api/auth/user"],
-    retry: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
-  });
-
   return {
-    user,
-    isLoading,
-    error,
-    isAuthenticated: !!user && !error,
+    user: null,
+    isLoading: false,
+    error: null,
+    isAuthenticated: false,
   };
 }

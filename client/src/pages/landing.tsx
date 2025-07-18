@@ -3,8 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Martini, WandSparkles, Dice2, BookOpen, GraduationCap, ShoppingCart } from "lucide-react";
 
 export default function Landing() {
-  const handleLogin = () => {
-    window.location.href = "/api/login";
+  const handleGetStarted = () => {
+    window.location.href = "/constructor";
   };
 
   return (
@@ -18,10 +18,10 @@ export default function Landing() {
               <h1 className="text-xl font-bold text-neon-turquoise">Конструктор Коктейлей</h1>
             </div>
             <Button 
-              onClick={handleLogin}
+              onClick={handleGetStarted}
               className="glow-button bg-neon-turquoise text-night-blue hover:bg-neon-turquoise/90"
             >
-              Войти
+              Начать
             </Button>
           </div>
         </nav>
@@ -45,7 +45,7 @@ export default function Landing() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-                onClick={handleLogin}
+                onClick={handleGetStarted}
                 className="glow-button bg-neon-turquoise text-night-blue px-8 py-4 text-lg hover:bg-neon-turquoise/90"
               >
                 <WandSparkles className="mr-2 h-5 w-5" />
@@ -124,7 +124,7 @@ export default function Landing() {
             Присоединяйтесь к сообществу барменов и любителей коктейлей
           </p>
           <Button 
-            onClick={handleLogin}
+            onClick={handleGetStarted}
             className="glow-button bg-neon-turquoise text-night-blue px-12 py-4 text-xl hover:bg-neon-turquoise/90"
           >
             Начать бесплатно
