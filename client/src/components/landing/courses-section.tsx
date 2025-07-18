@@ -146,24 +146,24 @@ const CoursesSection = () => {
         <div className="mt-16">
           <h3 className="text-2xl font-bold text-white text-center mb-8">Популярные курсы</h3>
           
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 w-[90%] mx-auto">
             {courses.map((course, index) => (
-              <div key={index} className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-xl p-6 border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-slate-900/20">
+              <div key={index} className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-xl p-6 border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-slate-900/20 flex flex-col">
                 {/* Course Image Placeholder */}
                 <div className={`w-full h-32 bg-gradient-to-br ${course.bgGradient} rounded-lg mb-4 flex items-center justify-center`}>
                   <Beaker className="w-8 h-8 text-white/70" />
                 </div>
                 
                 {/* Course Content */}
-                <div className="space-y-3">
-                  <h4 className="text-white text-xl font-semibold group-hover:text-cyan-300 transition-colors">
+                <div className="flex flex-col flex-1">
+                  <h4 className="text-white text-xl font-semibold group-hover:text-cyan-300 transition-colors whitespace-nowrap overflow-hidden text-ellipsis mb-2">
                     {course.title}
                   </h4>
-                  <span className={`text-sm font-medium ${course.levelColor}`}>
+                  <span className={`text-sm font-medium ${course.levelColor} mb-4`}>
                     {course.level}
                   </span>
                   
-                  <button className="w-full mt-4 px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white rounded-lg transition-all duration-300 font-medium hover:shadow-lg hover:shadow-pink-500/25">
+                  <button className="w-full mt-auto px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white rounded-lg transition-all duration-300 font-medium hover:shadow-lg hover:shadow-pink-500/25">
                     Записаться
                   </button>
                 </div>
