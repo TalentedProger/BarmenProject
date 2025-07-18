@@ -145,13 +145,16 @@ The application follows modern full-stack development practices with a focus on 
 
 ## Recent Changes
 
-### January 18, 2025 - Complete Authentication Removal
+### January 18, 2025 - Complete Authentication Removal & UI Improvements
 - ✅ Completely removed authentication system to fix user access issues
 - ✅ All pages now work without any authentication requirements
 - ✅ Landing page redirects to constructor instead of login
 - ✅ API routes simplified to work without user sessions
 - ✅ Database seeding with sample ingredients and glass types
 - ✅ All authentication errors resolved
+- ✅ Updated hero section with split layout (text left, cocktail glass image right)
+- ✅ Moved action buttons to bottom of hero section
+- ✅ Added SVG cocktail glass illustration with gradient effects
 
 ### Migration Status: COMPLETED
 The project has been successfully migrated from Replit Agent to the standard Replit environment. All core functionality is working:

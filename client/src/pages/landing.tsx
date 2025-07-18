@@ -28,38 +28,78 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-20 pb-12 relative overflow-hidden">
+      <section className="pt-20 pb-12 relative overflow-hidden min-h-[80vh]">
         <div className="absolute inset-0 bg-gradient-to-br from-night-blue via-graphite to-charcoal"></div>
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-20 left-10 w-64 h-64 bg-neon-purple rounded-full blur-3xl animate-pulse-slow"></div>
           <div className="absolute bottom-20 right-10 w-80 h-80 bg-neon-turquoise rounded-full blur-3xl animate-pulse-slow"></div>
         </div>
         
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center py-20">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-neon-turquoise to-neon-purple bg-clip-text text-transparent animate-float">
-              Создай свой идеальный коктейль
-            </h1>
-            <p className="text-xl md:text-2xl text-cream mb-8 max-w-3xl mx-auto">
-              Интерактивный конструктор напитков с реалистичной визуализацией, расчетом крепости и стоимости
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                onClick={handleGetStarted}
-                className="glow-button bg-neon-turquoise text-night-blue px-8 py-4 text-lg hover:bg-neon-turquoise/90"
-              >
-                <WandSparkles className="mr-2 h-5 w-5" />
-                Начать создание
-              </Button>
-              <Button 
-                variant="outline"
-                className="neon-border bg-transparent text-neon-turquoise px-8 py-4 text-lg hover:bg-neon-turquoise hover:text-night-blue"
-                onClick={() => window.location.href = "/catalog"}
-              >
-                <BookOpen className="mr-2 h-5 w-5" />
-                Каталог рецептов
-              </Button>
+        <div className="container mx-auto px-4 relative z-10 h-full">
+          <div className="grid md:grid-cols-2 gap-8 items-center py-20 h-full">
+            {/* Left side - Text content */}
+            <div className="space-y-6">
+              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-neon-turquoise to-neon-purple bg-clip-text text-transparent animate-float">
+                Создай свой идеальный коктейль
+              </h1>
+              <p className="text-lg md:text-xl text-cream max-w-2xl">
+                Интерактивный конструктор напитков с реалистичной визуализацией, расчетом крепости и стоимости
+              </p>
             </div>
+            
+            {/* Right side - Cocktail glass image */}
+            <div className="flex justify-center items-center">
+              <div className="relative">
+                <div className="w-80 h-80 bg-gradient-to-b from-transparent via-neon-turquoise/20 to-neon-turquoise/40 rounded-full blur-2xl absolute inset-0 animate-pulse"></div>
+                <svg className="w-64 h-64 relative z-10" viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  {/* Martini glass */}
+                  <path d="M50 50 L150 50 L100 150 L100 250 L80 250 L80 270 L120 270 L120 250 L100 250 L100 150 Z" 
+                        fill="url(#glassGradient)" 
+                        stroke="#00F5FF" 
+                        strokeWidth="2"/>
+                  
+                  {/* Cocktail liquid */}
+                  <path d="M55 55 L145 55 L100 145 Z" 
+                        fill="url(#liquidGradient)" 
+                        opacity="0.8"/>
+                  
+                  {/* Glass shine effect */}
+                  <path d="M60 60 L70 60 L65 90 Z" 
+                        fill="rgba(255,255,255,0.3)"/>
+                  
+                  <defs>
+                    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="rgba(0,245,255,0.1)" />
+                      <stop offset="100%" stopColor="rgba(0,245,255,0.3)" />
+                    </linearGradient>
+                    <linearGradient id="liquidGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#FF6B9D" />
+                      <stop offset="50%" stopColor="#8B5CF6" />
+                      <stop offset="100%" stopColor="#00F5FF" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+          </div>
+          
+          {/* Buttons at the bottom */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+            <Button 
+              onClick={handleGetStarted}
+              className="glow-button bg-neon-turquoise text-night-blue px-8 py-4 text-lg hover:bg-neon-turquoise/90"
+            >
+              <WandSparkles className="mr-2 h-5 w-5" />
+              Начать создание
+            </Button>
+            <Button 
+              variant="outline"
+              className="neon-border bg-transparent text-neon-turquoise px-8 py-4 text-lg hover:bg-neon-turquoise hover:text-night-blue"
+              onClick={() => window.location.href = "/catalog"}
+            >
+              <BookOpen className="mr-2 h-5 w-5" />
+              Каталог рецептов
+            </Button>
           </div>
         </div>
       </section>
