@@ -29,7 +29,11 @@ export default function Landing() {
 
       {/* Hero Section */}
       <section className="pt-20 pb-12 relative overflow-hidden min-h-[80vh]">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-graphite to-charcoal"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-night-blue via-graphite to-charcoal"></div>
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-20 left-10 w-64 h-64 bg-neon-purple rounded-full blur-3xl animate-pulse-slow"></div>
+          <div className="absolute bottom-20 right-10 w-80 h-80 bg-neon-turquoise rounded-full blur-3xl animate-pulse-slow"></div>
+        </div>
         
         <div className="container mx-auto px-4 relative z-10 h-full">
           <div className="grid md:grid-cols-2 gap-8 items-center py-20 h-full">
@@ -100,7 +104,12 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-steel relative">
+      <section className="py-16 bg-gradient-to-br from-purple-900 to-night-blue relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-10 right-20 w-96 h-96 bg-neon-purple rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-20 w-80 h-80 bg-neon-turquoise rounded-full blur-3xl"></div>
+        </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4 text-platinum">Возможности платформы</h2>
