@@ -106,6 +106,10 @@
     color: var(--neon-pink);
   }
   
+  .text-neon-pink {
+    color: var(--neon-pink);
+  }
+  
   .bg-neon-turquoise {
     background-color: var(--neon-turquoise);
   }

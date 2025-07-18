@@ -38,11 +38,11 @@ export default function Landing() {
         <div className="container mx-auto px-4 relative z-10 h-full">
           <div className="grid md:grid-cols-2 gap-8 items-center py-20 h-full">
             {/* Left side - Text content */}
-            <div className="space-y-6">
-              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-neon-turquoise to-neon-purple bg-clip-text text-transparent animate-float">
+            <div className="space-y-6 pl-8 flex flex-col justify-center h-64">
+              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-neon-turquoise via-neon-purple to-neon-pink bg-clip-text text-transparent animate-float">
                 Создай свой идеальный коктейль
               </h1>
-              <p className="text-lg md:text-xl text-cream max-w-2xl">
+              <p className="text-lg md:text-xl text-neon-turquoise max-w-2xl font-medium">
                 Интерактивный конструктор напитков с реалистичной визуализацией, расчетом крепости и стоимости
               </p>
             </div>
@@ -115,7 +115,7 @@ export default function Landing() {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="glass-effect border-none">
+            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
               <CardContent className="p-6 text-center">
                 <div className="w-16 h-16 bg-neon-turquoise rounded-full flex items-center justify-center mx-auto mb-4">
                   <Martini className="text-night-blue text-2xl" />
@@ -127,7 +127,7 @@ export default function Landing() {
               </CardContent>
             </Card>
             
-            <Card className="glass-effect border-none">
+            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
               <CardContent className="p-6 text-center">
                 <div className="w-16 h-16 bg-neon-purple rounded-full flex items-center justify-center mx-auto mb-4">
                   <Dice2 className="text-night-blue text-2xl" />
@@ -139,7 +139,7 @@ export default function Landing() {
               </CardContent>
             </Card>
             
-            <Card className="glass-effect border-none">
+            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
               <CardContent className="p-6 text-center">
                 <div className="w-16 h-16 bg-neon-amber rounded-full flex items-center justify-center mx-auto mb-4">
                   <BookOpen className="text-night-blue text-2xl" />

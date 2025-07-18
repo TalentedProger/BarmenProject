@@ -61,6 +61,16 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        // Custom nightclub theme colors
+        "night-blue": "var(--night-blue)",
+        "graphite": "var(--graphite)",
+        "charcoal": "var(--charcoal)",
+        "ice-white": "var(--ice-white)",
+        "cream": "var(--cream)",
+        "neon-turquoise": "var(--neon-turquoise)",
+        "neon-purple": "var(--neon-purple)",
+        "neon-amber": "var(--neon-amber)",
+        "neon-pink": "var(--neon-pink)",
       },
       keyframes: {
         "accordion-down": {
