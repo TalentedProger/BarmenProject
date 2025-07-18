@@ -154,10 +154,10 @@ export default function Constructor() {
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8 min-h-[600px]">
-            {/* Left Sidebar - Ingredient Recommendations */}
+            {/* Left Sidebar - Added Ingredients */}
             <div className="lg:col-span-1 flex flex-col">
               <div className="bg-card border border-border rounded-lg p-6 flex-1">
-                <IngredientRecommendations />
+                <IngredientSelector />
               </div>
             </div>
 
@@ -172,9 +172,9 @@ export default function Constructor() {
                 )}
               </div>
               
-              {/* Added Ingredients - moved below center */}
+              {/* Ingredient Recommendations - moved below center */}
               <div className="bg-card border border-border rounded-lg p-6">
-                <IngredientSelector />
+                <IngredientRecommendations />
               </div>
             </div>
 
