@@ -99,44 +99,15 @@ const CoursesSection = () => {
           <div className="relative flex flex-col items-center space-y-8">
             {/* Main Illustration Area */}
             <div className="relative">
-              {/* Bartender Illustration Placeholder */}
-              <div className="relative w-80 h-96 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl border border-slate-700/50 flex items-center justify-center">
-                <div className="text-center space-y-4">
-                  {/* Cocktail Glass SVG */}
-                  <div className="mx-auto w-24 h-24 relative">
-                    <svg viewBox="0 0 100 100" className="w-full h-full">
-                      {/* Glass */}
-                      <path d="M20 30 L80 30 L60 70 L40 70 Z" fill="none" stroke="#00FFF0" strokeWidth="2" opacity="0.8"/>
-                      {/* Stem */}
-                      <line x1="50" y1="70" x2="50" y2="85" stroke="#00FFF0" strokeWidth="2" opacity="0.8"/>
-                      {/* Base */}
-                      <line x1="40" y1="85" x2="60" y2="85" stroke="#00FFF0" strokeWidth="3" opacity="0.8"/>
-                      {/* Liquid */}
-                      <path d="M25 35 L75 35 L60 65 L40 65 Z" fill="url(#cocktailGradient)" opacity="0.6"/>
-                      {/* Animated drop */}
-                      <circle cx="50" cy="20" r="2" fill="#00FFF0" opacity="0.8">
-                        <animate attributeName="cy" values="20;35;20" dur="2s" repeatCount="indefinite"/>
-                        <animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite"/>
-                      </circle>
-                    </svg>
-                    {/* Gradient definition */}
-                    <svg className="absolute inset-0 pointer-events-none">
-                      <defs>
-                        <linearGradient id="cocktailGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                          <stop offset="0%" style={{stopColor: '#FF4D9D', stopOpacity: 0.8}} />
-                          <stop offset="100%" style={{stopColor: '#00FFF0', stopOpacity: 0.4}} />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                  </div>
-                  
-                  {/* Glow effect around glass */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/20 to-pink-400/20 rounded-2xl blur-xl"></div>
-                  
-                  <div className="text-gray-400 text-sm">
-                    Интерактивное обучение
-                  </div>
-                </div>
+              {/* Bartender Image */}
+              <div className="relative w-80 h-96 rounded-2xl overflow-hidden border border-slate-700/50 animate-shimmer-shadow">
+                <img 
+                  src="/attached_assets/Leonardo_Phoenix_10_A_stylish_male_bartender_with_rolledup_sle_2 (1)_1752845021301.jpg"
+                  alt="Professional bartender creating cocktails"
+                  className="w-full h-full object-cover"
+                />
+                {/* Dynamic glow overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-pink-400/10 rounded-2xl"></div>
               </div>
             </div>
           </div>

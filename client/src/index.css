@@ -132,6 +132,32 @@
   .animate-breathing {
     animation: breathing 4s ease-in-out infinite;
   }
+
+  /* Shimmering shadow animation */
+  @keyframes shimmer-shadow {
+    0%, 100% {
+      box-shadow: 
+        0 0 20px rgba(0, 255, 240, 0.3),
+        0 0 40px rgba(255, 77, 157, 0.2),
+        0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    33% {
+      box-shadow: 
+        0 0 30px rgba(255, 77, 157, 0.4),
+        0 0 50px rgba(179, 136, 235, 0.3),
+        0 15px 40px rgba(0, 0, 0, 0.5);
+    }
+    66% {
+      box-shadow: 
+        0 0 25px rgba(179, 136, 235, 0.3),
+        0 0 45px rgba(255, 186, 8, 0.2),
+        0 12px 35px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .animate-shimmer-shadow {
+    animation: shimmer-shadow 4s ease-in-out infinite;
+  }
   
   .bg-neon-turquoise {
     background-color: var(--neon-turquoise);
