@@ -225,18 +225,19 @@ export default function PopularRecipesSection() {
             pauseOnMouseEnter: true,
           }}
           slidesPerView={1}
-          spaceBetween={40}
+          spaceBetween={60}
           breakpoints={{
             640: {
               slidesPerView: 2,
-              spaceBetween: 40,
+              spaceBetween: 60,
             },
             1024: {
               slidesPerView: 3,
-              spaceBetween: 50,
+              spaceBetween: 80,
             },
           }}
           className="popular-recipes-swiper mb-8"
+          style={{ overflow: 'visible' }}
         >
           {popularRecipes.map((recipe) => (
             <SwiperSlide key={recipe.id}>
