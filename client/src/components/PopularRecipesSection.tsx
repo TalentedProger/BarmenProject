@@ -138,7 +138,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           <p className="text-zinc-300 text-base italic">{recipe.description}</p>
 
           {/* Tags - Fixed height to prevent layout shift */}
-          <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start">
+          <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start pt-[6px] pb-[6px]">
             {recipe.tags.map((tag, index) => (
               <span
                 key={index}
