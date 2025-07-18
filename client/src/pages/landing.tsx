@@ -222,51 +222,26 @@ export default function Landing() {
               </div>
             </div>
             
-            {/* Right side - Bar photo in wine glass shape */}
+            {/* Right side - Cocktail image with elegant shadows */}
             <div className="flex-1 flex justify-center md:justify-end">
               <div className="relative hover:scale-105 transition-all duration-300">
-                {/* Wine glass shape container with clip-path */}
-                <div 
-                  className="w-64 h-96 relative overflow-hidden"
+                <img 
+                  src="/attached_assets/Flux_Dev_a_lush_3d_render_of_A_stylized_artistic_illustration__3-Photoroom_1752879813613.png"
+                  alt="Стилизованный коктейль с градиентными эффектами"
+                  className="w-80 h-auto object-contain relative z-10"
                   style={{
-                    clipPath: 'polygon(42% 0%, 58% 0%, 60% 5%, 85% 45%, 90% 65%, 85% 75%, 55% 85%, 54% 90%, 56% 100%, 44% 100%, 46% 90%, 45% 85%, 15% 75%, 10% 65%, 15% 45%, 40% 5%)',
-                    filter: 'drop-shadow(0 20px 40px rgba(0, 255, 255, 0.2))'
+                    filter: 'drop-shadow(0 25px 50px rgba(138, 43, 226, 0.3)) drop-shadow(0 15px 30px rgba(0, 255, 255, 0.2))',
                   }}
-                >
-                  <img 
-                    src="/attached_assets/Flux_Dev_a_lush_3d_render_of_A_stylized_artistic_illustration__3-Photoroom_1752879813613.png"
-                    alt="Стилизованный коктейль с градиентными эффектами"
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                  
-                  {/* Glass highlight for 3D effect */}
-                  <div 
-                    className="absolute inset-0 opacity-30"
-                    style={{
-                      background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.2) 20%, transparent 40%, transparent 60%, rgba(255,255,255,0.1) 80%, transparent 100%)',
-                      clipPath: 'polygon(42% 0%, 58% 0%, 60% 5%, 85% 45%, 90% 65%, 85% 75%, 55% 85%, 54% 90%, 56% 100%, 44% 100%, 46% 90%, 45% 85%, 15% 75%, 10% 65%, 15% 45%, 40% 5%)'
-                    }}
-                  ></div>
-                </div>
+                  loading="lazy"
+                />
                 
-                {/* Glass rim and 3D edge effects */}
-                <div 
-                  className="absolute top-0 left-0 w-64 h-96 border border-cyan-200/40"
-                  style={{
-                    clipPath: 'polygon(42% 0%, 58% 0%, 60% 5%, 85% 45%, 90% 65%, 85% 75%, 55% 85%, 54% 90%, 56% 100%, 44% 100%, 46% 90%, 45% 85%, 15% 75%, 10% 65%, 15% 45%, 40% 5%)',
-                    boxShadow: 'inset 0 0 30px rgba(0, 255, 255, 0.15), inset -10px 0 20px rgba(255, 255, 255, 0.1)'
-                  }}
-                ></div>
+                {/* Elegant glow effects behind the cocktail */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-purple-500/20 to-cyan-400/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-pink-400/15 to-blue-400/15 rounded-full blur-2xl -z-20"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-t from-violet-400/25 to-cyan-300/25 rounded-full blur-xl -z-30"></div>
                 
-                {/* Stem shadow for depth */}
-                <div 
-                  className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-2 h-16 bg-gradient-to-b from-transparent to-black/20 blur-sm"
-                ></div>
-                
-                {/* Glow effects behind the glass */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-cyan-400/15 to-purple-500/15 rounded-full blur-3xl -z-10"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-purple-400/8 to-cyan-400/8 rounded-full blur-[100px] -z-20"></div>
+                {/* Soft base shadow */}
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black/20 rounded-full blur-lg -z-40"></div>
               </div>
             </div>
           </div>
