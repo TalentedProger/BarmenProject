@@ -106,7 +106,7 @@ const popularRecipes: Recipe[] = [
 
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   return (
-    <div className="recipe-card bg-[#1A1A1E] rounded-2xl shadow-lg shadow-pink-500/20 hover:shadow-cyan-500/30 transition-all duration-300 overflow-hidden group">
+    <div className="recipe-card bg-[#1A1A1E] rounded-2xl shadow-lg shadow-pink-500/20 hover:shadow-cyan-500/30 transition-all duration-300 overflow-hidden group h-[520px] flex flex-col">
       {/* Image */}
       <div className="relative overflow-hidden">
         <img
@@ -120,19 +120,19 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-3">
+      <div className="p-4 space-y-3 flex-1 flex flex-col">
         {/* Title */}
         <h3 className="text-white text-2xl font-semibold">{recipe.name}</h3>
         
         {/* Description */}
         <p className="text-zinc-300 text-base italic">{recipe.description}</p>
 
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2">
+        {/* Tags - Fixed height to prevent layout shift */}
+        <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start">
           {recipe.tags.map((tag, index) => (
             <span
               key={index}
-              className="text-sm bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-zinc-200 font-medium"
+              className="text-sm bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-zinc-200 font-medium whitespace-nowrap"
             >
               {tag}
             </span>
@@ -167,8 +167,8 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           </div>
         </div>
 
-        {/* Single centered button */}
-        <div className="flex justify-center pt-4">
+        {/* Single centered button - Push to bottom */}
+        <div className="flex justify-center pt-4 mt-auto">
           <Button
             className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
           >
@@ -184,7 +184,7 @@ export default function PopularRecipesSection() {
   const [swiperRef, setSwiperRef] = useState<any>(null);
 
   return (
-    <section className="py-16 bg-[#0C0C0F] relative overflow-hidden">
+    <section className="py-24 bg-[#0C0C0F] relative overflow-hidden">
       {/* Background gradient effects */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 blur-sm" />
