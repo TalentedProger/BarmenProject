@@ -52,9 +52,9 @@ export default function Landing() {
             <div className="flex justify-end items-start animate-slide-up h-full pt-8">
               <div className="relative">
                 <img 
-                  src="/attached_assets/Leonardo_Phoenix_10_A_futuristic_interactive_cocktail_creation_0 (1)_1752851067513.png"
+                  src="/attached_assets/Leonardo_Phoenix_10_A_futuristic_interactive_cocktail_creation_0 (1)_1752851226590.png"
                   alt="Interactive cocktail creation with layered colors"
-                  className="h-[90%] w-auto object-contain relative z-10 max-h-96"
+                  className="h-full w-auto object-contain relative z-10"
                 />
                 {/* Subtle glow effect behind the image */}
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/20 to-purple-400/20 rounded-full blur-2xl transform scale-75"></div>
