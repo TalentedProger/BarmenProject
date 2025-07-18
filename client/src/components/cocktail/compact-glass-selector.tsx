@@ -43,21 +43,31 @@ export function CompactGlassSelector() {
   const isSelected = selectedGlass?.id === currentGlass.id;
 
   return (
-    <div className="flex flex-col items-center h-full justify-between">
+    <div className="relative flex flex-col items-center h-full justify-between">
+      {/* Navigation buttons positioned at main container edges */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={prevGlass}
+        className="absolute left-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-16 h-16 z-10"
+      >
+        <ChevronLeft className="h-24 w-24" />
+      </Button>
+      
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={nextGlass}
+        className="absolute right-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-16 h-16 z-10"
+      >
+        <ChevronRight className="h-24 w-24" />
+      </Button>
+
       <div className="flex flex-col items-center space-y-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">Выберите стакан</h3>
         
-        {/* Glass Image with Navigation - Arrows at container edges */}
-        <div className="relative flex items-center justify-center w-full">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={prevGlass}
-            className="absolute left-0 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-12 h-12"
-          >
-            <ChevronLeft className="h-12 w-12" />
-          </Button>
-          
+        {/* Glass Image - centered without navigation interference */}
+        <div className="flex items-center justify-center w-full">          
           <div className="flex flex-col items-center space-y-2">
             {/* Enlarged glass image */}
             <div className="w-48 h-56 flex items-center justify-center">
@@ -68,15 +78,6 @@ export function CompactGlassSelector() {
               />
             </div>
           </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={nextGlass}
-            className="absolute right-0 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-12 h-12"
-          >
-            <ChevronRight className="h-12 w-12" />
-          </Button>
         </div>
 
         {/* Glass name closer to button */}
