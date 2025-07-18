@@ -150,7 +150,7 @@ const CoursesSection = () => {
             {courses.map((course, index) => (
               <div key={index} className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-xl p-6 border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-slate-900/20 flex flex-col">
                 {/* Course Image */}
-                <div className="w-full h-32 rounded-lg mb-4 overflow-hidden">
+                <div className="w-full h-64 rounded-lg mb-4 overflow-hidden">
                   <img 
                     src={course.image} 
                     alt={course.title}
