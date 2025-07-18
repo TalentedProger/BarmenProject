@@ -159,25 +159,26 @@
     animation: shimmer-shadow 4s ease-in-out infinite;
   }
 
-  /* Hero button pulse glow animation */
-  @keyframes pulse-glow {
+  /* Hero button gentle breathing animation */
+  @keyframes gentle-breathe {
     0%, 100% {
       box-shadow: 
-        0 0 20px rgba(179, 136, 235, 0.4),
-        0 0 40px rgba(179, 136, 235, 0.2),
+        0 0 15px rgba(179, 136, 235, 0.3),
+        0 0 30px rgba(179, 136, 235, 0.15),
         0 8px 25px rgba(0, 0, 0, 0.3);
+      transform: scale(1);
     }
     50% {
       box-shadow: 
-        0 0 30px rgba(179, 136, 235, 0.6),
-        0 0 60px rgba(179, 136, 235, 0.3),
-        0 12px 30px rgba(0, 0, 0, 0.4);
-      transform: translateY(-2px) scale(1.02);
+        0 0 25px rgba(179, 136, 235, 0.45),
+        0 0 50px rgba(179, 136, 235, 0.25),
+        0 10px 30px rgba(0, 0, 0, 0.35);
+      transform: scale(1.01);
     }
   }
 
-  .animate-pulse-glow {
-    animation: pulse-glow 4s ease-in-out infinite;
+  .animate-gentle-breathe {
+    animation: gentle-breathe 6s ease-in-out infinite;
   }
   
   .bg-neon-turquoise {
