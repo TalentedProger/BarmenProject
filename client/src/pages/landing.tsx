@@ -145,10 +145,10 @@ export default function Landing() {
             
             <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
               <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-neon-turquoise rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Users className="text-night-blue text-2xl" />
                 </div>
-                <h3 className="text-xl font-bold text-platinum mb-2">👥 Сообщество</h3>
+                <h3 className="text-xl font-bold text-platinum mb-2">Сообщество</h3>
                 <p className="text-zinc">
                   Присоединяйтесь к сообществу барменов, делитесь опытом и находите единомышленников
                 </p>
@@ -157,7 +157,7 @@ export default function Landing() {
             
             <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
               <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-neon-purple rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <ShoppingCart className="text-night-blue text-2xl" />
                 </div>
                 <h3 className="text-xl font-bold text-platinum mb-2">Магазин барного инвентаря</h3>
@@ -169,7 +169,7 @@ export default function Landing() {
             
             <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
               <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-neon-amber rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <GraduationCap className="text-night-blue text-2xl" />
                 </div>
                 <h3 className="text-xl font-bold text-platinum mb-2">Специальные курсы</h3>

@@ -194,3 +194,13 @@ The project has been successfully migrated from Replit Agent to the standard Rep
 - ✅ All core features working: constructor, catalog, generator, and profile pages
 - ✅ API endpoints responding correctly (ingredients, recipes, etc.)
 - ✅ Migration checklist completed successfully
+
+### January 18, 2025 - Landing Page Improvements
+- ✅ Moved 3 cards from "Дополнительные возможности" to "Возможности платформы" section
+- ✅ Removed the entire "Дополнительные возможности" section
+- ✅ Updated "Возможности платформы" section to display 6 cards in 3-column grid
+- ✅ Removed emoji from "Сообщество" card title
+- ✅ Updated background colors for last 3 cards with distinct colors:
+  - Сообщество: green (bg-green-500)
+  - Магазин барного инвентаря: orange (bg-orange-500)
+  - Специальные курсы: purple (bg-purple-500)
