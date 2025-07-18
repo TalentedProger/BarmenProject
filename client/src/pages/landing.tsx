@@ -142,26 +142,7 @@ export default function Landing() {
                 </p>
               </CardContent>
             </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Popular Recipes Section */}
-      <PopularRecipesSection />
-
-      {/* Additional Services Section */}
-      <section className="py-16 bg-gradient-to-b from-graphite/50 to-transparent">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 text-platinum">
-              Дополнительные возможности
-            </h2>
-            <p className="text-lg text-zinc max-w-2xl mx-auto">
-              Расширьте свои навыки и возможности в мире барменского искусства
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
+            
             <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
               <CardContent className="p-6 text-center">
                 <div className="w-16 h-16 bg-neon-turquoise rounded-full flex items-center justify-center mx-auto mb-4">
@@ -200,6 +181,11 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Popular Recipes Section */}
+      <PopularRecipesSection />
+
+
 
       {/* Courses Section */}
       <CoursesSection />
