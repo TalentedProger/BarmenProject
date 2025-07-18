@@ -66,7 +66,10 @@ export default function Landing() {
           <div className="flex flex-col sm:flex-row gap-6 justify-center mt-8">
             <Button 
               onClick={handleGetStarted}
-              className="hero-primary-button bg-gradient-to-r from-neon-purple to-electric text-white px-10 py-5 text-lg font-semibold rounded-xl shadow-lg shadow-neon-purple/30 hover:shadow-xl hover:shadow-neon-purple/50 transform hover:scale-105 transition-all duration-300 animate-gentle-breathe relative overflow-hidden"
+              className="hero-primary-button bg-gradient-to-r from-neon-purple to-electric text-white px-10 py-5 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden"
+              style={{
+                boxShadow: '0 0 20px rgba(179, 136, 235, 0.4), 0 0 40px rgba(179, 136, 235, 0.2), 0 8px 25px rgba(0, 0, 0, 0.3)'
+              }}
             >
               <WandSparkles className="mr-2 h-6 w-6" />
               Начать создание
