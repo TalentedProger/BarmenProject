@@ -102,87 +102,89 @@ const popularRecipes: Recipe[] = [
   }
 ];
 
-
-
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   return (
-    <div className="recipe-card bg-[#1A1A1E] rounded-2xl transition-all duration-300 overflow-hidden group h-[520px] flex flex-col" 
-         style={{
-           boxShadow: '0 0 12px rgba(236, 72, 153, 0.15), 0 0 12px rgba(236, 72, 153, 0.15), 0 4px 20px rgba(0, 0, 0, 0.25)'
-         }}
-         onMouseEnter={(e) => {
-           e.currentTarget.style.boxShadow = '0 0 16px rgba(6, 182, 212, 0.2), 0 0 16px rgba(6, 182, 212, 0.2), 0 6px 24px rgba(0, 0, 0, 0.3)';
-         }}
-         onMouseLeave={(e) => {
-           e.currentTarget.style.boxShadow = '0 0 12px rgba(236, 72, 153, 0.15), 0 0 12px rgba(236, 72, 153, 0.15), 0 4px 20px rgba(0, 0, 0, 0.25)';
-         }}>
-      {/* Image */}
-      <div className="relative overflow-hidden">
-        <img
-          src={recipe.image}
-          alt={recipe.name}
-          className="w-full h-48 object-cover rounded-t-2xl transition-transform duration-300 group-hover:scale-105"
-          loading="lazy"
-          decoding="async"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-      </div>
-
-      {/* Content */}
-      <div className="p-4 space-y-3 flex-1 flex flex-col">
-        {/* Title */}
-        <h3 className="text-white text-2xl font-semibold">{recipe.name}</h3>
-        
-        {/* Description */}
-        <p className="text-zinc-300 text-base italic">{recipe.description}</p>
-
-        {/* Tags - Fixed height to prevent layout shift */}
-        <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start">
-          {recipe.tags.map((tag, index) => (
-            <span
-              key={index}
-              className="text-sm bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-zinc-200 font-medium whitespace-nowrap"
-            >
-              {tag}
-            </span>
-          ))}
+    <div className="recipe-card relative">
+      <div 
+        className="bg-[#1A1A1E] rounded-2xl transition-all duration-300 overflow-hidden group h-[520px] flex flex-col relative z-10"
+        style={{
+          filter: 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.filter = 'drop-shadow(0 0 16px rgba(6, 182, 212, 0.2)) drop-shadow(0 6px 24px rgba(0, 0, 0, 0.3))';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.filter = 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))';
+        }}
+      >
+        {/* Image */}
+        <div className="relative overflow-hidden">
+          <img
+            src={recipe.image}
+            alt={recipe.name}
+            className="w-full h-48 object-cover rounded-t-2xl transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         </div>
 
-        {/* Stats in column */}
-        <div className="space-y-2 text-base text-zinc-200 font-medium">
-          <div className="flex items-center">
-            <span>🍹 ABV: {recipe.abv}%</span>
+        {/* Content */}
+        <div className="p-4 space-y-3 flex-1 flex flex-col">
+          {/* Title */}
+          <h3 className="text-white text-2xl font-semibold">{recipe.name}</h3>
+          
+          {/* Description */}
+          <p className="text-zinc-300 text-base italic">{recipe.description}</p>
+
+          {/* Tags - Fixed height to prevent layout shift */}
+          <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start">
+            {recipe.tags.map((tag, index) => (
+              <span
+                key={index}
+                className="text-sm bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-zinc-200 font-medium whitespace-nowrap"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
-          <div className="flex items-center">
-            <span>💧 Объем: {recipe.volume} мл</span>
-          </div>
-          <div className="flex items-center">
-            <span>💰 Цена: {recipe.price || '150'} ₽</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="flex">
-              {Array.from({ length: 5 }, (_, i) => (
-                <Star
-                  key={i}
-                  className={`w-4 h-4 ${
-                    i < Math.floor(recipe.rating)
-                      ? 'fill-yellow-400 text-yellow-400'
-                      : 'text-gray-500'
-                  }`}
-                />
-              ))}
+
+          {/* Stats in column */}
+          <div className="space-y-2 text-base text-zinc-200 font-medium">
+            <div className="flex items-center">
+              <span>🍹 ABV: {recipe.abv}%</span>
             </div>
-            <span className="text-base text-zinc-300 font-medium">({recipe.reviewCount})</span>
+            <div className="flex items-center">
+              <span>💧 Объем: {recipe.volume} мл</span>
+            </div>
+            <div className="flex items-center">
+              <span>💰 Цена: {recipe.price || '150'} ₽</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="flex">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i < Math.floor(recipe.rating)
+                        ? 'fill-yellow-400 text-yellow-400'
+                        : 'text-gray-500'
+                    }`}
+                  />
+                ))}
+              </div>
+              <span className="text-base text-zinc-300 font-medium">({recipe.reviewCount})</span>
+            </div>
           </div>
-        </div>
 
-        {/* Single centered button - Push to bottom */}
-        <div className="flex justify-center pt-4 mt-auto">
-          <Button
-            className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-          >
-            Открыть рецепт
-          </Button>
+          {/* Single centered button - Push to bottom */}
+          <div className="flex justify-center pt-4 mt-auto">
+            <Button
+              className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+            >
+              Открыть рецепт
+            </Button>
+          </div>
         </div>
       </div>
     </div>
@@ -260,8 +262,6 @@ export default function PopularRecipesSection() {
           </button>
         </div>
       </div>
-
-
     </section>
   );
 }
