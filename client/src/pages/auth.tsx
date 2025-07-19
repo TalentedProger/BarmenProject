@@ -111,10 +111,11 @@ export default function Auth() {
                 {/* Title positioned inside container at top */}
                 <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center w-full px-4">
                   <h1 
-                    className="font-bold text-white/70 text-center text-[30px] leading-tight transition-transform duration-1000"
+                    className="font-bold text-transparent text-center text-[30px] leading-tight opacity-70"
                     style={{ 
-                      animation: 'gentleGlow 5s ease-in-out infinite alternate',
-                      transformOrigin: 'center'
+                      background: 'linear-gradient(135deg, rgba(88, 28, 135, 0.9) 0%, rgba(157, 78, 221, 0.8) 30%, rgba(219, 39, 119, 0.8) 70%, rgba(190, 24, 93, 0.9) 100%)',
+                      WebkitBackgroundClip: 'text',
+                      backgroundClip: 'text'
                     }}
                   >
                     Добро<br />
