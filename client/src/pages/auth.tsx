@@ -189,7 +189,7 @@ export default function Auth() {
                   onClick={() => setIsLogin(true)}
                   className={`flex-1 py-3 px-4 rounded-md font-semibold transition-all duration-300 ${
                     isLogin
-                      ? 'bg-gradient-to-r from-neon-turquoise to-electric text-black shadow-lg shadow-neon-turquoise/30'
+                      ? 'bg-gradient-to-r from-neon-turquoise to-electric text-black shadow-lg shadow-neon-turquoise/30 border border-neon-turquoise/50'
                       : 'text-white/70 hover:text-white hover:bg-white/5'
                   }`}
                 >
@@ -200,7 +200,7 @@ export default function Auth() {
                   onClick={() => setIsLogin(false)}
                   className={`flex-1 py-3 px-4 rounded-md font-semibold transition-all duration-300 ${
                     !isLogin
-                      ? 'bg-gradient-to-r from-neon-purple to-neon-pink text-black shadow-lg shadow-neon-purple/30'
+                      ? 'bg-gradient-to-r from-neon-purple to-neon-pink text-black shadow-lg shadow-neon-purple/30 border border-neon-purple/50'
                       : 'text-white/70 hover:text-white hover:bg-white/5'
                   }`}
                 >
