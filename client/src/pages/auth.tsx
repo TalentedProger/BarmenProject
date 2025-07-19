@@ -107,9 +107,9 @@ export default function Auth() {
       <div className="relative z-10 flex min-h-screen">
         {/* Left Side - Visual (Hidden on Mobile) */}
         <div className="hidden md:flex md:w-1/2 items-center justify-center p-8">
-          <div className="text-center space-y-4 max-w-md">
+          <div className="text-center space-y-2 max-w-md">
             {/* Title */}
-            <h1 className="text-4xl font-bold text-white mb-4" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
+            <h1 className="text-4xl font-bold text-white mb-8" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
               Добро пожаловать в Cocktailo
             </h1>
             
@@ -166,7 +166,7 @@ export default function Auth() {
             </div>
             
             {/* Quote */}
-            <blockquote className="text-xl italic text-white/80 leading-relaxed mt-4" style={{ textShadow: '0 0 5px rgba(192, 132, 252, 0.3)' }}>
+            <blockquote className="text-xl italic text-white/80 leading-relaxed mt-8" style={{ textShadow: '0 0 5px rgba(192, 132, 252, 0.3)' }}>
               "Каждый коктейль начинается с твоей идеи."
             </blockquote>
           </div>
