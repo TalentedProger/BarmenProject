@@ -370,13 +370,13 @@ export default function Landing() {
 
       {/* Footer with liquid wave effect */}
       <footer className="relative bg-gradient-to-b from-slate-950 to-black overflow-hidden">
-        {/* Animated liquid wave at top - full width */}
+        {/* Static neon wave at top - full width */}
         <div className="absolute top-0 left-0 w-full h-20 overflow-hidden">
           <svg 
-            className="absolute w-full h-full animate-pulse" 
+            className="absolute w-full h-full" 
             viewBox="0 0 1200 120" 
             preserveAspectRatio="none"
-            style={{ width: '100vw', left: '50%', transform: 'translateX(-50%)' }}
+            style={{ width: '100%' }}
           >
             <defs>
               <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -402,29 +402,7 @@ export default function Landing() {
               d="M0,50 C100,30 200,70 300,50 C400,30 500,70 600,50 C700,30 800,70 900,50 C1000,30 1100,70 1200,50 L1200,0 L0,0 Z" 
               fill="url(#waveGradient)" 
               filter="url(#glow)"
-            >
-              <animateTransform
-                attributeName="transform"
-                type="translate"
-                values="0,0;-100,0;0,0"
-                dur="8s"
-                repeatCount="indefinite"
-              />
-            </path>
-            <path 
-              d="M0,35 C80,55 160,15 240,35 C320,55 400,15 480,35 C560,55 640,15 720,35 C800,55 880,15 960,35 C1040,55 1120,15 1200,35 L1200,0 L0,0 Z" 
-              fill="url(#waveGradient)" 
-              opacity="0.7"
-              filter="url(#glow)"
-            >
-              <animateTransform
-                attributeName="transform"
-                type="translate"
-                values="0,0;100,0;0,0"
-                dur="10s"
-                repeatCount="indefinite"
-              />
-            </path>
+            />
           </svg>
         </div>
 
