@@ -112,9 +112,10 @@ export default function Auth() {
             <div className="mx-auto relative py-8">
               <div className="relative group">
                 {/* Title positioned inside container at top */}
-                <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center max-w-xs">
+                <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center w-full px-4">
                   <h1 className="text-4xl font-bold text-white leading-tight" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
-                    Добро пожаловать в Cocktailo
+                    Добро<br />
+                    пожаловать в Cocktailo
                   </h1>
                 </div>
                 
