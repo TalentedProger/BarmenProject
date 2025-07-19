@@ -110,7 +110,12 @@ export default function Auth() {
               <div className="relative group">
                 {/* Title positioned inside container at top */}
                 <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center w-full px-4">
-                  <h1 className="font-bold text-white text-center text-[30px]" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
+                  <h1 
+                    className="font-bold text-white/70 text-center text-[30px] leading-tight"
+                    style={{ 
+                      animation: 'gentleGlow 4s ease-in-out infinite alternate'
+                    }}
+                  >
                     Добро<br />
                     пожаловать в Cocktailo
                   </h1>

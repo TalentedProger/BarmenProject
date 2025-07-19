@@ -125,6 +125,18 @@
     }
   }
 
+  /* Gentle glow animation for auth title */
+  @keyframes gentleGlow {
+    0% {
+      text-shadow: 0 0 15px rgba(0, 255, 247, 0.4), 0 0 30px rgba(192, 132, 252, 0.3), 0 0 45px rgba(255, 110, 199, 0.15);
+      filter: drop-shadow(0 0 6px rgba(0, 255, 247, 0.2)) brightness(0.9);
+    }
+    100% {
+      text-shadow: 0 0 25px rgba(0, 255, 247, 0.7), 0 0 50px rgba(192, 132, 252, 0.5), 0 0 75px rgba(255, 110, 199, 0.25);
+      filter: drop-shadow(0 0 12px rgba(0, 255, 247, 0.4)) brightness(1.1);
+    }
+  }
+
   /* Fade in animation for auth form elements */
   @keyframes fade-in {
     0% {
