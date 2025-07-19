@@ -111,9 +111,10 @@ export default function Auth() {
                 {/* Title positioned inside container at top */}
                 <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center w-full px-4">
                   <h1 
-                    className="font-bold text-white/70 text-center text-[30px] leading-tight"
+                    className="font-bold text-white/70 text-center text-[30px] leading-tight transition-transform duration-1000"
                     style={{ 
-                      animation: 'gentleGlow 4s ease-in-out infinite alternate'
+                      animation: 'gentleGlow 5s ease-in-out infinite alternate',
+                      transformOrigin: 'center'
                     }}
                   >
                     Добро<br />
