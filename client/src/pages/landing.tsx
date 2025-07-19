@@ -3,10 +3,39 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Martini, WandSparkles, Dice2, BookOpen, GraduationCap, ShoppingCart, Users } from "lucide-react";
 import CoursesSection from "@/components/landing/courses-section";
 import PopularRecipesSection from "@/components/PopularRecipesSection";
+import { useState } from "react";
 
 export default function Landing() {
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  
   const handleGetStarted = () => {
     window.location.href = "/constructor";
+  };
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setEmailError("");
+    
+    if (!email.trim()) {
+      setEmailError("Введите email адрес");
+      return;
+    }
+    
+    if (!validateEmail(email)) {
+      setEmailError("Введите корректный email адрес");
+      return;
+    }
+    
+    // Здесь будет логика отправки email
+    console.log("Подписка на email:", email);
+    alert("Спасибо за подписку!");
+    setEmail("");
   };
 
   return (
@@ -303,12 +332,13 @@ export default function Landing() {
 
       {/* Footer with liquid wave effect */}
       <footer className="relative bg-gradient-to-b from-slate-950 to-black overflow-hidden">
-        {/* Animated liquid wave at top */}
+        {/* Animated liquid wave at top - full width */}
         <div className="absolute top-0 left-0 w-full h-20 overflow-hidden">
           <svg 
             className="absolute w-full h-full animate-pulse" 
             viewBox="0 0 1200 120" 
             preserveAspectRatio="none"
+            style={{ width: '100vw', left: '50%', transform: 'translateX(-50%)' }}
           >
             <defs>
               <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -412,15 +442,26 @@ export default function Landing() {
               <div className="space-y-6">
                 <h4 className="text-lg font-semibold text-white mb-4">Будь в курсе новых рецептов и фишек</h4>
                 
-                <form className="space-y-4">
-                  <input
-                    type="email"
-                    placeholder="Введи свой email"
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-zinc-500 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 focus:outline-none transition-all duration-300"
-                    style={{
-                      backdropFilter: 'blur(10px)',
-                    }}
-                  />
+                <form className="space-y-4" onSubmit={handleEmailSubmit}>
+                  <div className="space-y-2">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Введи свой email"
+                      className={`w-full px-4 py-3 bg-slate-900/50 border rounded-lg text-white placeholder-zinc-500 focus:ring-1 focus:outline-none transition-all duration-300 ${
+                        emailError 
+                          ? 'border-red-500 focus:border-red-400 focus:ring-red-400' 
+                          : 'border-slate-700 focus:border-cyan-400 focus:ring-cyan-400'
+                      }`}
+                      style={{
+                        backdropFilter: 'blur(10px)',
+                      }}
+                    />
+                    {emailError && (
+                      <p className="text-red-400 text-xs pl-1">{emailError}</p>
+                    )}
+                  </div>
                   
                   <button
                     type="submit"
