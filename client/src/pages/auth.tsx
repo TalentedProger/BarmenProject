@@ -84,14 +84,12 @@ export default function Auth() {
       >
         <div className="absolute inset-0 bg-black/55 backdrop-blur-[6px]"></div>
       </div>
-
       {/* Floating Background Elements */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 bg-neon-turquoise rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-32 right-16 w-40 h-40 bg-neon-purple rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
         <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-pink-400 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
-
       {/* Back Button */}
       <Link href="/">
         <Button 
@@ -102,7 +100,6 @@ export default function Auth() {
           На главную
         </Button>
       </Link>
-
       {/* Main Content */}
       <div className="relative z-10 flex min-h-screen">
         {/* Left Side - Visual (Hidden on Mobile) */}
@@ -113,7 +110,7 @@ export default function Auth() {
               <div className="relative group">
                 {/* Title positioned inside container at top */}
                 <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center w-full px-4">
-                  <h1 className="text-4xl font-bold text-white leading-tight" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
+                  <h1 className="font-bold text-white text-[40px]" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
                     Добро<br />
                     пожаловать в Cocktailo
                   </h1>
