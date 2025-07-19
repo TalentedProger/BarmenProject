@@ -107,58 +107,65 @@ export default function Auth() {
       <div className="relative z-10 flex min-h-screen">
         {/* Left Side - Visual (Hidden on Mobile) */}
         <div className="hidden md:flex md:w-1/2 items-center justify-center p-8">
-          <div className="text-center space-y-6 max-w-md">
-            {/* Cocktail Glass SVG Animation */}
-            <div className="mx-auto mb-8">
-              <svg
-                width="120"
-                height="160"
-                viewBox="0 0 120 160"
-                className="mx-auto filter drop-shadow-lg"
-              >
-                <defs>
-                  <linearGradient id="cocktailGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#FF6EC7" stopOpacity="0.8" />
-                    <stop offset="50%" stopColor="#C084FC" stopOpacity="0.9" />
-                    <stop offset="100%" stopColor="#00FFF7" stopOpacity="0.8" />
-                  </linearGradient>
-                  <filter id="glow">
-                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                    <feMerge> 
-                      <feMergeNode in="coloredBlur"/>
-                      <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                  </filter>
-                </defs>
-                
-                {/* Glass outline */}
-                <path
-                  d="M20 40 L100 40 L85 100 L35 100 Z"
-                  fill="none"
-                  stroke="rgba(255, 255, 255, 0.3)"
-                  strokeWidth="2"
-                />
-                
-                {/* Liquid layers with animation */}
-                <path
-                  d="M35 100 L85 100 L80 85 L40 85 Z"
-                  fill="url(#cocktailGradient)"
-                  filter="url(#glow)"
-                  className="animate-pulse"
-                />
-                
-                {/* Stem */}
-                <rect x="57" y="100" width="6" height="40" fill="rgba(255, 255, 255, 0.3)" />
-                
-                {/* Base */}
-                <ellipse cx="60" cy="145" rx="25" ry="8" fill="rgba(255, 255, 255, 0.3)" />
-              </svg>
-            </div>
-            
-            <h1 className="text-4xl font-bold text-white mb-4" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
+          <div className="text-center space-y-8 max-w-md">
+            {/* Title */}
+            <h1 className="text-4xl font-bold text-white" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
               Добро пожаловать в Cocktailo
             </h1>
             
+            {/* Futuristic Cocktail Glass Image */}
+            <div className="mx-auto relative">
+              <div className="relative group">
+                <img 
+                  src="/attached_assets/Flux_Dev_a_lush_3d_render_of_Stylized_futuristic_cocktail_glas_3 (1)-Photoroom_1752957568046.png"
+                  alt="Футуристический коктейльный бокал с неоновыми оттенками"
+                  className="w-80 h-auto object-contain mx-auto relative z-10 transition-all duration-700 group-hover:scale-105"
+                  loading="eager"
+                />
+                
+                {/* Спокойные динамические тени */}
+                <div className="absolute inset-0 -z-10">
+                  {/* Основная мягкая тень */}
+                  <div 
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl animate-pulse opacity-30"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(192, 132, 252, 0.4) 0%, rgba(0, 255, 247, 0.3) 50%, rgba(255, 110, 199, 0.2) 100%)',
+                      animationDuration: '4s'
+                    }}
+                  ></div>
+                  
+                  {/* Вторичная тень */}
+                  <div 
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full blur-2xl animate-pulse opacity-20"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(0, 255, 247, 0.5) 0%, rgba(192, 132, 252, 0.4) 70%, transparent 100%)',
+                      animationDuration: '6s',
+                      animationDelay: '1s'
+                    }}
+                  ></div>
+                  
+                  {/* Третья мягкая тень */}
+                  <div 
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-xl animate-pulse opacity-25"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(255, 110, 199, 0.4) 0%, rgba(179, 136, 235, 0.3) 60%, transparent 100%)',
+                      animationDuration: '8s',
+                      animationDelay: '2s'
+                    }}
+                  ></div>
+                  
+                  {/* Базовая тень под бокалом */}
+                  <div 
+                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-8 rounded-full blur-lg opacity-40"
+                    style={{
+                      background: 'radial-gradient(ellipse, rgba(0, 0, 0, 0.6) 0%, transparent 70%)'
+                    }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Quote */}
             <blockquote className="text-xl italic text-white/80 leading-relaxed" style={{ textShadow: '0 0 5px rgba(192, 132, 252, 0.3)' }}>
               "Каждый коктейль начинается с твоей идеи."
             </blockquote>
