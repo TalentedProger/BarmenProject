@@ -107,70 +107,68 @@ export default function Auth() {
       <div className="relative z-10 flex min-h-screen">
         {/* Left Side - Visual (Hidden on Mobile) */}
         <div className="hidden md:flex md:w-1/2 items-center justify-center p-8">
-          <div className="relative w-full h-full flex items-center justify-center">
-            {/* Futuristic Cocktail Glass Image - Full Container */}
-            <div className="relative w-full h-full flex items-center justify-center group">
-              <img 
-                src="/attached_assets/Flux_Dev_a_lush_3d_render_of_Stylized_futuristic_cocktail_glas_3 (1)-Photoroom_1752957568046.png"
-                alt="Футуристический коктейльный бокал с неоновыми оттенками"
-                className="w-full h-full max-w-lg max-h-[80vh] object-contain relative z-10 transition-all duration-700 group-hover:scale-105"
-                loading="eager"
-              />
-              
-              {/* Спокойные динамические тени */}
-              <div className="absolute inset-0 -z-10">
-                {/* Основная мягкая тень */}
-                <div 
-                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl animate-pulse opacity-30"
-                  style={{
-                    background: 'radial-gradient(circle, rgba(192, 132, 252, 0.4) 0%, rgba(0, 255, 247, 0.3) 50%, rgba(255, 110, 199, 0.2) 100%)',
-                    animationDuration: '4s'
-                  }}
-                ></div>
+          <div className="text-center space-y-4 max-w-md">
+            {/* Title */}
+            <h1 className="text-4xl font-bold text-white mb-4" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
+              Добро пожаловать в Cocktailo
+            </h1>
+            
+            {/* Futuristic Cocktail Glass Image */}
+            <div className="mx-auto relative">
+              <div className="relative group">
+                <img 
+                  src="/attached_assets/Flux_Dev_a_lush_3d_render_of_Stylized_futuristic_cocktail_glas_3 (1)-Photoroom_1752957568046.png"
+                  alt="Футуристический коктейльный бокал с неоновыми оттенками"
+                  className="w-80 h-auto object-contain mx-auto relative z-10 transition-all duration-700 group-hover:scale-105"
+                  loading="eager"
+                />
                 
-                {/* Вторичная тень */}
-                <div 
-                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full blur-2xl animate-pulse opacity-20"
-                  style={{
-                    background: 'radial-gradient(circle, rgba(0, 255, 247, 0.5) 0%, rgba(192, 132, 252, 0.4) 70%, transparent 100%)',
-                    animationDuration: '6s',
-                    animationDelay: '1s'
-                  }}
-                ></div>
-                
-                {/* Третья мягкая тень */}
-                <div 
-                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-xl animate-pulse opacity-25"
-                  style={{
-                    background: 'radial-gradient(circle, rgba(255, 110, 199, 0.4) 0%, rgba(179, 136, 235, 0.3) 60%, transparent 100%)',
-                    animationDuration: '8s',
-                    animationDelay: '2s'
-                  }}
-                ></div>
-                
-                {/* Базовая тень под бокалом */}
-                <div 
-                  className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-32 h-8 rounded-full blur-lg opacity-40"
-                  style={{
-                    background: 'radial-gradient(ellipse, rgba(0, 0, 0, 0.6) 0%, transparent 70%)'
-                  }}
-                ></div>
+                {/* Спокойные динамические тени */}
+                <div className="absolute inset-0 -z-10">
+                  {/* Основная мягкая тень */}
+                  <div 
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl animate-pulse opacity-30"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(192, 132, 252, 0.4) 0%, rgba(0, 255, 247, 0.3) 50%, rgba(255, 110, 199, 0.2) 100%)',
+                      animationDuration: '4s'
+                    }}
+                  ></div>
+                  
+                  {/* Вторичная тень */}
+                  <div 
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full blur-2xl animate-pulse opacity-20"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(0, 255, 247, 0.5) 0%, rgba(192, 132, 252, 0.4) 70%, transparent 100%)',
+                      animationDuration: '6s',
+                      animationDelay: '1s'
+                    }}
+                  ></div>
+                  
+                  {/* Третья мягкая тень */}
+                  <div 
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-xl animate-pulse opacity-25"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(255, 110, 199, 0.4) 0%, rgba(179, 136, 235, 0.3) 60%, transparent 100%)',
+                      animationDuration: '8s',
+                      animationDelay: '2s'
+                    }}
+                  ></div>
+                  
+                  {/* Базовая тень под бокалом */}
+                  <div 
+                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-8 rounded-full blur-lg opacity-40"
+                    style={{
+                      background: 'radial-gradient(ellipse, rgba(0, 0, 0, 0.6) 0%, transparent 70%)'
+                    }}
+                  ></div>
+                </div>
               </div>
             </div>
             
-            {/* Title positioned near the glass */}
-            <div className="absolute top-16 left-1/2 transform -translate-x-1/2 text-center">
-              <h1 className="text-3xl font-bold text-white whitespace-nowrap" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
-                Добро пожаловать в Cocktailo
-              </h1>
-            </div>
-            
-            {/* Quote positioned at bottom */}
-            <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-center max-w-sm">
-              <blockquote className="text-lg italic text-white/80 leading-relaxed" style={{ textShadow: '0 0 5px rgba(192, 132, 252, 0.3)' }}>
-                "Каждый коктейль начинается с твоей идеи."
-              </blockquote>
-            </div>
+            {/* Quote */}
+            <blockquote className="text-xl italic text-white/80 leading-relaxed mt-4" style={{ textShadow: '0 0 5px rgba(192, 132, 252, 0.3)' }}>
+              "Каждый коктейль начинается с твоей идеи."
+            </blockquote>
           </div>
         </div>
 
