@@ -11,11 +11,13 @@ import Constructor from "@/pages/constructor";
 import Generator from "@/pages/generator";
 import Catalog from "@/pages/catalog";
 import Profile from "@/pages/profile";
+import Auth from "@/pages/auth";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Landing} />
+      <Route path="/auth" component={Auth} />
       <Route path="/home" component={Home} />
       <Route path="/constructor" component={Constructor} />
       <Route path="/generator" component={Generator} />

@@ -81,10 +81,7 @@ export default function Landing() {
               <Button 
                 variant="outline"
                 className="bg-transparent border border-neon-purple text-neon-purple px-4 py-2 rounded-lg font-medium hover:bg-neon-purple hover:text-night-blue transition-all duration-300 shadow-md shadow-neon-purple/20"
-                onClick={() => {
-                  // В будущем здесь будет логика входа/регистрации
-                  alert("Функция входа/регистрации будет добавлена позже");
-                }}
+                onClick={() => window.location.href = "/auth"}
               >
                 <LogIn className="mr-2 h-4 w-4" />
                 Вход
