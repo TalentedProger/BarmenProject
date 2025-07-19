@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Martini, WandSparkles, Dice2, BookOpen, GraduationCap, ShoppingCart, Users } from "lucide-react";
+import { Martini, WandSparkles, Dice2, BookOpen, GraduationCap, ShoppingCart, Users, LogIn, UserPlus } from "lucide-react";
 import CoursesSection from "@/components/landing/courses-section";
 import PopularRecipesSection from "@/components/PopularRecipesSection";
 import { useState } from "react";
@@ -70,12 +70,26 @@ export default function Landing() {
               <Martini className="text-electric text-2xl" />
               <h1 className="text-xl font-bold text-platinum">Cocktailo Maker</h1>
             </div>
-            <Button 
-              onClick={handleGetStarted}
-              className="minimalist-button bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              Начать
-            </Button>
+            <div className="flex items-center space-x-3">
+              <Button 
+                onClick={handleGetStarted}
+                className="bg-gradient-to-r from-neon-turquoise to-electric text-night-blue px-6 py-2 rounded-lg font-semibold hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/30"
+              >
+                <WandSparkles className="mr-2 h-4 w-4" />
+                Начать
+              </Button>
+              <Button 
+                variant="outline"
+                className="bg-transparent border border-neon-purple text-neon-purple px-4 py-2 rounded-lg font-medium hover:bg-neon-purple hover:text-night-blue transition-all duration-300 shadow-md shadow-neon-purple/20"
+                onClick={() => {
+                  // В будущем здесь будет логика входа/регистрации
+                  alert("Функция входа/регистрации будет добавлена позже");
+                }}
+              >
+                <LogIn className="mr-2 h-4 w-4" />
+                Вход
+              </Button>
+            </div>
           </div>
         </nav>
       </header>
