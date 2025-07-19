@@ -8,6 +8,8 @@ import { useState } from "react";
 export default function Landing() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [heroEmail, setHeroEmail] = useState("");
+  const [heroEmailError, setHeroEmailError] = useState("");
   
   const handleGetStarted = () => {
     window.location.href = "/constructor";
@@ -36,6 +38,26 @@ export default function Landing() {
     console.log("Подписка на email:", email);
     alert("Спасибо за подписку!");
     setEmail("");
+  };
+
+  const handleHeroEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setHeroEmailError("");
+    
+    if (!heroEmail.trim()) {
+      setHeroEmailError("Введите email адрес");
+      return;
+    }
+    
+    if (!validateEmail(heroEmail)) {
+      setHeroEmailError("Введите корректный email адрес");
+      return;
+    }
+    
+    // Здесь будет логика отправки email
+    console.log("Подписка на email из hero:", heroEmail);
+    alert("Спасибо за подписку!");
+    setHeroEmail("");
   };
 
   return (
@@ -239,16 +261,32 @@ export default function Landing() {
                 Мы не спамим. Только крафтовые новости.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                <input
-                  type="email"
-                  placeholder="Введи свой email"
-                  className="rounded-full px-6 py-3 text-sm bg-[#1A1A1E] text-white border border-zinc-700 focus:border-cyan-500 focus:outline-none w-full sm:w-auto min-w-[280px]"
-                />
-                <Button className="rounded-full px-6 py-3 ml-0 sm:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30">
-                  Подписаться
-                </Button>
-              </div>
+              <form onSubmit={handleHeroEmailSubmit} className="flex flex-col gap-4 justify-center md:justify-start">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex flex-col w-full sm:w-auto min-w-[280px]">
+                    <input
+                      type="email"
+                      value={heroEmail}
+                      onChange={(e) => setHeroEmail(e.target.value)}
+                      placeholder="Введи свой email"
+                      className={`rounded-full px-6 py-3 text-sm bg-[#1A1A1E] text-white border focus:outline-none transition-all duration-300 ${
+                        heroEmailError 
+                          ? 'border-red-500 focus:border-red-400' 
+                          : 'border-zinc-700 focus:border-cyan-500'
+                      }`}
+                    />
+                    {heroEmailError && (
+                      <p className="text-red-400 text-xs mt-1 pl-4">{heroEmailError}</p>
+                    )}
+                  </div>
+                  <Button 
+                    type="submit"
+                    className="rounded-full px-6 py-3 ml-0 sm:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30"
+                  >
+                    Подписаться
+                  </Button>
+                </div>
+              </form>
             </div>
             
             {/* Right side - Cocktail image with elegant shadows */}
@@ -361,15 +399,29 @@ export default function Landing() {
               </filter>
             </defs>
             <path 
-              d="M0,40 C150,20 350,60 600,40 C850,20 1050,60 1200,40 L1200,0 L0,0 Z" 
+              d="M0,50 C100,30 200,70 300,50 C400,30 500,70 600,50 C700,30 800,70 900,50 C1000,30 1100,70 1200,50 L1200,0 L0,0 Z" 
               fill="url(#waveGradient)" 
               filter="url(#glow)"
             >
               <animateTransform
                 attributeName="transform"
                 type="translate"
-                values="0,0;50,0;0,0"
-                dur="6s"
+                values="0,0;-100,0;0,0"
+                dur="8s"
+                repeatCount="indefinite"
+              />
+            </path>
+            <path 
+              d="M0,35 C80,55 160,15 240,35 C320,55 400,15 480,35 C560,55 640,15 720,35 C800,55 880,15 960,35 C1040,55 1120,15 1200,35 L1200,0 L0,0 Z" 
+              fill="url(#waveGradient)" 
+              opacity="0.7"
+              filter="url(#glow)"
+            >
+              <animateTransform
+                attributeName="transform"
+                type="translate"
+                values="0,0;100,0;0,0"
+                dur="10s"
                 repeatCount="indefinite"
               />
             </path>
