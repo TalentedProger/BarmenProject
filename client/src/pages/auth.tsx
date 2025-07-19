@@ -111,11 +111,10 @@ export default function Auth() {
                 {/* Title positioned inside container at top */}
                 <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center w-full px-4">
                   <h1 
-                    className="font-bold text-transparent text-center text-[30px] leading-tight opacity-70"
+                    className="font-bold text-white text-center text-[30px] leading-tight"
                     style={{ 
-                      background: 'linear-gradient(135deg, rgba(88, 28, 135, 0.9) 0%, rgba(157, 78, 221, 0.8) 30%, rgba(219, 39, 119, 0.8) 70%, rgba(190, 24, 93, 0.9) 100%)',
-                      WebkitBackgroundClip: 'text',
-                      backgroundClip: 'text'
+                      textShadow: '0 0 20px rgba(88, 28, 135, 0.8), 0 0 40px rgba(88, 28, 135, 0.6), 0 0 60px rgba(88, 28, 135, 0.4)',
+                      filter: 'drop-shadow(0 0 15px rgba(88, 28, 135, 0.7))'
                     }}
                   >
                     Добро<br />
@@ -190,7 +189,7 @@ export default function Auth() {
                   onClick={() => setIsLogin(true)}
                   className={`flex-1 py-3 px-4 rounded-md font-semibold transition-all duration-300 ${
                     isLogin
-                      ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/30 border border-cyan-500'
+                      ? 'bg-cyan-500/70 text-white shadow-lg shadow-cyan-500/20 border border-cyan-500/70'
                       : 'text-white/70 hover:text-white hover:bg-white/5'
                   }`}
                 >
