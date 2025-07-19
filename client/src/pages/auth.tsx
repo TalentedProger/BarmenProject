@@ -107,19 +107,21 @@ export default function Auth() {
       <div className="relative z-10 flex min-h-screen">
         {/* Left Side - Visual (Hidden on Mobile) */}
         <div className="hidden md:flex md:w-1/2 items-center justify-center p-8">
-          <div className="text-center space-y-2 max-w-md">
-            {/* Title */}
-            <h1 className="text-4xl font-bold text-white mb-8" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
-              Добро пожаловать в Cocktailo
-            </h1>
-            
-            {/* Futuristic Cocktail Glass Image */}
-            <div className="mx-auto relative">
+          <div className="text-center max-w-md">
+            {/* Futuristic Cocktail Glass Image with Title Inside */}
+            <div className="mx-auto relative py-8">
               <div className="relative group">
+                {/* Title positioned inside container at top */}
+                <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center">
+                  <h1 className="text-3xl font-bold text-white" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
+                    Добро пожаловать в Cocktailo
+                  </h1>
+                </div>
+                
                 <img 
                   src="/attached_assets/Flux_Dev_a_lush_3d_render_of_Stylized_futuristic_cocktail_glas_3 (1)-Photoroom_1752957568046.png"
                   alt="Футуристический коктейльный бокал с неоновыми оттенками"
-                  className="w-80 h-auto object-contain mx-auto relative z-10 transition-all duration-700 group-hover:scale-105"
+                  className="w-80 h-auto object-contain mx-auto relative z-10 transition-all duration-700 group-hover:scale-105 pt-16 pb-8"
                   loading="eager"
                 />
                 
@@ -156,7 +158,7 @@ export default function Auth() {
                   
                   {/* Базовая тень под бокалом */}
                   <div 
-                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-8 rounded-full blur-lg opacity-40"
+                    className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-32 h-8 rounded-full blur-lg opacity-40"
                     style={{
                       background: 'radial-gradient(ellipse, rgba(0, 0, 0, 0.6) 0%, transparent 70%)'
                     }}
@@ -166,7 +168,7 @@ export default function Auth() {
             </div>
             
             {/* Quote */}
-            <blockquote className="text-xl italic text-white/80 leading-relaxed mt-8" style={{ textShadow: '0 0 5px rgba(192, 132, 252, 0.3)' }}>
+            <blockquote className="text-xl italic text-white/80 leading-relaxed" style={{ textShadow: '0 0 5px rgba(192, 132, 252, 0.3)' }}>
               "Каждый коктейль начинается с твоей идеи."
             </blockquote>
           </div>
