@@ -112,8 +112,8 @@ export default function Auth() {
             <div className="mx-auto relative py-8">
               <div className="relative group">
                 {/* Title positioned inside container at top */}
-                <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center">
-                  <h1 className="text-3xl font-bold text-white" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
+                <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center max-w-xs">
+                  <h1 className="text-4xl font-bold text-white leading-tight" style={{ textShadow: '0 0 10px rgba(0, 255, 247, 0.5)' }}>
                     Добро пожаловать в Cocktailo
                   </h1>
                 </div>
@@ -168,7 +168,7 @@ export default function Auth() {
             </div>
             
             {/* Quote */}
-            <blockquote className="text-xl italic text-white/80 leading-relaxed" style={{ textShadow: '0 0 5px rgba(192, 132, 252, 0.3)' }}>
+            <blockquote className="text-xl italic text-white/80 leading-relaxed -mt-4" style={{ textShadow: '0 0 5px rgba(192, 132, 252, 0.3)' }}>
               "Каждый коктейль начинается с твоей идеи."
             </blockquote>
           </div>
