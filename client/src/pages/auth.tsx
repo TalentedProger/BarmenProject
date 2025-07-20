@@ -111,14 +111,19 @@ export default function Auth() {
                 {/* Title positioned inside container at top */}
                 <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center w-full px-4">
                   <h1 
-                    className="font-bold text-white text-center text-[30px] leading-tight"
+                    className="font-bold text-center text-[32px] leading-tight bg-gradient-to-r from-cyan-300 via-purple-400 to-pink-400 bg-clip-text text-transparent"
                     style={{ 
-                      textShadow: '0 0 20px rgba(88, 28, 135, 0.8), 0 0 40px rgba(88, 28, 135, 0.6), 0 0 60px rgba(88, 28, 135, 0.4)',
-                      filter: 'drop-shadow(0 0 15px rgba(88, 28, 135, 0.7))'
+                      fontFamily: 'Rubik, system-ui, sans-serif',
+                      fontWeight: '800',
+                      letterSpacing: '-0.02em',
+                      textShadow: '0 0 30px rgba(96, 165, 250, 0.6), 0 0 60px rgba(168, 85, 247, 0.4), 0 0 90px rgba(236, 72, 153, 0.3)',
+                      filter: 'drop-shadow(0 0 20px rgba(96, 165, 250, 0.5)) drop-shadow(0 0 40px rgba(168, 85, 247, 0.3))'
                     }}
                   >
-                    Добро<br />
-                    пожаловать в Cocktailo
+                    Добро пожаловать<br />
+                    <span className="text-[28px] bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">
+                      в Cocktailo
+                    </span>
                   </h1>
                 </div>
                 
@@ -306,10 +311,20 @@ export default function Auth() {
                   <div className="text-center">
                     <button
                       type="button"
-                      className="text-neon-turquoise hover:text-white underline text-sm transition-all duration-300 hover:shadow-lg"
-                      style={{ textShadow: '0 0 5px rgba(0, 255, 247, 0.3)' }}
+                      className="group relative text-sm font-medium text-cyan-400 hover:text-white transition-all duration-300 transform hover:scale-105"
+                      style={{ 
+                        textShadow: '0 0 8px rgba(34, 211, 238, 0.4)',
+                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.textShadow = '0 0 15px rgba(34, 211, 238, 0.8), 0 0 25px rgba(34, 211, 238, 0.5)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.textShadow = '0 0 8px rgba(34, 211, 238, 0.4)';
+                      }}
                     >
-                      Забыли пароль?
+                      <span className="relative z-10">Забыли пароль?</span>
+                      <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300"></div>
                     </button>
                   </div>
                 )}
@@ -345,10 +360,25 @@ export default function Auth() {
                   <button
                     type="button"
                     onClick={handleGuestLogin}
-                    className="text-neon-purple hover:text-white underline font-medium transition-all duration-300"
-                    style={{ textShadow: '0 0 5px rgba(192, 132, 252, 0.3)' }}
+                    className="group relative inline-flex items-center px-6 py-3 text-sm font-semibold bg-transparent border border-purple-400/30 text-purple-300 rounded-lg hover:bg-purple-500/10 hover:border-purple-400/60 hover:text-white transition-all duration-300 transform hover:scale-105"
+                    style={{ 
+                      textShadow: '0 0 10px rgba(196, 181, 253, 0.4)',
+                      boxShadow: '0 0 15px rgba(196, 181, 253, 0.2)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.textShadow = '0 0 15px rgba(196, 181, 253, 0.8), 0 0 25px rgba(196, 181, 253, 0.5)';
+                      e.target.style.boxShadow = '0 0 25px rgba(196, 181, 253, 0.4), 0 0 40px rgba(196, 181, 253, 0.2)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.textShadow = '0 0 10px rgba(196, 181, 253, 0.4)';
+                      e.target.style.boxShadow = '0 0 15px rgba(196, 181, 253, 0.2)';
+                    }}
                   >
-                    Войти как гость
+                    <svg className="mr-2 h-4 w-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <span className="relative z-10">Войти как гость</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-400/5 to-cyan-400/0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </button>
                 </div>
               </form>
