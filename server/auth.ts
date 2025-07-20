@@ -44,10 +44,14 @@ export async function setupAuth(app: Express) {
 
   // Google OAuth Strategy - only initialize if credentials are available
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    const callbackURL = process.env.REPLIT_DOMAINS
+      ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}/api/auth/google/callback`
+      : "http://localhost:5000/api/auth/google/callback";
+    
     passport.use(new GoogleStrategy({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/api/auth/google/callback"
+      callbackURL: callbackURL
     }, async (accessToken, refreshToken, profile, done) => {
     try {
       // Check if user exists by Google ID
