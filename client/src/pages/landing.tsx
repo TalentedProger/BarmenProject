@@ -80,7 +80,7 @@ export default function Landing() {
               </Button>
               <Button 
                 variant="outline"
-                className="bg-transparent border border-neon-purple text-neon-purple px-4 py-2 rounded-lg font-medium hover:bg-neon-purple hover:text-night-blue transition-all duration-300 shadow-md shadow-neon-purple/20"
+                className="bg-transparent border border-neon-purple text-neon-purple px-6 py-2 rounded-lg font-semibold hover:bg-neon-purple hover:text-night-blue transition-all duration-300 shadow-md shadow-neon-purple/20"
                 onClick={() => window.location.href = "/auth"}
               >
                 <LogIn className="mr-2 h-4 w-4" />
