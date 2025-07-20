@@ -1,4 +1,11 @@
 import {
+  users,
+  ingredients,
+  glassTypes,
+  recipes,
+  recipeIngredients,
+  userFavorites,
+  recipeRatings,
   type User,
   type UpsertUser,
   type Ingredient,
@@ -15,10 +22,14 @@ import {
   type InsertRecipeRating,
 } from "@shared/schema";
 import { nanoid } from "nanoid";
+import { db } from "./db";
+import { eq, and, desc, asc, ilike, or } from "drizzle-orm";
 
 export interface IStorage {
-  // User operations (mandatory for Replit Auth)
+  // User operations (mandatory for authentication)
   getUser(id: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
+  getUserByGoogleId(googleId: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
 
   // Ingredient operations
@@ -137,8 +148,10 @@ export class MemoryStorage implements IStorage {
       this.ingredients.set(id, {
         id,
         ...ingredient,
+        abv: ingredient.abv || null,
+        unit: ingredient.unit || "ml",
         createdAt: new Date()
-      });
+      } as Ingredient);
     });
 
     // Initialize sample glass types
@@ -164,9 +177,22 @@ export class MemoryStorage implements IStorage {
     return this.users.get(id);
   }
 
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(user => user.email === email);
+  }
+
+  async getUserByGoogleId(googleId: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(user => user.googleId === googleId);
+  }
+
   async upsertUser(userData: UpsertUser): Promise<User> {
     const user: User = {
-      ...userData,
+      id: userData.id,
+      email: userData.email || null,
+      firstName: userData.firstName || null,
+      lastName: userData.lastName || null,
+      profileImageUrl: userData.profileImageUrl || null,
+      googleId: userData.googleId || null,
       updatedAt: new Date(),
       createdAt: this.users.get(userData.id)?.createdAt || new Date()
     };
@@ -192,6 +218,8 @@ export class MemoryStorage implements IStorage {
     const newIngredient: Ingredient = {
       id,
       ...ingredient,
+      abv: ingredient.abv || null,
+      unit: ingredient.unit || "ml",
       createdAt: new Date()
     };
     this.ingredients.set(id, newIngredient);
@@ -250,6 +278,14 @@ export class MemoryStorage implements IStorage {
     const newRecipe: Recipe = {
       ...recipe,
       id,
+      description: recipe.description || null,
+      instructions: recipe.instructions || null,
+      createdBy: recipe.createdBy || null,
+      glassTypeId: recipe.glassTypeId || null,
+      isPublic: recipe.isPublic ?? true,
+      difficulty: recipe.difficulty || null,
+      rating: recipe.rating || null,
+      ratingCount: recipe.ratingCount || null,
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -315,6 +351,8 @@ export class MemoryStorage implements IStorage {
     const newRecipeIngredient: RecipeIngredient = {
       id,
       ...recipeIngredient,
+      recipeId: recipeIngredient.recipeId || null,
+      ingredientId: recipeIngredient.ingredientId || null,
       createdAt: new Date()
     };
     
@@ -379,6 +417,9 @@ export class MemoryStorage implements IStorage {
     const newRating: RecipeRating = {
       id,
       ...rating,
+      recipeId: rating.recipeId || null,
+      userId: rating.userId || null,
+      review: rating.review || null,
       createdAt: new Date()
     };
     
@@ -414,7 +455,7 @@ export class MemoryStorage implements IStorage {
     ratings[existingIndex] = {
       ...ratings[existingIndex],
       rating,
-      review
+      review: review || null
     };
     this.recipeRatings.set(recipeId, ratings);
     
@@ -441,4 +482,244 @@ export class MemoryStorage implements IStorage {
   }
 }
 
-export const storage = new MemoryStorage();
+// Database Storage Implementation
+export class DatabaseStorage implements IStorage {
+  // User operations
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async getUserByGoogleId(googleId: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.googleId, googleId));
+    return user;
+  }
+
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: {
+          ...userData,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return user;
+  }
+
+  // Ingredient operations
+  async getIngredients(): Promise<Ingredient[]> {
+    return await db.select().from(ingredients).orderBy(asc(ingredients.category), asc(ingredients.name));
+  }
+
+  async getIngredientsByCategory(category: string): Promise<Ingredient[]> {
+    return await db.select().from(ingredients)
+      .where(eq(ingredients.category, category))
+      .orderBy(asc(ingredients.name));
+  }
+
+  async createIngredient(ingredient: InsertIngredient): Promise<Ingredient> {
+    const [newIngredient] = await db.insert(ingredients).values(ingredient).returning();
+    return newIngredient;
+  }
+
+  // Glass type operations
+  async getGlassTypes(): Promise<GlassType[]> {
+    return await db.select().from(glassTypes).orderBy(asc(glassTypes.name));
+  }
+
+  async getGlassType(id: number): Promise<GlassType | undefined> {
+    const [glassType] = await db.select().from(glassTypes).where(eq(glassTypes.id, id));
+    return glassType;
+  }
+
+  async createGlassType(glassType: InsertGlassType): Promise<GlassType> {
+    const [newGlassType] = await db.insert(glassTypes).values(glassType).returning();
+    return newGlassType;
+  }
+
+  // Recipe operations
+  async getRecipes(limit = 20, offset = 0): Promise<Recipe[]> {
+    return await db.select().from(recipes)
+      .where(eq(recipes.isPublic, true))
+      .orderBy(desc(recipes.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async getRecipe(id: string): Promise<Recipe | undefined> {
+    const [recipe] = await db.select().from(recipes).where(eq(recipes.id, id));
+    return recipe;
+  }
+
+  async getRecipeWithIngredients(id: string): Promise<(Recipe & { ingredients: (RecipeIngredient & { ingredient: Ingredient })[] }) | undefined> {
+    const recipe = await this.getRecipe(id);
+    if (!recipe) return undefined;
+
+    const recipeIngs = await this.getRecipeIngredients(id);
+    return { ...recipe, ingredients: recipeIngs };
+  }
+
+  async getUserRecipes(userId: string): Promise<Recipe[]> {
+    return await db.select().from(recipes)
+      .where(eq(recipes.createdBy, userId))
+      .orderBy(desc(recipes.createdAt));
+  }
+
+  async createRecipe(recipe: InsertRecipe): Promise<Recipe> {
+    const [newRecipe] = await db.insert(recipes).values(recipe).returning();
+    return newRecipe;
+  }
+
+  async updateRecipe(id: string, recipeData: Partial<InsertRecipe>): Promise<Recipe> {
+    const [updatedRecipe] = await db.update(recipes)
+      .set({ ...recipeData, updatedAt: new Date() })
+      .where(eq(recipes.id, id))
+      .returning();
+    return updatedRecipe;
+  }
+
+  async deleteRecipe(id: string): Promise<void> {
+    await db.delete(recipes).where(eq(recipes.id, id));
+  }
+
+  async searchRecipes(query: string, category?: string, difficulty?: string): Promise<Recipe[]> {
+    let conditions = eq(recipes.isPublic, true);
+    
+    if (query) {
+      conditions = and(conditions, or(
+        ilike(recipes.name, `%${query}%`),
+        ilike(recipes.description, `%${query}%`)
+      )) as any;
+    }
+    
+    if (category) {
+      conditions = and(conditions, eq(recipes.category, category)) as any;
+    }
+    
+    if (difficulty) {
+      conditions = and(conditions, eq(recipes.difficulty, difficulty)) as any;
+    }
+
+    return await db.select().from(recipes)
+      .where(conditions)
+      .orderBy(desc(recipes.rating), desc(recipes.createdAt));
+  }
+
+  // Recipe ingredient operations
+  async getRecipeIngredients(recipeId: string): Promise<(RecipeIngredient & { ingredient: Ingredient })[]> {
+    return await db.select({
+      id: recipeIngredients.id,
+      recipeId: recipeIngredients.recipeId,
+      ingredientId: recipeIngredients.ingredientId,
+      amount: recipeIngredients.amount,
+      unit: recipeIngredients.unit,
+      order: recipeIngredients.order,
+      createdAt: recipeIngredients.createdAt,
+      ingredient: ingredients
+    })
+    .from(recipeIngredients)
+    .innerJoin(ingredients, eq(recipeIngredients.ingredientId, ingredients.id))
+    .where(eq(recipeIngredients.recipeId, recipeId))
+    .orderBy(asc(recipeIngredients.order));
+  }
+
+  async createRecipeIngredient(recipeIngredient: InsertRecipeIngredient): Promise<RecipeIngredient> {
+    const [newRecipeIngredient] = await db.insert(recipeIngredients).values(recipeIngredient).returning();
+    return newRecipeIngredient;
+  }
+
+  async deleteRecipeIngredients(recipeId: string): Promise<void> {
+    await db.delete(recipeIngredients).where(eq(recipeIngredients.recipeId, recipeId));
+  }
+
+  // User favorite operations
+  async getUserFavorites(userId: string): Promise<(UserFavorite & { recipe: Recipe })[]> {
+    return await db.select({
+      id: userFavorites.id,
+      userId: userFavorites.userId,
+      recipeId: userFavorites.recipeId,
+      createdAt: userFavorites.createdAt,
+      recipe: recipes
+    })
+    .from(userFavorites)
+    .innerJoin(recipes, eq(userFavorites.recipeId, recipes.id))
+    .where(eq(userFavorites.userId, userId))
+    .orderBy(desc(userFavorites.createdAt));
+  }
+
+  async addUserFavorite(userId: string, recipeId: string): Promise<UserFavorite> {
+    const [favorite] = await db.insert(userFavorites).values({ userId, recipeId }).returning();
+    return favorite;
+  }
+
+  async removeUserFavorite(userId: string, recipeId: string): Promise<void> {
+    await db.delete(userFavorites)
+      .where(and(eq(userFavorites.userId, userId), eq(userFavorites.recipeId, recipeId)));
+  }
+
+  async isUserFavorite(userId: string, recipeId: string): Promise<boolean> {
+    const [favorite] = await db.select().from(userFavorites)
+      .where(and(eq(userFavorites.userId, userId), eq(userFavorites.recipeId, recipeId)));
+    return !!favorite;
+  }
+
+  // Recipe rating operations
+  async getRecipeRatings(recipeId: string): Promise<RecipeRating[]> {
+    return await db.select().from(recipeRatings)
+      .where(eq(recipeRatings.recipeId, recipeId))
+      .orderBy(desc(recipeRatings.createdAt));
+  }
+
+  async createRecipeRating(rating: InsertRecipeRating): Promise<RecipeRating> {
+    const [newRating] = await db.insert(recipeRatings).values(rating).returning();
+    
+    // Update recipe average rating
+    await this.updateRecipeAverageRating(rating.recipeId!);
+    
+    return newRating;
+  }
+
+  async updateRecipeRating(userId: string, recipeId: string, rating: number, review?: string): Promise<RecipeRating> {
+    const [updatedRating] = await db.update(recipeRatings)
+      .set({ rating, review })
+      .where(and(eq(recipeRatings.userId, userId), eq(recipeRatings.recipeId, recipeId)))
+      .returning();
+    
+    // Update recipe average rating
+    await this.updateRecipeAverageRating(recipeId);
+    
+    return updatedRating;
+  }
+
+  async getUserRecipeRating(userId: string, recipeId: string): Promise<RecipeRating | undefined> {
+    const [rating] = await db.select().from(recipeRatings)
+      .where(and(eq(recipeRatings.userId, userId), eq(recipeRatings.recipeId, recipeId)));
+    return rating;
+  }
+
+  private async updateRecipeAverageRating(recipeId: string): Promise<void> {
+    const ratings = await this.getRecipeRatings(recipeId);
+    if (ratings.length === 0) return;
+    
+    const avgRating = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
+    
+    await db.update(recipes)
+      .set({ 
+        rating: avgRating.toFixed(2),
+        ratingCount: ratings.length
+      })
+      .where(eq(recipes.id, recipeId));
+  }
+}
+
+// Use database storage by default, fallback to memory for development
+export const storage = process.env.DATABASE_URL ? new DatabaseStorage() : new MemoryStorage();

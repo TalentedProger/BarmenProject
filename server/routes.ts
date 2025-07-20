@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth } from "./replitAuth";
+import { setupAuth, isAuthenticated, optionalAuth } from "./auth";
 import { 
   insertIngredientSchema,
   insertGlassTypeSchema,
@@ -13,8 +13,17 @@ import {
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Simplified auth setup (no authentication required)
+  // Setup Google OAuth authentication
   await setupAuth(app);
+
+  // Auth routes
+  app.get('/api/auth/user', optionalAuth, async (req, res) => {
+    if (req.user) {
+      res.json(req.user);
+    } else {
+      res.status(401).json({ error: 'Not authenticated' });
+    }
+  });
 
   // Ingredient routes
   app.get('/api/ingredients', async (req, res) => {

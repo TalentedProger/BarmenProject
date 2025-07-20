@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Mail, Lock, Martini, ArrowLeft } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
+import { handleGoogleLogin, handleGuestLogin } from "@/lib/authUtils";
+import { useAuth } from "@/hooks/useAuth";
+import { useMutation } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -16,6 +20,54 @@ export default function Auth() {
     confirmPassword: ""
   });
   const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [location, setLocation] = useLocation();
+  const { toast } = useToast();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  // Check for authentication errors from URL params
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+    
+    if (error === 'google_auth_failed') {
+      toast({
+        title: "Ошибка аутентификации",
+        description: "Не удалось войти через Google. Попробуйте снова.",
+        variant: "destructive",
+      });
+    } else if (error === 'google_oauth_not_configured') {
+      toast({
+        title: "Google OAuth недоступен",
+        description: "Аутентификация через Google временно недоступна. Попробуйте войти как гость.",
+        variant: "destructive",
+      });
+    }
+  }, [toast]);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      setLocation('/');
+    }
+  }, [isAuthenticated, isLoading, setLocation]);
+
+  const guestLoginMutation = useMutation({
+    mutationFn: handleGuestLogin,
+    onSuccess: () => {
+      toast({
+        title: "Добро пожаловать!",
+        description: "Вы вошли как гость.",
+      });
+      setLocation('/');
+    },
+    onError: () => {
+      toast({
+        title: "Ошибка",
+        description: "Не удалось войти как гость. Попробуйте снова.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -55,22 +107,20 @@ export default function Auth() {
     
     if (!validateForm()) return;
     
-    // В будущем здесь будет логика аутентификации
-    console.log(isLogin ? "Вход:" : "Регистрация:", formData);
-    alert(isLogin ? "Добро пожаловать в Cocktailo!" : "Регистрация успешна!");
-    
-    // Переход на конструктор после успешной аутентификации
-    window.location.href = "/constructor";
+    // Traditional email/password authentication placeholder
+    toast({
+      title: "Функция недоступна",
+      description: "Аутентификация по email/паролю будет добавлена в будущем. Используйте Google или войдите как гость.",
+      variant: "destructive",
+    });
   };
 
-  const handleGuestLogin = () => {
-    // Переход в гостевой режим
-    window.location.href = "/constructor";
+  const handleGuestLoginClick = () => {
+    guestLoginMutation.mutate();
   };
 
-  const handleGoogleLogin = () => {
-    // В будущем здесь будет интеграция с Google OAuth
-    alert("Функция входа через Google будет добавлена позже");
+  const handleGoogleLoginClick = () => {
+    handleGoogleLogin();
   };
 
   return (
@@ -343,7 +393,7 @@ export default function Auth() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={handleGoogleLogin}
+                  onClick={handleGoogleLoginClick}
                   className="w-full bg-transparent border border-white/30 text-white hover:bg-white/10 transition-all duration-300 shadow-md hover:shadow-lg"
                 >
                   <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
@@ -359,7 +409,8 @@ export default function Auth() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={handleGuestLogin}
+                  onClick={handleGuestLoginClick}
+                  disabled={guestLoginMutation.isPending}
                   className="w-full group relative bg-transparent border border-purple-400/30 text-purple-300 hover:bg-purple-500/10 hover:border-purple-400/60 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg"
                   style={{ 
                     textShadow: '0 0 10px rgba(196, 181, 253, 0.4)',
