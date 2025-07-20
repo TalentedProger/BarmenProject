@@ -111,7 +111,7 @@ export default function Auth() {
                 {/* Title positioned inside container at top */}
                 <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center w-full px-4">
                   <h1 
-                    className="font-bold text-center text-[32px] leading-tight bg-gradient-to-r from-cyan-300 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+                    className="font-bold text-center text-[38px] leading-tight bg-gradient-to-r from-cyan-300 via-purple-400 to-pink-400 bg-clip-text text-transparent"
                     style={{ 
                       fontFamily: 'Rubik, system-ui, sans-serif',
                       fontWeight: '800',
@@ -121,7 +121,7 @@ export default function Auth() {
                     }}
                   >
                     Добро пожаловать<br />
-                    <span className="text-[28px] bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">
+                    <span className="text-[34px] bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">
                       в Cocktailo
                     </span>
                   </h1>
@@ -335,7 +335,7 @@ export default function Auth() {
                     <div className="w-full border-t border-white/20"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-black/20 text-white/70">или</span>
+                    <span className="px-4 text-white/70">или</span>
                   </div>
                 </div>
 
@@ -356,31 +356,30 @@ export default function Auth() {
                 </Button>
 
                 {/* Guest Login */}
-                <div className="text-center mt-6">
-                  <button
-                    type="button"
-                    onClick={handleGuestLogin}
-                    className="group relative inline-flex items-center px-6 py-3 text-sm font-semibold bg-transparent border border-purple-400/30 text-purple-300 rounded-lg hover:bg-purple-500/10 hover:border-purple-400/60 hover:text-white transition-all duration-300 transform hover:scale-105"
-                    style={{ 
-                      textShadow: '0 0 10px rgba(196, 181, 253, 0.4)',
-                      boxShadow: '0 0 15px rgba(196, 181, 253, 0.2)'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.textShadow = '0 0 15px rgba(196, 181, 253, 0.8), 0 0 25px rgba(196, 181, 253, 0.5)';
-                      e.target.style.boxShadow = '0 0 25px rgba(196, 181, 253, 0.4), 0 0 40px rgba(196, 181, 253, 0.2)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.textShadow = '0 0 10px rgba(196, 181, 253, 0.4)';
-                      e.target.style.boxShadow = '0 0 15px rgba(196, 181, 253, 0.2)';
-                    }}
-                  >
-                    <svg className="mr-2 h-4 w-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                    </svg>
-                    <span className="relative z-10">Войти как гость</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-400/5 to-cyan-400/0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </button>
-                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleGuestLogin}
+                  className="w-full group relative bg-transparent border border-purple-400/30 text-purple-300 hover:bg-purple-500/10 hover:border-purple-400/60 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg"
+                  style={{ 
+                    textShadow: '0 0 10px rgba(196, 181, 253, 0.4)',
+                    boxShadow: '0 0 15px rgba(196, 181, 253, 0.2)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.textShadow = '0 0 15px rgba(196, 181, 253, 0.8), 0 0 25px rgba(196, 181, 253, 0.5)';
+                    e.target.style.boxShadow = '0 0 25px rgba(196, 181, 253, 0.4), 0 0 40px rgba(196, 181, 253, 0.2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.textShadow = '0 0 10px rgba(196, 181, 253, 0.4)';
+                    e.target.style.boxShadow = '0 0 15px rgba(196, 181, 253, 0.2)';
+                  }}
+                >
+                  <svg className="mr-2 h-4 w-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  Войти как гость
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-400/5 to-cyan-400/0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </Button>
               </form>
             </CardContent>
           </Card>
