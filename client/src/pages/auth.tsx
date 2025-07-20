@@ -171,7 +171,12 @@ export default function Auth() {
                     }}
                   >
                     Добро пожаловать<br />
-                    <span className="text-[34px] bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">
+                    <span className="text-[38px] font-black bg-gradient-to-r from-purple-300 via-cyan-300 to-purple-300 bg-clip-text text-transparent" 
+                          style={{
+                            textShadow: '0 0 40px rgba(96, 165, 250, 0.8), 0 0 80px rgba(168, 85, 247, 0.6), 0 0 120px rgba(236, 72, 153, 0.4)',
+                            filter: 'drop-shadow(0 0 25px rgba(96, 165, 250, 0.7)) drop-shadow(0 0 50px rgba(168, 85, 247, 0.5))',
+                            letterSpacing: '-0.01em'
+                          }}>
                       в Cocktailo
                     </span>
                   </h1>
