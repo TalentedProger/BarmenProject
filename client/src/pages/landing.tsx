@@ -79,9 +79,9 @@ export default function Landing() {
             <div className="flex items-center space-x-3">
               <Button 
                 onClick={handleGetStarted}
-                className="bg-gradient-to-r from-neon-turquoise to-electric text-night-blue px-6 py-2 rounded-lg font-semibold hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/30"
+                className="bg-gradient-to-r from-neon-turquoise to-electric text-night-blue px-5 py-1.5 rounded-lg font-semibold hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/30"
               >
-                <WandSparkles className="mr-2 h-4 w-4" />
+                <WandSparkles className="mr-2 h-3 w-3" />
                 Начать
               </Button>
               
@@ -163,12 +163,12 @@ export default function Landing() {
               onClick={handleGetStarted}
               className="hero-primary-button bg-gradient-to-r from-neon-purple to-electric text-white px-10 py-5 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden"
               style={{
-                boxShadow: '0 0 20px rgba(179, 136, 235, 0.4), 0 0 40px rgba(179, 136, 235, 0.2), 0 8px 25px rgba(0, 0, 0, 0.3)'
+                boxShadow: '0 0 15px rgba(179, 136, 235, 0.25), 0 0 30px rgba(179, 136, 235, 0.15), 0 8px 20px rgba(0, 0, 0, 0.2)'
               }}
             >
               <WandSparkles className="mr-2 h-6 w-6" />
               Начать создание
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform skew-x-12 translate-x-[-200%] hover:translate-x-[200%] transition-transform duration-1000"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent transform skew-x-12 translate-x-[-200%] hover:translate-x-[200%] transition-transform duration-1000"></div>
             </Button>
             <Button 
               variant="outline"

@@ -295,7 +295,7 @@ export default function Profile() {
 
             <div className="grid lg:grid-cols-4 gap-8 mb-8">
               {/* User Profile Card */}
-              <Card className="glass-effect border-none shadow-lg shadow-slate-500/10 hover:shadow-xl hover:shadow-slate-500/15 transition-shadow duration-300">
+              <Card className="glass-effect border-none shadow-xl shadow-slate-500/15 hover:shadow-lg hover:shadow-slate-400/10 transition-shadow duration-300">
                 <CardHeader>
                   <CardTitle className="text-center">
                     <div className="flex justify-between items-center">
