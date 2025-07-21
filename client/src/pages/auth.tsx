@@ -3,12 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Mail, Lock, Martini, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, Martini, ArrowLeft, User } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { handleGoogleLogin, handleGuestLogin } from "@/lib/authUtils";
 import { useAuth } from "@/hooks/useAuth";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -17,12 +18,15 @@ export default function Auth() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    firstName: "",
+    lastName: ""
   });
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [location, setLocation] = useLocation();
   const { toast } = useToast();
   const { isAuthenticated, isLoading } = useAuth();
+  const queryClient = useQueryClient();
 
   // Check for authentication errors from URL params
   useEffect(() => {
@@ -69,6 +73,70 @@ export default function Auth() {
     },
   });
 
+  const registerMutation = useMutation({
+    mutationFn: async (data: { email: string; password: string; firstName: string; lastName?: string }) => {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Registration failed');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Регистрация успешна!",
+        description: "Добро пожаловать в Cocktailo Maker!",
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+      setLocation('/');
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Ошибка регистрации",
+        description: error.message || "Не удалось создать аккаунт. Попробуйте снова.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const loginMutation = useMutation({
+    mutationFn: async (data: { email: string; password: string }) => {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Login failed');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Добро пожаловать!",
+        description: "Успешный вход в систему.",
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+      setLocation('/');
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Ошибка входа",
+        description: error.message || "Неверный email или пароль.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
@@ -92,10 +160,16 @@ export default function Auth() {
       newErrors.password = "Пароль должен содержать минимум 6 символов";
     }
     
-    if (!isLogin && !formData.confirmPassword.trim()) {
-      newErrors.confirmPassword = "Подтвердите пароль";
-    } else if (!isLogin && formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Пароли не совпадают";
+    if (!isLogin) {
+      if (!formData.firstName.trim()) {
+        newErrors.firstName = "Введите имя";
+      }
+      
+      if (!formData.confirmPassword.trim()) {
+        newErrors.confirmPassword = "Подтвердите пароль";
+      } else if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = "Пароли не совпадают";
+      }
     }
     
     setErrors(newErrors);
@@ -107,12 +181,19 @@ export default function Auth() {
     
     if (!validateForm()) return;
     
-    // Traditional email/password authentication placeholder
-    toast({
-      title: "Функция недоступна",
-      description: "Аутентификация по email/паролю будет добавлена в будущем. Используйте Google или войдите как гость.",
-      variant: "destructive",
-    });
+    if (isLogin) {
+      loginMutation.mutate({
+        email: formData.email,
+        password: formData.password
+      });
+    } else {
+      registerMutation.mutate({
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName || undefined
+      });
+    }
   };
 
   const handleGuestLoginClick = () => {
@@ -294,6 +375,52 @@ export default function Auth() {
                   )}
                 </div>
 
+                {/* Name Fields - Only for Registration */}
+                {!isLogin && (
+                  <>
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName" className="text-white/90 font-medium">Имя *</Label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/50" />
+                        <Input
+                          id="firstName"
+                          type="text"
+                          value={formData.firstName}
+                          onChange={(e) => handleInputChange('firstName', e.target.value)}
+                          placeholder="Ваше имя"
+                          className={`pl-12 bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-neon-turquoise focus:ring-1 focus:ring-neon-turquoise transition-all duration-300 ${
+                            errors.firstName ? 'border-red-500 focus:border-red-400 focus:ring-red-400' : ''
+                          }`}
+                          style={{
+                            boxShadow: formData.firstName ? '0 0 5px rgba(0, 255, 247, 0.3)' : 'none'
+                          }}
+                        />
+                      </div>
+                      {errors.firstName && (
+                        <p className="text-red-400 text-sm">{errors.firstName}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName" className="text-white/90 font-medium">Фамилия</Label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/50" />
+                        <Input
+                          id="lastName"
+                          type="text"
+                          value={formData.lastName}
+                          onChange={(e) => handleInputChange('lastName', e.target.value)}
+                          placeholder="Ваша фамилия (необязательно)"
+                          className="pl-12 bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-neon-turquoise focus:ring-1 focus:ring-neon-turquoise transition-all duration-300"
+                          style={{
+                            boxShadow: formData.lastName ? '0 0 5px rgba(0, 255, 247, 0.3)' : 'none'
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+
                 {/* Password Field */}
                 <div className="space-y-2">
                   <Label htmlFor="password" className="text-white/90 font-medium">Пароль</Label>
@@ -372,10 +499,10 @@ export default function Auth() {
                         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                       }}
                       onMouseEnter={(e) => {
-                        e.target.style.textShadow = '0 0 15px rgba(34, 211, 238, 0.8), 0 0 25px rgba(34, 211, 238, 0.5)';
+                        (e.target as HTMLElement).style.textShadow = '0 0 15px rgba(34, 211, 238, 0.8), 0 0 25px rgba(34, 211, 238, 0.5)';
                       }}
                       onMouseLeave={(e) => {
-                        e.target.style.textShadow = '0 0 8px rgba(34, 211, 238, 0.4)';
+                        (e.target as HTMLElement).style.textShadow = '0 0 8px rgba(34, 211, 238, 0.4)';
                       }}
                     >
                       <span className="relative z-10">Забыли пароль?</span>

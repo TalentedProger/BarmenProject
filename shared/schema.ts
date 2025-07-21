@@ -25,7 +25,7 @@ export const sessions = pgTable(
   (table) => [index("IDX_session_expire").on(table.expire)],
 );
 
-// User storage table for Google Auth
+// User storage table for Google Auth and Email/Password
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().notNull(),
   email: varchar("email").unique(),
@@ -33,6 +33,8 @@ export const users = pgTable("users", {
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
   googleId: varchar("google_id").unique(), // Google OAuth ID
+  passwordHash: varchar("password_hash"), // For email/password auth
+  emailVerified: boolean("email_verified").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -117,9 +119,27 @@ export const insertRecipeIngredientSchema = createInsertSchema(recipeIngredients
 export const insertUserFavoriteSchema = createInsertSchema(userFavorites);
 export const insertRecipeRatingSchema = createInsertSchema(recipeRatings);
 
+// Auth schemas
+export const registerSchema = z.object({
+  email: z.string().email("Неверный формат email"),
+  password: z.string().min(6, "Пароль должен быть не менее 6 символов"),
+  firstName: z.string().min(1, "Имя обязательно"),
+  lastName: z.string().optional(),
+});
+
+export const loginSchema = z.object({
+  email: z.string().email("Неверный формат email"),
+  password: z.string().min(1, "Пароль обязателен"),
+});
+
+export const insertUserSchema = createInsertSchema(users);
+
 // Types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
+export type InsertUser = z.infer<typeof insertUserSchema>;
+export type RegisterUser = z.infer<typeof registerSchema>;
+export type LoginUser = z.infer<typeof loginSchema>;
 export type Ingredient = typeof ingredients.$inferSelect;
 export type InsertIngredient = z.infer<typeof insertIngredientSchema>;
 export type GlassType = typeof glassTypes.$inferSelect;

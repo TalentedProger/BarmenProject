@@ -1,10 +1,13 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as LocalStrategy } from 'passport-local';
 import session from 'express-session';
 import type { Express, RequestHandler } from 'express';
 import connectPg from 'connect-pg-simple';
 import { storage } from './storage';
 import { nanoid } from 'nanoid';
+import bcrypt from 'bcryptjs';
+import { registerSchema, loginSchema } from '@shared/schema';
 
 // Session configuration
 export function getSession() {
@@ -103,6 +106,30 @@ export async function setupAuth(app: Express) {
     console.warn('Google OAuth credentials not provided. Google authentication will be disabled.');
   }
 
+  // Email/Password Strategy
+  passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+  }, async (email, password, done) => {
+    try {
+      const user = await storage.getUserByEmail(email);
+      
+      if (!user || !user.passwordHash) {
+        return done(null, false, { message: 'Неверный email или пароль' });
+      }
+      
+      const isValidPassword = await bcrypt.compare(password, user.passwordHash);
+      if (!isValidPassword) {
+        return done(null, false, { message: 'Неверный email или пароль' });
+      }
+      
+      return done(null, user);
+    } catch (error) {
+      console.error('Local auth error:', error);
+      return done(error, false);
+    }
+  }));
+
   // Passport serialization
   passport.serializeUser((user: any, done) => {
     done(null, user.id);
@@ -157,6 +184,87 @@ export async function setupAuth(app: Express) {
     });
   });
 
+  // Register with email/password
+  app.post('/api/auth/register', async (req, res) => {
+    try {
+      const { email, password, firstName, lastName } = registerSchema.parse(req.body);
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(email);
+      if (existingUser) {
+        return res.status(400).json({ error: 'Пользователь с таким email уже существует' });
+      }
+      
+      // Hash password
+      const saltRounds = 12;
+      const passwordHash = await bcrypt.hash(password, saltRounds);
+      
+      // Create user
+      const newUser = await storage.upsertUser({
+        id: nanoid(),
+        email,
+        firstName,
+        lastName: lastName || null,
+        profileImageUrl: null,
+        googleId: null,
+        passwordHash,
+        emailVerified: false,
+      });
+      
+      // Log in the user
+      req.login(newUser, (err) => {
+        if (err) {
+          console.error('Auto-login after registration error:', err);
+          return res.status(500).json({ error: 'Пользователь создан, но произошла ошибка входа' });
+        }
+        
+        // Return user without password hash
+        const { passwordHash: _, ...userWithoutPassword } = newUser;
+        res.status(201).json({ user: userWithoutPassword });
+      });
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      if (error?.issues) {
+        return res.status(400).json({ error: error.issues[0].message });
+      }
+      res.status(500).json({ error: 'Ошибка регистрации' });
+    }
+  });
+
+  // Login with email/password
+  app.post('/api/auth/login', (req, res, next) => {
+    try {
+      loginSchema.parse(req.body);
+    } catch (error: any) {
+      if (error?.issues) {
+        return res.status(400).json({ error: error.issues[0].message });
+      }
+      return res.status(400).json({ error: 'Неверные данные' });
+    }
+    
+    passport.authenticate('local', (err: any, user: any, info: any) => {
+      if (err) {
+        console.error('Login error:', err);
+        return res.status(500).json({ error: 'Ошибка входа' });
+      }
+      
+      if (!user) {
+        return res.status(401).json({ error: info?.message || 'Неверный email или пароль' });
+      }
+      
+      req.login(user, (err) => {
+        if (err) {
+          console.error('Login session error:', err);
+          return res.status(500).json({ error: 'Ошибка создания сессии' });
+        }
+        
+        // Return user without password hash
+        const { passwordHash: _, ...userWithoutPassword } = user;
+        res.json({ user: userWithoutPassword });
+      });
+    })(req, res, next);
+  });
+
   // Guest login
   app.post('/api/auth/guest', async (req, res) => {
     try {
@@ -167,6 +275,8 @@ export async function setupAuth(app: Express) {
         lastName: null,
         profileImageUrl: null,
         googleId: null,
+        passwordHash: null,
+        emailVerified: false,
       });
       
       req.login(guestUser, (err) => {
