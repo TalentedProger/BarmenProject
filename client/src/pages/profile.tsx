@@ -36,6 +36,7 @@ export default function Profile() {
   const [userFavorites, setUserFavorites] = useState<Set<string>>(new Set());
   const [editingProfile, setEditingProfile] = useState(false);
   const [nickname, setNickname] = useState("");
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const [location, setLocation] = useLocation();
   const { user, isAuthenticated, isLoading } = useAuth();
 
@@ -70,7 +71,7 @@ export default function Profile() {
   }, [favoriteRecipes]);
 
   const updateProfileMutation = useMutation({
-    mutationFn: async (data: { nickname: string }) => {
+    mutationFn: async (data: { nickname: string; profileImageUrl?: string }) => {
       const response = await fetch('/api/auth/profile', {
         method: 'PATCH',
         body: JSON.stringify(data),
@@ -124,6 +125,42 @@ export default function Profile() {
     },
   });
 
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Проверка размера файла (макс 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "Ошибка",
+          description: "Размер файла не должен превышать 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Проверка типа файла
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Ошибка",
+          description: "Можно загружать только изображения",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setProfileImage(result);
+        toast({
+          title: "Фото загружено",
+          description: "Не забудьте сохранить изменения",
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSaveProfile = () => {
     if (nickname.trim().length < 2) {
       toast({
@@ -133,7 +170,10 @@ export default function Profile() {
       });
       return;
     }
-    updateProfileMutation.mutate({ nickname: nickname.trim() });
+    updateProfileMutation.mutate({ 
+      nickname: nickname.trim(),
+      profileImageUrl: profileImage || user.profileImageUrl
+    });
   };
 
   const deleteRecipeMutation = useMutation({
@@ -273,9 +313,9 @@ export default function Profile() {
                 <CardContent className="p-6 pt-2">
                   <div className="text-center mb-6">
                     <Avatar className="w-24 h-24 mx-auto mb-4">
-                      <AvatarImage src={user.profileImageUrl || undefined} alt={user.nickname} />
+                      <AvatarImage src={profileImage || user.profileImageUrl} alt={user.nickname} />
                       <AvatarFallback className="bg-gradient-to-br from-neon-turquoise to-neon-purple text-black text-2xl font-bold">
-                        {user.nickname?.charAt(0) || user.email?.charAt(0) || 'U'}
+                        {user.nickname?.charAt(0)?.toUpperCase() || user.email?.charAt(0)?.toUpperCase() || 'U'}
                       </AvatarFallback>
                     </Avatar>
                     
@@ -289,6 +329,24 @@ export default function Profile() {
                             onChange={(e) => setNickname(e.target.value)}
                             className="bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-neon-turquoise"
                             placeholder="Ваш никнейм"
+                          />
+                        </div>
+                        <div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => document.getElementById('photo-upload')?.click()}
+                            className="w-full border-neon-purple text-neon-purple hover:bg-neon-purple hover:text-black transition-all duration-300"
+                          >
+                            <Camera className="h-4 w-4 mr-2" />
+                            Установить фото
+                          </Button>
+                          <input
+                            id="photo-upload"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handlePhotoUpload}
                           />
                         </div>
                         <div className="flex gap-2">
@@ -323,6 +381,7 @@ export default function Profile() {
                         <Badge className="text-neon-amber border-neon-amber" variant="outline">
                           {getUserLevel(userRecipes.length)}
                         </Badge>
+
                       </>
                     )}
                   </div>
@@ -345,7 +404,7 @@ export default function Profile() {
                         onClick={() => logoutMutation.mutate()}
                         disabled={logoutMutation.isPending}
                         variant="outline"
-                        className="w-full border-red-500/50 text-red-400 hover:bg-red-500/10"
+                        className="w-full border-red-500/50 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300"
                       >
                         <LogOut className="h-4 w-4 mr-2" />
                         Выйти

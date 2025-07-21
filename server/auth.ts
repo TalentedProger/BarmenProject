@@ -189,7 +189,7 @@ export async function setupAuth(app: Express) {
         return res.status(401).json({ error: 'Не авторизован' });
       }
 
-      const { nickname } = req.body;
+      const { nickname, profileImageUrl } = req.body;
       
       if (!nickname || nickname.trim().length < 2) {
         return res.status(400).json({ error: 'Никнейм должен содержать минимум 2 символа' });
@@ -199,10 +199,16 @@ export async function setupAuth(app: Express) {
         return res.status(400).json({ error: 'Никнейм не может быть длиннее 50 символов' });
       }
       
+      // Validate image URL if provided
+      if (profileImageUrl && !profileImageUrl.startsWith('data:image/')) {
+        return res.status(400).json({ error: 'Неверный формат изображения' });
+      }
+      
       // Update user
       const updatedUser = await storage.upsertUser({
         ...req.user,
         nickname: nickname.trim(),
+        profileImageUrl: profileImageUrl || req.user.profileImageUrl,
       });
       
       // Return user without password hash
