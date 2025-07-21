@@ -52,11 +52,7 @@ export default function Header() {
           Каталог
         </Button>
       </Link>
-      <Link href="/profile">
-        <Button variant="ghost" className="hover:text-white text-zinc">
-          Профиль
-        </Button>
-      </Link>
+
     </>
   );
 

@@ -112,6 +112,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Current user recipes route - must come before /:id route
+  app.get('/api/recipes/user', async (req: any, res) => {
+    try {
+      // For demo purposes, return empty array since no auth
+      res.json([]);
+    } catch (error) {
+      console.error("Error fetching user recipes:", error);
+      res.status(500).json({ message: "Failed to fetch user recipes" });
+    }
+  });
+
   app.get('/api/recipes/:id', async (req, res) => {
     try {
       const recipe = await storage.getRecipeWithIngredients(req.params.id);
@@ -206,6 +217,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to fetch user recipes" });
     }
   });
+
+
 
   // User favorite routes (simplified for demo)
   app.get('/api/users/:userId/favorites', async (req: any, res) => {

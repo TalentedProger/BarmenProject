@@ -47,8 +47,8 @@ export default function Profile() {
   }, [isAuthenticated, isLoading, setLocation]);
 
   useEffect(() => {
-    if (user?.nickname) {
-      setNickname(user.nickname);
+    if (user && (user as any)?.nickname) {
+      setNickname((user as any).nickname);
     }
   }, [user]);
 
@@ -281,12 +281,12 @@ export default function Profile() {
     <div className="min-h-screen bg-night-blue text-ice-white">
       <Header />
       
-      <section className="pt-20 pb-16 bg-gradient-to-b from-night-blue to-charcoal">
+      <section className="pt-32 pb-16 bg-gradient-to-b from-night-blue to-charcoal">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4 text-neon-turquoise">
-                <User className="inline mr-3 h-10 w-10" />
+              <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-neon-turquoise via-electric to-neon-purple bg-clip-text text-transparent">
+                <User className="inline mr-3 h-12 w-12 text-neon-turquoise" />
                 Мой Профиль
               </h2>
               <p className="text-xl text-cream">Отслеживайте свои рецепты и достижения</p>
@@ -313,9 +313,9 @@ export default function Profile() {
                 <CardContent className="p-6 pt-2">
                   <div className="text-center mb-6">
                     <Avatar className="w-24 h-24 mx-auto mb-4">
-                      <AvatarImage src={profileImage || user.profileImageUrl} alt={user.nickname} />
+                      <AvatarImage src={profileImage || (user as any)?.profileImageUrl} alt={(user as any)?.nickname} />
                       <AvatarFallback className="bg-gradient-to-br from-neon-turquoise to-neon-purple text-black text-2xl font-bold">
-                        {user.nickname?.charAt(0)?.toUpperCase() || user.email?.charAt(0)?.toUpperCase() || 'U'}
+                        {(user as any)?.nickname?.charAt(0)?.toUpperCase() || (user as any)?.email?.charAt(0)?.toUpperCase() || 'U'}
                       </AvatarFallback>
                     </Avatar>
                     
@@ -364,7 +364,7 @@ export default function Profile() {
                             variant="outline"
                             onClick={() => {
                               setEditingProfile(false);
-                              setNickname(user.nickname);
+                              setNickname((user as any)?.nickname || '');
                             }}
                             className="border-white/20 text-white hover:bg-white/10"
                           >
@@ -375,9 +375,9 @@ export default function Profile() {
                     ) : (
                       <>
                         <h3 className="text-xl font-bold text-neon-turquoise mb-1">
-                          {user.nickname}
+                          {(user as any)?.nickname || 'Пользователь'}
                         </h3>
-                        <p className="text-sm text-white/70 mb-2">{user.email}</p>
+                        <p className="text-sm text-white/70 mb-2">{(user as any)?.email || ''}</p>
                         <Badge className="text-neon-amber border-neon-amber" variant="outline">
                           {getUserLevel(userRecipes.length)}
                         </Badge>
@@ -415,37 +415,46 @@ export default function Profile() {
               </Card>
 
               {/* Stats Cards */}
-              <Card className="glass-effect border-none">
-                <CardContent className="p-6 text-center">
-                  <TrendingUp className="text-neon-turquoise text-4xl mx-auto mb-4" />
-                  <h3 className="text-3xl font-bold text-neon-turquoise mb-2">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-turquoise/10 to-electric/5 border border-neon-turquoise/20 backdrop-blur-md">
+                <div className="absolute inset-0 bg-gradient-to-br from-neon-turquoise/5 to-transparent"></div>
+                <CardContent className="relative p-6 text-center">
+                  <div className="bg-gradient-to-br from-neon-turquoise/20 to-electric/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <TrendingUp className="text-neon-turquoise text-2xl" />
+                  </div>
+                  <h3 className="text-3xl font-bold bg-gradient-to-r from-neon-turquoise to-electric bg-clip-text text-transparent mb-2">
                     {userRecipes.reduce((sum, recipe) => sum + (recipe.ratingCount || 0), 0)}
                   </h3>
-                  <p className="text-cream">Общих оценок</p>
+                  <p className="text-white/80 font-medium">Общих оценок</p>
                 </CardContent>
               </Card>
               
-              <Card className="glass-effect border-none">
-                <CardContent className="p-6 text-center">
-                  <Trophy className="text-neon-amber text-4xl mx-auto mb-4" />
-                  <h3 className="text-3xl font-bold text-neon-amber mb-2">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-amber/10 to-yellow-500/5 border border-neon-amber/20 backdrop-blur-md">
+                <div className="absolute inset-0 bg-gradient-to-br from-neon-amber/5 to-transparent"></div>
+                <CardContent className="relative p-6 text-center">
+                  <div className="bg-gradient-to-br from-neon-amber/20 to-yellow-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Trophy className="text-neon-amber text-2xl" />
+                  </div>
+                  <h3 className="text-3xl font-bold bg-gradient-to-r from-neon-amber to-yellow-400 bg-clip-text text-transparent mb-2">
                     {userRecipes.filter(recipe => parseFloat(recipe.rating?.toString() || '0') >= 4.5).length}
                   </h3>
-                  <p className="text-cream">Топ рецептов</p>
+                  <p className="text-white/80 font-medium">Топ рецептов</p>
                 </CardContent>
               </Card>
               
-              <Card className="glass-effect border-none">
-                <CardContent className="p-6 text-center">
-                  <Clock className="text-neon-pink text-4xl mx-auto mb-4" />
-                  <h3 className="text-3xl font-bold text-neon-pink mb-2">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-pink/10 to-purple-500/5 border border-neon-pink/20 backdrop-blur-md">
+                <div className="absolute inset-0 bg-gradient-to-br from-neon-pink/5 to-transparent"></div>
+                <CardContent className="relative p-6 text-center">
+                  <div className="bg-gradient-to-br from-neon-pink/20 to-purple-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Clock className="text-neon-pink text-2xl" />
+                  </div>
+                  <h3 className="text-3xl font-bold bg-gradient-to-r from-neon-pink to-purple-400 bg-clip-text text-transparent mb-2">
                     {userRecipes.filter(recipe => {
                       const createdAt = new Date(recipe.createdAt!);
                       const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
                       return createdAt > weekAgo;
                     }).length}
                   </h3>
-                  <p className="text-cream">За эту неделю</p>
+                  <p className="text-white/80 font-medium">За эту неделю</p>
                 </CardContent>
               </Card>
             </div>
