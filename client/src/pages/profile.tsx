@@ -280,14 +280,13 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-night-blue text-ice-white">
       <Header />
-      
       <section className="pt-32 pb-16 bg-gradient-to-b from-night-blue to-charcoal">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <div className="flex items-center justify-center mb-4">
                 <User className="mr-3 h-10 w-10 text-pink-800" />
-                <h2 className="text-5xl font-bold text-pink-800">
+                <h2 className="font-bold text-pink-800 text-[40px]">
                   Мой Профиль
                 </h2>
               </div>
@@ -581,7 +580,6 @@ export default function Profile() {
           </div>
         </div>
       </section>
-      
       <Footer />
     </div>
   );
