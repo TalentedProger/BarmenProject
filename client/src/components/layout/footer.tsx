@@ -1,64 +1,75 @@
-import { Martini, Instagram, Send, Youtube } from "lucide-react";
-
 export default function Footer() {
   return (
-    <footer className="bg-graphite border-t border-border py-12">
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-4 gap-8">
+    <footer 
+      className="relative py-24 text-white"
+      style={{
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
+      }}
+    >
+      {/* Grid overlay */}
+      <div 
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px'
+        }}
+      />
+      
+      <div className="container mx-auto px-6 relative">
+        {/* Top section with links */}
+        <div className="grid md:grid-cols-4 gap-12 mb-16">
           <div>
-            <div className="flex items-center space-x-3 mb-4">
-              <Martini className="text-electric text-2xl" />
-              <h3 className="text-xl font-bold text-platinum">Cocktailo Maker</h3>
-            </div>
-            <p className="text-zinc text-sm">
-              Современная платформа для создания и изучения коктейлей с реалистичной визуализацией
+            <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-neon-pink to-neon-turquoise bg-clip-text text-transparent">
+              Cocktailo
+            </h3>
+            <p className="text-zinc-400 leading-relaxed">
+              Современная платформа для создания уникальных коктейлей с AI-ассистентом и реалистичной 3D визуализацией
             </p>
           </div>
           
           <div>
-            <h4 className="text-lg font-semibold text-electric mb-4">Продукт</h4>
-            <ul className="space-y-2 text-zinc text-sm">
-              <li><a href="#" className="hover:text-electric transition-colors">Конструктор</a></li>
-              <li><a href="#" className="hover:text-electric transition-colors">Генератор</a></li>
-              <li><a href="#" className="hover:text-electric transition-colors">Каталог</a></li>
-              <li><a href="#" className="hover:text-electric transition-colors">Профиль</a></li>
+            <h4 className="text-lg font-semibold mb-6 text-neon-turquoise">Продукт</h4>
+            <ul className="space-y-3 text-zinc-400">
+              <li><a href="/constructor" className="hover:text-neon-turquoise transition-colors">Конструктор</a></li>
+              <li><a href="/generator" className="hover:text-neon-turquoise transition-colors">Генератор</a></li>
+              <li><a href="/catalog" className="hover:text-neon-turquoise transition-colors">Каталог</a></li>
+              <li><a href="/profile" className="hover:text-neon-turquoise transition-colors">Профиль</a></li>
             </ul>
           </div>
           
           <div>
-            <h4 className="text-lg font-semibold text-electric mb-4">Поддержка</h4>
-            <ul className="space-y-2 text-zinc text-sm">
-              <li><a href="#" className="hover:text-electric transition-colors">Помощь</a></li>
-              <li><a href="#" className="hover:text-electric transition-colors">Контакты</a></li>
-              <li><a href="#" className="hover:text-electric transition-colors">FAQ</a></li>
-              <li><a href="#" className="hover:text-electric transition-colors">Обратная связь</a></li>
+            <h4 className="text-lg font-semibold mb-6 text-neon-turquoise">Поддержка</h4>
+            <ul className="space-y-3 text-zinc-400">
+              <li><a href="#" className="hover:text-neon-turquoise transition-colors">Помощь</a></li>
+              <li><a href="#" className="hover:text-neon-turquoise transition-colors">Контакты</a></li>
+              <li><a href="#" className="hover:text-neon-turquoise transition-colors">FAQ</a></li>
+              <li><a href="#" className="hover:text-neon-turquoise transition-colors">Обратная связь</a></li>
             </ul>
           </div>
           
           <div>
-            <h4 className="text-lg font-semibold text-electric mb-4">Социальные сети</h4>
-            <div className="flex space-x-4">
-              <a href="#" className="text-electric hover:text-platinum transition-colors text-xl">
-                <Instagram className="h-6 w-6" />
-              </a>
-              <a href="#" className="text-electric hover:text-platinum transition-colors text-xl">
-                <Send className="h-6 w-6" />
-              </a>
-              <a href="#" className="text-electric hover:text-platinum transition-colors text-xl">
-                <Youtube className="h-6 w-6" />
-              </a>
-            </div>
+            <h4 className="text-lg font-semibold mb-6 text-neon-turquoise">Компания</h4>
+            <ul className="space-y-3 text-zinc-400">
+              <li><a href="#" className="hover:text-neon-turquoise transition-colors">О нас</a></li>
+              <li><a href="#" className="hover:text-neon-turquoise transition-colors">Блог</a></li>
+              <li><a href="#" className="hover:text-neon-turquoise transition-colors">Карьера</a></li>
+              <li><a href="#" className="hover:text-neon-turquoise transition-colors">Пресс-кит</a></li>
+            </ul>
           </div>
         </div>
-        
-        <div className="border-t border-border mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
+
+        {/* Bottom section */}
+        <div className="mt-12 pt-8 border-t border-slate-800">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-zinc-500 text-sm">
               &copy; 2025 Cocktailo. Все права защищены.
             </p>
             
             {/* Social icons */}
-            <div className="flex space-x-6 mt-4 md:mt-0">
+            <div className="flex space-x-6">
               {[
                 { icon: '📱', label: 'Telegram', url: 'https://t.me/cocktailo' },
                 { icon: '🟣', label: 'VK', url: 'https://vk.com/cocktailo' },
@@ -75,10 +86,12 @@ export default function Footer() {
                     backgroundColor: 'rgba(15, 23, 42, 0.5)'
                   }}
                   onMouseEnter={(e) => {
-                    (e.target as HTMLElement).style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.4)';
+                    const target = e.target as HTMLElement;
+                    target.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.4)';
                   }}
                   onMouseLeave={(e) => {
-                    (e.target as HTMLElement).style.boxShadow = 'none';
+                    const target = e.target as HTMLElement;
+                    target.style.boxShadow = 'none';
                   }}
                 >
                   <span className="text-lg">{social.icon}</span>
