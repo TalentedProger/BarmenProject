@@ -2,13 +2,18 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import RecipeCard from "@/components/recipe/recipe-card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
   User, 
   Martini, 
@@ -17,27 +22,45 @@ import {
   Clock, 
   TrendingUp,
   Edit,
-  Trash2
+  Trash2,
+  Camera,
+  Save,
+  LogOut
 } from "lucide-react";
 import type { Recipe } from "@shared/schema";
+import { useLocation } from "wouter";
 
 export default function Profile() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [userFavorites, setUserFavorites] = useState<Set<string>>(new Set());
-  
-  // Demo user data for public access
-  const demoUser = { id: 'demo', name: 'Demo User', email: 'demo@example.com' };
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [nickname, setNickname] = useState("");
+  const [location, setLocation] = useLocation();
+  const { user, isAuthenticated, isLoading } = useAuth();
 
-  // Fetch user recipes (demo data)
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      setLocation('/auth');
+    }
+  }, [isAuthenticated, isLoading, setLocation]);
+
+  useEffect(() => {
+    if (user?.nickname) {
+      setNickname(user.nickname);
+    }
+  }, [user]);
+
+  // Fetch user recipes
   const { data: userRecipes = [], isLoading: recipesLoading } = useQuery<Recipe[]>({
-    queryKey: ["/api/recipes"],
+    queryKey: ["/api/recipes/user"],
+    enabled: isAuthenticated
   });
 
-  // Fetch user favorites (demo data)
-  const { data: favoriteRecipes = [], isLoading: favoritesLoading } = useQuery({
-    queryKey: ["/api/recipes"],
-    select: (data: any[]) => data.slice(0, 3), // Show first 3 as demo favorites
+  // Fetch user favorites
+  const { data: favoriteRecipes = [], isLoading: favoritesLoading } = useQuery<Recipe[]>({
+    queryKey: ["/api/favorites"],
+    enabled: isAuthenticated
   });
 
   useEffect(() => {
@@ -45,6 +68,73 @@ export default function Profile() {
       setUserFavorites(new Set(favoriteRecipes.map((recipe: Recipe) => recipe.id)));
     }
   }, [favoriteRecipes]);
+
+  const updateProfileMutation = useMutation({
+    mutationFn: async (data: { nickname: string }) => {
+      const response = await fetch('/api/auth/profile', {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Ошибка обновления профиля');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Профиль обновлен",
+        description: "Ваш никнейм успешно изменен",
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+      setEditingProfile(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Ошибка",
+        description: error.message || "Не удалось обновить профиль",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch('/api/auth/logout', { method: 'POST' });
+      if (!response.ok) throw new Error('Logout failed');
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Выход выполнен",
+        description: "До встречи!",
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+      setLocation('/');
+    },
+    onError: () => {
+      toast({
+        title: "Ошибка",
+        description: "Не удалось выйти из аккаунта",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleSaveProfile = () => {
+    if (nickname.trim().length < 2) {
+      toast({
+        title: "Ошибка",
+        description: "Никнейм должен содержать минимум 2 символа",
+        variant: "destructive",
+      });
+      return;
+    }
+    updateProfileMutation.mutate({ nickname: nickname.trim() });
+  };
 
   const deleteRecipeMutation = useMutation({
     mutationFn: async (recipeId: string) => {
@@ -88,17 +178,6 @@ export default function Profile() {
       });
     },
     onError: (error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Ошибка авторизации",
-          description: "Выполняется перенаправление на страницу входа...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
       toast({
         title: "Ошибка",
         description: "Не удалось обновить избранное. Попробуйте еще раз.",
@@ -133,6 +212,19 @@ export default function Profile() {
     return "Профессионал";
   };
 
+  if (!isAuthenticated || !user) {
+    return (
+      <div className="min-h-screen bg-graphite text-white">
+        <Header />
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold mb-4">Загрузка...</h2>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const getLevelColor = (level: string) => {
     switch (level) {
       case "Новичок": return "text-green-400";
@@ -161,41 +253,105 @@ export default function Profile() {
             </div>
 
             <div className="grid lg:grid-cols-4 gap-8 mb-8">
-              {/* User Info */}
+              {/* User Profile Card */}
               <Card className="glass-effect border-none">
-                <CardContent className="p-6">
-                  <div className="text-center mb-6">
-                    <div className="w-24 h-24 bg-gradient-to-br from-neon-turquoise to-neon-purple rounded-full flex items-center justify-center mx-auto mb-4">
-                      <User className="text-night-blue text-3xl" />
+                <CardHeader>
+                  <CardTitle className="text-center">
+                    <div className="flex justify-between items-center">
+                      <span>Профиль</span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setEditingProfile(!editingProfile)}
+                        className="text-neon-turquoise hover:bg-white/10"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
                     </div>
-                    <h3 className="text-xl font-bold text-neon-turquoise mb-1">
-                      {demoUser.name}
-                    </h3>
-                    <p className={`text-sm ${getLevelColor(userLevel)}`}>
-                      {userLevel}
-                    </p>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 pt-2">
+                  <div className="text-center mb-6">
+                    <Avatar className="w-24 h-24 mx-auto mb-4">
+                      <AvatarImage src={user.profileImageUrl || undefined} alt={user.nickname} />
+                      <AvatarFallback className="bg-gradient-to-br from-neon-turquoise to-neon-purple text-black text-2xl font-bold">
+                        {user.nickname?.charAt(0) || user.email?.charAt(0) || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                    
+                    {editingProfile ? (
+                      <div className="space-y-3">
+                        <div>
+                          <Label htmlFor="nickname" className="text-white/90 font-medium">Никнейм</Label>
+                          <Input
+                            id="nickname"
+                            value={nickname}
+                            onChange={(e) => setNickname(e.target.value)}
+                            className="bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-neon-turquoise"
+                            placeholder="Ваш никнейм"
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            onClick={handleSaveProfile}
+                            disabled={updateProfileMutation.isPending}
+                            className="bg-gradient-to-r from-neon-turquoise to-electric text-black"
+                          >
+                            <Save className="h-4 w-4 mr-1" />
+                            Сохранить
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setEditingProfile(false);
+                              setNickname(user.nickname);
+                            }}
+                            className="border-white/20 text-white hover:bg-white/10"
+                          >
+                            Отмена
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <h3 className="text-xl font-bold text-neon-turquoise mb-1">
+                          {user.nickname}
+                        </h3>
+                        <p className="text-sm text-white/70 mb-2">{user.email}</p>
+                        <Badge className="text-neon-amber border-neon-amber" variant="outline">
+                          {getUserLevel(userRecipes.length)}
+                        </Badge>
+                      </>
+                    )}
                   </div>
                   
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-cream">Рецептов создано:</span>
-                      <span className="text-neon-amber font-semibold">
-                        {userRecipes.length}
-                      </span>
+                  {!editingProfile && (
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-cream">Рецептов создано:</span>
+                        <span className="text-neon-amber font-semibold">
+                          {userRecipes.length}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-cream">Любимых рецептов:</span>
+                        <span className="text-neon-pink font-semibold">
+                          {favoriteRecipes?.length || 0}
+                        </span>
+                      </div>
+                      <Button
+                        onClick={() => logoutMutation.mutate()}
+                        disabled={logoutMutation.isPending}
+                        variant="outline"
+                        className="w-full border-red-500/50 text-red-400 hover:bg-red-500/10"
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Выйти
+                      </Button>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-cream">Любимых рецептов:</span>
-                      <span className="text-neon-pink font-semibold">
-                        {favoriteRecipes.length}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-cream">Уровень:</span>
-                      <Badge className={`${getLevelColor(userLevel)} border-current`} variant="outline">
-                        {userLevel}
-                      </Badge>
-                    </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
 

@@ -102,13 +102,13 @@ export default function Header() {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="flex items-center space-x-2 hover:bg-white/10">
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={user.profileImageUrl || undefined} alt={user.firstName || "User"} />
+                        <AvatarImage src={user.profileImageUrl || undefined} alt={user.nickname || "User"} />
                         <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
-                          {user.firstName?.charAt(0) || user.email?.charAt(0) || 'U'}
+                          {user.nickname?.charAt(0) || user.email?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>
                       <span className="text-white font-medium">
-                        {user.firstName || user.email?.split('@')[0] || 'Пользователь'}
+                        {user.nickname || 'Пользователь'}
                       </span>
                     </Button>
                   </DropdownMenuTrigger>

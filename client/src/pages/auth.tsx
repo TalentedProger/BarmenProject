@@ -19,8 +19,7 @@ export default function Auth() {
     email: "",
     password: "",
     confirmPassword: "",
-    firstName: "",
-    lastName: ""
+    nickname: ""
   });
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [location, setLocation] = useLocation();
@@ -74,7 +73,7 @@ export default function Auth() {
   });
 
   const registerMutation = useMutation({
-    mutationFn: async (data: { email: string; password: string; firstName: string; lastName?: string }) => {
+    mutationFn: async (data: { email: string; password: string; nickname: string }) => {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -161,8 +160,12 @@ export default function Auth() {
     }
     
     if (!isLogin) {
-      if (!formData.firstName.trim()) {
-        newErrors.firstName = "Введите имя";
+      if (!formData.nickname.trim()) {
+        newErrors.nickname = "Введите никнейм";
+      } else if (formData.nickname.length < 2) {
+        newErrors.nickname = "Никнейм должен содержать минимум 2 символа";
+      } else if (formData.nickname.length > 50) {
+        newErrors.nickname = "Никнейм не может быть длиннее 50 символов";
       }
       
       if (!formData.confirmPassword.trim()) {
@@ -190,8 +193,7 @@ export default function Auth() {
       registerMutation.mutate({
         email: formData.email,
         password: formData.password,
-        firstName: formData.firstName,
-        lastName: formData.lastName || undefined
+        nickname: formData.nickname
       });
     }
   };
@@ -375,50 +377,30 @@ export default function Auth() {
                   )}
                 </div>
 
-                {/* Name Fields - Only for Registration */}
+                {/* Nickname Field - Only for Registration */}
                 {!isLogin && (
-                  <>
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName" className="text-white/90 font-medium">Имя *</Label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/50" />
-                        <Input
-                          id="firstName"
-                          type="text"
-                          value={formData.firstName}
-                          onChange={(e) => handleInputChange('firstName', e.target.value)}
-                          placeholder="Ваше имя"
-                          className={`pl-12 bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-neon-turquoise focus:ring-1 focus:ring-neon-turquoise transition-all duration-300 ${
-                            errors.firstName ? 'border-red-500 focus:border-red-400 focus:ring-red-400' : ''
-                          }`}
-                          style={{
-                            boxShadow: formData.firstName ? '0 0 5px rgba(0, 255, 247, 0.3)' : 'none'
-                          }}
-                        />
-                      </div>
-                      {errors.firstName && (
-                        <p className="text-red-400 text-sm">{errors.firstName}</p>
-                      )}
+                  <div className="space-y-2">
+                    <Label htmlFor="nickname" className="text-white/90 font-medium">Никнейм *</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/50" />
+                      <Input
+                        id="nickname"
+                        type="text"
+                        value={formData.nickname}
+                        onChange={(e) => handleInputChange('nickname', e.target.value)}
+                        placeholder="Ваш никнейм"
+                        className={`pl-12 bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-neon-turquoise focus:ring-1 focus:ring-neon-turquoise transition-all duration-300 ${
+                          errors.nickname ? 'border-red-500 focus:border-red-400 focus:ring-red-400' : ''
+                        }`}
+                        style={{
+                          boxShadow: formData.nickname ? '0 0 5px rgba(0, 255, 247, 0.3)' : 'none'
+                        }}
+                      />
                     </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName" className="text-white/90 font-medium">Фамилия</Label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/50" />
-                        <Input
-                          id="lastName"
-                          type="text"
-                          value={formData.lastName}
-                          onChange={(e) => handleInputChange('lastName', e.target.value)}
-                          placeholder="Ваша фамилия (необязательно)"
-                          className="pl-12 bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-neon-turquoise focus:ring-1 focus:ring-neon-turquoise transition-all duration-300"
-                          style={{
-                            boxShadow: formData.lastName ? '0 0 5px rgba(0, 255, 247, 0.3)' : 'none'
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </>
+                    {errors.nickname && (
+                      <p className="text-red-400 text-sm">{errors.nickname}</p>
+                    )}
+                  </div>
                 )}
 
                 {/* Password Field */}

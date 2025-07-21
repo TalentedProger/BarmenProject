@@ -29,8 +29,7 @@ export const sessions = pgTable(
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().notNull(),
   email: varchar("email").unique(),
-  firstName: varchar("first_name"),
-  lastName: varchar("last_name"),
+  nickname: varchar("nickname").notNull(),
   profileImageUrl: varchar("profile_image_url"),
   googleId: varchar("google_id").unique(), // Google OAuth ID
   passwordHash: varchar("password_hash"), // For email/password auth
@@ -123,8 +122,7 @@ export const insertRecipeRatingSchema = createInsertSchema(recipeRatings);
 export const registerSchema = z.object({
   email: z.string().email("Неверный формат email"),
   password: z.string().min(6, "Пароль должен быть не менее 6 символов"),
-  firstName: z.string().min(1, "Имя обязательно"),
-  lastName: z.string().optional(),
+  nickname: z.string().min(2, "Никнейм должен содержать минимум 2 символа").max(50, "Никнейм не может быть длиннее 50 символов"),
 });
 
 export const loginSchema = z.object({
@@ -132,7 +130,14 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Пароль обязателен"),
 });
 
-export const insertUserSchema = createInsertSchema(users);
+export const insertUserSchema = createInsertSchema(users, {
+  nickname: z.string().min(2, "Никнейм должен содержать минимум 2 символа").max(50, "Никнейм не может быть длиннее 50 символов"),
+  email: z.string().email("Неверный формат email"),
+}).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
 
 // Types
 export type UpsertUser = typeof users.$inferInsert;

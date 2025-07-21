@@ -73,8 +73,7 @@ export async function setupAuth(app: Express) {
             id: nanoid(),
             googleId: profile.id,
             email: profile.emails?.[0]?.value || null,
-            firstName: profile.name?.givenName || null,
-            lastName: profile.name?.familyName || null,
+            nickname: profile.name?.givenName || profile.displayName || 'Пользователь',
             profileImageUrl: profile.photos?.[0]?.value || null,
           });
         } else {
@@ -90,8 +89,7 @@ export async function setupAuth(app: Express) {
         user = await storage.upsertUser({
           ...user,
           email: profile.emails?.[0]?.value || user.email,
-          firstName: profile.name?.givenName || user.firstName,
-          lastName: profile.name?.familyName || user.lastName,
+          nickname: profile.name?.givenName || profile.displayName || user.nickname,
           profileImageUrl: profile.photos?.[0]?.value || user.profileImageUrl,
         });
       }
@@ -184,10 +182,46 @@ export async function setupAuth(app: Express) {
     });
   });
 
+  // Update profile
+  app.patch('/api/auth/profile', async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ error: 'Не авторизован' });
+      }
+
+      const { nickname } = req.body;
+      
+      if (!nickname || nickname.trim().length < 2) {
+        return res.status(400).json({ error: 'Никнейм должен содержать минимум 2 символа' });
+      }
+      
+      if (nickname.trim().length > 50) {
+        return res.status(400).json({ error: 'Никнейм не может быть длиннее 50 символов' });
+      }
+      
+      // Update user
+      const updatedUser = await storage.upsertUser({
+        ...req.user,
+        nickname: nickname.trim(),
+      });
+      
+      // Return user without password hash
+      const { passwordHash: _, ...userWithoutPassword } = updatedUser;
+      res.json({ user: userWithoutPassword });
+    } catch (error: any) {
+      console.error('Profile update error:', error);
+      if (error.message?.includes('duplicate') || error.message?.includes('unique')) {
+        res.status(400).json({ error: 'Пользователь с таким никнеймом уже существует' });
+      } else {
+        res.status(500).json({ error: 'Ошибка сервера' });
+      }
+    }
+  });
+
   // Register with email/password
   app.post('/api/auth/register', async (req, res) => {
     try {
-      const { email, password, firstName, lastName } = registerSchema.parse(req.body);
+      const { email, password, nickname } = registerSchema.parse(req.body);
       
       // Check if user already exists
       const existingUser = await storage.getUserByEmail(email);
@@ -203,8 +237,7 @@ export async function setupAuth(app: Express) {
       const newUser = await storage.upsertUser({
         id: nanoid(),
         email,
-        firstName,
-        lastName: lastName || null,
+        nickname,
         profileImageUrl: null,
         googleId: null,
         passwordHash,
