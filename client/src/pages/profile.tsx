@@ -286,12 +286,12 @@ export default function Profile() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <div className="flex items-center justify-center mb-4">
-                <User className="mr-3 h-8 w-8 text-slate-400" />
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-600 to-pink-800 bg-clip-text text-transparent">
+                <User className="mr-3 h-10 w-10 text-pink-800" />
+                <h2 className="text-5xl font-bold text-pink-800">
                   Мой Профиль
                 </h2>
               </div>
-              <p className="text-xl text-cream">Отслеживайте свои рецепты и достижения</p>
+              <p className="text-lg text-cream">Отслеживайте свои рецепты и достижения</p>
             </div>
 
             <div className="grid lg:grid-cols-4 gap-8 mb-8">
@@ -417,7 +417,7 @@ export default function Profile() {
               </Card>
 
               {/* Stats Cards */}
-              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-turquoise/10 to-electric/5 border border-neon-turquoise/20 backdrop-blur-md">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-turquoise/10 to-electric/5 border border-neon-turquoise/20 backdrop-blur-md shadow-lg shadow-neon-turquoise/15 hover:shadow-xl hover:shadow-neon-turquoise/20 transition-shadow duration-300">
                 <div className="absolute inset-0 bg-gradient-to-br from-neon-turquoise/5 to-transparent"></div>
                 <CardContent className="relative p-6 text-center">
                   <div className="bg-gradient-to-br from-neon-turquoise/20 to-electric/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -430,7 +430,7 @@ export default function Profile() {
                 </CardContent>
               </Card>
               
-              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-amber/10 to-yellow-500/5 border border-neon-amber/20 backdrop-blur-md">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-amber/10 to-yellow-500/5 border border-neon-amber/20 backdrop-blur-md shadow-lg shadow-neon-amber/15 hover:shadow-xl hover:shadow-neon-amber/20 transition-shadow duration-300">
                 <div className="absolute inset-0 bg-gradient-to-br from-neon-amber/5 to-transparent"></div>
                 <CardContent className="relative p-6 text-center">
                   <div className="bg-gradient-to-br from-neon-amber/20 to-yellow-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -443,7 +443,7 @@ export default function Profile() {
                 </CardContent>
               </Card>
               
-              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-pink/10 to-purple-500/5 border border-neon-pink/20 backdrop-blur-md">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-pink/10 to-purple-500/5 border border-neon-pink/20 backdrop-blur-md shadow-lg shadow-neon-pink/15 hover:shadow-xl hover:shadow-neon-pink/20 transition-shadow duration-300">
                 <div className="absolute inset-0 bg-gradient-to-br from-neon-pink/5 to-transparent"></div>
                 <CardContent className="relative p-6 text-center">
                   <div className="bg-gradient-to-br from-neon-pink/20 to-purple-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
