@@ -1,15 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Martini, WandSparkles, Dice2, BookOpen, GraduationCap, ShoppingCart, Users, LogIn, UserPlus } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Martini, WandSparkles, Dice2, BookOpen, GraduationCap, ShoppingCart, Users, LogIn, UserPlus, User, LogOut } from "lucide-react";
 import CoursesSection from "@/components/landing/courses-section";
 import PopularRecipesSection from "@/components/PopularRecipesSection";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useMutation } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { handleLogout } from "@/lib/authUtils";
 
 export default function Landing() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [heroEmail, setHeroEmail] = useState("");
   const [heroEmailError, setHeroEmailError] = useState("");
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const { toast } = useToast();
   
   const handleGetStarted = () => {
     window.location.href = "/constructor";
@@ -60,6 +68,28 @@ export default function Landing() {
     setHeroEmail("");
   };
 
+  const logoutMutation = useMutation({
+    mutationFn: handleLogout,
+    onSuccess: () => {
+      toast({
+        title: "До свидания!",
+        description: "Вы успешно вышли из системы.",
+      });
+      window.location.reload();
+    },
+    onError: () => {
+      toast({
+        title: "Ошибка",
+        description: "Не удалось выйти из системы.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleLogoutClick = () => {
+    logoutMutation.mutate();
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
@@ -78,14 +108,56 @@ export default function Landing() {
                 <WandSparkles className="mr-2 h-4 w-4" />
                 Начать
               </Button>
-              <Button 
-                variant="outline"
-                className="bg-transparent border border-neon-purple text-neon-purple px-6 py-2 rounded-lg font-semibold hover:bg-neon-purple hover:text-night-blue transition-all duration-300 shadow-md shadow-neon-purple/20"
-                onClick={() => window.location.href = "/auth"}
-              >
-                <LogIn className="mr-2 h-4 w-4" />
-                Вход
-              </Button>
+              
+              {/* Auth Section - показывает либо кнопку входа, либо профиль пользователя */}
+              {!isLoading && !isAuthenticated ? (
+                <Button 
+                  variant="outline"
+                  className="bg-transparent border border-neon-purple text-neon-purple px-6 py-2 rounded-lg font-semibold hover:bg-neon-purple hover:text-night-blue transition-all duration-300 shadow-md shadow-neon-purple/20"
+                  onClick={() => window.location.href = "/auth"}
+                >
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Вход
+                </Button>
+              ) : isAuthenticated && user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="flex items-center space-x-2 hover:bg-white/10 p-2 rounded-lg">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage 
+                          src={(user as any)?.profileImageUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face"} 
+                          alt={(user as any)?.nickname || "User"} 
+                        />
+                        <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
+                          {(user as any)?.nickname?.charAt(0) || (user as any)?.email?.charAt(0) || 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-white font-medium">
+                        {(user as any)?.nickname || 'Пользователь'}
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="bg-black/90 backdrop-blur-lg border-white/20">
+                    <DropdownMenuItem asChild>
+                      <button 
+                        onClick={() => window.location.href = "/profile"} 
+                        className="flex items-center cursor-pointer w-full text-left"
+                      >
+                        <User className="mr-2 h-4 w-4" />
+                        Профиль
+                      </button>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={handleLogoutClick}
+                      disabled={logoutMutation.isPending}
+                      className="flex items-center cursor-pointer"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Выйти
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : null}
             </div>
           </div>
         </nav>
