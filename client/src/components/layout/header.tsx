@@ -102,13 +102,13 @@ export default function Header() {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="flex items-center space-x-2 hover:bg-white/10">
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={user.profileImageUrl || undefined} alt={user.nickname || "User"} />
+                        <AvatarImage src={(user as any)?.profileImageUrl || undefined} alt={(user as any)?.nickname || "User"} />
                         <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
-                          {user.nickname?.charAt(0) || user.email?.charAt(0) || 'U'}
+                          {(user as any)?.nickname?.charAt(0) || (user as any)?.email?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>
                       <span className="text-white font-medium">
-                        {user.nickname || 'Пользователь'}
+                        {(user as any)?.nickname || 'Пользователь'}
                       </span>
                     </Button>
                   </DropdownMenuTrigger>
@@ -162,16 +162,16 @@ export default function Header() {
                       <>
                         <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-lg mb-3">
                           <Avatar className="h-10 w-10">
-                            <AvatarImage src={user.profileImageUrl || undefined} alt={user.firstName || "User"} />
+                            <AvatarImage src={(user as any)?.profileImageUrl || undefined} alt={(user as any)?.nickname || "User"} />
                             <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
-                              {user.firstName?.charAt(0) || user.email?.charAt(0) || 'U'}
+                              {(user as any)?.nickname?.charAt(0) || (user as any)?.email?.charAt(0) || 'U'}
                             </AvatarFallback>
                           </Avatar>
                           <div>
                             <p className="text-white font-medium">
-                              {user.firstName || user.email?.split('@')[0] || 'Пользователь'}
+                              {(user as any)?.nickname || (user as any)?.email?.split('@')[0] || 'Пользователь'}
                             </p>
-                            <p className="text-white/70 text-sm">{user.email}</p>
+                            <p className="text-white/70 text-sm">{(user as any)?.email}</p>
                           </div>
                         </div>
                         <Button 

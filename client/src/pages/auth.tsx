@@ -531,12 +531,14 @@ export default function Auth() {
                     boxShadow: '0 0 15px rgba(196, 181, 253, 0.2)'
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.textShadow = '0 0 15px rgba(196, 181, 253, 0.8), 0 0 25px rgba(196, 181, 253, 0.5)';
-                    e.target.style.boxShadow = '0 0 25px rgba(196, 181, 253, 0.4), 0 0 40px rgba(196, 181, 253, 0.2)';
+                    const target = e.target as HTMLElement;
+                    target.style.textShadow = '0 0 15px rgba(196, 181, 253, 0.8), 0 0 25px rgba(196, 181, 253, 0.5)';
+                    target.style.boxShadow = '0 0 25px rgba(196, 181, 253, 0.4), 0 0 40px rgba(196, 181, 253, 0.2)';
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.textShadow = '0 0 10px rgba(196, 181, 253, 0.4)';
-                    e.target.style.boxShadow = '0 0 15px rgba(196, 181, 253, 0.2)';
+                    const target = e.target as HTMLElement;
+                    target.style.textShadow = '0 0 10px rgba(196, 181, 253, 0.4)';
+                    target.style.boxShadow = '0 0 15px rgba(196, 181, 253, 0.2)';
                   }}
                 >
                   <svg className="mr-2 h-4 w-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
