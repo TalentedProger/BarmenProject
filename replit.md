@@ -238,17 +238,21 @@ The project has been successfully migrated from Replit Agent to the standard Rep
 - ✅ Responsive design with mobile-first approach
 - ✅ Rearranged layout: title top, image center, quote bottom
 
-### January 21, 2025 - Project Migration & Authentication System Complete
-- ✅ Successfully completed migration from Replit Agent to standard Replit environment
-- ✅ Configured PostgreSQL database with proper environment variables
-- ✅ Set up Google OAuth authentication with GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET
-- ✅ Fixed TypeScript error in authentication system
-- ✅ Created database tables using `npm run db:push`
-- ✅ Email/password registration and login working correctly
-- ✅ Landing page authentication UI implementation:
-  - Shows "Вход" button for unauthenticated users
-  - Shows avatar + nickname dropdown for authenticated users
-  - Dropdown includes "Профиль" and "Выйти" options
-- ✅ Profile page functional with nickname editing and logout capability
-- ✅ Session management working with PostgreSQL storage
-- ✅ All core application functionality verified working
+### January 21, 2025 - Profile Avatar & Navigation Improvements
+- ✅ Landing page navigation updates:
+  - Removed dropdown menu from user avatar
+  - Direct navigation to profile page when clicking avatar
+  - Avatar displays first letter of nickname on neon gradient background
+- ✅ Profile page enhancements:
+  - Added photo upload functionality with "Установить фото" button
+  - File validation (images only, max 2MB)
+  - Updated profile editing UI to include photo upload
+  - Consistent footer styling with landing page
+- ✅ Backend API improvements:
+  - Increased request body limit to 10MB for image uploads
+  - Added profileImageUrl support in profile update endpoint
+  - Enhanced image validation for base64 data URLs
+- ✅ User experience improvements:
+  - Unified avatar styling across landing and profile pages
+  - Streamlined navigation flow
+  - Better error handling for file uploads

@@ -128,11 +128,11 @@ export default function Profile() {
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Проверка размера файла (макс 5MB)
-      if (file.size > 5 * 1024 * 1024) {
+      // Проверка размера файла (макс 2MB)
+      if (file.size > 2 * 1024 * 1024) {
         toast({
           title: "Ошибка",
-          description: "Размер файла не должен превышать 5MB",
+          description: "Размер файла не должен превышать 2MB",
           variant: "destructive",
         });
         return;

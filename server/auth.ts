@@ -200,7 +200,7 @@ export async function setupAuth(app: Express) {
       }
       
       // Validate image URL if provided
-      if (profileImageUrl && !profileImageUrl.startsWith('data:image/')) {
+      if (profileImageUrl && profileImageUrl.length > 0 && !profileImageUrl.startsWith('data:image/')) {
         return res.status(400).json({ error: 'Неверный формат изображения' });
       }
       
