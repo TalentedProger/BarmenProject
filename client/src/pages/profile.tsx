@@ -416,7 +416,7 @@ export default function Profile() {
               </Card>
 
               {/* Stats Cards */}
-              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-turquoise/10 to-electric/5 border border-neon-turquoise/20 backdrop-blur-md shadow-lg shadow-neon-turquoise/15 hover:shadow-xl hover:shadow-neon-turquoise/20 transition-shadow duration-300">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-turquoise/10 to-electric/5 border border-neon-turquoise/20 backdrop-blur-md shadow-md shadow-cyan-500/10 hover:shadow-lg hover:shadow-cyan-500/15 transition-all duration-300">
                 <div className="absolute inset-0 bg-gradient-to-br from-neon-turquoise/5 to-transparent"></div>
                 <CardContent className="relative p-6 text-center">
                   <div className="bg-gradient-to-br from-neon-turquoise/20 to-electric/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -429,7 +429,7 @@ export default function Profile() {
                 </CardContent>
               </Card>
               
-              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-amber/10 to-yellow-500/5 border border-neon-amber/20 backdrop-blur-md shadow-lg shadow-neon-amber/15 hover:shadow-xl hover:shadow-neon-amber/20 transition-shadow duration-300">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-amber/10 to-yellow-500/5 border border-neon-amber/20 backdrop-blur-md shadow-md shadow-yellow-500/10 hover:shadow-lg hover:shadow-yellow-500/15 transition-all duration-300">
                 <div className="absolute inset-0 bg-gradient-to-br from-neon-amber/5 to-transparent"></div>
                 <CardContent className="relative p-6 text-center">
                   <div className="bg-gradient-to-br from-neon-amber/20 to-yellow-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -442,7 +442,7 @@ export default function Profile() {
                 </CardContent>
               </Card>
               
-              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-pink/10 to-purple-500/5 border border-neon-pink/20 backdrop-blur-md shadow-lg shadow-neon-pink/15 hover:shadow-xl hover:shadow-neon-pink/20 transition-shadow duration-300">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-pink/10 to-purple-500/5 border border-neon-pink/20 backdrop-blur-md shadow-md shadow-pink-500/10 hover:shadow-lg hover:shadow-pink-500/15 transition-all duration-300">
                 <div className="absolute inset-0 bg-gradient-to-br from-neon-pink/5 to-transparent"></div>
                 <CardContent className="relative p-6 text-center">
                   <div className="bg-gradient-to-br from-neon-pink/20 to-purple-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
