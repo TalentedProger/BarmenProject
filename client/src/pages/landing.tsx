@@ -560,19 +560,21 @@ export default function Landing() {
             <div className="mt-12 pt-8 border-t border-slate-800">
               <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <p className="text-zinc-500 text-sm">
-                  &copy; 2024 Cocktailo. Все права защищены.
+                  &copy; 2025 Cocktailo. Все права защищены.
                 </p>
                 
                 {/* Social icons */}
                 <div className="flex space-x-6">
                   {[
-                    { icon: '📱', label: 'Telegram' },
-                    { icon: '📘', label: 'Facebook' },
-                    { icon: '📸', label: 'Instagram' }
+                    { icon: '📱', label: 'Telegram', url: 'https://t.me/cocktailo' },
+                    { icon: '🟣', label: 'VK', url: 'https://vk.com/cocktailo' },
+                    { icon: '📸', label: 'Instagram', url: 'https://instagram.com/cocktailo' }
                   ].map((social, index) => (
                     <a
                       key={index}
-                      href="#"
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-10 h-10 flex items-center justify-center rounded-full border border-slate-700 text-zinc-400 hover:text-cyan-300 hover:border-cyan-400 transition-all duration-300 hover:scale-110"
                       style={{
                         backdropFilter: 'blur(10px)',

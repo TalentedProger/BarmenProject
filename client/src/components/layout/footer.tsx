@@ -51,8 +51,41 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="border-t border-border mt-8 pt-8 text-center">
-          <p className="text-zinc text-sm">&copy; 2025 Cocktailo Maker. Все права защищены.</p>
+        <div className="border-t border-border mt-8 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-zinc-500 text-sm">
+              &copy; 2025 Cocktailo. Все права защищены.
+            </p>
+            
+            {/* Social icons */}
+            <div className="flex space-x-6 mt-4 md:mt-0">
+              {[
+                { icon: '📱', label: 'Telegram', url: 'https://t.me/cocktailo' },
+                { icon: '🟣', label: 'VK', url: 'https://vk.com/cocktailo' },
+                { icon: '📸', label: 'Instagram', url: 'https://instagram.com/cocktailo' }
+              ].map((social, index) => (
+                <a
+                  key={index}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 flex items-center justify-center rounded-full border border-slate-700 text-zinc-400 hover:text-cyan-300 hover:border-cyan-400 transition-all duration-300 hover:scale-110"
+                  style={{
+                    backdropFilter: 'blur(10px)',
+                    backgroundColor: 'rgba(15, 23, 42, 0.5)'
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.target as HTMLElement).style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.target as HTMLElement).style.boxShadow = 'none';
+                  }}
+                >
+                  <span className="text-lg">{social.icon}</span>
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </footer>
