@@ -201,11 +201,10 @@ export default function PopularRecipesSection() {
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 blur-sm" />
         <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 blur-sm" />
       </div>
-
       <div className="container mx-auto px-4 relative z-10 max-w-7xl">
         {/* Section Title */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#F1F1F1] mb-4" 
+          <h2 className="md:text-5xl font-bold text-[#F1F1F1] mb-4 text-[38px]" 
               style={{ textShadow: '0 0 20px rgba(6, 182, 212, 0.3)' }}>
             Популярные рецепты коктейлей
           </h2>
