@@ -285,16 +285,18 @@ export default function Profile() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-neon-turquoise via-electric to-neon-purple bg-clip-text text-transparent">
-                <User className="inline mr-3 h-12 w-12 text-neon-turquoise" />
-                Мой Профиль
-              </h2>
+              <div className="flex items-center justify-center mb-4">
+                <User className="mr-3 h-8 w-8 text-slate-400" />
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-600 to-pink-800 bg-clip-text text-transparent">
+                  Мой Профиль
+                </h2>
+              </div>
               <p className="text-xl text-cream">Отслеживайте свои рецепты и достижения</p>
             </div>
 
             <div className="grid lg:grid-cols-4 gap-8 mb-8">
               {/* User Profile Card */}
-              <Card className="glass-effect border-none">
+              <Card className="glass-effect border-none shadow-lg shadow-slate-500/10 hover:shadow-xl hover:shadow-slate-500/15 transition-shadow duration-300">
                 <CardHeader>
                   <CardTitle className="text-center">
                     <div className="flex justify-between items-center">

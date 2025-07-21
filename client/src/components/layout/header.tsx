@@ -38,17 +38,17 @@ export default function Header() {
   const NavItems = () => (
     <>
       <Link href="/constructor">
-        <Button variant="ghost" className="hover:text-white text-zinc">
+        <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg">
           Конструктор
         </Button>
       </Link>
       <Link href="/generator">
-        <Button variant="ghost" className="hover:text-white text-zinc">
+        <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg">
           Генератор
         </Button>
       </Link>
       <Link href="/catalog">
-        <Button variant="ghost" className="hover:text-white text-zinc">
+        <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg">
           Каталог
         </Button>
       </Link>
