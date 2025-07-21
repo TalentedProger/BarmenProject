@@ -290,7 +290,7 @@ export default function Profile() {
                   Мой Профиль
                 </h2>
               </div>
-              <p className="text-lg text-cream">Отслеживайте свои рецепты и достижения</p>
+              <p className="text-cream text-[16px]">Отслеживайте свои рецепты и достижения</p>
             </div>
 
             <div className="grid lg:grid-cols-4 gap-8 mb-8">
