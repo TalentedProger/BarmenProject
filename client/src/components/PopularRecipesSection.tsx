@@ -106,9 +106,11 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   return (
     <div className="recipe-card relative">
       <div 
-        className="bg-[#1A1A1E] rounded-2xl transition-all duration-300 overflow-hidden group h-[520px] flex flex-col relative z-10"
+        className="bg-[#1A1A1E] rounded-2xl transition-all duration-200 ease-out overflow-hidden group h-[520px] flex flex-col relative z-10 will-change-auto"
         style={{
-          filter: 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))'
+          filter: 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))',
+          transform: 'translateZ(0)', // Force hardware acceleration
+          backfaceVisibility: 'hidden', // Prevent flickering
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.filter = 'drop-shadow(0 0 16px rgba(6, 182, 212, 0.2)) drop-shadow(0 6px 24px rgba(0, 0, 0, 0.3))';
@@ -118,15 +120,20 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
         }}
       >
         {/* Image */}
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden will-change-transform">
           <img
             src={recipe.image}
             alt={recipe.name}
-            className="w-full h-48 object-cover rounded-t-2xl transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-48 object-cover rounded-t-2xl transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform"
             loading="lazy"
             decoding="async"
+            fetchPriority="low"
+            style={{
+              transform: 'translateZ(0)', // Force hardware acceleration
+              contentVisibility: 'auto', // Optimize rendering
+            }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
         </div>
 
         {/* Content */}
@@ -180,7 +187,16 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           {/* Single centered button - Push to bottom */}
           <div className="flex justify-center pt-4 mt-auto">
             <Button
-              className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600 hover:to-cyan-600 transition-all duration-200 ease-out shadow-lg hover:shadow-xl will-change-transform"
+              style={{
+                transform: 'translateZ(0)', // Force hardware acceleration
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateZ(0) scale(1.02)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateZ(0) scale(1)';
+              }}
             >
               Открыть рецепт
             </Button>
@@ -225,6 +241,8 @@ export default function PopularRecipesSection() {
           }}
           slidesPerView={1}
           spaceBetween={30}
+          speed={600} // Smooth transition speed
+          effect="slide"
           breakpoints={{
             640: {
               slidesPerView: 2,
@@ -236,6 +254,9 @@ export default function PopularRecipesSection() {
             },
           }}
           className="popular-recipes-swiper mb-8"
+          style={{
+            overflow: 'visible', // Prevent clipping
+          }}
         >
           {popularRecipes.map((recipe) => (
             <SwiperSlide key={recipe.id}>
