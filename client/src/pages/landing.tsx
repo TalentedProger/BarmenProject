@@ -274,11 +274,7 @@ export default function Landing() {
                       }
                     }
                   }}
-                  whileHover={{
-                    scale: 1.02,
-                    y: -5,
-                    transition: { duration: 0.2, ease: "easeOut" }
-                  }}
+
                 >
                   <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300 h-full">
                     <CardContent className="p-6 text-center">
