@@ -149,7 +149,7 @@ export default function Landing() {
                   className="h-full w-auto object-contain relative z-10"
                   loading="eager"
                   decoding="async"
-                  fetchpriority="high"
+                  fetchPriority="high"
                 />
                 {/* Subtle glow effect behind the image */}
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/20 to-purple-400/20 rounded-full blur-2xl transform scale-75"></div>
@@ -496,10 +496,10 @@ export default function Landing() {
                         transition: 'all 0.3s ease'
                       }}
                       onMouseEnter={(e) => {
-                        e.target.style.textShadow = '0 0 8px #00ffff88';
+                        (e.target as HTMLElement).style.textShadow = '0 0 8px #00ffff88';
                       }}
                       onMouseLeave={(e) => {
-                        e.target.style.textShadow = 'none';
+                        (e.target as HTMLElement).style.textShadow = 'none';
                       }}
                     >
                       {link.label}
@@ -540,10 +540,10 @@ export default function Landing() {
                       boxShadow: '0 4px 15px rgba(0, 255, 255, 0.3)',
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.boxShadow = '0 6px 20px rgba(0, 255, 255, 0.5)';
+                      (e.target as HTMLElement).style.boxShadow = '0 6px 20px rgba(0, 255, 255, 0.5)';
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.boxShadow = '0 4px 15px rgba(0, 255, 255, 0.3)';
+                      (e.target as HTMLElement).style.boxShadow = '0 4px 15px rgba(0, 255, 255, 0.3)';
                     }}
                   >
                     Подписаться

@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
-  User, 
+  User as UserIcon, 
   Martini, 
   Heart, 
   Trophy, 
@@ -27,7 +27,7 @@ import {
   Save,
   LogOut
 } from "lucide-react";
-import type { Recipe } from "@shared/schema";
+import type { Recipe, User } from "@shared/schema";
 import { useLocation } from "wouter";
 
 export default function Profile() {
@@ -172,7 +172,7 @@ export default function Profile() {
     }
     updateProfileMutation.mutate({ 
       nickname: nickname.trim(),
-      profileImageUrl: profileImage || user.profileImageUrl
+      profileImageUrl: profileImage || (user as User)?.profileImageUrl || undefined
     });
   };
 
@@ -285,7 +285,7 @@ export default function Profile() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <div className="flex items-center justify-center mb-4">
-                <User className="mr-3 h-10 w-10 text-pink-800" />
+                <UserIcon className="mr-3 h-10 w-10 text-pink-800" />
                 <h2 className="font-bold text-pink-800 text-[40px]">
                   Мой Профиль
                 </h2>
