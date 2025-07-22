@@ -7,6 +7,7 @@ import PopularRecipesSection from "@/components/PopularRecipesSection";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { motion } from "framer-motion";
 
 export default function Landing() {
   const [email, setEmail] = useState("");
@@ -197,79 +198,110 @@ export default function Landing() {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-neon-turquoise rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Martini className="text-night-blue text-2xl" />
-                </div>
-                <h3 className="text-xl font-bold text-platinum mb-2">Конструктор</h3>
-                <p className="text-zinc">
-                  Создавайте коктейли слой за слоем с визуализацией в реальном времени
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-neon-purple rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Dice2 className="text-night-blue text-2xl" />
-                </div>
-                <h3 className="text-xl font-bold text-platinum mb-2">Генератор</h3>
-                <p className="text-zinc">
-                  Автоматическое создание уникальных рецептов на основе ваших предпочтений
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-neon-amber rounded-full flex items-center justify-center mx-auto mb-4">
-                  <BookOpen className="text-night-blue text-2xl" />
-                </div>
-                <h3 className="text-xl font-bold text-platinum mb-2">Каталог</h3>
-                <p className="text-zinc">
-                  Тысячи проверенных рецептов от профессиональных барменов
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="text-night-blue text-2xl" />
-                </div>
-                <h3 className="text-xl font-bold text-platinum mb-2">Сообщество</h3>
-                <p className="text-zinc">
-                  Присоединяйтесь к сообществу барменов, делитесь опытом и находите единомышленников
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <ShoppingCart className="text-night-blue text-2xl" />
-                </div>
-                <h3 className="text-xl font-bold text-platinum mb-2">Магазин барного инвентаря</h3>
-                <p className="text-zinc">
-                  Профессиональное барное оборудование и ингредиенты для создания идеальных коктейлей
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <GraduationCap className="text-night-blue text-2xl" />
-                </div>
-                <h3 className="text-xl font-bold text-platinum mb-2">Специальные курсы</h3>
-                <p className="text-zinc">
-                  Обучение от профессиональных барменов: от основ миксологии до авторских техник
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+          <motion.div 
+            className="grid md:grid-cols-3 gap-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.1,
+                  delayChildren: 0.2
+                }
+              }
+            }}
+          >
+            {[
+              {
+                icon: Martini,
+                title: "Конструктор",
+                description: "Создавайте коктейли слой за слоем с визуализацией в реальном времени",
+                bgColor: "bg-neon-turquoise"
+              },
+              {
+                icon: Dice2,
+                title: "Генератор",
+                description: "Автоматическое создание уникальных рецептов на основе ваших предпочтений",
+                bgColor: "bg-neon-purple"
+              },
+              {
+                icon: BookOpen,
+                title: "Каталог",
+                description: "Тысячи проверенных рецептов от профессиональных барменов",
+                bgColor: "bg-neon-amber"
+              },
+              {
+                icon: Users,
+                title: "Сообщество",
+                description: "Присоединяйтесь к сообществу барменов, делитесь опытом и находите единомышленников",
+                bgColor: "bg-red-500"
+              },
+              {
+                icon: ShoppingCart,
+                title: "Магазин барного инвентаря",
+                description: "Профессиональное барное оборудование и ингредиенты для создания идеальных коктейлей",
+                bgColor: "bg-orange-500"
+              },
+              {
+                icon: GraduationCap,
+                title: "Специальные курсы",
+                description: "Обучение от профессиональных барменов: от основ миксологии до авторских техник",
+                bgColor: "bg-green-500"
+              }
+            ].map((feature, index) => {
+              const IconComponent = feature.icon;
+              return (
+                <motion.div
+                  key={index}
+                  variants={{
+                    hidden: { 
+                      opacity: 0, 
+                      y: 50,
+                      filter: "blur(10px)"
+                    },
+                    visible: { 
+                      opacity: 1, 
+                      y: 0,
+                      filter: "blur(0px)",
+                      transition: {
+                        duration: 0.8,
+                        ease: [0.25, 0.46, 0.45, 0.94],
+                        opacity: { duration: 0.6 },
+                        y: { duration: 0.8 },
+                        filter: { duration: 0.6 }
+                      }
+                    }
+                  }}
+                  whileHover={{
+                    scale: 1.02,
+                    y: -5,
+                    transition: { duration: 0.2, ease: "easeOut" }
+                  }}
+                >
+                  <Card className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300 h-full">
+                    <CardContent className="p-6 text-center">
+                      <motion.div 
+                        className={`w-16 h-16 ${feature.bgColor} rounded-full flex items-center justify-center mx-auto mb-4`}
+                        whileHover={{ 
+                          scale: 1.1,
+                          rotate: 5,
+                          transition: { duration: 0.2 }
+                        }}
+                      >
+                        <IconComponent className="text-night-blue text-2xl" />
+                      </motion.div>
+                      <h3 className="text-xl font-bold text-platinum mb-2">{feature.title}</h3>
+                      <p className="text-zinc">
+                        {feature.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </motion.div>
         </div>
       </section>
 
