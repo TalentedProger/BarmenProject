@@ -228,45 +228,42 @@ export default function PopularRecipesSection() {
         </div>
 
         {/* Swiper Carousel */}
-        <div className="px-8 -mx-8 overflow-visible">
-          <Swiper
-            onSwiper={setSwiperRef}
-            modules={[Navigation, Autoplay]}
-            grabCursor={true}
-            centeredSlides={true}
-            loop={true}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            slidesPerView={1}
-            spaceBetween={30}
-            breakpoints={{
-              640: {
-                slidesPerView: 2,
-                spaceBetween: 40,
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 50,
-              },
-            }}
-            className="popular-recipes-swiper mb-8 overflow-visible"
-            style={{
-              paddingLeft: '20px',
-              paddingRight: '20px',
-              marginLeft: '-20px',
-              marginRight: '-20px',
-            }}
-          >
-            {popularRecipes.map((recipe) => (
-              <SwiperSlide key={recipe.id}>
-                <RecipeCard recipe={recipe} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+        <Swiper
+          onSwiper={setSwiperRef}
+          modules={[Navigation, Autoplay]}
+          grabCursor={true}
+          centeredSlides={true}
+          loop={true}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          slidesPerView={1}
+          spaceBetween={30}
+          breakpoints={{
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 40,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 50,
+            },
+          }}
+          className="popular-recipes-swiper mb-8"
+          style={{
+            overflow: 'visible',
+            padding: '0 20px',
+            margin: '0 -20px',
+          }}
+        >
+          {popularRecipes.map((recipe) => (
+            <SwiperSlide key={recipe.id}>
+              <RecipeCard recipe={recipe} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
         {/* Navigation Arrows */}
         <div className="flex justify-center items-center gap-6">
