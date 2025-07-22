@@ -241,8 +241,6 @@ export default function PopularRecipesSection() {
           }}
           slidesPerView={1}
           spaceBetween={30}
-          speed={600} // Smooth transition speed
-          effect="slide"
           breakpoints={{
             640: {
               slidesPerView: 2,
@@ -254,9 +252,6 @@ export default function PopularRecipesSection() {
             },
           }}
           className="popular-recipes-swiper mb-8"
-          style={{
-            overflow: 'visible', // Prevent clipping
-          }}
         >
           {popularRecipes.map((recipe) => (
             <SwiperSlide key={recipe.id}>
