@@ -252,11 +252,6 @@ export default function PopularRecipesSection() {
             },
           }}
           className="popular-recipes-swiper mb-8"
-          style={{
-            overflow: 'visible',
-            padding: '0 20px',
-            margin: '0 -20px',
-          }}
         >
           {popularRecipes.map((recipe) => (
             <SwiperSlide key={recipe.id}>
