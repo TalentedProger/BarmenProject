@@ -302,24 +302,27 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             ))}
           </div>
 
-          {/* Top stats: Объем и ABV - под тегами */}
-          <div className="grid grid-cols-2 gap-6 text-lg text-white font-bold max-[480px]:text-base px-4 py-3 max-[480px]:px-3" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>
-            <div className="flex items-center text-left">
-              <span>💧 {recipe.volume} мл</span>
-            </div>
-            <div className="flex items-center text-left">
-              <span>🍹 {recipe.abv}%</span>
-            </div>
-          </div>
-
           {/* Main spacer - takes up remaining space */}
           <div className="flex-1"></div>
 
-          {/* Bottom stats: Цена и Рейтинг - над кнопкой */}
-          <div className="grid grid-cols-2 gap-6 text-lg text-white font-bold max-[480px]:text-base px-4 py-3 max-[480px]:px-3" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>
+          {/* All stats in one container - 4 rows */}
+          <div className="space-y-2 text-lg text-white font-bold max-[480px]:text-base px-4 py-3 max-[480px]:px-3" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>
+            {/* Row 1: Объем */}
+            <div className="flex items-center text-left">
+              <span>💧 {recipe.volume} мл</span>
+            </div>
+            
+            {/* Row 2: ABV */}
+            <div className="flex items-center text-left">
+              <span>🍹 {recipe.abv}%</span>
+            </div>
+            
+            {/* Row 3: Цена */}
             <div className="flex items-center text-left">
               <span>💰 {recipe.price || '150'} ₽</span>
             </div>
+            
+            {/* Row 4: Рейтинг */}
             <div className="flex items-center space-x-2 text-left">
               <div className="flex">
                 {Array.from({ length: 5 }, (_, i) => (
