@@ -117,7 +117,7 @@ const CoursesSection = () => {
         <div className="hidden max-[1024px]:block space-y-8">
           {/* 1. Main Text */}
           <div className="text-center">
-            <h2 className="text-4xl font-bold text-[#00FFF0] mb-6 leading-tight max-[480px]:text-3xl">
+            <h2 className="text-4xl font-bold text-[#00FFF0] mb-6 leading-tight max-[480px]:text-3xl max-[1024px]:mt-0">
               Стань мастером коктейлей
             </h2>
             <p className="text-lg text-gray-300 leading-relaxed max-[480px]:text-base px-4">
