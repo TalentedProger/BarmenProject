@@ -138,7 +138,7 @@ const CoursesSection = () => {
                     {course.level}
                   </span>
                   
-                  <button className="w-full mt-auto px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white rounded-lg transition-all duration-300 font-medium hover:shadow-lg hover:shadow-pink-500/25">
+                  <button className="w-full mt-auto px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white rounded-lg transition-all duration-300 font-medium hover:shadow-lg hover:shadow-pink-500/25 max-[480px]:mx-auto max-[480px]:w-auto max-[480px]:px-6">
                     Записаться
                   </button>
                 </div>

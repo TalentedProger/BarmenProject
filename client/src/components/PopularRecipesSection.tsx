@@ -220,7 +220,7 @@ export default function PopularRecipesSection() {
       <div className="container mx-auto px-4 relative z-10 max-w-7xl">
         {/* Section Title */}
         <div className="text-center mb-12">
-          <h2 className="md:text-5xl font-bold text-[#F1F1F1] mb-4 text-[40px]" 
+          <h2 className="md:text-5xl font-bold text-[#F1F1F1] mb-4 text-[40px] max-[480px]:text-2xl" 
               style={{ textShadow: '0 0 20px rgba(6, 182, 212, 0.3)' }}>
             Популярные рецепты коктейлей
           </h2>

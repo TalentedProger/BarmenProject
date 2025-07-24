@@ -74,13 +74,13 @@ export default function Landing() {
         <nav className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Martini className="text-electric text-2xl" />
-              <h1 className="text-xl font-bold text-platinum">Cocktailo Maker</h1>
+              <Martini className="text-electric text-2xl max-[480px]:text-xl" />
+              <h1 className="text-xl font-bold text-platinum max-[480px]:text-lg">Cocktailo Maker</h1>
             </div>
             <div className="flex items-center space-x-3">
               <Button 
                 onClick={handleGetStarted}
-                className="bg-gradient-to-r from-neon-turquoise to-electric text-night-blue px-5 py-1.5 rounded-lg font-semibold hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/30"
+                className="bg-gradient-to-r from-neon-turquoise to-electric text-night-blue px-5 py-1.5 rounded-lg font-semibold hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/30 max-[480px]:hidden"
               >
                 <WandSparkles className="mr-2 h-3 w-3" />
                 Начать
@@ -90,10 +90,10 @@ export default function Landing() {
               {!isLoading && !isAuthenticated ? (
                 <Button 
                   variant="outline"
-                  className="bg-transparent border border-neon-purple text-neon-purple px-6 py-2 rounded-lg font-semibold hover:bg-neon-purple hover:text-night-blue transition-all duration-300 shadow-md shadow-neon-purple/20"
+                  className="bg-transparent border border-neon-purple text-neon-purple px-6 py-2 rounded-lg font-semibold hover:bg-neon-purple hover:text-night-blue transition-all duration-300 shadow-md shadow-neon-purple/20 max-[480px]:px-4 max-[480px]:py-1.5 max-[480px]:text-sm"
                   onClick={() => window.location.href = "/auth"}
                 >
-                  <LogIn className="mr-2 h-4 w-4" />
+                  <LogIn className="mr-2 h-4 w-4 max-[480px]:h-3 max-[480px]:w-3" />
                   Вход
                 </Button>
               ) : isAuthenticated && user ? (
@@ -142,7 +142,7 @@ export default function Landing() {
             </div>
             
             {/* Right side - Interactive cocktail creation image */}
-            <div className="flex justify-end items-start animate-slide-up h-full pt-8">
+            <div className="flex justify-end items-start animate-slide-up h-full pt-8 max-[480px]:pt-2">
               <div className="relative">
                 <img 
                   src="/attached_assets/Leonardo_Phoenix_10_A_futuristic_interactive_cocktail_creation_0 (1)_1752851226590.png"
@@ -329,9 +329,9 @@ export default function Landing() {
                 Мы не спамим. Только крафтовые новости.
               </p>
               
-              <form onSubmit={handleHeroEmailSubmit} className="flex flex-col gap-4 justify-center md:justify-start">
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex flex-col w-full sm:w-auto min-w-[280px]">
+              <form onSubmit={handleHeroEmailSubmit} className="flex flex-col gap-4 justify-center md:justify-start max-[480px]:items-center">
+                <div className="flex flex-col sm:flex-row gap-4 max-[480px]:w-full max-[480px]:items-center">
+                  <div className="flex flex-col w-full sm:w-auto min-w-[280px] max-[480px]:max-w-[300px]">
                     <input
                       type="email"
                       value={heroEmail}
@@ -349,7 +349,7 @@ export default function Landing() {
                   </div>
                   <Button 
                     type="submit"
-                    className="rounded-full px-6 py-3 ml-0 sm:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30"
+                    className="rounded-full px-6 py-3 ml-0 sm:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30 max-[480px]:w-auto max-[480px]:ml-0"
                   >
                     Подписаться
                   </Button>
