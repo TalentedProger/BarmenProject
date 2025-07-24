@@ -302,20 +302,21 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             ))}
           </div>
 
-          {/* First spacer - equal distribution */}
-          <div className="flex-1"></div>
-
-          {/* Stats in 2x2 grid - positioned symmetrically */}
-          <div className="grid grid-cols-2 gap-2 text-base text-white font-medium max-[480px]:text-sm drop-shadow-md px-4 py-3 max-[480px]:px-3 max-[480px]:py-2">
-            {/* First row: Объем, ABV */}
+          {/* Top stats: Объем и ABV - под тегами */}
+          <div className="grid grid-cols-2 gap-3 text-lg text-white font-semibold max-[480px]:text-base drop-shadow-md px-4 py-2 max-[480px]:px-3">
             <div className="flex items-center justify-center text-center">
               <span>💧 {recipe.volume} мл</span>
             </div>
             <div className="flex items-center justify-center text-center">
               <span>🍹 {recipe.abv}%</span>
             </div>
-            
-            {/* Second row: Цена, Рейтинг */}
+          </div>
+
+          {/* Main spacer - takes up remaining space */}
+          <div className="flex-1"></div>
+
+          {/* Bottom stats: Цена и Рейтинг - над кнопкой */}
+          <div className="grid grid-cols-2 gap-3 text-lg text-white font-semibold max-[480px]:text-base drop-shadow-md px-4 py-2 max-[480px]:px-3">
             <div className="flex items-center justify-center text-center">
               <span>💰 {recipe.price || '150'} ₽</span>
             </div>
@@ -324,7 +325,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                 {Array.from({ length: 5 }, (_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 drop-shadow-sm max-[480px]:w-3 max-[480px]:h-3 ${
+                    className={`w-5 h-5 drop-shadow-sm max-[480px]:w-4 max-[480px]:h-4 ${
                       i < Math.floor(recipe.rating)
                         ? 'fill-yellow-400 text-yellow-400'
                         : 'text-white/40'
@@ -332,12 +333,9 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                   />
                 ))}
               </div>
-              <span className="text-sm text-white/90 font-medium drop-shadow-sm max-[480px]:text-xs">({recipe.reviewCount})</span>
+              <span className="text-base text-white/90 font-medium drop-shadow-sm max-[480px]:text-sm">({recipe.reviewCount})</span>
             </div>
           </div>
-
-          {/* Second spacer - equal distribution */}
-          <div className="flex-1"></div>
 
           {/* Single centered button - at bottom with symmetric margin */}
           <div className="flex justify-center px-4 py-4 max-[480px]:px-3 max-[480px]:py-3">
