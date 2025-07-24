@@ -280,13 +280,13 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
         {/* Content overlay */}
         <div className="relative z-10 flex flex-col h-full">
           {/* Title and Description container with blur background - full width */}
-          <div className="bg-black/40 backdrop-blur-sm rounded-t-2xl p-4 max-[480px]:p-3 border-b border-white/10">
+          <div className="bg-black/40 backdrop-blur-sm rounded-t-2xl p-3 max-[480px]:p-2 border-b border-white/10">
             {/* Title */}
-            <h3 className="text-white text-2xl font-bold max-[480px]:text-xl drop-shadow-lg mb-2">{recipe.name}</h3>
+            <h3 className="text-white text-2xl font-bold max-[480px]:text-xl drop-shadow-lg mb-1">{recipe.name}</h3>
             
             {/* Description - Fixed height for consistency */}
-            <div className="h-12 flex items-center max-[480px]:h-10">
-              <p className="text-white/90 text-base italic leading-tight max-[480px]:text-sm line-clamp-2 drop-shadow-md">{recipe.description}</p>
+            <div className="h-10 flex items-center max-[480px]:h-8">
+              <p className="text-white/90 text-sm italic leading-tight max-[480px]:text-xs line-clamp-2 drop-shadow-md">{recipe.description}</p>
             </div>
           </div>
 
@@ -306,7 +306,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           <div className="flex-1"></div>
 
           {/* Stats in column - positioned symmetrically */}
-          <div className="space-y-2 text-base text-white font-medium max-[480px]:space-y-1 max-[480px]:text-sm drop-shadow-md px-4 py-4 max-[480px]:px-3 max-[480px]:py-3">
+          <div className="space-y-2 text-lg text-white font-medium max-[480px]:space-y-1 max-[480px]:text-base drop-shadow-md px-4 py-4 max-[480px]:px-3 max-[480px]:py-3">
             <div className="flex items-center">
               <span>🍹 ABV: {recipe.abv}%</span>
             </div>
@@ -321,7 +321,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                 {Array.from({ length: 5 }, (_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 drop-shadow-sm ${
+                    className={`w-5 h-5 drop-shadow-sm max-[480px]:w-4 max-[480px]:h-4 ${
                       i < Math.floor(recipe.rating)
                         ? 'fill-yellow-400 text-yellow-400'
                         : 'text-white/40'
@@ -329,7 +329,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                   />
                 ))}
               </div>
-              <span className="text-base text-white/90 font-medium drop-shadow-sm">({recipe.reviewCount})</span>
+              <span className="text-lg text-white/90 font-medium drop-shadow-sm max-[480px]:text-base">({recipe.reviewCount})</span>
             </div>
           </div>
 
