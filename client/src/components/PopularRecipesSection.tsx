@@ -33,7 +33,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 1,
     name: "Маргарита",
-    image: "/attached_assets/Leonardo_Phoenix_10_A_modern_elegant_cocktail_in_a_coupe_glass_3_1752844466369.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_classic_Margarita_cocktail_in_a_0_1753377591761.jpg",
     description: "Классика текилы с лаймом и солью",
     tags: ["❄️ Освежающий", "🍋 Кислый", "⚡ Крепкий"],
     abv: 13,
@@ -47,7 +47,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 2,
     name: "Мохито",
-    image: "/attached_assets/Leonardo_Phoenix_10_A_closeup_of_a_crystalclear_Old_Fashioned_1_1752844466371.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_refreshing_Mojito_in_a_tall_hig_0_1753377591761.jpg",
     description: "Мята, лайм и ром — вечная классика",
     tags: ["🌿 Лёгкий", "🌿 Мятный", "❄️ Освежающий"],
     abv: 10,
@@ -61,7 +61,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 3,
     name: "Сангрия",
-    image: "/attached_assets/Leonardo_Phoenix_10_A_vibrant_colorful_cocktail_in_a_tall_hurr_1_1752844466371.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_vibrant_red_Sangria_in_a_large__1_1753377591760.jpg",
     description: "Фруктово-винный коктейль из Испании",
     tags: ["🍓 Фруктовый", "🌿 Лёгкий", "🌈 Яркий"],
     abv: 9,
@@ -75,7 +75,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 4,
     name: "Апероль шприц",
-    image: "/attached_assets/Leonardo_Phoenix_10_A_modern_elegant_cocktail_in_a_coupe_glass_3_1752844509292.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_An_Aperol_Spritz_in_a_large_ballo_0_1753377591760.jpg",
     description: "Итальянская классика с апельсиновыми нотами",
     tags: ["🍸 Горьковатый", "🍊 Цитрус", "❄️ Освежающий"],
     abv: 11,
@@ -89,7 +89,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 5,
     name: "Пина Колада",
-    image: "/attached_assets/b2ced5a6-3173-4934-b60f-e27b59441390_1752844476725.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Pia_Colada_in_a_tall_hurricane__0_1753377591760.jpg",
     description: "Тропический рай из ананаса и кокоса",
     tags: ["🍬 Сладкий", "🥥 Кремовый", "🌴 Экзотический"],
     abv: 10,
@@ -103,7 +103,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 6,
     name: "Дайкири",
-    image: "/attached_assets/7b2e9f21-5799-4ec1-94a8-77404805e855_1752844481467.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Daiquiri_in_a_sleek_cocktail_gl_0_1753377591759.jpg",
     description: "Минимализм с лаймом и ромом",
     tags: ["🍋 Кислый", "⚡ Крепкий", "🍊 Цитрус"],
     abv: 14,
@@ -117,7 +117,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 7,
     name: "Манхэттен",
-    image: "/attached_assets/4a3bc8c8-d8eb-45e6-89a3-f706db11a5d3_1752844471093.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_deep_amber_Manhattan_in_a_short_0_1753377591759.jpg",
     description: "Горький и сильный коктейль с вермутом",
     tags: ["⚡ Крепкий", "🍸 Горький", "🔥 Пряный"],
     abv: 18,
@@ -131,7 +131,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 8,
     name: "Мартини Фиеро Тоник",
-    image: "/attached_assets/6d059335-5b16-412d-b1e0-9d4fdec2fabd_1752844498127.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_vibrant_orange_Martini_Fiero__T_1_1753377591758.jpg",
     description: "Лёгкий коктейль на базе апельсинового мартини",
     tags: ["🌿 Лёгкий", "🍊 Цитрус", "💫 Пузырьки"],
     abv: 8,
@@ -145,7 +145,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 9,
     name: "Б-52",
-    image: "/attached_assets/7b0cd4c3-110f-469e-8f73-624886a09247_1752844490867.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_layered_B52_shot_in_a_small_sho_3_1753377591758.jpg",
     description: "Слоистый шот с ликёрами",
     tags: ["🍬 Сладкий", "🥃 Шот", "🥛 Густой"],
     abv: 22,
@@ -159,7 +159,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 10,
     name: "Космополитен",
-    image: "/attached_assets/Leonardo_Phoenix_10_A_modern_elegant_cocktail_in_a_coupe_glass_3_1752844466369.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_bright_pink_Cosmopolitan_in_a_m_0_1753377591757.jpg",
     description: "Яркий коктейль с клюквой и лаймом",
     tags: ["🌈 Яркий", "🍓 Фруктовый", "💃 Женственный"],
     abv: 13,
@@ -173,7 +173,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 11,
     name: "Белый русский",
-    image: "/attached_assets/Leonardo_Phoenix_10_A_closeup_of_a_crystalclear_Old_Fashioned_1_1752844466371.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_White_Russian_in_a_short_glass__2_1753377591757.jpg",
     description: "Кофейно-сливочный коктейль на водке",
     tags: ["🥛 Сливочный", "⚡ Крепкий", "🍮 Десертный"],
     abv: 20,
@@ -187,7 +187,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 12,
     name: "Лонг Айленд Айс Ти",
-    image: "/attached_assets/Leonardo_Phoenix_10_A_vibrant_colorful_cocktail_in_a_tall_hurr_1_1752844466371.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Long_Island_Iced_Tea_in_a_tall__1_1753377591756.jpg",
     description: "Мощный коктейль из 5 спиртов",
     tags: ["⚡ Крепкий", "🍊 Цитрус", "🧊 Лёд"],
     abv: 22,
@@ -201,7 +201,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 13,
     name: "Куба либре",
-    image: "/attached_assets/Leonardo_Phoenix_10_A_modern_elegant_cocktail_in_a_coupe_glass_3_1752844509292.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Cuba_Libre_in_a_tall_glass_dark_2_1753377591756.jpg",
     description: "Кола + ром + лайм — просто и эффектно",
     tags: ["🥂 Классика", "💫 Газированный", "⚡ Крепкий"],
     abv: 12,
@@ -215,7 +215,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 14,
     name: "Текила Санрайз",
-    image: "/attached_assets/b2ced5a6-3173-4934-b60f-e27b59441390_1752844476725.jpg",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Tequila_Sunrise_in_a_tall_glass_2_1753377591754.jpg",
     description: "Солнечный градиент апельсина и гренадина",
     tags: ["🌈 Яркий", "🍊 Цитрус", "🌴 Экзотика"],
     abv: 13,
@@ -229,7 +229,7 @@ const popularRecipes: Recipe[] = [
   {
     id: 15,
     name: "Негрони",
-    image: "/attached_assets/7b2e9f21-5799-4ec1-94a8-77404805e855_1752844481467.jpg",
+    image: "/attached_assets/Flux_Dev_A_classic_Negroni_in_a_short_glass_with_a_large_ice_c_3_1753377591753.jpg",
     description: "Горький и стильный коктейль с джином",
     tags: ["⚡ Крепкий", "🍸 Горький", "🍷 Аперитив"],
     abv: 20,
