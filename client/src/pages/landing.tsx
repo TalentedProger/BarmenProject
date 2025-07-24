@@ -122,35 +122,35 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-20 pb-12 relative overflow-hidden min-h-[80vh] max-[480px]:min-h-[60vh] max-[480px]:pb-6">
+      <section className="pt-20 pb-8 relative overflow-hidden min-h-[75vh] max-[480px]:min-h-[auto] max-[480px]:pb-4">
         <div className="absolute inset-0 bg-gradient-to-br from-night-blue via-graphite to-charcoal"></div>
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-20 left-10 w-64 h-64 bg-neon-purple rounded-full blur-3xl animate-pulse-slow"></div>
           <div className="absolute bottom-20 right-10 w-80 h-80 bg-neon-turquoise rounded-full blur-3xl animate-pulse-slow"></div>
         </div>
         
-        <div className="container mx-auto px-4 relative z-10 h-full">
-          <div className="grid md:grid-cols-2 gap-8 items-center py-20 h-full max-[480px]:py-8 max-[480px]:gap-4">
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid md:grid-cols-2 gap-6 items-center py-12 max-[480px]:py-6 max-[480px]:gap-3">
             {/* Left side - Text content */}
-            <div className="space-y-6 pl-8 flex flex-col justify-center h-64 animate-fade-in">
-              <h1 className="text-3xl md:text-4xl font-bold text-platinum leading-tight">
+            <div className="space-y-4 md:pl-8 flex flex-col justify-center animate-fade-in max-[480px]:text-center max-[480px]:space-y-3">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-platinum leading-tight max-[480px]:text-xl">
                 Создай свой идеальный коктейль
               </h1>
-              <p className="text-base md:text-lg text-zinc max-w-2xl leading-relaxed">
+              <p className="text-sm md:text-base lg:text-lg text-zinc max-w-2xl leading-relaxed max-[480px]:text-sm max-[480px]:px-2">
                 Интерактивный конструктор напитков с реалистичной визуализацией, расчетом крепости и стоимости
               </p>
             </div>
             
             {/* Right side - Interactive cocktail creation image */}
-            <div className="flex justify-end items-start animate-slide-up h-full pt-8 max-[480px]:pt-0 max-[480px]:pb-0 max-[480px]:mb-0">
-              <div className="relative">
+            <div className="flex justify-center md:justify-end items-center animate-slide-up max-[480px]:mt-2">
+              <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg">
                 <img 
                   src="/attached_assets/Leonardo_Phoenix_10_A_futuristic_interactive_cocktail_creation_0 (1)_1752851226590.png"
                   alt="Interactive cocktail creation with layered colors"
-                  className="h-full w-auto object-contain relative z-10"
+                  className="hero-image relative z-10"
                   loading="eager"
                   decoding="async"
-                  fetchPriority="high"
+                  draggable="false"
                 />
                 {/* Subtle glow effect behind the image */}
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/20 to-purple-400/20 rounded-full blur-2xl transform scale-75"></div>
@@ -159,7 +159,7 @@ export default function Landing() {
           </div>
           
           {/* Buttons at the bottom */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mt-8 max-[480px]:mt-4 max-[480px]:gap-3">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 max-[480px]:mt-3 max-[480px]:gap-3">
             <Button 
               onClick={handleGetStarted}
               className="hero-primary-button bg-gradient-to-r from-neon-purple to-electric text-white px-10 py-5 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden max-[480px]:px-6 max-[480px]:py-3 max-[480px]:text-base"
