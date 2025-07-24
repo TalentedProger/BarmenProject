@@ -62,9 +62,9 @@ const CoursesSection = () => {
       
       <div className="container mx-auto px-4 relative z-10 max-w-6xl">
         {/* Two-column layout: Content left, Image right */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-16 max-[1024px]:grid-cols-1 max-[1024px]:gap-8">
-          {/* Left Column - Content */}
-          <div className="space-y-8 max-[1024px]:text-center max-[1024px]:order-2">
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-16 max-[1024px]:grid-cols-1 max-[1024px]:gap-6">
+          {/* Left Column - Content (Desktop) */}
+          <div className="space-y-8 max-[1024px]:hidden">
             <div>
               <h2 className="text-4xl font-bold text-[#00FFF0] mb-4 leading-tight">
                 Стань мастером коктейлей
@@ -75,7 +75,7 @@ const CoursesSection = () => {
             </div>
 
             {/* Features List */}
-            <ul className="space-y-4 text-left max-[1024px]:inline-block">
+            <ul className="space-y-4 text-left">
               {features.map((feature, index) => (
                 <li key={index} className="flex items-start space-x-3 text-base text-gray-300">
                   <feature.icon className={`w-5 h-5 mt-1 ${feature.accent}`} />
@@ -96,11 +96,11 @@ const CoursesSection = () => {
             </div>
           </div>
 
-          {/* Right Column - Bartender Image */}
-          <div className="relative flex justify-center max-[1024px]:order-1">
+          {/* Right Column - Bartender Image (Desktop) */}
+          <div className="relative flex justify-center max-[1024px]:hidden">
             <div className="relative">
               {/* Bartender Image */}
-              <div className="relative w-80 h-96 rounded-2xl overflow-hidden border border-slate-700/50 animate-shimmer-shadow max-[480px]:w-64 max-[480px]:h-80">
+              <div className="relative w-80 h-96 rounded-2xl overflow-hidden border border-slate-700/50 animate-shimmer-shadow">
                 <img 
                   src="/attached_assets/Leonardo_Phoenix_10_A_stylish_male_bartender_with_rolledup_sle_2 (1)_1752845021301.jpg"
                   alt="Professional bartender creating cocktails"
@@ -110,6 +110,56 @@ const CoursesSection = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-pink-400/10 rounded-2xl"></div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Mobile Layout - Custom Order */}
+        <div className="hidden max-[1024px]:block space-y-6">
+          {/* 1. Main Text */}
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-[#00FFF0] mb-4 leading-tight max-[480px]:text-2xl">
+              Стань мастером коктейлей
+            </h2>
+            <p className="text-base text-gray-300 leading-relaxed max-[480px]:text-sm px-4">
+              Интерактивные мини-курсы по миксологии, техникам и креативу для барменов и ценителей напитков.
+            </p>
+          </div>
+
+          {/* 2. Bartender Image */}
+          <div className="relative flex justify-center">
+            <div className="relative">
+              <div className="relative w-64 h-80 rounded-2xl overflow-hidden border border-slate-700/50 animate-shimmer-shadow max-[480px]:w-56 max-[480px]:h-72">
+                <img 
+                  src="/attached_assets/Leonardo_Phoenix_10_A_stylish_male_bartender_with_rolledup_sle_2 (1)_1752845021301.jpg"
+                  alt="Professional bartender creating cocktails"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-pink-400/10 rounded-2xl"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. Features List */}
+          <div className="px-4">
+            <ul className="space-y-3 text-left">
+              {features.map((feature, index) => (
+                <li key={index} className="flex items-start space-x-3 text-sm text-gray-300 max-[480px]:text-xs">
+                  <feature.icon className={`w-4 h-4 mt-1 ${feature.accent} max-[480px]:w-3 max-[480px]:h-3`} />
+                  <span>
+                    <span className={`${feature.accent} font-medium`}>{feature.text}</span>
+                    {" — "}
+                    <span>{feature.description}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* 4. CTA Button - Centered and Smaller */}
+          <div className="pt-2 text-center">
+            <button className="inline-block px-6 py-3 rounded-xl text-white bg-gradient-to-r from-[#FF4D9D] to-[#B388EB] hover:from-[#FF4D9D]/90 hover:to-[#B388EB]/90 shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 transition-all duration-300 font-medium text-base max-[480px]:px-5 max-[480px]:py-2 max-[480px]:text-sm">
+              Изучить курсы
+            </button>
           </div>
         </div>
 
