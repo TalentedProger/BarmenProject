@@ -246,7 +246,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   return (
     <div className="recipe-card relative">
       <div 
-        className="bg-[#1A1A1E] rounded-2xl transition-all duration-200 ease-out overflow-hidden group h-[520px] flex flex-col relative z-10 will-change-auto max-[480px]:h-[480px] max-[480px]:w-[85%] max-[480px]:mx-auto"
+        className="bg-[#1A1A1E] rounded-2xl transition-all duration-200 ease-out overflow-hidden group h-[460px] flex flex-col relative z-10 will-change-auto max-[480px]:h-[420px] max-[480px]:w-[85%] max-[480px]:mx-auto"
         style={{
           filter: 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))',
           transform: 'translateZ(0)', // Force hardware acceleration
@@ -267,26 +267,26 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform"
             loading="lazy"
             decoding="async"
-            fetchPriority="low"
+
             style={{
               transform: 'translateZ(0)', // Force hardware acceleration
               contentVisibility: 'auto', // Optimize rendering
             }}
           />
-          {/* Enhanced gradient overlay for better text readability */}
+          {/* Enhanced gradient overlay for better text readability - always visible */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 pointer-events-none" />
         </div>
 
         {/* Content overlay */}
         <div className="relative z-10 flex flex-col h-full">
-          {/* Title and Description container with blur background - full width */}
-          <div className="bg-black/40 backdrop-blur-sm rounded-t-2xl p-3 max-[480px]:p-2 border-b border-white/10">
+          {/* Title and Description container - centered text, compact */}
+          <div className="bg-black/40 backdrop-blur-sm rounded-t-2xl p-2 max-[480px]:p-1.5 border-b border-white/10 text-center">
             {/* Title */}
-            <h3 className="text-white text-2xl font-bold max-[480px]:text-xl drop-shadow-lg mb-1">{recipe.name}</h3>
+            <h3 className="text-white text-xl font-bold max-[480px]:text-lg drop-shadow-lg mb-0.5">{recipe.name}</h3>
             
-            {/* Description - Fixed height for consistency */}
-            <div className="h-10 flex items-center max-[480px]:h-8">
-              <p className="text-white/90 text-sm italic leading-tight max-[480px]:text-xs line-clamp-2 drop-shadow-md">{recipe.description}</p>
+            {/* Description - Compact height */}
+            <div className="h-8 flex items-center justify-center max-[480px]:h-6">
+              <p className="text-white/90 text-sm italic leading-tight max-[480px]:text-xs line-clamp-2 drop-shadow-md mb-0">{recipe.description}</p>
             </div>
           </div>
 
@@ -305,23 +305,26 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           {/* First spacer - equal distribution */}
           <div className="flex-1"></div>
 
-          {/* Stats in column - positioned symmetrically */}
-          <div className="space-y-2 text-lg text-white font-medium max-[480px]:space-y-1 max-[480px]:text-base drop-shadow-md px-4 py-4 max-[480px]:px-3 max-[480px]:py-3">
-            <div className="flex items-center">
-              <span>🍹 ABV: {recipe.abv}%</span>
+          {/* Stats in 2x2 grid - positioned symmetrically */}
+          <div className="grid grid-cols-2 gap-2 text-base text-white font-medium max-[480px]:text-sm drop-shadow-md px-4 py-3 max-[480px]:px-3 max-[480px]:py-2">
+            {/* First row: Объем, ABV */}
+            <div className="flex items-center justify-center text-center">
+              <span>💧 {recipe.volume} мл</span>
             </div>
-            <div className="flex items-center">
-              <span>💧 Объем: {recipe.volume} мл</span>
+            <div className="flex items-center justify-center text-center">
+              <span>🍹 {recipe.abv}%</span>
             </div>
-            <div className="flex items-center">
-              <span>💰 Цена: {recipe.price || '150'} ₽</span>
+            
+            {/* Second row: Цена, Рейтинг */}
+            <div className="flex items-center justify-center text-center">
+              <span>💰 {recipe.price || '150'} ₽</span>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-1">
               <div className="flex">
                 {Array.from({ length: 5 }, (_, i) => (
                   <Star
                     key={i}
-                    className={`w-5 h-5 drop-shadow-sm max-[480px]:w-4 max-[480px]:h-4 ${
+                    className={`w-4 h-4 drop-shadow-sm max-[480px]:w-3 max-[480px]:h-3 ${
                       i < Math.floor(recipe.rating)
                         ? 'fill-yellow-400 text-yellow-400'
                         : 'text-white/40'
@@ -329,7 +332,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                   />
                 ))}
               </div>
-              <span className="text-lg text-white/90 font-medium drop-shadow-sm max-[480px]:text-base">({recipe.reviewCount})</span>
+              <span className="text-sm text-white/90 font-medium drop-shadow-sm max-[480px]:text-xs">({recipe.reviewCount})</span>
             </div>
           </div>
 
