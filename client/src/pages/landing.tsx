@@ -349,7 +349,7 @@ export default function Landing() {
                   </div>
                   <Button 
                     type="submit"
-                    className="rounded-full px-6 py-3 ml-0 sm:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30 max-[480px]:w-auto max-[480px]:ml-0"
+                    className="rounded-full px-6 py-3 ml-0 sm:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30 max-[480px]:w-3/5 max-[480px]:ml-0"
                   >
                     Подписаться
                   </Button>

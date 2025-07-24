@@ -88,7 +88,7 @@ const CoursesSection = () => {
             </ul>
 
             {/* CTA Button */}
-            <div className="pt-4">
+            <div className="pt-4 max-[480px]:flex max-[480px]:justify-center">
               <button className="inline-block px-8 py-4 rounded-xl text-white bg-gradient-to-r from-[#FF4D9D] to-[#B388EB] hover:from-[#FF4D9D]/90 hover:to-[#B388EB]/90 shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 transition-all duration-300 font-medium text-lg">
                 Изучить курсы
               </button>
