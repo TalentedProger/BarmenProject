@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import { ArrowLeft, ArrowRight, Star, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'wouter';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -343,20 +344,22 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
 
           {/* Single centered button - at bottom with symmetric margin */}
           <div className="flex justify-center px-4 py-4 max-[480px]:px-3 max-[480px]:py-3">
-            <Button
-              className="bg-gradient-to-r from-purple-500/90 to-cyan-500/90 backdrop-blur-sm text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600/90 hover:to-cyan-600/90 transition-all duration-200 ease-out shadow-xl hover:shadow-2xl will-change-transform border border-white/20"
-              style={{
-                transform: 'translateZ(0)', // Force hardware acceleration
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateZ(0) scale(1.02)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateZ(0) scale(1)';
-              }}
-            >
-              Открыть рецепт
-            </Button>
+            <Link href={`/recipe/${recipe.id}`}>
+              <Button
+                className="bg-gradient-to-r from-purple-500/90 to-cyan-500/90 backdrop-blur-sm text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600/90 hover:to-cyan-600/90 transition-all duration-200 ease-out shadow-xl hover:shadow-2xl will-change-transform border border-white/20"
+                style={{
+                  transform: 'translateZ(0)', // Force hardware acceleration
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateZ(0) scale(1.02)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateZ(0) scale(1)';
+                }}
+              >
+                Открыть рецепт
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
