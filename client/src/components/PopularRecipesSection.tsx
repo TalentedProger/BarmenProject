@@ -302,7 +302,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             ))}
           </div>
 
-          {/* Spacer to push stats and button to bottom */}
+          {/* First spacer - equal distribution */}
           <div className="flex-1"></div>
 
           {/* Stats in column - positioned symmetrically */}
@@ -332,6 +332,9 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
               <span className="text-base text-white/90 font-medium drop-shadow-sm">({recipe.reviewCount})</span>
             </div>
           </div>
+
+          {/* Second spacer - equal distribution */}
+          <div className="flex-1"></div>
 
           {/* Single centered button - at bottom with symmetric margin */}
           <div className="flex justify-center px-4 py-4 max-[480px]:px-3 max-[480px]:py-3">
