@@ -234,7 +234,7 @@ export default function Auth() {
         </Button>
       </Link>
       {/* Main Content */}
-      <div className="relative z-10 flex min-h-screen">
+      <div className="relative z-10 flex min-h-screen pt-20 md:pt-0">
         {/* Left Side - Visual (Hidden on Mobile) */}
         <div className="hidden md:flex md:w-1/2 items-center justify-center p-8">
           <div className="text-center max-w-md">
