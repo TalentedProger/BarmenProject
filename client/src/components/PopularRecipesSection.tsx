@@ -106,7 +106,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   return (
     <div className="recipe-card relative">
       <div 
-        className="bg-[#1A1A1E] rounded-2xl transition-all duration-200 ease-out overflow-hidden group h-[520px] flex flex-col relative z-10 will-change-auto max-[480px]:h-[450px] max-[480px]:scale-95"
+        className="bg-[#1A1A1E] rounded-2xl transition-all duration-200 ease-out overflow-hidden group h-[520px] flex flex-col relative z-10 will-change-auto max-[480px]:h-[480px] max-[480px]:w-[85%] max-[480px]:mx-auto"
         style={{
           filter: 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))',
           transform: 'translateZ(0)', // Force hardware acceleration
@@ -211,7 +211,7 @@ export default function PopularRecipesSection() {
   const [swiperRef, setSwiperRef] = useState<any>(null);
 
   return (
-    <section className="py-24 bg-[#0C0C0F] relative overflow-hidden">
+    <section className="py-24 bg-[#0C0C0F] relative overflow-hidden max-[480px]:py-16">
       {/* Background gradient effects */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 blur-sm" />
@@ -219,7 +219,7 @@ export default function PopularRecipesSection() {
       </div>
       <div className="container mx-auto px-4 relative z-10 max-w-7xl">
         {/* Section Title */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 max-[480px]:mb-8">
           <h2 className="md:text-5xl font-bold text-[#F1F1F1] mb-4 text-[40px] max-[480px]:text-2xl" 
               style={{ textShadow: '0 0 20px rgba(6, 182, 212, 0.3)' }}>
             Популярные рецепты коктейлей
@@ -251,7 +251,7 @@ export default function PopularRecipesSection() {
               spaceBetween: 50,
             },
           }}
-          className="popular-recipes-swiper mb-8"
+          className="popular-recipes-swiper mb-8 max-[480px]:mb-6"
         >
           {popularRecipes.map((recipe) => (
             <SwiperSlide key={recipe.id}>
@@ -261,7 +261,7 @@ export default function PopularRecipesSection() {
         </Swiper>
 
         {/* Navigation Arrows */}
-        <div className="flex justify-center items-center gap-6 max-[480px]:gap-4 max-[480px]:mt-4">
+        <div className="flex justify-center items-center gap-6 max-[480px]:gap-4 max-[480px]:mt-2">
           <button
             onClick={() => swiperRef?.slidePrev()}
             className="p-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30 max-[480px]:p-3"
