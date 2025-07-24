@@ -217,9 +217,9 @@ export default function PopularRecipesSection() {
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 blur-sm" />
         <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 blur-sm" />
       </div>
-      <div className="container mx-auto px-4 relative z-10 max-w-7xl">
+      <div className="container mx-auto px-6 relative z-10 max-w-7xl max-[480px]:px-3">
         {/* Section Title */}
-        <div className="text-center mb-12 max-[480px]:mb-8">
+        <div className="text-center mb-10 max-[480px]:mb-6">
           <h2 className="md:text-5xl font-bold text-[#F1F1F1] mb-4 text-[40px] max-[480px]:text-2xl" 
               style={{ textShadow: '0 0 20px rgba(6, 182, 212, 0.3)' }}>
             Популярные рецепты коктейлей
@@ -261,7 +261,7 @@ export default function PopularRecipesSection() {
         </Swiper>
 
         {/* Navigation Arrows */}
-        <div className="flex justify-center items-center gap-6 max-[480px]:gap-4 max-[480px]:mt-2">
+        <div className="flex justify-center items-center gap-6 mt-5 max-[480px]:gap-4 max-[480px]:mt-1">
           <button
             onClick={() => swiperRef?.slidePrev()}
             className="p-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30 max-[480px]:p-3"
