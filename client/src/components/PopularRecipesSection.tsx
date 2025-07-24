@@ -303,11 +303,11 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           </div>
 
           {/* Top stats: Объем и ABV - под тегами */}
-          <div className="grid grid-cols-2 gap-3 text-lg text-white font-semibold max-[480px]:text-base drop-shadow-md px-4 py-2 max-[480px]:px-3">
-            <div className="flex items-center justify-center text-center">
+          <div className="grid grid-cols-2 gap-6 text-lg text-white font-bold max-[480px]:text-base px-4 py-3 max-[480px]:px-3" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>
+            <div className="flex items-center text-left">
               <span>💧 {recipe.volume} мл</span>
             </div>
-            <div className="flex items-center justify-center text-center">
+            <div className="flex items-center text-left">
               <span>🍹 {recipe.abv}%</span>
             </div>
           </div>
@@ -316,24 +316,25 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           <div className="flex-1"></div>
 
           {/* Bottom stats: Цена и Рейтинг - над кнопкой */}
-          <div className="grid grid-cols-2 gap-3 text-lg text-white font-semibold max-[480px]:text-base drop-shadow-md px-4 py-2 max-[480px]:px-3">
-            <div className="flex items-center justify-center text-center">
+          <div className="grid grid-cols-2 gap-6 text-lg text-white font-bold max-[480px]:text-base px-4 py-3 max-[480px]:px-3" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>
+            <div className="flex items-center text-left">
               <span>💰 {recipe.price || '150'} ₽</span>
             </div>
-            <div className="flex items-center justify-center space-x-1">
+            <div className="flex items-center space-x-2 text-left">
               <div className="flex">
                 {Array.from({ length: 5 }, (_, i) => (
                   <Star
                     key={i}
-                    className={`w-5 h-5 drop-shadow-sm max-[480px]:w-4 max-[480px]:h-4 ${
+                    className={`w-5 h-5 max-[480px]:w-4 max-[480px]:h-4 ${
                       i < Math.floor(recipe.rating)
                         ? 'fill-yellow-400 text-yellow-400'
                         : 'text-white/40'
                     }`}
+                    style={{ filter: 'drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8))' }}
                   />
                 ))}
               </div>
-              <span className="text-base text-white/90 font-medium drop-shadow-sm max-[480px]:text-sm">({recipe.reviewCount})</span>
+              <span className="text-base text-white font-medium max-[480px]:text-sm" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>({recipe.reviewCount})</span>
             </div>
           </div>
 
