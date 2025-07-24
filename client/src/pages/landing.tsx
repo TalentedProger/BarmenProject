@@ -133,10 +133,10 @@ export default function Landing() {
           <div className="grid md:grid-cols-2 gap-12 items-center py-24 max-[480px]:py-12 max-[480px]:gap-6">
             {/* Left side - Text content */}
             <div className="space-y-4 md:pl-8 flex flex-col justify-center animate-fade-in max-[480px]:text-center max-[480px]:space-y-3">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-platinum leading-tight max-[480px]:text-xl">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-platinum leading-tight max-[480px]:text-2xl">
                 Создай свой идеальный коктейль
               </h1>
-              <p className="text-sm md:text-base lg:text-lg text-zinc max-w-2xl leading-relaxed max-[480px]:text-sm max-[480px]:px-2">
+              <p className="text-sm md:text-base lg:text-lg text-zinc max-w-2xl leading-relaxed max-[480px]:text-xs max-[480px]:px-2">
                 Интерактивный конструктор напитков с реалистичной визуализацией, расчетом крепости и стоимости
               </p>
             </div>
