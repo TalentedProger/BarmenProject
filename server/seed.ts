@@ -73,3 +73,8 @@ export async function seedDatabase() {
     console.error("Error seeding database:", error);
   }
 }
+
+// Run seed if this file is called directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  seedDatabase();
+}

@@ -206,9 +206,9 @@ export async function setupAuth(app: Express) {
       
       // Update user
       const updatedUser = await storage.upsertUser({
-        ...req.user,
+        ...(req.user as any),
         nickname: nickname.trim(),
-        profileImageUrl: profileImageUrl || req.user.profileImageUrl,
+        profileImageUrl: profileImageUrl || (req.user as any).profileImageUrl,
       });
       
       // Return user without password hash
@@ -310,8 +310,7 @@ export async function setupAuth(app: Express) {
       const guestUser = await storage.upsertUser({
         id: nanoid(),
         email: null,
-        firstName: 'Гость',
-        lastName: null,
+        nickname: 'Гость',
         profileImageUrl: null,
         googleId: null,
         passwordHash: null,
