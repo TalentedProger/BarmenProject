@@ -311,3 +311,8 @@ The project has been successfully migrated from Replit Agent to the standard Rep
   - Featured specialty drinks: Б-52, Текила Санрайз
   - Preserved exact design structure: images, descriptions, tags, ABV, volume, price, ratings
   - Maintained consistent styling and layout across all cards
+- ✅ Fixed card symmetry issues:
+  - Increased image height from h-48 to h-56 (h-36 to h-44 on mobile)
+  - Added fixed height container for descriptions with 2-line text clamp
+  - Implemented line-clamp-2 CSS utility for consistent text truncation
+  - All cards now maintain uniform dimensions and visual consistency

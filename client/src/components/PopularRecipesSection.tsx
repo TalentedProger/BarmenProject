@@ -264,7 +264,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           <img
             src={recipe.image}
             alt={recipe.name}
-            className="w-full h-48 object-cover rounded-t-2xl transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform max-[480px]:h-36"
+            className="w-full h-56 object-cover rounded-t-2xl transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform max-[480px]:h-44"
             loading="lazy"
             decoding="async"
             fetchPriority="low"
@@ -281,8 +281,10 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           {/* Title */}
           <h3 className="text-white text-2xl font-semibold max-[480px]:text-xl">{recipe.name}</h3>
           
-          {/* Description */}
-          <p className="text-zinc-300 text-base italic max-[480px]:text-sm">{recipe.description}</p>
+          {/* Description - Fixed height for consistency */}
+          <div className="h-12 flex items-center max-[480px]:h-10">
+            <p className="text-zinc-300 text-base italic leading-tight max-[480px]:text-sm line-clamp-2">{recipe.description}</p>
+          </div>
 
           {/* Tags - Fixed height to prevent layout shift */}
           <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start pt-[6px] pb-[6px] max-[480px]:min-h-[50px] max-[480px]:gap-1">
