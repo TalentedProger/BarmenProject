@@ -259,12 +259,12 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           e.currentTarget.style.filter = 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))';
         }}
       >
-        {/* Image */}
-        <div className="relative overflow-hidden will-change-transform">
+        {/* Image with overlay content */}
+        <div className="relative overflow-hidden will-change-transform flex-1">
           <img
             src={recipe.image}
             alt={recipe.name}
-            className="w-full h-56 object-cover rounded-t-2xl transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform max-[480px]:h-44"
+            className="w-full h-full object-cover object-center rounded-2xl transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform"
             loading="lazy"
             decoding="async"
             fetchPriority="low"
@@ -273,75 +273,75 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
               contentVisibility: 'auto', // Optimize rendering
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
-        </div>
-
-        {/* Content */}
-        <div className="p-4 space-y-3 flex-1 flex flex-col max-[480px]:p-3 max-[480px]:space-y-2">
-          {/* Title */}
-          <h3 className="text-white text-2xl font-semibold max-[480px]:text-xl">{recipe.name}</h3>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
           
-          {/* Description - Fixed height for consistency */}
-          <div className="h-12 flex items-center max-[480px]:h-10">
-            <p className="text-zinc-300 text-base italic leading-tight max-[480px]:text-sm line-clamp-2">{recipe.description}</p>
-          </div>
+          {/* Content overlay */}
+          <div className="absolute inset-0 p-4 flex flex-col justify-end max-[480px]:p-3">
+            {/* Title */}
+            <h3 className="text-white text-2xl font-semibold max-[480px]:text-xl">{recipe.name}</h3>
+            
+            {/* Description - Fixed height for consistency */}
+            <div className="h-12 flex items-center max-[480px]:h-10">
+              <p className="text-zinc-300 text-base italic leading-tight max-[480px]:text-sm line-clamp-2">{recipe.description}</p>
+            </div>
 
-          {/* Tags - Fixed height to prevent layout shift */}
-          <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start pt-[6px] pb-[6px] max-[480px]:min-h-[50px] max-[480px]:gap-1">
-            {recipe.tags.map((tag, index) => (
-              <span
-                key={index}
-                className="text-sm bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-zinc-200 font-medium whitespace-nowrap max-[480px]:text-xs max-[480px]:px-2"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+            {/* Tags - Fixed height to prevent layout shift */}
+            <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start pt-[6px] pb-[6px] max-[480px]:min-h-[50px] max-[480px]:gap-1">
+              {recipe.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="text-sm bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-zinc-200 font-medium whitespace-nowrap max-[480px]:text-xs max-[480px]:px-2"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
 
-          {/* Stats in column */}
-          <div className="space-y-2 text-base text-zinc-200 font-medium max-[480px]:space-y-1 max-[480px]:text-sm">
-            <div className="flex items-center">
-              <span>🍹 ABV: {recipe.abv}%</span>
-            </div>
-            <div className="flex items-center">
-              <span>💧 Объем: {recipe.volume} мл</span>
-            </div>
-            <div className="flex items-center">
-              <span>💰 Цена: {recipe.price || '150'} ₽</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="flex">
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${
-                      i < Math.floor(recipe.rating)
-                        ? 'fill-yellow-400 text-yellow-400'
-                        : 'text-gray-500'
-                    }`}
-                  />
-                ))}
+            {/* Stats in column */}
+            <div className="space-y-2 text-base text-zinc-200 font-medium max-[480px]:space-y-1 max-[480px]:text-sm">
+              <div className="flex items-center">
+                <span>🍹 ABV: {recipe.abv}%</span>
               </div>
-              <span className="text-base text-zinc-300 font-medium">({recipe.reviewCount})</span>
+              <div className="flex items-center">
+                <span>💧 Объем: {recipe.volume} мл</span>
+              </div>
+              <div className="flex items-center">
+                <span>💰 Цена: {recipe.price || '150'} ₽</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="flex">
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 ${
+                        i < Math.floor(recipe.rating)
+                          ? 'fill-yellow-400 text-yellow-400'
+                          : 'text-gray-500'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-base text-zinc-300 font-medium">({recipe.reviewCount})</span>
+              </div>
             </div>
-          </div>
 
-          {/* Single centered button - Push to bottom */}
-          <div className="flex justify-center pt-4 mt-auto">
-            <Button
-              className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600 hover:to-cyan-600 transition-all duration-200 ease-out shadow-lg hover:shadow-xl will-change-transform"
-              style={{
-                transform: 'translateZ(0)', // Force hardware acceleration
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateZ(0) scale(1.02)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateZ(0) scale(1)';
-              }}
-            >
-              Открыть рецепт
-            </Button>
+            {/* Single centered button - Push to bottom */}
+            <div className="flex justify-center pt-4 mt-auto">
+              <Button
+                className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600 hover:to-cyan-600 transition-all duration-200 ease-out shadow-lg hover:shadow-xl will-change-transform"
+                style={{
+                  transform: 'translateZ(0)', // Force hardware acceleration
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateZ(0) scale(1.02)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateZ(0) scale(1)';
+                }}
+              >
+                Открыть рецепт
+              </Button>
+            </div>
           </div>
         </div>
       </div>

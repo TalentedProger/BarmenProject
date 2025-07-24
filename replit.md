@@ -321,3 +321,9 @@ The project has been successfully migrated from Replit Agent to the standard Rep
   - Maintained exact design structure and card layout consistency
   - Images properly matched to corresponding cocktails by filename analysis
   - All new images are high-resolution 3D renders with atmospheric bar backgrounds
+- ✅ Enhanced card layout with full-height images and overlay text:
+  - Images now fill the entire card height while maintaining same width
+  - All text content (title, description, tags, stats, button) positioned as overlay on images
+  - Added darker gradient overlay (from-black/80) for better text readability
+  - Images centered with object-center for optimal focal point positioning
+  - Preserved all existing functionality and hover effects
