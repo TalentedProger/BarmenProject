@@ -329,15 +329,15 @@ export default function Landing() {
                 Мы не спамим. Только крафтовые новости.
               </p>
               
-              <form onSubmit={handleHeroEmailSubmit} className="flex flex-col gap-4 justify-center md:justify-start max-[480px]:items-center">
+              <form onSubmit={handleHeroEmailSubmit} className="flex flex-col gap-4 justify-center md:justify-start max-[480px]:items-center max-[480px]:w-full">
                 <div className="flex flex-col sm:flex-row gap-4 max-[480px]:w-full max-[480px]:items-center">
-                  <div className="flex flex-col w-full sm:w-auto min-w-[280px] max-[480px]:max-w-[300px]">
+                  <div className="flex flex-col w-full sm:w-auto min-w-[280px] max-[480px]:w-full">
                     <input
                       type="email"
                       value={heroEmail}
                       onChange={(e) => setHeroEmail(e.target.value)}
                       placeholder="Введи свой email"
-                      className={`rounded-full px-6 py-3 text-sm bg-[#1A1A1E] text-white border focus:outline-none transition-all duration-300 ${
+                      className={`rounded-full px-6 py-3 text-sm bg-[#1A1A1E] text-white border focus:outline-none transition-all duration-300 w-full ${
                         heroEmailError 
                           ? 'border-red-500 focus:border-red-400' 
                           : 'border-zinc-700 focus:border-cyan-500'
@@ -349,7 +349,7 @@ export default function Landing() {
                   </div>
                   <Button 
                     type="submit"
-                    className="rounded-full px-6 py-3 ml-0 sm:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30 max-[480px]:w-3/5 max-[480px]:ml-0"
+                    className="rounded-full px-6 py-3 ml-0 sm:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30 max-[480px]:w-1/2 max-[480px]:ml-0 max-[480px]:mt-2"
                   >
                     Подписаться
                   </Button>
