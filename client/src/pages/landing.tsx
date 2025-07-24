@@ -129,8 +129,8 @@ export default function Landing() {
           <div className="absolute bottom-20 right-10 w-80 h-80 bg-neon-turquoise rounded-full blur-3xl animate-pulse-slow"></div>
         </div>
         
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid md:grid-cols-2 gap-6 items-center py-12 max-[480px]:py-6 max-[480px]:gap-3">
+        <div className="container mx-auto px-8 relative z-10">
+          <div className="grid md:grid-cols-2 gap-12 items-center py-24 max-[480px]:py-12 max-[480px]:gap-6">
             {/* Left side - Text content */}
             <div className="space-y-4 md:pl-8 flex flex-col justify-center animate-fade-in max-[480px]:text-center max-[480px]:space-y-3">
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-platinum leading-tight max-[480px]:text-xl">
@@ -159,10 +159,10 @@ export default function Landing() {
           </div>
           
           {/* Buttons at the bottom */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 max-[480px]:mt-3 max-[480px]:gap-3">
+          <div className="flex flex-col gap-4 justify-center items-center mt-12 max-[480px]:mt-6 max-[480px]:gap-3 w-full">
             <Button 
               onClick={handleGetStarted}
-              className="hero-primary-button bg-gradient-to-r from-neon-purple to-electric text-white px-10 py-5 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden max-[480px]:px-6 max-[480px]:py-3 max-[480px]:text-base"
+              className="hero-primary-button bg-gradient-to-r from-neon-purple to-electric text-white py-5 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden w-4/5 max-w-md max-[480px]:py-3 max-[480px]:text-base"
               style={{
                 boxShadow: '0 0 15px rgba(179, 136, 235, 0.25), 0 0 30px rgba(179, 136, 235, 0.15), 0 8px 20px rgba(0, 0, 0, 0.2)'
               }}
@@ -173,7 +173,7 @@ export default function Landing() {
             </Button>
             <Button 
               variant="outline"
-              className="hero-secondary-button bg-transparent border-2 border-neon-turquoise text-neon-turquoise px-10 py-5 text-lg font-semibold rounded-xl hover:bg-neon-turquoise hover:text-night-blue transform hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/20 hover:shadow-xl hover:shadow-neon-turquoise/40 max-[480px]:px-6 max-[480px]:py-3 max-[480px]:text-base"
+              className="hero-secondary-button bg-transparent border-2 border-neon-turquoise text-neon-turquoise py-5 text-lg font-semibold rounded-xl hover:bg-neon-turquoise hover:text-night-blue transform hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/20 hover:shadow-xl hover:shadow-neon-turquoise/40 w-4/5 max-w-md max-[480px]:py-3 max-[480px]:text-base"
               onClick={() => window.location.href = "/catalog"}
             >
               <BookOpen className="mr-2 h-6 w-6 max-[480px]:h-4 max-[480px]:w-4" />
