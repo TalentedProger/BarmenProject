@@ -114,13 +114,13 @@ const CoursesSection = () => {
         </div>
 
         {/* Mobile Layout - Custom Order */}
-        <div className="hidden max-[1024px]:block space-y-6">
+        <div className="hidden max-[1024px]:block space-y-8 mt-8">
           {/* 1. Main Text */}
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-[#00FFF0] mb-4 leading-tight max-[480px]:text-2xl">
+            <h2 className="text-4xl font-bold text-[#00FFF0] mb-6 leading-tight max-[480px]:text-3xl">
               Стань мастером коктейлей
             </h2>
-            <p className="text-base text-gray-300 leading-relaxed max-[480px]:text-sm px-4">
+            <p className="text-lg text-gray-300 leading-relaxed max-[480px]:text-base px-4">
               Интерактивные мини-курсы по миксологии, техникам и креативу для барменов и ценителей напитков.
             </p>
           </div>
@@ -128,7 +128,7 @@ const CoursesSection = () => {
           {/* 2. Bartender Image */}
           <div className="relative flex justify-center">
             <div className="relative">
-              <div className="relative w-64 h-80 rounded-2xl overflow-hidden border border-slate-700/50 animate-shimmer-shadow max-[480px]:w-56 max-[480px]:h-72">
+              <div className="relative w-80 h-96 rounded-2xl overflow-hidden border border-slate-700/50 animate-shimmer-shadow max-[480px]:w-72 max-[480px]:h-80">
                 <img 
                   src="/attached_assets/Leonardo_Phoenix_10_A_stylish_male_bartender_with_rolledup_sle_2 (1)_1752845021301.jpg"
                   alt="Professional bartender creating cocktails"
@@ -141,10 +141,10 @@ const CoursesSection = () => {
 
           {/* 3. Features List */}
           <div className="px-4">
-            <ul className="space-y-3 text-left">
+            <ul className="space-y-4 text-left">
               {features.map((feature, index) => (
-                <li key={index} className="flex items-start space-x-3 text-sm text-gray-300 max-[480px]:text-xs">
-                  <feature.icon className={`w-4 h-4 mt-1 ${feature.accent} max-[480px]:w-3 max-[480px]:h-3`} />
+                <li key={index} className="flex items-start space-x-3 text-base text-gray-300 max-[480px]:text-sm">
+                  <feature.icon className={`w-5 h-5 mt-1 ${feature.accent} max-[480px]:w-4 max-[480px]:h-4`} />
                   <span>
                     <span className={`${feature.accent} font-medium`}>{feature.text}</span>
                     {" — "}
@@ -156,8 +156,8 @@ const CoursesSection = () => {
           </div>
 
           {/* 4. CTA Button - Centered and Smaller */}
-          <div className="pt-2 text-center">
-            <button className="inline-block px-6 py-3 rounded-xl text-white bg-gradient-to-r from-[#FF4D9D] to-[#B388EB] hover:from-[#FF4D9D]/90 hover:to-[#B388EB]/90 shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 transition-all duration-300 font-medium text-base max-[480px]:px-5 max-[480px]:py-2 max-[480px]:text-sm">
+          <div className="pt-4 text-center">
+            <button className="inline-block px-7 py-3 rounded-xl text-white bg-gradient-to-r from-[#FF4D9D] to-[#B388EB] hover:from-[#FF4D9D]/90 hover:to-[#B388EB]/90 shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 transition-all duration-300 font-medium text-lg max-[480px]:px-6 max-[480px]:py-3 max-[480px]:text-base">
               Изучить курсы
             </button>
           </div>
