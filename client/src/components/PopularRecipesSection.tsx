@@ -303,29 +303,29 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           </div>
 
           {/* Top stats: Объем и ABV - под тегами */}
-          <div className="grid grid-cols-2 gap-3 text-lg text-white font-semibold max-[480px]:text-base drop-shadow-md px-4 py-2 max-[480px]:px-3">
-            <div className="flex items-center justify-center text-center">
-              <span>💧 {recipe.volume} мл</span>
-            </div>
-            <div className="flex items-center justify-center text-center">
-              <span>🍹 {recipe.abv}%</span>
-            </div>
+          <div className="flex gap-2 items-start content-start px-4 py-3 max-[480px]:gap-1 max-[480px]:px-3 max-[480px]:py-2">
+            <span className="text-base bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full text-white font-semibold whitespace-nowrap max-[480px]:text-sm max-[480px]:px-2 max-[480px]:py-1 border border-white/20">
+              💧 {recipe.volume} мл
+            </span>
+            <span className="text-base bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full text-white font-semibold whitespace-nowrap max-[480px]:text-sm max-[480px]:px-2 max-[480px]:py-1 border border-white/20">
+              🍹 {recipe.abv}%
+            </span>
           </div>
 
           {/* Main spacer - takes up remaining space */}
           <div className="flex-1"></div>
 
           {/* Bottom stats: Цена и Рейтинг - над кнопкой */}
-          <div className="grid grid-cols-2 gap-3 text-lg text-white font-semibold max-[480px]:text-base drop-shadow-md px-4 py-2 max-[480px]:px-3">
-            <div className="flex items-center justify-center text-center">
-              <span>💰 {recipe.price || '150'} ₽</span>
-            </div>
-            <div className="flex items-center justify-center space-x-1">
+          <div className="flex gap-2 items-start content-start px-4 py-3 max-[480px]:gap-1 max-[480px]:px-3 max-[480px]:py-2">
+            <span className="text-base bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full text-white font-semibold whitespace-nowrap max-[480px]:text-sm max-[480px]:px-2 max-[480px]:py-1 border border-white/20">
+              💰 {recipe.price || '150'} ₽
+            </span>
+            <div className="flex items-center bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/20 space-x-1 max-[480px]:px-2 max-[480px]:py-1">
               <div className="flex">
                 {Array.from({ length: 5 }, (_, i) => (
                   <Star
                     key={i}
-                    className={`w-5 h-5 drop-shadow-sm max-[480px]:w-4 max-[480px]:h-4 ${
+                    className={`w-4 h-4 drop-shadow-sm max-[480px]:w-3 max-[480px]:h-3 ${
                       i < Math.floor(recipe.rating)
                         ? 'fill-yellow-400 text-yellow-400'
                         : 'text-white/40'
@@ -333,7 +333,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                   />
                 ))}
               </div>
-              <span className="text-base text-white/90 font-medium drop-shadow-sm max-[480px]:text-sm">({recipe.reviewCount})</span>
+              <span className="text-sm text-white/90 font-medium drop-shadow-sm max-[480px]:text-xs">({recipe.reviewCount})</span>
             </div>
           </div>
 
