@@ -278,17 +278,20 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
         </div>
 
         {/* Content overlay */}
-        <div className="relative z-10 p-4 space-y-3 flex-1 flex flex-col max-[480px]:p-3 max-[480px]:space-y-2">
-          {/* Title */}
-          <h3 className="text-white text-2xl font-bold max-[480px]:text-xl drop-shadow-lg">{recipe.name}</h3>
-          
-          {/* Description - Fixed height for consistency */}
-          <div className="h-12 flex items-center max-[480px]:h-10">
-            <p className="text-white/90 text-base italic leading-tight max-[480px]:text-sm line-clamp-2 drop-shadow-md">{recipe.description}</p>
+        <div className="relative z-10 flex flex-col h-full">
+          {/* Title and Description container with blur background */}
+          <div className="bg-black/30 backdrop-blur-md rounded-lg p-4 m-3 max-[480px]:p-3 max-[480px]:m-2 border border-white/10">
+            {/* Title */}
+            <h3 className="text-white text-2xl font-bold max-[480px]:text-xl drop-shadow-lg mb-2">{recipe.name}</h3>
+            
+            {/* Description - Fixed height for consistency */}
+            <div className="h-12 flex items-center max-[480px]:h-10">
+              <p className="text-white/90 text-base italic leading-tight max-[480px]:text-sm line-clamp-2 drop-shadow-md">{recipe.description}</p>
+            </div>
           </div>
 
           {/* Tags - Fixed height to prevent layout shift */}
-          <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start pt-[6px] pb-[6px] max-[480px]:min-h-[50px] max-[480px]:gap-1">
+          <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start px-4 pt-2 max-[480px]:min-h-[50px] max-[480px]:gap-1 max-[480px]:px-3">
             {recipe.tags.map((tag, index) => (
               <span
                 key={index}
@@ -299,8 +302,11 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             ))}
           </div>
 
-          {/* Stats in column */}
-          <div className="space-y-2 text-base text-white font-medium max-[480px]:space-y-1 max-[480px]:text-sm drop-shadow-md">
+          {/* Spacer to push stats and button to bottom */}
+          <div className="flex-1"></div>
+
+          {/* Stats in column - positioned lower */}
+          <div className="space-y-2 text-base text-white font-medium max-[480px]:space-y-1 max-[480px]:text-sm drop-shadow-md px-4 pb-4 max-[480px]:px-3">
             <div className="flex items-center">
               <span>🍹 ABV: {recipe.abv}%</span>
             </div>
@@ -327,8 +333,8 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             </div>
           </div>
 
-          {/* Single centered button - Push to bottom */}
-          <div className="flex justify-center pt-4 mt-auto">
+          {/* Single centered button - at bottom with margin */}
+          <div className="flex justify-center pb-4 px-4 max-[480px]:pb-3 max-[480px]:px-3">
             <Button
               className="bg-gradient-to-r from-purple-500/90 to-cyan-500/90 backdrop-blur-sm text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600/90 hover:to-cyan-600/90 transition-all duration-200 ease-out shadow-xl hover:shadow-2xl will-change-transform border border-white/20"
               style={{
