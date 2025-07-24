@@ -419,7 +419,7 @@ export default function Landing() {
             </div>
             
             {/* Right side - Phone image */}
-            <div className="flex-1 flex justify-center md:justify-end mr-16">
+            <div className="flex-1 flex justify-center md:justify-end md:mr-16">
               <div className="relative">
                 <img 
                   src="/attached_assets/ChatGPT Image 18 июл. 2025 г., 23_50_01-Photoroom_1752872369395.png"
