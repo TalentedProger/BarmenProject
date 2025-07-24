@@ -114,7 +114,7 @@ const CoursesSection = () => {
         </div>
 
         {/* Mobile Layout - Custom Order */}
-        <div className="hidden max-[1024px]:block space-y-8 mt-8">
+        <div className="hidden max-[1024px]:block space-y-8">
           {/* 1. Main Text */}
           <div className="text-center">
             <h2 className="text-4xl font-bold text-[#00FFF0] mb-6 leading-tight max-[480px]:text-3xl">
