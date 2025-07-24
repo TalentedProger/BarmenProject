@@ -106,7 +106,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   return (
     <div className="recipe-card relative">
       <div 
-        className="bg-[#1A1A1E] rounded-2xl transition-all duration-200 ease-out overflow-hidden group h-[520px] flex flex-col relative z-10 will-change-auto"
+        className="bg-[#1A1A1E] rounded-2xl transition-all duration-200 ease-out overflow-hidden group h-[520px] flex flex-col relative z-10 will-change-auto max-[480px]:h-[450px] max-[480px]:scale-95"
         style={{
           filter: 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))',
           transform: 'translateZ(0)', // Force hardware acceleration
@@ -124,7 +124,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           <img
             src={recipe.image}
             alt={recipe.name}
-            className="w-full h-48 object-cover rounded-t-2xl transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform"
+            className="w-full h-48 object-cover rounded-t-2xl transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform max-[480px]:h-36"
             loading="lazy"
             decoding="async"
             fetchPriority="low"
@@ -137,19 +137,19 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
         </div>
 
         {/* Content */}
-        <div className="p-4 space-y-3 flex-1 flex flex-col">
+        <div className="p-4 space-y-3 flex-1 flex flex-col max-[480px]:p-3 max-[480px]:space-y-2">
           {/* Title */}
-          <h3 className="text-white text-2xl font-semibold">{recipe.name}</h3>
+          <h3 className="text-white text-2xl font-semibold max-[480px]:text-xl">{recipe.name}</h3>
           
           {/* Description */}
-          <p className="text-zinc-300 text-base italic">{recipe.description}</p>
+          <p className="text-zinc-300 text-base italic max-[480px]:text-sm">{recipe.description}</p>
 
           {/* Tags - Fixed height to prevent layout shift */}
-          <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start pt-[6px] pb-[6px]">
+          <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start pt-[6px] pb-[6px] max-[480px]:min-h-[50px] max-[480px]:gap-1">
             {recipe.tags.map((tag, index) => (
               <span
                 key={index}
-                className="text-sm bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-zinc-200 font-medium whitespace-nowrap"
+                className="text-sm bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-zinc-200 font-medium whitespace-nowrap max-[480px]:text-xs max-[480px]:px-2"
               >
                 {tag}
               </span>
@@ -157,7 +157,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           </div>
 
           {/* Stats in column */}
-          <div className="space-y-2 text-base text-zinc-200 font-medium">
+          <div className="space-y-2 text-base text-zinc-200 font-medium max-[480px]:space-y-1 max-[480px]:text-sm">
             <div className="flex items-center">
               <span>🍹 ABV: {recipe.abv}%</span>
             </div>
@@ -261,19 +261,19 @@ export default function PopularRecipesSection() {
         </Swiper>
 
         {/* Navigation Arrows */}
-        <div className="flex justify-center items-center gap-6">
+        <div className="flex justify-center items-center gap-6 max-[480px]:gap-4 max-[480px]:mt-4">
           <button
             onClick={() => swiperRef?.slidePrev()}
-            className="p-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30"
+            className="p-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30 max-[480px]:p-3"
           >
-            <ArrowLeft className="w-6 h-6 text-white" />
+            <ArrowLeft className="w-6 h-6 text-white max-[480px]:w-5 max-[480px]:h-5" />
           </button>
           
           <button
             onClick={() => swiperRef?.slideNext()}
-            className="p-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30"
+            className="p-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30 max-[480px]:p-3"
           >
-            <ArrowRight className="w-6 h-6 text-white" />
+            <ArrowRight className="w-6 h-6 text-white max-[480px]:w-5 max-[480px]:h-5" />
           </button>
         </div>
       </div>

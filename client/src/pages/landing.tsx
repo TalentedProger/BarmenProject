@@ -122,7 +122,7 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-20 pb-12 relative overflow-hidden min-h-[80vh]">
+      <section className="pt-20 pb-12 relative overflow-hidden min-h-[80vh] max-[480px]:min-h-[60vh] max-[480px]:pb-6">
         <div className="absolute inset-0 bg-gradient-to-br from-night-blue via-graphite to-charcoal"></div>
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-20 left-10 w-64 h-64 bg-neon-purple rounded-full blur-3xl animate-pulse-slow"></div>
@@ -130,7 +130,7 @@ export default function Landing() {
         </div>
         
         <div className="container mx-auto px-4 relative z-10 h-full">
-          <div className="grid md:grid-cols-2 gap-8 items-center py-20 h-full">
+          <div className="grid md:grid-cols-2 gap-8 items-center py-20 h-full max-[480px]:py-8 max-[480px]:gap-4">
             {/* Left side - Text content */}
             <div className="space-y-6 pl-8 flex flex-col justify-center h-64 animate-fade-in">
               <h1 className="text-3xl md:text-4xl font-bold text-platinum leading-tight">
@@ -142,7 +142,7 @@ export default function Landing() {
             </div>
             
             {/* Right side - Interactive cocktail creation image */}
-            <div className="flex justify-end items-start animate-slide-up h-full pt-8 max-[480px]:pt-2">
+            <div className="flex justify-end items-start animate-slide-up h-full pt-8 max-[480px]:pt-0 max-[480px]:pb-0 max-[480px]:mb-0">
               <div className="relative">
                 <img 
                   src="/attached_assets/Leonardo_Phoenix_10_A_futuristic_interactive_cocktail_creation_0 (1)_1752851226590.png"
@@ -159,24 +159,24 @@ export default function Landing() {
           </div>
           
           {/* Buttons at the bottom */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mt-8">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mt-8 max-[480px]:mt-4 max-[480px]:gap-3">
             <Button 
               onClick={handleGetStarted}
-              className="hero-primary-button bg-gradient-to-r from-neon-purple to-electric text-white px-10 py-5 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden"
+              className="hero-primary-button bg-gradient-to-r from-neon-purple to-electric text-white px-10 py-5 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden max-[480px]:px-6 max-[480px]:py-3 max-[480px]:text-base"
               style={{
                 boxShadow: '0 0 15px rgba(179, 136, 235, 0.25), 0 0 30px rgba(179, 136, 235, 0.15), 0 8px 20px rgba(0, 0, 0, 0.2)'
               }}
             >
-              <WandSparkles className="mr-2 h-6 w-6" />
+              <WandSparkles className="mr-2 h-6 w-6 max-[480px]:h-4 max-[480px]:w-4" />
               Начать создание
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent transform skew-x-12 translate-x-[-200%] hover:translate-x-[200%] transition-transform duration-1000"></div>
             </Button>
             <Button 
               variant="outline"
-              className="hero-secondary-button bg-transparent border-2 border-neon-turquoise text-neon-turquoise px-10 py-5 text-lg font-semibold rounded-xl hover:bg-neon-turquoise hover:text-night-blue transform hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/20 hover:shadow-xl hover:shadow-neon-turquoise/40"
+              className="hero-secondary-button bg-transparent border-2 border-neon-turquoise text-neon-turquoise px-10 py-5 text-lg font-semibold rounded-xl hover:bg-neon-turquoise hover:text-night-blue transform hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/20 hover:shadow-xl hover:shadow-neon-turquoise/40 max-[480px]:px-6 max-[480px]:py-3 max-[480px]:text-base"
               onClick={() => window.location.href = "/catalog"}
             >
-              <BookOpen className="mr-2 h-6 w-6" />
+              <BookOpen className="mr-2 h-6 w-6 max-[480px]:h-4 max-[480px]:w-4" />
               Каталог рецептов
             </Button>
           </div>
