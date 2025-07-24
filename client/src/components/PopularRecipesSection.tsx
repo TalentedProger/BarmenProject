@@ -259,12 +259,12 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           e.currentTarget.style.filter = 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))';
         }}
       >
-        {/* Image */}
-        <div className="relative overflow-hidden will-change-transform">
+        {/* Background Image covering entire card */}
+        <div className="absolute inset-0 overflow-hidden will-change-transform rounded-2xl">
           <img
             src={recipe.image}
             alt={recipe.name}
-            className="w-full h-56 object-cover rounded-t-2xl transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform max-[480px]:h-44"
+            className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform"
             loading="lazy"
             decoding="async"
             fetchPriority="low"
@@ -273,17 +273,18 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
               contentVisibility: 'auto', // Optimize rendering
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+          {/* Enhanced gradient overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 pointer-events-none" />
         </div>
 
-        {/* Content */}
-        <div className="p-4 space-y-3 flex-1 flex flex-col max-[480px]:p-3 max-[480px]:space-y-2">
+        {/* Content overlay */}
+        <div className="relative z-10 p-4 space-y-3 flex-1 flex flex-col max-[480px]:p-3 max-[480px]:space-y-2">
           {/* Title */}
-          <h3 className="text-white text-2xl font-semibold max-[480px]:text-xl">{recipe.name}</h3>
+          <h3 className="text-white text-2xl font-bold max-[480px]:text-xl drop-shadow-lg">{recipe.name}</h3>
           
           {/* Description - Fixed height for consistency */}
           <div className="h-12 flex items-center max-[480px]:h-10">
-            <p className="text-zinc-300 text-base italic leading-tight max-[480px]:text-sm line-clamp-2">{recipe.description}</p>
+            <p className="text-white/90 text-base italic leading-tight max-[480px]:text-sm line-clamp-2 drop-shadow-md">{recipe.description}</p>
           </div>
 
           {/* Tags - Fixed height to prevent layout shift */}
@@ -291,7 +292,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             {recipe.tags.map((tag, index) => (
               <span
                 key={index}
-                className="text-sm bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-zinc-200 font-medium whitespace-nowrap max-[480px]:text-xs max-[480px]:px-2"
+                className="text-sm bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-white font-medium whitespace-nowrap max-[480px]:text-xs max-[480px]:px-2 border border-white/20"
               >
                 {tag}
               </span>
@@ -299,7 +300,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           </div>
 
           {/* Stats in column */}
-          <div className="space-y-2 text-base text-zinc-200 font-medium max-[480px]:space-y-1 max-[480px]:text-sm">
+          <div className="space-y-2 text-base text-white font-medium max-[480px]:space-y-1 max-[480px]:text-sm drop-shadow-md">
             <div className="flex items-center">
               <span>🍹 ABV: {recipe.abv}%</span>
             </div>
@@ -314,22 +315,22 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                 {Array.from({ length: 5 }, (_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 ${
+                    className={`w-4 h-4 drop-shadow-sm ${
                       i < Math.floor(recipe.rating)
                         ? 'fill-yellow-400 text-yellow-400'
-                        : 'text-gray-500'
+                        : 'text-white/40'
                     }`}
                   />
                 ))}
               </div>
-              <span className="text-base text-zinc-300 font-medium">({recipe.reviewCount})</span>
+              <span className="text-base text-white/90 font-medium drop-shadow-sm">({recipe.reviewCount})</span>
             </div>
           </div>
 
           {/* Single centered button - Push to bottom */}
           <div className="flex justify-center pt-4 mt-auto">
             <Button
-              className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600 hover:to-cyan-600 transition-all duration-200 ease-out shadow-lg hover:shadow-xl will-change-transform"
+              className="bg-gradient-to-r from-purple-500/90 to-cyan-500/90 backdrop-blur-sm text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600/90 hover:to-cyan-600/90 transition-all duration-200 ease-out shadow-xl hover:shadow-2xl will-change-transform border border-white/20"
               style={{
                 transform: 'translateZ(0)', // Force hardware acceleration
               }}
