@@ -49,9 +49,9 @@ const mojitorecipeData = {
 };
 
 const TasteRadar = ({ taste }: { taste: any }) => {
-  const radius = 80;
-  const centerX = 100;
-  const centerY = 100;
+  const radius = 120;
+  const centerX = 150;
+  const centerY = 150;
   
   const points = [
     { label: "Сладость", value: taste.sweetness, angle: 0 },
@@ -61,9 +61,8 @@ const TasteRadar = ({ taste }: { taste: any }) => {
     { label: "Освежающая сила", value: taste.refreshing, angle: 288 }
   ];
 
-  const getCoordinates = (angle: number, value: number) => {
+  const getCoordinates = (angle: number, distance: number) => {
     const radian = (angle - 90) * Math.PI / 180;
-    const distance = (value / 5) * radius;
     return {
       x: centerX + distance * Math.cos(radian),
       y: centerY + distance * Math.sin(radian)
@@ -71,13 +70,13 @@ const TasteRadar = ({ taste }: { taste: any }) => {
   };
 
   const pathData = points.map((point, index) => {
-    const coords = getCoordinates(point.angle, point.value);
+    const coords = getCoordinates(point.angle, (point.value / 5) * radius);
     return `${index === 0 ? 'M' : 'L'} ${coords.x} ${coords.y}`;
   }).join(' ') + ' Z';
 
   return (
-    <div className="relative">
-      <svg width="200" height="200" className="mx-auto">
+    <div className="relative flex items-center justify-center">
+      <svg width="300" height="300" className="mx-auto">
         {/* Background circles */}
         {[1, 2, 3, 4, 5].map((level) => (
           <circle
@@ -93,7 +92,7 @@ const TasteRadar = ({ taste }: { taste: any }) => {
         
         {/* Axis lines */}
         {points.map((point) => {
-          const coords = getCoordinates(point.angle, 5);
+          const coords = getCoordinates(point.angle, radius);
           return (
             <line
               key={point.label}
@@ -112,46 +111,47 @@ const TasteRadar = ({ taste }: { taste: any }) => {
           d={pathData}
           fill="rgba(6, 182, 212, 0.2)"
           stroke="rgba(6, 182, 212, 0.8)"
-          strokeWidth="2"
-          filter="drop-shadow(0 0 8px rgba(6, 182, 212, 0.4))"
+          strokeWidth="3"
+          filter="drop-shadow(0 0 12px rgba(6, 182, 212, 0.6))"
         />
         
         {/* Data points */}
         {points.map((point) => {
-          const coords = getCoordinates(point.angle, point.value);
+          const coords = getCoordinates(point.angle, (point.value / 5) * radius);
           return (
             <circle
               key={point.label}
               cx={coords.x}
               cy={coords.y}
-              r="4"
+              r="6"
               fill="#06B6D4"
-              filter="drop-shadow(0 0 4px rgba(6, 182, 212, 0.6))"
+              filter="drop-shadow(0 0 8px rgba(6, 182, 212, 0.8))"
             />
           );
         })}
       </svg>
       
-      {/* Labels */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        {points.map((point) => {
-          const coords = getCoordinates(point.angle, 6);
-          return (
-            <div
-              key={point.label}
-              className="absolute text-xs text-white font-medium text-center"
-              style={{
-                left: coords.x - 30,
-                top: coords.y - 10,
-                width: 60
-              }}
-            >
-              {point.label}
-              <div className="text-cyan-400 text-sm font-bold">{point.value}/5</div>
+      {/* Labels positioned around the circle */}
+      {points.map((point) => {
+        const labelDistance = radius + 40;
+        const coords = getCoordinates(point.angle, labelDistance);
+        return (
+          <div
+            key={point.label}
+            className="absolute text-center"
+            style={{
+              left: coords.x - 50,
+              top: coords.y - 15,
+              width: 100
+            }}
+          >
+            <div className="text-white font-semibold text-sm mb-1">{point.label}</div>
+            <div className="text-cyan-400 text-lg font-bold" style={{ textShadow: '0 0 8px rgba(6, 182, 212, 0.6)' }}>
+              {point.value}/5
             </div>
-          );
-        })}
-      </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -248,91 +248,117 @@ export default function RecipePage() {
             </div>
           </div>
 
-          {/* Calculations */}
-          <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+          {/* Calculations - разноцветные карточки с неоновым свечением */}
+          <div className="space-y-4">
             <h2 className="text-3xl font-bold text-white mb-6">📊 Расчёты</h2>
             <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-4 bg-white/5 rounded-xl">
-                <div className="text-2xl font-bold text-cyan-400">{recipe.abv}%</div>
+              <div className="text-center p-4 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl border border-purple-400/30 shadow-lg shadow-purple-500/20">
+                <div className="text-2xl font-bold text-purple-300" style={{ textShadow: '0 0 10px rgba(168, 85, 247, 0.8)' }}>{recipe.abv}%</div>
                 <div className="text-white/80">ABV</div>
               </div>
-              <div className="text-center p-4 bg-white/5 rounded-xl">
-                <div className="text-2xl font-bold text-cyan-400">{recipe.volume} мл</div>
+              <div className="text-center p-4 bg-gradient-to-br from-cyan-500/20 to-cyan-600/20 rounded-xl border border-cyan-400/30 shadow-lg shadow-cyan-500/20">
+                <div className="text-2xl font-bold text-cyan-300" style={{ textShadow: '0 0 10px rgba(6, 182, 212, 0.8)' }}>{recipe.volume} мл</div>
                 <div className="text-white/80">Объём</div>
               </div>
-              <div className="text-center p-4 bg-white/5 rounded-xl">
-                <div className="text-2xl font-bold text-cyan-400">{recipe.calories} ккал</div>
+              <div className="text-center p-4 bg-gradient-to-br from-pink-500/20 to-pink-600/20 rounded-xl border border-pink-400/30 shadow-lg shadow-pink-500/20">
+                <div className="text-2xl font-bold text-pink-300" style={{ textShadow: '0 0 10px rgba(236, 72, 153, 0.8)' }}>{recipe.calories} ккал</div>
                 <div className="text-white/80">Калории</div>
               </div>
-              <div className="text-center p-4 bg-white/5 rounded-xl">
-                <div className="text-2xl font-bold text-cyan-400">{recipe.price} ₽</div>
+              <div className="text-center p-4 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-xl border border-green-400/30 shadow-lg shadow-green-500/20">
+                <div className="text-2xl font-bold text-green-300" style={{ textShadow: '0 0 10px rgba(34, 197, 94, 0.8)' }}>{recipe.price} ₽</div>
                 <div className="text-white/80">Стоимость</div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Video Section */}
-        <section className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10 text-center">
-          <h2 className="text-3xl font-bold text-white mb-6">📽 Видео приготовления</h2>
-          <div className="relative max-w-md mx-auto">
-            <div className="aspect-video bg-black/60 rounded-xl flex items-center justify-center border border-white/20">
+        {/* Video Section - убрал темный фон */}
+        <section className="text-center">
+          <h2 className="text-3xl font-bold text-white mb-8">📽 Видео приготовления</h2>
+          <div className="relative max-w-2xl mx-auto">
+            <div className="aspect-video bg-gradient-to-br from-purple-900/30 to-cyan-900/30 rounded-2xl flex items-center justify-center border-2 border-white/20 backdrop-blur-md overflow-hidden">
+              {/* Background pattern */}
+              <div className="absolute inset-0 opacity-20">
+                <div className="w-full h-full bg-gradient-to-br from-white/5 to-transparent"></div>
+              </div>
+              
               <Button
                 onClick={() => window.open(recipe.videoUrl, '_blank')}
-                className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 px-8 py-4 text-lg font-semibold shadow-xl"
+                className="relative z-10 bg-gradient-to-r from-purple-600/90 to-cyan-600/90 hover:from-purple-500/90 hover:to-cyan-500/90 px-12 py-6 text-xl font-semibold rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300 border border-white/30 backdrop-blur-sm"
+                style={{
+                  boxShadow: '0 0 30px rgba(168, 85, 247, 0.4), 0 0 60px rgba(6, 182, 212, 0.2)'
+                }}
               >
-                <Play className="w-6 h-6 mr-2" />
+                <Play className="w-8 h-8 mr-3" />
                 Смотреть видео
               </Button>
             </div>
           </div>
         </section>
 
-        {/* Recipe Steps */}
+        {/* Recipe Steps - убрал стикеры, добавил пошаговое появление */}
         <section className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">🧑‍🍳 Пошаговый рецепт</h2>
+          <h2 className="text-3xl font-bold text-white mb-8 text-center">Пошаговый рецепт</h2>
           <div className="max-w-2xl mx-auto space-y-6">
             {recipe.steps.map((step, index) => (
               <div
                 key={index}
-                className={`flex items-center space-x-4 p-4 rounded-xl transition-all duration-300 cursor-pointer ${
+                className={`flex items-center space-x-6 p-6 rounded-2xl transition-all duration-500 cursor-pointer transform hover:scale-[1.02] opacity-0 animate-fadeInUp ${
                   currentStep >= step.step
-                    ? 'bg-cyan-500/20 border border-cyan-500/40'
-                    : 'bg-white/5 border border-white/10 hover:bg-white/10'
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25'
+                    : 'bg-gradient-to-r from-white/5 to-white/10 border border-white/20 hover:from-white/10 hover:to-white/15'
                 }`}
                 onClick={() => setCurrentStep(step.step)}
+                style={{
+                  animationDelay: `${index * 0.3}s`,
+                  animationFillMode: 'forwards'
+                }}
               >
-                <div className="text-4xl transform transition-transform duration-200 hover:scale-110">
+                <div className="text-5xl transform transition-all duration-300 hover:scale-125 hover:rotate-12">
                   {step.icon}
                 </div>
                 <div className="flex-1">
-                  <div className="text-white/60 text-sm">Шаг {step.step}</div>
-                  <div className="text-white text-lg font-medium">{step.text}</div>
+                  <div className="text-cyan-300 text-base font-medium mb-1">Шаг {step.step}</div>
+                  <div className="text-white text-xl font-semibold">{step.text}</div>
                 </div>
-                <div className={`w-6 h-6 rounded-full border-2 transition-all duration-200 ${
+                <div className={`w-8 h-8 rounded-full border-3 transition-all duration-300 flex items-center justify-center ${
                   currentStep >= step.step
-                    ? 'bg-cyan-500 border-cyan-500'
-                    : 'border-white/40'
-                }`} />
+                    ? 'bg-gradient-to-r from-cyan-400 to-purple-400 border-cyan-300 shadow-lg shadow-cyan-400/50'
+                    : 'border-white/40 hover:border-white/60'
+                }`}>
+                  {currentStep >= step.step && (
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Equipment */}
+        {/* Equipment - убрал кнопки Купить, добавил одну общую */}
         <section className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-          <h2 className="text-3xl font-bold text-white mb-6">🧰 Что потребуется</h2>
-          <div className="grid md:grid-cols-3 gap-4">
+          <h2 className="text-3xl font-bold text-white mb-8 text-center">🧰 Что потребуется</h2>
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
             {recipe.equipment.map((item, index) => (
-              <div key={index} className="text-center p-6 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-200">
-                <div className="text-4xl mb-3">{item.icon}</div>
-                <div className="text-white font-medium mb-3">{item.name}</div>
-                <Button size="sm" className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600">
-                  <ShoppingCart className="w-4 h-4 mr-1" />
-                  Купить
-                </Button>
+              <div key={index} className="text-center p-6 bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105">
+                <div className="text-5xl mb-4 transform hover:scale-110 transition-transform duration-200">{item.icon}</div>
+                <div className="text-white font-semibold text-lg">{item.name}</div>
               </div>
             ))}
+          </div>
+          
+          {/* Единая кнопка Посетить магазин */}
+          <div className="text-center">
+            <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 px-8 py-4 text-lg font-semibold rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 border border-orange-400/30"
+              style={{
+                boxShadow: '0 0 20px rgba(234, 88, 12, 0.4)'
+              }}
+            >
+              <ShoppingCart className="w-6 h-6 mr-3" />
+              Посетить магазин
+            </Button>
           </div>
         </section>
 
@@ -342,46 +368,52 @@ export default function RecipePage() {
           <TasteRadar taste={recipe.taste} />
         </section>
 
-        {/* Social Functions */}
+        {/* Social Functions - переработанная компоновка */}
         <section className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-          <div className="flex flex-wrap justify-center gap-6">
-            {/* Rating */}
-            <div className="text-center">
-              <div className="text-white mb-2">Ваша оценка</div>
-              <div className="flex justify-center space-x-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    className={`w-8 h-8 cursor-pointer transition-all duration-200 ${
-                      userRating >= star
-                        ? 'fill-yellow-400 text-yellow-400'
-                        : 'text-white/40 hover:text-yellow-300'
-                    }`}
-                    onClick={() => setUserRating(star)}
-                  />
-                ))}
-              </div>
-              <div className="text-white/60 text-sm mt-1">
-                {recipe.rating} ({recipe.reviewCount} отзывов)
-              </div>
-            </div>
-
-            {/* Save to favorites */}
+          <div className="flex items-center justify-between">
+            {/* Left Button - Save to favorites */}
             <Button
               onClick={() => setIsFavorite(!isFavorite)}
               className={`${
                 isFavorite
-                  ? 'bg-gradient-to-r from-pink-500 to-red-500'
+                  ? 'bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600'
                   : 'bg-white/10 hover:bg-white/20'
-              } backdrop-blur-sm border border-white/20`}
+              } backdrop-blur-sm border border-white/20 px-6 py-3 text-lg font-medium rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300`}
+              style={{
+                boxShadow: isFavorite ? '0 0 20px rgba(236, 72, 153, 0.4)' : 'none'
+              }}
             >
-              <Heart className={`w-4 h-4 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
+              <Heart className={`w-5 h-5 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
               {isFavorite ? 'В избранном' : 'В избранное'}
             </Button>
 
-            {/* Share */}
-            <Button className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20">
-              <Share2 className="w-4 h-4 mr-2" />
+            {/* Center - Rating */}
+            <div className="text-center">
+              <div className="text-white mb-3 text-lg font-medium">Ваша оценка</div>
+              <div className="flex justify-center space-x-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className={`w-10 h-10 cursor-pointer transition-all duration-200 transform hover:scale-110 ${
+                      userRating >= star
+                        ? 'fill-yellow-400 text-yellow-400 drop-shadow-lg'
+                        : 'text-white/40 hover:text-yellow-300'
+                    }`}
+                    onClick={() => setUserRating(star)}
+                    style={{ 
+                      filter: userRating >= star ? 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.8))' : 'none'
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="text-white/60 text-sm mt-2">
+                {recipe.rating} ({recipe.reviewCount} отзывов)
+              </div>
+            </div>
+
+            {/* Right Button - Share */}
+            <Button className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 px-6 py-3 text-lg font-medium rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300">
+              <Share2 className="w-5 h-5 mr-2" />
               Поделиться
             </Button>
           </div>
