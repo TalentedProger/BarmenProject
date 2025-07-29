@@ -49,9 +49,9 @@ const mojitorecipeData = {
 };
 
 const TasteRadar = ({ taste }: { taste: any }) => {
-  const radius = 120;
-  const centerX = 150;
-  const centerY = 150;
+  const radius = 80;
+  const centerX = 120;
+  const centerY = 120;
   
   const points = [
     { label: "Сладость", value: taste.sweetness, angle: 0 },
@@ -76,7 +76,7 @@ const TasteRadar = ({ taste }: { taste: any }) => {
 
   return (
     <div className="relative flex items-center justify-center">
-      <svg width="300" height="300" className="mx-auto">
+      <svg width="240" height="240" className="mx-auto">
         {/* Background circles */}
         {[1, 2, 3, 4, 5].map((level) => (
           <circle
@@ -133,20 +133,20 @@ const TasteRadar = ({ taste }: { taste: any }) => {
       
       {/* Labels positioned around the circle */}
       {points.map((point) => {
-        const labelDistance = radius + 40;
+        const labelDistance = radius + 30;
         const coords = getCoordinates(point.angle, labelDistance);
         return (
           <div
             key={point.label}
             className="absolute text-center"
             style={{
-              left: coords.x - 50,
-              top: coords.y - 15,
-              width: 100
+              left: coords.x - 40,
+              top: coords.y - 12,
+              width: 80
             }}
           >
-            <div className="text-white font-semibold text-sm mb-1">{point.label}</div>
-            <div className="text-cyan-400 text-lg font-bold" style={{ textShadow: '0 0 8px rgba(6, 182, 212, 0.6)' }}>
+            <div className="text-white font-semibold text-xs mb-1">{point.label}</div>
+            <div className="text-cyan-400 text-sm font-bold" style={{ textShadow: '0 0 6px rgba(6, 182, 212, 0.6)' }}>
               {point.value}/5
             </div>
           </div>
@@ -166,8 +166,8 @@ export default function RecipePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0A0A0D] via-[#1B1B1F] to-[#0A0A0D]">
-      {/* Back Button */}
-      <div className="absolute top-6 left-6 z-20">
+      {/* Back Button - исправлена позиция для мобильных */}
+      <div className="absolute top-6 left-6 z-20 md:top-6 md:left-6">
         <Button
           onClick={() => window.history.back()}
           className="bg-black/40 backdrop-blur-sm border border-white/20 hover:bg-black/60 transition-all duration-300"
@@ -191,16 +191,21 @@ export default function RecipePage() {
 
         {/* Hero Content */}
         <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
-          {/* Cocktail Glass */}
-          <div className="mb-8">
-            <img
-              src={recipe.image}
-              alt={recipe.name}
-              className="w-64 h-80 mx-auto object-cover rounded-2xl shadow-2xl transition-transform duration-500 hover:scale-105"
-              style={{
-                filter: 'drop-shadow(0 0 30px rgba(6, 182, 212, 0.3))'
-              }}
-            />
+          {/* Cocktail Glass - круглое изображение с неоновым свечением */}
+          <div className="mb-8 flex justify-center">
+            <div className="relative">
+              <img
+                src={recipe.image}
+                alt={recipe.name}
+                className="w-80 h-80 mx-auto object-cover rounded-full shadow-2xl transition-transform duration-500 hover:scale-105 border-4 border-cyan-400/30"
+                style={{
+                  filter: 'drop-shadow(0 0 40px rgba(6, 182, 212, 0.6))'
+                }}
+              />
+              {/* Дополнительные неоновые кольца */}
+              <div className="absolute inset-0 rounded-full border-2 border-purple-400/40 animate-pulse"></div>
+              <div className="absolute -inset-2 rounded-full border border-cyan-300/30 animate-pulse" style={{ animationDelay: '1s' }}></div>
+            </div>
           </div>
 
           {/* Title */}
@@ -248,9 +253,9 @@ export default function RecipePage() {
             </div>
           </div>
 
-          {/* Calculations - разноцветные карточки с неоновым свечением */}
-          <div className="space-y-4">
-            <h2 className="text-3xl font-bold text-white mb-6">📊 Расчёты</h2>
+          {/* Calculations - тёмный фон как у ингредиентов */}
+          <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+            <h2 className="text-3xl font-bold text-white mb-6 text-center">📊 Расчёты</h2>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center p-4 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl border border-purple-400/30 shadow-lg shadow-purple-500/20">
                 <div className="text-2xl font-bold text-purple-300" style={{ textShadow: '0 0 10px rgba(168, 85, 247, 0.8)' }}>{recipe.abv}%</div>
@@ -296,41 +301,37 @@ export default function RecipePage() {
           </div>
         </section>
 
-        {/* Recipe Steps - убрал стикеры, добавил пошаговое появление */}
-        <section className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">Пошаговый рецепт</h2>
-          <div className="max-w-2xl mx-auto space-y-6">
+        {/* Recipe Steps - убрал фон, добавил свайп-навигацию */}
+        <section>
+          <h2 className="text-3xl font-bold text-white mb-4 text-center">Пошаговый рецепт</h2>
+          <p className="text-zinc-400 text-center mb-8 text-sm">
+            Свайпните снизу вверх для перехода к следующему шагу
+          </p>
+          <div className="max-w-2xl mx-auto">
             {recipe.steps.map((step, index) => (
               <div
                 key={index}
-                className={`flex items-center space-x-6 p-6 rounded-2xl transition-all duration-500 cursor-pointer transform hover:scale-[1.02] opacity-0 animate-fadeInUp ${
-                  currentStep >= step.step
-                    ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25'
-                    : 'bg-gradient-to-r from-white/5 to-white/10 border border-white/20 hover:from-white/10 hover:to-white/15'
-                }`}
-                onClick={() => setCurrentStep(step.step)}
-                style={{
-                  animationDelay: `${index * 0.3}s`,
-                  animationFillMode: 'forwards'
-                }}
+                className={`${
+                  currentStep === step.step ? 'block' : 'hidden'
+                } transition-all duration-500`}
               >
-                <div className="text-5xl transform transition-all duration-300 hover:scale-125 hover:rotate-12">
-                  {step.icon}
-                </div>
-                <div className="flex-1">
-                  <div className="text-cyan-300 text-base font-medium mb-1">Шаг {step.step}</div>
-                  <div className="text-white text-xl font-semibold">{step.text}</div>
-                </div>
-                <div className={`w-8 h-8 rounded-full border-3 transition-all duration-300 flex items-center justify-center ${
-                  currentStep >= step.step
-                    ? 'bg-gradient-to-r from-cyan-400 to-purple-400 border-cyan-300 shadow-lg shadow-cyan-400/50'
-                    : 'border-white/40 hover:border-white/60'
-                }`}>
-                  {currentStep >= step.step && (
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  )}
+                <div
+                  className="flex items-center space-x-6 p-6 rounded-2xl bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 cursor-pointer transform hover:scale-[1.02]"
+                  onClick={() => {
+                    if (currentStep < recipe.steps.length) {
+                      setCurrentStep(currentStep + 1);
+                    } else {
+                      setCurrentStep(1);
+                    }
+                  }}
+                >
+                  <div className="text-5xl transform transition-all duration-300 hover:scale-125 hover:rotate-12">
+                    {step.icon}
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-cyan-300 text-base font-medium mb-1">Шаг {step.step}</div>
+                    <div className="text-white text-xl font-semibold">{step.text}</div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -339,7 +340,7 @@ export default function RecipePage() {
 
         {/* Equipment - убрал кнопки Купить, добавил одну общую */}
         <section className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">🧰 Что потребуется</h2>
+          <h2 className="text-3xl font-bold text-white mb-8 text-center">Что потребуется ?</h2>
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             {recipe.equipment.map((item, index) => (
               <div key={index} className="text-center p-6 bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105">
@@ -370,50 +371,49 @@ export default function RecipePage() {
 
         {/* Social Functions - переработанная компоновка */}
         <section className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-          <div className="flex items-center justify-between">
-            {/* Left Button - Save to favorites */}
+          {/* Rating Section - вверху */}
+          <div className="text-center mb-8">
+            <div className="text-white mb-4 text-xl font-medium">Ваша оценка</div>
+            <div className="flex justify-center space-x-2 mb-4">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star
+                  key={star}
+                  className={`w-8 h-8 cursor-pointer transition-all duration-200 transform hover:scale-110 ${
+                    userRating >= star
+                      ? 'fill-yellow-400 text-yellow-400 drop-shadow-lg'
+                      : 'text-white/40 hover:text-yellow-300'
+                  }`}
+                  onClick={() => setUserRating(star)}
+                  style={{ 
+                    filter: userRating >= star ? 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.8))' : 'none'
+                  }}
+                />
+              ))}
+            </div>
+            <div className="text-white/60 text-sm">
+              {recipe.rating} ({recipe.reviewCount} отзывов)
+            </div>
+          </div>
+
+          {/* Buttons - внизу в одну строку */}
+          <div className="flex justify-center space-x-4">
             <Button
               onClick={() => setIsFavorite(!isFavorite)}
               className={`${
                 isFavorite
                   ? 'bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600'
                   : 'bg-white/10 hover:bg-white/20'
-              } backdrop-blur-sm border border-white/20 px-6 py-3 text-lg font-medium rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300`}
+              } backdrop-blur-sm border border-white/20 px-5 py-2 text-base font-medium rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex-1 max-w-[140px]`}
               style={{
-                boxShadow: isFavorite ? '0 0 20px rgba(236, 72, 153, 0.4)' : 'none'
+                boxShadow: isFavorite ? '0 0 15px rgba(236, 72, 153, 0.4)' : 'none'
               }}
             >
-              <Heart className={`w-5 h-5 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
+              <Heart className={`w-4 h-4 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
               {isFavorite ? 'В избранном' : 'В избранное'}
             </Button>
 
-            {/* Center - Rating */}
-            <div className="text-center">
-              <div className="text-white mb-3 text-lg font-medium">Ваша оценка</div>
-              <div className="flex justify-center space-x-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    className={`w-10 h-10 cursor-pointer transition-all duration-200 transform hover:scale-110 ${
-                      userRating >= star
-                        ? 'fill-yellow-400 text-yellow-400 drop-shadow-lg'
-                        : 'text-white/40 hover:text-yellow-300'
-                    }`}
-                    onClick={() => setUserRating(star)}
-                    style={{ 
-                      filter: userRating >= star ? 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.8))' : 'none'
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="text-white/60 text-sm mt-2">
-                {recipe.rating} ({recipe.reviewCount} отзывов)
-              </div>
-            </div>
-
-            {/* Right Button - Share */}
-            <Button className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 px-6 py-3 text-lg font-medium rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300">
-              <Share2 className="w-5 h-5 mr-2" />
+            <Button className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 px-5 py-2 text-base font-medium rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex-1 max-w-[140px]">
+              <Share2 className="w-4 h-4 mr-2" />
               Поделиться
             </Button>
           </div>
