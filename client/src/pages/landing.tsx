@@ -393,7 +393,7 @@ export default function Landing() {
         <div className="container mx-auto px-6 max-w-6xl relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12">
             {/* Mobile layout: Title first */}
-            <div className="w-full text-center md:hidden mb-8">
+            <div className="w-full text-center md:hidden mb-4">
               <h2 className="text-3xl font-bold text-white mb-4" style={{ textShadow: '0 0 4px #8F00FF88' }}>
                 Cocktailo — теперь в твоём кармане
               </h2>
@@ -403,7 +403,7 @@ export default function Landing() {
             </div>
 
             {/* Mobile layout: Phone image second */}
-            <div className="w-full flex justify-center md:hidden mb-8">
+            <div className="w-full flex justify-center md:hidden mb-4">
               <div className="relative">
                 <img 
                   src="/attached_assets/ChatGPT Image 18 июл. 2025 г., 23_50_01-Photoroom_1752872369395.png"
