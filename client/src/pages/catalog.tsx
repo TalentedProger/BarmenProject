@@ -16,8 +16,8 @@ export default function Catalog() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedDifficulty, setSelectedDifficulty] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedDifficulty, setSelectedDifficulty] = useState("all");
   const [currentPage, setCurrentPage] = useState(0);
   const [userFavorites, setUserFavorites] = useState<Set<string>>(new Set());
 
@@ -27,8 +27,8 @@ export default function Catalog() {
   const { data: recipes = [], isLoading: recipesLoading, refetch } = useQuery<Recipe[]>({
     queryKey: ["/api/recipes", {
       search: searchQuery,
-      category: selectedCategory,
-      difficulty: selectedDifficulty,
+      category: selectedCategory === "all" ? "" : selectedCategory,
+      difficulty: selectedDifficulty === "all" ? "" : selectedDifficulty,
       limit: ITEMS_PER_PAGE,
       offset: currentPage * ITEMS_PER_PAGE
     }],
@@ -134,7 +134,7 @@ export default function Catalog() {
                       <SelectValue placeholder="Все категории" />
                     </SelectTrigger>
                     <SelectContent className="bg-night-blue border-gray-600">
-                      <SelectItem value="">Все категории</SelectItem>
+                      <SelectItem value="all">Все категории</SelectItem>
                       <SelectItem value="classic">Классические</SelectItem>
                       <SelectItem value="summer">Летние</SelectItem>
                       <SelectItem value="shot">Шоты</SelectItem>
@@ -147,7 +147,7 @@ export default function Catalog() {
                       <SelectValue placeholder="Любая сложность" />
                     </SelectTrigger>
                     <SelectContent className="bg-night-blue border-gray-600">
-                      <SelectItem value="">Любая сложность</SelectItem>
+                      <SelectItem value="all">Любая сложность</SelectItem>
                       <SelectItem value="easy">Легкая</SelectItem>
                       <SelectItem value="medium">Средняя</SelectItem>
                       <SelectItem value="hard">Сложная</SelectItem>
