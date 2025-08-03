@@ -56,6 +56,7 @@ const CocktailCard = ({
           src={cocktail.image} 
           alt={cocktail.name}
           className="w-full h-full object-cover transition-transform duration-300"
+          id="cocktail-image"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
       </div>
@@ -85,16 +86,16 @@ const CocktailCard = ({
 
         {/* Теги */}
         <div className="flex flex-wrap gap-2 p-2 min-h-[50px] items-start">
-          <span className={`px-3 py-1.5 rounded-full text-xs font-semibold bg-neon-amber/40 text-neon-amber border border-neon-amber/60 shadow-lg`}
+          <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-800/90 text-neon-amber border border-neon-amber/60 shadow-lg backdrop-blur-sm"
             style={{
               textShadow: '0 0 8px rgba(255, 193, 7, 0.8)',
-              boxShadow: '0 0 12px rgba(255, 193, 7, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+              boxShadow: '0 0 12px rgba(255, 193, 7, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
             }}>
             {getCategoryLabel(cocktail.category)}
           </span>
-          <span className={`px-3 py-1.5 rounded-full text-xs font-semibold bg-white/30 border border-white/50 shadow-lg ${getDifficultyColor(cocktail.difficulty)}`}
+          <span className={`px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-800/90 border border-white/30 shadow-lg backdrop-blur-sm ${getDifficultyColor(cocktail.difficulty)}`}
             style={{
-              boxShadow: '0 0 12px rgba(255, 255, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+              boxShadow: '0 0 12px rgba(255, 255, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
             }}>
             {getDifficultyLabel(cocktail.difficulty)}
           </span>
@@ -131,10 +132,10 @@ const CocktailCard = ({
                 boxShadow: '0 4px 15px rgba(139, 69, 255, 0.4), 0 2px 8px rgba(0, 247, 239, 0.3)'
               }}
               onMouseEnter={(e) => {
-                const target = e.currentTarget;
-                const card = target.closest('.group');
+                const button = e.currentTarget;
+                const card = button.closest('.group');
                 if (card) {
-                  const img = card.querySelector('img');
+                  const img = card.querySelector('#cocktail-image') as HTMLImageElement;
                   if (img) {
                     img.style.transform = 'scale(1.1)';
                     img.style.transition = 'transform 0.3s ease';
@@ -142,10 +143,10 @@ const CocktailCard = ({
                 }
               }}
               onMouseLeave={(e) => {
-                const target = e.currentTarget;
-                const card = target.closest('.group');
+                const button = e.currentTarget;
+                const card = button.closest('.group');
                 if (card) {
-                  const img = card.querySelector('img');
+                  const img = card.querySelector('#cocktail-image') as HTMLImageElement;
                   if (img) {
                     img.style.transform = 'scale(1)';
                     img.style.transition = 'transform 0.3s ease';
