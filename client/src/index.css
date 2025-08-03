@@ -69,18 +69,26 @@
   }
 }
 
-/* Hover эффекты для карточек коктейлей */
+/* Hover эффекты для карточек коктейлей - оптимизированы */
+.cocktail-card {
+  will-change: transform;
+}
+
+.cocktail-image {
+  will-change: transform;
+}
+
 .cocktail-card:has(.recipe-button:hover) {
-  transform: scale(1.05);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(139, 69, 255, 0.2);
+  transform: scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 0 20px rgba(139, 69, 255, 0.15);
 }
 
 .cocktail-card:has(.recipe-button:hover) .cocktail-image {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .recipe-button:hover {
-  box-shadow: 0 8px 25px rgba(139, 69, 255, 0.6), 0 4px 12px rgba(0, 247, 239, 0.4);
+  box-shadow: 0 6px 20px rgba(139, 69, 255, 0.5), 0 3px 10px rgba(0, 247, 239, 0.3);
 }
 
 .dark {

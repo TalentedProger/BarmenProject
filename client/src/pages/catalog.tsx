@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
@@ -10,8 +10,8 @@ import { Search, Filter, Star, Heart, Clock, TrendingUp } from "lucide-react";
 import { getCocktails, type CocktailData } from "@/data/cocktails";
 import { Link } from "wouter";
 
-// Компонент карточки коктейля
-const CocktailCard = ({ 
+// Компонент карточки коктейля - мемоизирован для оптимизации
+const CocktailCard = React.memo(({ 
   cocktail, 
   isFavorite, 
   onFavorite 
@@ -49,13 +49,16 @@ const CocktailCard = ({
   };
 
   return (
-    <Card className="cocktail-card group relative overflow-hidden glass-effect border-none shadow-xl transition-all duration-500 bg-gradient-to-b from-slate-800/50 to-slate-900/50 w-full max-w-sm mx-auto">
+    <Card className="cocktail-card group relative overflow-hidden glass-effect border-none shadow-xl transition-all duration-300 ease-out bg-gradient-to-b from-slate-800/50 to-slate-900/50 w-full max-w-sm mx-auto">
       {/* Фоновое изображение */}
       <div className="absolute inset-0">
         <img 
           src={cocktail.image} 
           alt={cocktail.name}
-          className="cocktail-image w-full h-full object-cover transition-transform duration-400"
+          className="cocktail-image w-full h-full object-cover transition-transform duration-300 ease-out"
+          loading="lazy"
+          decoding="async"
+          style={{ contentVisibility: 'auto' }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
       </div>
@@ -139,7 +142,7 @@ const CocktailCard = ({
       </CardContent>
     </Card>
   );
-};
+});
 
 export default function Catalog() {
   const { toast } = useToast();
@@ -152,29 +155,35 @@ export default function Catalog() {
 
   const ITEMS_PER_LOAD = 12;
 
-  // Получаем отфильтрованные коктейли
-  useEffect(() => {
-    const filtered = getCocktails({
+  // Мемоизированные отфильтрованные коктейли для оптимизации
+  const filteredCocktailsData = useMemo(() => {
+    return getCocktails({
       search: searchQuery,
       category: selectedCategory === "all" ? undefined : selectedCategory,
       difficulty: selectedDifficulty === "all" ? undefined : selectedDifficulty,
     });
-    setFilteredCocktails(filtered);
-    setDisplayedItems(ITEMS_PER_LOAD);
   }, [searchQuery, selectedCategory, selectedDifficulty]);
 
-  // Получаем отображаемые коктейли с учетом лимита
-  const displayedCocktails = filteredCocktails.slice(0, displayedItems);
+  // Обновляем состояние когда изменяются фильтры
+  useEffect(() => {
+    setFilteredCocktails(filteredCocktailsData);
+    setDisplayedItems(ITEMS_PER_LOAD);
+  }, [filteredCocktailsData]);
 
-  const handleSearch = () => {
-    // Поиск происходит автоматически через useEffect
-  };
+  // Получаем отображаемые коктейли с учетом лимита - мемоизировано
+  const displayedCocktails = useMemo(() => {
+    return filteredCocktails.slice(0, displayedItems);
+  }, [filteredCocktails, displayedItems]);
 
-  const handleLoadMore = () => {
+  const handleSearch = useCallback(() => {
+    // Поиск происходит автоматически через useMemo
+  }, []);
+
+  const handleLoadMore = useCallback(() => {
     setDisplayedItems(prev => prev + ITEMS_PER_LOAD);
-  };
+  }, []);
 
-  const handleFavorite = (cocktailId: string, isFavorite: boolean) => {
+  const handleFavorite = useCallback((cocktailId: string, isFavorite: boolean) => {
     const newFavorites = new Set(userFavorites);
     if (isFavorite) {
       newFavorites.delete(cocktailId);
@@ -187,7 +196,7 @@ export default function Catalog() {
       title: isFavorite ? "Удалено из избранного" : "Добавлено в избранное",
       description: isFavorite ? "Рецепт удален из избранного" : "Рецепт добавлен в избранное",
     });
-  };
+  }, [userFavorites, toast]);
 
   return (
     <div className="min-h-screen bg-night-blue text-ice-white">
@@ -274,7 +283,10 @@ export default function Catalog() {
           ) : (
             <>
               {/* Адаптивная сетка: 1 на мобильных, 2 на планшетах, 3 на десктопе */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 justify-items-center">
+              <div 
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 justify-items-center"
+                style={{ containIntrinsicSize: '300px 400px', contentVisibility: 'auto' }}
+              >
                 {displayedCocktails.map((cocktail) => (
                   <CocktailCard
                     key={cocktail.id}
