@@ -371,7 +371,7 @@ export default function PopularRecipesSection() {
   const [swiperRef, setSwiperRef] = useState<any>(null);
 
   return (
-    <section className="py-24 bg-[#0C0C0F] relative overflow-hidden max-[480px]:py-8">
+    <section className="py-12 bg-[#0C0C0F] relative overflow-hidden max-[480px]:py-4">
       {/* Background gradient effects */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 blur-sm" />
