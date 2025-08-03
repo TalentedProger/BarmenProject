@@ -282,11 +282,11 @@ export default function RecipePage() {
           {/* Equipment Section - Left side */}
           <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
             <h2 className="text-3xl font-bold text-white mb-8 text-center">Что потребуется ?</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 mb-6">
               {recipe.equipment.map((item, index) => (
-                <div key={index} className="text-center p-6 bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105">
-                  <div className="text-5xl mb-4 transform hover:scale-110 transition-transform duration-200">{item.icon}</div>
-                  <div className="text-white font-semibold text-lg">{item.name}</div>
+                <div key={index} className="text-center p-4 bg-gradient-to-br from-white/5 to-white/10 rounded-xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105">
+                  <div className="text-4xl mb-3 transform hover:scale-110 transition-transform duration-200">{item.icon}</div>
+                  <div className="text-white font-semibold text-base">{item.name}</div>
                 </div>
               ))}
             </div>
@@ -319,7 +319,7 @@ export default function RecipePage() {
               </div>
             </div>
 
-            <div className="text-center mt-8">
+            <div className="text-center mt-4">
               <Button
                 onClick={() => window.open(recipe.videoUrl, '_blank')}
                 className="bg-gradient-to-r from-purple-600/90 to-cyan-600/90 hover:from-purple-500/90 hover:to-cyan-500/90 px-12 py-6 text-xl font-semibold rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300 border border-white/30 backdrop-blur-sm"
@@ -358,20 +358,27 @@ export default function RecipePage() {
                     }
                   }}
                 >
-                  {/* Квадратный контейнер с центрированным заголовком */}
-                  <div className="aspect-square max-w-md mx-auto mb-6 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 rounded-2xl flex flex-col items-center justify-center p-8">
-                    <div className="text-6xl mb-4 transform transition-all duration-300 hover:scale-125 hover:rotate-12">
-                      {step.icon}
+                  {/* Квадратный контейнер с заголовком вверху и описанием внизу */}
+                  <div className="aspect-square max-w-md mx-auto bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 rounded-2xl flex flex-col p-8">
+                    {/* Заголовок в верхней части */}
+                    <div className="text-center mb-4">
+                      <div className="text-cyan-300 text-lg font-medium mb-2">Шаг {step.step}</div>
+                      <div className="text-white text-xl font-semibold">{step.text}</div>
                     </div>
-                    <div className="text-cyan-300 text-lg font-medium mb-2">Шаг {step.step}</div>
-                    <div className="text-white text-2xl font-semibold text-center">{step.text}</div>
-                  </div>
-                  
-                  {/* Описание шага */}
-                  <div className="text-center max-w-2xl mx-auto">
-                    <p className="text-zinc-300 text-lg leading-relaxed">
-                      {step.description || "Следуйте инструкции выше для выполнения данного шага приготовления коктейля."}
-                    </p>
+                    
+                    {/* Иконка в центре */}
+                    <div className="flex-1 flex items-center justify-center">
+                      <div className="text-6xl transform transition-all duration-300 hover:scale-125 hover:rotate-12">
+                        {step.icon}
+                      </div>
+                    </div>
+                    
+                    {/* Описание в нижней части */}
+                    <div className="text-center mt-4">
+                      <p className="text-zinc-300 text-sm leading-relaxed">
+                        Следуйте инструкции выше для выполнения данного шага приготовления коктейля.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -387,22 +394,22 @@ export default function RecipePage() {
 
         {/* Social Functions - адаптивная компоновка */}
         <section className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-          <div className="text-white mb-6 text-xl font-medium text-center">Ваша оценка</div>
+          <div className="text-white max-[800px]:mb-3 min-[800px]:mb-6 text-xl font-medium text-center">Ваша оценка</div>
           
           {/* Адаптивная компоновка для рейтинга и кнопок */}
-          <div className="flex flex-col max-[800px]:space-y-6 min-[800px]:flex-row min-[800px]:items-center min-[800px]:justify-between min-[800px]:space-y-0">
+          <div className="flex flex-col max-[800px]:space-y-8 min-[800px]:flex-row min-[800px]:items-center min-[800px]:justify-between min-[800px]:space-y-0">
             
             {/* Кнопка "В избранное" - слева на больших экранах */}
-            <div className="min-[800px]:order-1 max-[800px]:order-2">
+            <div className="min-[800px]:order-1 max-[800px]:order-2 max-[800px]:w-[60%] max-[800px]:mx-auto">
               <Button
                 onClick={() => setIsFavorite(!isFavorite)}
                 className={`${
                   isFavorite
-                    ? 'bg-gradient-to-r from-pink-500 to-fuchsia-500 hover:from-pink-600 hover:to-fuchsia-600'
-                    : 'bg-gradient-to-r from-pink-500/20 to-fuchsia-500/20 hover:from-pink-500/30 hover:to-fuchsia-500/30 border-2 border-pink-400/50'
+                    ? 'bg-gradient-to-r from-neon-purple to-purple-500 hover:from-purple-600 hover:to-purple-700'
+                    : 'bg-gradient-to-r from-neon-purple/20 to-purple-500/20 hover:from-neon-purple/30 hover:to-purple-500/30 border-2 border-purple-400/50'
                 } backdrop-blur-sm px-6 py-3 text-base font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 w-full min-[800px]:w-auto min-[800px]:min-w-[160px]`}
                 style={{
-                  boxShadow: '0 0 20px rgba(236, 72, 153, 0.4), 0 0 40px rgba(217, 70, 239, 0.2)'
+                  boxShadow: '0 0 20px rgba(168, 85, 247, 0.4), 0 0 40px rgba(139, 69, 193, 0.2)'
                 }}
               >
                 <Heart className={`w-5 h-5 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
@@ -434,11 +441,11 @@ export default function RecipePage() {
             </div>
 
             {/* Кнопка "Поделиться" - справа на больших экранах */}
-            <div className="min-[800px]:order-3 max-[800px]:order-3">
+            <div className="min-[800px]:order-3 max-[800px]:order-3 max-[800px]:w-[60%] max-[800px]:mx-auto">
               <Button 
-                className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/30 hover:to-blue-500/30 backdrop-blur-sm border-2 border-cyan-400/50 px-6 py-3 text-base font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 w-full min-[800px]:w-auto min-[800px]:min-w-[160px]"
+                className="bg-gradient-to-r from-neon-turquoise/20 to-electric/20 hover:from-neon-turquoise/30 hover:to-electric/30 backdrop-blur-sm border-2 border-cyan-400/50 px-6 py-3 text-base font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 w-full min-[800px]:w-auto min-[800px]:min-w-[160px]"
                 style={{
-                  boxShadow: '0 0 20px rgba(6, 182, 212, 0.4), 0 0 40px rgba(59, 130, 246, 0.2)'
+                  boxShadow: '0 0 20px rgba(0, 255, 255, 0.4), 0 0 40px rgba(54, 152, 255, 0.2)'
                 }}
               >
                 <Share2 className="w-5 h-5 mr-2" />
