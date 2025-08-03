@@ -49,7 +49,7 @@ const CocktailCard = ({
   };
 
   return (
-    <Card className="group relative overflow-hidden glass-effect border-none shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-b from-slate-800/50 to-slate-900/50">
+    <Card className="group relative overflow-hidden glass-effect border-none shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-b from-slate-800/50 to-slate-900/50 w-full max-w-sm mx-auto">
       {/* Фоновое изображение */}
       <div className="absolute inset-0">
         <img 
@@ -72,19 +72,19 @@ const CocktailCard = ({
         />
       </Button>
 
-      <CardContent className="relative z-10 p-0 h-80 flex flex-col">
-        {/* Заголовок и описание */}
-        <div className="bg-black/40 backdrop-blur-sm p-4 text-center border-b border-white/10">
-          <h3 className="text-white text-xl font-bold mb-1 drop-shadow-lg">
+      <CardContent className="relative z-10 p-0 h-[420px] sm:h-[400px] flex flex-col">
+        {/* Заголовок и описание - более компактный */}
+        <div className="bg-black/60 backdrop-blur-sm p-3 text-center border-b border-white/10">
+          <h3 className="text-white text-lg font-bold mb-1 drop-shadow-lg">
             {cocktail.name}
           </h3>
-          <p className="text-white/90 text-sm italic line-clamp-2 drop-shadow-md">
+          <p className="text-white/90 text-xs italic line-clamp-1 drop-shadow-md">
             {cocktail.description}
           </p>
         </div>
 
         {/* Теги */}
-        <div className="flex flex-wrap gap-1 p-3 min-h-[60px] items-start">
+        <div className="flex flex-wrap gap-1 p-2 min-h-[50px] items-start">
           <span className={`px-2 py-1 rounded-full text-xs font-medium bg-neon-amber/20 text-neon-amber border border-neon-amber/30`}>
             {getCategoryLabel(cocktail.category)}
           </span>
@@ -96,34 +96,31 @@ const CocktailCard = ({
         {/* Спейсер */}
         <div className="flex-1" />
 
-        {/* Статистика */}
-        <div className="bg-black/40 backdrop-blur-sm p-4 space-y-2">
-          <div className="flex justify-between items-center text-sm">
-            <span className="text-white/70">Крепость:</span>
-            <span className="text-neon-turquoise font-semibold">{cocktail.abv}%</span>
+        {/* Статистика - без прозрачного фона и в новом формате */}
+        <div className="p-3 space-y-2">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-white/90 font-medium">Крепость: <span className="text-neon-turquoise font-semibold">{cocktail.abv}%</span></span>
           </div>
-          <div className="flex justify-between items-center text-sm">
-            <span className="text-white/70">Объем:</span>
-            <span className="text-neon-purple font-semibold">{cocktail.volume}мл</span>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-white/90 font-medium">Объем: <span className="text-neon-purple font-semibold">{cocktail.volume}мл</span></span>
           </div>
-          <div className="flex justify-between items-center text-sm">
-            <span className="text-white/70">Рейтинг:</span>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-white/90 font-medium">Рейтинг: </span>
             <div className="flex items-center space-x-1">
               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
               <span className="text-white font-medium">{cocktail.rating}</span>
               <span className="text-white/60">({cocktail.reviewCount})</span>
             </div>
           </div>
-          <div className="flex justify-between items-center text-sm">
-            <span className="text-white/70">Стоимость:</span>
-            <span className="text-neon-amber font-semibold">{cocktail.cost}₽</span>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-white/90 font-medium">Стоимость: <span className="text-neon-amber font-semibold">{cocktail.cost}₽</span></span>
           </div>
         </div>
 
         {/* Кнопка просмотра */}
-        <div className="p-4">
+        <div className="p-3 pt-2">
           <Link href={`/recipe/${cocktail.id}`}>
-            <Button className="w-full bg-gradient-to-r from-purple-500/90 to-cyan-500/90 text-white font-medium hover:from-purple-600/90 hover:to-cyan-600/90 transition-all duration-200 shadow-lg hover:shadow-xl">
+            <Button className="w-full bg-gradient-to-r from-purple-500/90 to-cyan-500/90 text-white font-medium hover:from-purple-600/90 hover:to-cyan-600/90 transition-all duration-200 shadow-lg hover:shadow-xl text-sm py-2">
               Открыть рецепт
             </Button>
           </Link>
@@ -266,7 +263,7 @@ export default function Catalog() {
           ) : (
             <>
               {/* Адаптивная сетка: 1 на мобильных, 2 на планшетах, 3 на десктопе */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 justify-items-center">
                 {displayedCocktails.map((cocktail) => (
                   <CocktailCard
                     key={cocktail.id}
