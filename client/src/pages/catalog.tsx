@@ -49,14 +49,13 @@ const CocktailCard = ({
   };
 
   return (
-    <Card className="group relative overflow-hidden glass-effect border-none shadow-xl hover:shadow-2xl transition-all duration-300 bg-gradient-to-b from-slate-800/50 to-slate-900/50 w-full max-w-sm mx-auto">
+    <Card className="cocktail-card group relative overflow-hidden glass-effect border-none shadow-xl transition-all duration-500 bg-gradient-to-b from-slate-800/50 to-slate-900/50 w-full max-w-sm mx-auto">
       {/* Фоновое изображение */}
       <div className="absolute inset-0">
         <img 
           src={cocktail.image} 
           alt={cocktail.name}
-          className="w-full h-full object-cover transition-transform duration-300"
-          id="cocktail-image"
+          className="cocktail-image w-full h-full object-cover transition-transform duration-400"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
       </div>
@@ -124,44 +123,12 @@ const CocktailCard = ({
         <div className="p-3 pt-2 flex justify-center">
           <Link href={`/recipe/${cocktail.id}`} className="w-3/5">
             <Button 
-              className="w-full text-white font-medium transition-all duration-500 text-sm py-2 rounded-lg shadow-lg hover:shadow-2xl relative overflow-hidden group"
+              className="recipe-button w-full text-white font-medium transition-all duration-500 text-sm py-2 rounded-lg shadow-lg relative overflow-hidden"
               style={{
                 background: 'linear-gradient(45deg, rgba(139, 69, 255, 0.9), rgba(0, 247, 239, 0.9), rgba(255, 20, 147, 0.9), rgba(139, 69, 255, 0.9))',
                 backgroundSize: '300% 300%',
                 animation: 'shimmer 3s ease-in-out infinite',
                 boxShadow: '0 4px 15px rgba(139, 69, 255, 0.4), 0 2px 8px rgba(0, 247, 239, 0.3)'
-              }}
-              onMouseEnter={(e) => {
-                const button = e.currentTarget;
-                const card = button.closest('.group') as HTMLElement;
-                if (card) {
-                  // Увеличиваем контейнер карточки
-                  card.style.transform = 'scale(1.05)';
-                  card.style.transition = 'transform 0.4s ease';
-                  
-                  // Увеличиваем картинку
-                  const img = card.querySelector('#cocktail-image') as HTMLImageElement;
-                  if (img) {
-                    img.style.transform = 'scale(1.1)';
-                    img.style.transition = 'transform 0.3s ease';
-                  }
-                }
-              }}
-              onMouseLeave={(e) => {
-                const button = e.currentTarget;
-                const card = button.closest('.group') as HTMLElement;
-                if (card) {
-                  // Возвращаем контейнер карточки к нормальному размеру
-                  card.style.transform = 'scale(1)';
-                  card.style.transition = 'transform 0.4s ease';
-                  
-                  // Возвращаем картинку к нормальному размеру
-                  const img = card.querySelector('#cocktail-image') as HTMLImageElement;
-                  if (img) {
-                    img.style.transform = 'scale(1)';
-                    img.style.transition = 'transform 0.3s ease';
-                  }
-                }
               }}
             >
               <span className="relative z-10">Открыть рецепт</span>
