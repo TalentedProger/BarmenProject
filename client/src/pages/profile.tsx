@@ -350,12 +350,12 @@ export default function Profile() {
                             onChange={handlePhotoUpload}
                           />
                         </div>
-                        <div className="flex gap-2 justify-center mt-6">
+                        <div className="flex gap-2 mt-6">
                           <Button
                             size="sm"
                             onClick={handleSaveProfile}
                             disabled={updateProfileMutation.isPending}
-                            className="bg-gradient-to-r from-neon-turquoise to-electric text-black"
+                            className="flex-1 bg-gradient-to-r from-neon-turquoise to-electric text-black"
                           >
                             <Save className="h-4 w-4 mr-1" />
                             Сохранить
@@ -367,7 +367,7 @@ export default function Profile() {
                               setEditingProfile(false);
                               setNickname((user as any)?.nickname || '');
                             }}
-                            className="border-white/20 text-white hover:bg-white/10"
+                            className="flex-1 border-white/20 text-white hover:bg-white/10"
                           >
                             Отмена
                           </Button>
