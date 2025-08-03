@@ -277,19 +277,52 @@ export default function RecipePage() {
           </div>
         </section>
 
-        {/* Video Section - убрал темный фон */}
-        <section className="text-center">
-          <h2 className="text-3xl font-bold text-white mb-8">📽 Видео приготовления</h2>
-          <div className="relative max-w-2xl mx-auto">
-            <div className="aspect-video bg-gradient-to-br from-purple-900/30 to-cyan-900/30 rounded-2xl flex items-center justify-center border-2 border-white/20 backdrop-blur-md overflow-hidden">
-              {/* Background pattern */}
-              <div className="absolute inset-0 opacity-20">
-                <div className="w-full h-full bg-gradient-to-br from-white/5 to-transparent"></div>
+        {/* Main Content Grid - Equipment and Video */}
+        <section className="grid lg:grid-cols-2 gap-8">
+          {/* Equipment Section - Left side */}
+          <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+            <h2 className="text-3xl font-bold text-white mb-8 text-center">Что потребуется ?</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+              {recipe.equipment.map((item, index) => (
+                <div key={index} className="text-center p-6 bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105">
+                  <div className="text-5xl mb-4 transform hover:scale-110 transition-transform duration-200">{item.icon}</div>
+                  <div className="text-white font-semibold text-lg">{item.name}</div>
+                </div>
+              ))}
+            </div>
+            
+            {/* Единая кнопка Посетить магазин */}
+            <div className="text-center">
+              <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 px-8 py-4 text-lg font-semibold rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 border border-orange-400/30"
+                style={{
+                  boxShadow: '0 0 20px rgba(234, 88, 12, 0.4)'
+                }}
+              >
+                <ShoppingCart className="w-6 h-6 mr-3" />
+                Посетить магазин
+              </Button>
+            </div>
+          </div>
+
+          {/* Video Section - Right side */}
+          <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10 flex flex-col">
+            <h2 className="text-3xl font-bold text-white mb-8 text-center">📽 Видео приготовления</h2>
+            
+            <div className="flex-1 flex items-center justify-center">
+              <div className="relative w-full max-w-lg">
+                <div className="aspect-video bg-gradient-to-br from-purple-900/30 to-cyan-900/30 rounded-2xl flex items-center justify-center border-2 border-white/20 backdrop-blur-md overflow-hidden">
+                  {/* Background pattern */}
+                  <div className="absolute inset-0 opacity-20">
+                    <div className="w-full h-full bg-gradient-to-br from-white/5 to-transparent"></div>
+                  </div>
+                </div>
               </div>
-              
+            </div>
+
+            <div className="text-center mt-8">
               <Button
                 onClick={() => window.open(recipe.videoUrl, '_blank')}
-                className="relative z-10 bg-gradient-to-r from-purple-600/90 to-cyan-600/90 hover:from-purple-500/90 hover:to-cyan-500/90 px-12 py-6 text-xl font-semibold rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300 border border-white/30 backdrop-blur-sm"
+                className="bg-gradient-to-r from-purple-600/90 to-cyan-600/90 hover:from-purple-500/90 hover:to-cyan-500/90 px-12 py-6 text-xl font-semibold rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300 border border-white/30 backdrop-blur-sm"
                 style={{
                   boxShadow: '0 0 30px rgba(168, 85, 247, 0.4), 0 0 60px rgba(6, 182, 212, 0.2)'
                 }}
@@ -301,13 +334,13 @@ export default function RecipePage() {
           </div>
         </section>
 
-        {/* Recipe Steps - убрал фон, добавил свайп-навигацию */}
+        {/* Recipe Steps - квадратные карточки с описанием */}
         <section>
           <h2 className="text-3xl font-bold text-white mb-4 text-center">Пошаговый рецепт</h2>
           <p className="text-zinc-400 text-center mb-8 text-sm">
-            Свайпните снизу вверх для перехода к следующему шагу
+            Нажмите на карточку для перехода к следующему шагу
           </p>
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             {recipe.steps.map((step, index) => (
               <div
                 key={index}
@@ -316,7 +349,7 @@ export default function RecipePage() {
                 } transition-all duration-500`}
               >
                 <div
-                  className="flex items-center space-x-6 p-6 rounded-2xl bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 cursor-pointer transform hover:scale-[1.02]"
+                  className="cursor-pointer transform hover:scale-[1.02] transition-all duration-300"
                   onClick={() => {
                     if (currentStep < recipe.steps.length) {
                       setCurrentStep(currentStep + 1);
@@ -325,41 +358,24 @@ export default function RecipePage() {
                     }
                   }}
                 >
-                  <div className="text-5xl transform transition-all duration-300 hover:scale-125 hover:rotate-12">
-                    {step.icon}
+                  {/* Квадратный контейнер с центрированным заголовком */}
+                  <div className="aspect-square max-w-md mx-auto mb-6 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 rounded-2xl flex flex-col items-center justify-center p-8">
+                    <div className="text-6xl mb-4 transform transition-all duration-300 hover:scale-125 hover:rotate-12">
+                      {step.icon}
+                    </div>
+                    <div className="text-cyan-300 text-lg font-medium mb-2">Шаг {step.step}</div>
+                    <div className="text-white text-2xl font-semibold text-center">{step.text}</div>
                   </div>
-                  <div className="flex-1">
-                    <div className="text-cyan-300 text-base font-medium mb-1">Шаг {step.step}</div>
-                    <div className="text-white text-xl font-semibold">{step.text}</div>
+                  
+                  {/* Описание шага */}
+                  <div className="text-center max-w-2xl mx-auto">
+                    <p className="text-zinc-300 text-lg leading-relaxed">
+                      {step.description || "Следуйте инструкции выше для выполнения данного шага приготовления коктейля."}
+                    </p>
                   </div>
                 </div>
               </div>
             ))}
-          </div>
-        </section>
-
-        {/* Equipment - убрал кнопки Купить, добавил одну общую */}
-        <section className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">Что потребуется ?</h2>
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            {recipe.equipment.map((item, index) => (
-              <div key={index} className="text-center p-6 bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105">
-                <div className="text-5xl mb-4 transform hover:scale-110 transition-transform duration-200">{item.icon}</div>
-                <div className="text-white font-semibold text-lg">{item.name}</div>
-              </div>
-            ))}
-          </div>
-          
-          {/* Единая кнопка Посетить магазин */}
-          <div className="text-center">
-            <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 px-8 py-4 text-lg font-semibold rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 border border-orange-400/30"
-              style={{
-                boxShadow: '0 0 20px rgba(234, 88, 12, 0.4)'
-              }}
-            >
-              <ShoppingCart className="w-6 h-6 mr-3" />
-              Посетить магазин
-            </Button>
           </div>
         </section>
 
@@ -369,53 +385,66 @@ export default function RecipePage() {
           <TasteRadar taste={recipe.taste} />
         </section>
 
-        {/* Social Functions - переработанная компоновка */}
+        {/* Social Functions - адаптивная компоновка */}
         <section className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-          {/* Rating Section - вверху */}
-          <div className="text-center mb-8">
-            <div className="text-white mb-4 text-xl font-medium">Ваша оценка</div>
-            <div className="flex justify-center space-x-2 mb-4">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <Star
-                  key={star}
-                  className={`w-8 h-8 cursor-pointer transition-all duration-200 transform hover:scale-110 ${
-                    userRating >= star
-                      ? 'fill-yellow-400 text-yellow-400 drop-shadow-lg'
-                      : 'text-white/40 hover:text-yellow-300'
-                  }`}
-                  onClick={() => setUserRating(star)}
-                  style={{ 
-                    filter: userRating >= star ? 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.8))' : 'none'
-                  }}
-                />
-              ))}
+          <div className="text-white mb-6 text-xl font-medium text-center">Ваша оценка</div>
+          
+          {/* Адаптивная компоновка для рейтинга и кнопок */}
+          <div className="flex flex-col max-[800px]:space-y-6 min-[800px]:flex-row min-[800px]:items-center min-[800px]:justify-between min-[800px]:space-y-0">
+            
+            {/* Кнопка "В избранное" - слева на больших экранах */}
+            <div className="min-[800px]:order-1 max-[800px]:order-2">
+              <Button
+                onClick={() => setIsFavorite(!isFavorite)}
+                className={`${
+                  isFavorite
+                    ? 'bg-gradient-to-r from-pink-500 to-fuchsia-500 hover:from-pink-600 hover:to-fuchsia-600'
+                    : 'bg-gradient-to-r from-pink-500/20 to-fuchsia-500/20 hover:from-pink-500/30 hover:to-fuchsia-500/30 border-2 border-pink-400/50'
+                } backdrop-blur-sm px-6 py-3 text-base font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 w-full min-[800px]:w-auto min-[800px]:min-w-[160px]`}
+                style={{
+                  boxShadow: '0 0 20px rgba(236, 72, 153, 0.4), 0 0 40px rgba(217, 70, 239, 0.2)'
+                }}
+              >
+                <Heart className={`w-5 h-5 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
+                {isFavorite ? 'В избранном' : 'В избранное'}
+              </Button>
             </div>
-            <div className="text-white/60 text-sm">
-              {recipe.rating} ({recipe.reviewCount} отзывов)
+
+            {/* Рейтинг звездочками - по центру */}
+            <div className="min-[800px]:order-2 max-[800px]:order-1 text-center">
+              <div className="flex justify-center space-x-2 mb-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className={`w-8 h-8 cursor-pointer transition-all duration-200 transform hover:scale-110 ${
+                      userRating >= star
+                        ? 'fill-yellow-400 text-yellow-400 drop-shadow-lg'
+                        : 'text-white/40 hover:text-yellow-300'
+                    }`}
+                    onClick={() => setUserRating(star)}
+                    style={{ 
+                      filter: userRating >= star ? 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.8))' : 'none'
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="text-white/60 text-sm">
+                {recipe.rating} ({recipe.reviewCount} отзывов)
+              </div>
             </div>
-          </div>
 
-          {/* Buttons - внизу в одну строку */}
-          <div className="flex justify-center space-x-4">
-            <Button
-              onClick={() => setIsFavorite(!isFavorite)}
-              className={`${
-                isFavorite
-                  ? 'bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600'
-                  : 'bg-white/10 hover:bg-white/20'
-              } backdrop-blur-sm border border-white/20 px-5 py-2 text-base font-medium rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex-1 max-w-[140px]`}
-              style={{
-                boxShadow: isFavorite ? '0 0 15px rgba(236, 72, 153, 0.4)' : 'none'
-              }}
-            >
-              <Heart className={`w-4 h-4 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
-              {isFavorite ? 'В избранном' : 'В избранное'}
-            </Button>
-
-            <Button className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 px-5 py-2 text-base font-medium rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex-1 max-w-[140px]">
-              <Share2 className="w-4 h-4 mr-2" />
-              Поделиться
-            </Button>
+            {/* Кнопка "Поделиться" - справа на больших экранах */}
+            <div className="min-[800px]:order-3 max-[800px]:order-3">
+              <Button 
+                className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/30 hover:to-blue-500/30 backdrop-blur-sm border-2 border-cyan-400/50 px-6 py-3 text-base font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 w-full min-[800px]:w-auto min-[800px]:min-w-[160px]"
+                style={{
+                  boxShadow: '0 0 20px rgba(6, 182, 212, 0.4), 0 0 40px rgba(59, 130, 246, 0.2)'
+                }}
+              >
+                <Share2 className="w-5 h-5 mr-2" />
+                Поделиться
+              </Button>
+            </div>
           </div>
         </section>
 
