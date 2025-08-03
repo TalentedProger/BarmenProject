@@ -116,7 +116,7 @@ const CocktailCard = React.memo(({
           </div>
           <div className="flex items-center text-sm">
             <span className="text-white/90 font-medium flex items-center">
-              Рейтинг: <span className="text-white font-medium">{cocktail.rating}</span>
+              Рейтинг: <span className="text-white font-medium ml-1">{cocktail.rating}</span>
               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mx-1" />
               <span className="text-white/60">({cocktail.reviewCount})</span>
             </span>
