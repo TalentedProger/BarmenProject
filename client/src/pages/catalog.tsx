@@ -1,98 +1,184 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
-import RecipeCard from "@/components/recipe/recipe-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { Search, Filter, ChevronDown } from "lucide-react";
-import type { Recipe } from "@shared/schema";
+import { Search, Filter, Star, Heart, Clock, TrendingUp } from "lucide-react";
+import { getCocktails, type CocktailData } from "@/data/cocktails";
+import { Link } from "wouter";
+
+// Компонент карточки коктейля
+const CocktailCard = ({ 
+  cocktail, 
+  isFavorite, 
+  onFavorite 
+}: { 
+  cocktail: CocktailData; 
+  isFavorite: boolean;
+  onFavorite: (id: string, isFavorite: boolean) => void;
+}) => {
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case 'easy': return 'text-green-400';
+      case 'medium': return 'text-yellow-400';
+      case 'hard': return 'text-red-400';
+      default: return 'text-gray-400';
+    }
+  };
+
+  const getCategoryLabel = (category: string) => {
+    switch (category) {
+      case 'classic': return 'Классический';
+      case 'summer': return 'Летний';
+      case 'shot': return 'Шот';
+      case 'nonalcoholic': return 'Безалкогольный';
+      default: return category;
+    }
+  };
+
+  const getDifficultyLabel = (difficulty: string) => {
+    switch (difficulty) {
+      case 'easy': return 'Легкий';
+      case 'medium': return 'Средний';
+      case 'hard': return 'Сложный';
+      default: return difficulty;
+    }
+  };
+
+  return (
+    <Card className="group relative overflow-hidden glass-effect border-none shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-b from-slate-800/50 to-slate-900/50">
+      {/* Фоновое изображение */}
+      <div className="absolute inset-0">
+        <img 
+          src={cocktail.image} 
+          alt={cocktail.name}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
+      </div>
+
+      {/* Кнопка избранного */}
+      <Button
+        variant="ghost"
+        size="sm"
+        className="absolute top-3 right-3 z-10 h-8 w-8 p-0 bg-black/30 hover:bg-black/50 backdrop-blur-sm"
+        onClick={() => onFavorite(cocktail.id, isFavorite)}
+      >
+        <Heart 
+          className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-white'}`} 
+        />
+      </Button>
+
+      <CardContent className="relative z-10 p-0 h-80 flex flex-col">
+        {/* Заголовок и описание */}
+        <div className="bg-black/40 backdrop-blur-sm p-4 text-center border-b border-white/10">
+          <h3 className="text-white text-xl font-bold mb-1 drop-shadow-lg">
+            {cocktail.name}
+          </h3>
+          <p className="text-white/90 text-sm italic line-clamp-2 drop-shadow-md">
+            {cocktail.description}
+          </p>
+        </div>
+
+        {/* Теги */}
+        <div className="flex flex-wrap gap-1 p-3 min-h-[60px] items-start">
+          <span className={`px-2 py-1 rounded-full text-xs font-medium bg-neon-amber/20 text-neon-amber border border-neon-amber/30`}>
+            {getCategoryLabel(cocktail.category)}
+          </span>
+          <span className={`px-2 py-1 rounded-full text-xs font-medium bg-white/10 border border-white/20 ${getDifficultyColor(cocktail.difficulty)}`}>
+            {getDifficultyLabel(cocktail.difficulty)}
+          </span>
+        </div>
+
+        {/* Спейсер */}
+        <div className="flex-1" />
+
+        {/* Статистика */}
+        <div className="bg-black/40 backdrop-blur-sm p-4 space-y-2">
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-white/70">Крепость:</span>
+            <span className="text-neon-turquoise font-semibold">{cocktail.abv}%</span>
+          </div>
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-white/70">Объем:</span>
+            <span className="text-neon-purple font-semibold">{cocktail.volume}мл</span>
+          </div>
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-white/70">Рейтинг:</span>
+            <div className="flex items-center space-x-1">
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              <span className="text-white font-medium">{cocktail.rating}</span>
+              <span className="text-white/60">({cocktail.reviewCount})</span>
+            </div>
+          </div>
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-white/70">Стоимость:</span>
+            <span className="text-neon-amber font-semibold">{cocktail.cost}₽</span>
+          </div>
+        </div>
+
+        {/* Кнопка просмотра */}
+        <div className="p-4">
+          <Link href={`/recipe/${cocktail.id}`}>
+            <Button className="w-full bg-gradient-to-r from-purple-500/90 to-cyan-500/90 text-white font-medium hover:from-purple-600/90 hover:to-cyan-600/90 transition-all duration-200 shadow-lg hover:shadow-xl">
+              Открыть рецепт
+            </Button>
+          </Link>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
 export default function Catalog() {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
-  const [currentPage, setCurrentPage] = useState(0);
+  const [displayedItems, setDisplayedItems] = useState(12);
   const [userFavorites, setUserFavorites] = useState<Set<string>>(new Set());
+  const [filteredCocktails, setFilteredCocktails] = useState<CocktailData[]>([]);
 
-  const ITEMS_PER_PAGE = 12;
+  const ITEMS_PER_LOAD = 12;
 
-  // Fetch recipes
-  const { data: recipes = [], isLoading: recipesLoading, refetch } = useQuery<Recipe[]>({
-    queryKey: ["/api/recipes", {
-      search: searchQuery,
-      category: selectedCategory === "all" ? "" : selectedCategory,
-      difficulty: selectedDifficulty === "all" ? "" : selectedDifficulty,
-      limit: ITEMS_PER_PAGE,
-      offset: currentPage * ITEMS_PER_PAGE
-    }],
-  });
-
-  // Demo mode - no user favorites (authentication removed)
-  const favorites: string[] = [];
-
+  // Получаем отфильтрованные коктейли
   useEffect(() => {
-    if (favorites) {
-      setUserFavorites(new Set(favorites));
-    }
-  }, [favorites]);
-
-  // Demo mode - simulate favorite toggle without backend
-  const favoriteMutation = useMutation({
-    mutationFn: async ({ recipeId, isFavorite }: { recipeId: string; isFavorite: boolean }) => {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 300));
-      return { recipeId, isFavorite };
-    },
-    onSuccess: (_, { recipeId, isFavorite }) => {
-      const newFavorites = new Set(userFavorites);
-      if (isFavorite) {
-        newFavorites.delete(recipeId);
-      } else {
-        newFavorites.add(recipeId);
-      }
-      setUserFavorites(newFavorites);
-      
-      toast({
-        title: isFavorite ? "Удалено из избранного" : "Добавлено в избранное",
-        description: isFavorite ? "Рецепт удален из избранного (демо режим)" : "Рецепт добавлен в избранное (демо режим)",
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "Ошибка",
-        description: "Не удалось обновить избранное. Попробуйте еще раз.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const handleFavorite = (recipeId: string) => {
-    const isFavorite = userFavorites.has(recipeId);
-    favoriteMutation.mutate({ recipeId, isFavorite });
-  };
-
-  const handleViewRecipe = (recipeId: string) => {
-    // In a real app, this would navigate to recipe detail page
-    toast({
-      title: "Функция в разработке",
-      description: "Просмотр детальной информации о рецепте будет доступен в следующих версиях",
+    const filtered = getCocktails({
+      search: searchQuery,
+      category: selectedCategory === "all" ? undefined : selectedCategory,
+      difficulty: selectedDifficulty === "all" ? undefined : selectedDifficulty,
     });
-  };
+    setFilteredCocktails(filtered);
+    setDisplayedItems(ITEMS_PER_LOAD);
+  }, [searchQuery, selectedCategory, selectedDifficulty]);
+
+  // Получаем отображаемые коктейли с учетом лимита
+  const displayedCocktails = filteredCocktails.slice(0, displayedItems);
 
   const handleSearch = () => {
-    setCurrentPage(0);
-    refetch();
+    // Поиск происходит автоматически через useEffect
   };
 
   const handleLoadMore = () => {
-    setCurrentPage(prev => prev + 1);
+    setDisplayedItems(prev => prev + ITEMS_PER_LOAD);
+  };
+
+  const handleFavorite = (cocktailId: string, isFavorite: boolean) => {
+    const newFavorites = new Set(userFavorites);
+    if (isFavorite) {
+      newFavorites.delete(cocktailId);
+    } else {
+      newFavorites.add(cocktailId);
+    }
+    setUserFavorites(newFavorites);
+    
+    toast({
+      title: isFavorite ? "Удалено из избранного" : "Добавлено в избранное",
+      description: isFavorite ? "Рецепт удален из избранного" : "Рецепт добавлен в избранное",
+    });
   };
 
   return (
@@ -171,52 +257,38 @@ export default function Catalog() {
             </CardContent>
           </Card>
 
-          {/* Recipe Grid */}
-          {recipesLoading && currentPage === 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {[...Array(8)].map((_, index) => (
-                <Card key={index} className="glass-effect border-none animate-pulse">
-                  <div className="w-full h-48 bg-gray-700 rounded-t-lg"></div>
-                  <CardContent className="p-4">
-                    <div className="h-6 bg-gray-700 rounded mb-2"></div>
-                    <div className="h-4 bg-gray-700 rounded mb-3"></div>
-                    <div className="flex justify-between">
-                      <div className="h-4 bg-gray-700 rounded w-16"></div>
-                      <div className="h-4 bg-gray-700 rounded w-12"></div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : recipes.length === 0 ? (
+          {/* Cocktails Grid */}
+          {filteredCocktails.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-400 text-lg">Рецепты не найдены</p>
               <p className="text-gray-500 mt-2">Попробуйте изменить параметры поиска</p>
             </div>
           ) : (
             <>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {recipes.map((recipe) => (
-                  <RecipeCard
-                    key={recipe.id}
-                    recipe={recipe}
+              {/* Адаптивная сетка: 1 на мобильных, 2 на планшетах, 3 на десктопе */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayedCocktails.map((cocktail) => (
+                  <CocktailCard
+                    key={cocktail.id}
+                    cocktail={cocktail}
                     onFavorite={handleFavorite}
-                    onView={handleViewRecipe}
-                    isFavorite={userFavorites.has(recipe.id)}
+                    isFavorite={userFavorites.has(cocktail.id)}
                   />
                 ))}
               </div>
 
               {/* Load More Button */}
-              {recipes.length === ITEMS_PER_PAGE && (
+              {displayedItems < filteredCocktails.length && (
                 <div className="text-center mt-12">
                   <Button
                     onClick={handleLoadMore}
-                    disabled={recipesLoading}
-                    className="glow-button bg-neon-purple text-night-blue px-8 py-3 hover:bg-neon-purple/90"
+                    className="glow-button bg-neon-purple text-night-blue px-8 py-3 hover:bg-neon-purple/90 font-semibold rounded-xl shadow-lg"
+                    style={{
+                      boxShadow: '0 0 15px rgba(139, 69, 255, 0.4), 0 0 30px rgba(139, 69, 255, 0.2), 0 8px 20px rgba(0, 0, 0, 0.3)'
+                    }}
                   >
-                    <ChevronDown className="mr-2 h-4 w-4" />
-                    {recipesLoading ? "Загрузка..." : "Показать еще"}
+                    <TrendingUp className="mr-2 h-4 w-4" />
+                    Показать еще ({filteredCocktails.length - displayedItems} осталось)
                   </Button>
                 </div>
               )}

@@ -426,3 +426,30 @@
     opacity: 1;
   }
 }
+
+/* Адаптивные стили для каталога коктейлей */
+@media (max-width: 640px) {
+  .mobile-compact {
+    @apply text-sm p-3;
+  }
+  
+  .mobile-hidden {
+    @apply hidden;
+  }
+  
+  .mobile-stack {
+    @apply flex-col space-y-2 space-x-0;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1023px) {
+  .tablet-responsive {
+    @apply grid-cols-2 gap-4;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktop-responsive {
+    @apply grid-cols-3 gap-6;
+  }
+}
