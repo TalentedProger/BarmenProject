@@ -99,10 +99,10 @@ export default function Landing() {
               ) : isAuthenticated && user ? (
                 <Button 
                   variant="ghost" 
-                  className="flex items-center space-x-2 hover:bg-white/10 p-2 rounded-lg transition-all duration-300 hover:scale-105"
+                  className="flex items-center space-x-2 hover:bg-white/10 p-2 rounded-lg transition-all duration-300 hover:scale-105 md:justify-start justify-end"
                   onClick={() => window.location.href = "/profile"}
                 >
-                  <Avatar className="h-8 w-8">
+                  <Avatar className="h-8 w-8 shadow-sm shadow-black/30 ring-1 ring-white/10">
                     <AvatarImage 
                       src={(user as any)?.profileImageUrl} 
                       alt={(user as any)?.nickname || "User"} 
@@ -111,7 +111,7 @@ export default function Landing() {
                       {(user as any)?.nickname?.charAt(0)?.toUpperCase() || (user as any)?.email?.charAt(0)?.toUpperCase() || 'U'}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-white font-medium">
+                  <span className="text-white font-medium hidden md:inline">
                     {(user as any)?.nickname || 'Пользователь'}
                   </span>
                 </Button>

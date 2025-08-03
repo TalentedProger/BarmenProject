@@ -107,14 +107,14 @@ export default function Header() {
               ) : isAuthenticated && user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="flex items-center space-x-2 hover:bg-white/10">
-                      <Avatar className="h-8 w-8">
+                    <Button variant="ghost" className="flex items-center space-x-2 hover:bg-white/10 md:justify-start justify-end">
+                      <Avatar className="h-8 w-8 shadow-sm shadow-black/30 ring-1 ring-white/10">
                         <AvatarImage src={userDisplayData?.profileImageUrl || undefined} alt={userDisplayData?.nickname || "User"} />
                         <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
                           {userDisplayData?.avatar}
                         </AvatarFallback>
                       </Avatar>
-                      <span className="text-white font-medium">
+                      <span className="text-white font-medium hidden md:inline">
                         {userDisplayData?.nickname}
                       </span>
                     </Button>
@@ -168,7 +168,7 @@ export default function Header() {
                     ) : isAuthenticated && user ? (
                       <>
                         <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-lg mb-3">
-                          <Avatar className="h-10 w-10">
+                          <Avatar className="h-10 w-10 shadow-sm shadow-black/30 ring-1 ring-white/10">
                             <AvatarImage src={(user as any)?.profileImageUrl || undefined} alt={(user as any)?.nickname || "User"} />
                             <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
                               {(user as any)?.nickname?.charAt(0) || (user as any)?.email?.charAt(0) || 'U'}
