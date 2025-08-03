@@ -7,10 +7,12 @@ export function useAuth() {
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
+  const isAuthenticated = !!user && !error;
+
   return {
     user,
     isLoading,
-    isAuthenticated: !!user && !error,
+    isAuthenticated,
     error,
   };
 }

@@ -8,10 +8,21 @@ import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useCallback, useMemo } from "react";
 
 export default function Header() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
+
+  const userDisplayData = useMemo(() => {
+    if (!user) return null;
+    return {
+      nickname: (user as any)?.nickname || 'Пользователь',
+      email: (user as any)?.email || '',
+      profileImageUrl: (user as any)?.profileImageUrl,
+      avatar: (user as any)?.nickname?.charAt(0) || (user as any)?.email?.charAt(0) || 'U'
+    };
+  }, [user]);
 
   const logoutMutation = useMutation({
     mutationFn: handleLogout,
@@ -31,9 +42,9 @@ export default function Header() {
     },
   });
 
-  const handleLogoutClick = () => {
+  const handleLogoutClick = useCallback(() => {
     logoutMutation.mutate();
-  };
+  }, [logoutMutation]);
 
   const NavItems = () => (
     <>
@@ -98,13 +109,13 @@ export default function Header() {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="flex items-center space-x-2 hover:bg-white/10">
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={(user as any)?.profileImageUrl || undefined} alt={(user as any)?.nickname || "User"} />
+                        <AvatarImage src={userDisplayData?.profileImageUrl || undefined} alt={userDisplayData?.nickname || "User"} />
                         <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
-                          {(user as any)?.nickname?.charAt(0) || (user as any)?.email?.charAt(0) || 'U'}
+                          {userDisplayData?.avatar}
                         </AvatarFallback>
                       </Avatar>
                       <span className="text-white font-medium">
-                        {(user as any)?.nickname || 'Пользователь'}
+                        {userDisplayData?.nickname}
                       </span>
                     </Button>
                   </DropdownMenuTrigger>

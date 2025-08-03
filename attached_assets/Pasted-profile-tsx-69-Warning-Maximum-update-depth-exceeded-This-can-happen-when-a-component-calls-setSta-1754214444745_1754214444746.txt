@@ -1,0 +1,39 @@
+profile.tsx:69 Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.
+    at Profile (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit.dev/src/pages/profile.tsx:49:21)
+    at Route (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=79d50edd:323:16)
+    at Switch (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=79d50edd:379:17)
+    at Router
+    at div
+    at Provider (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…unner/workspace/node_modules/.vite/deps/chunk-VJRUVGTI.js?v=79d50edd:38:15)
+    at TooltipProvider (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…rkspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=79d50edd:62:5)
+    at QueryClientProvider (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…rkspace/node_modules/.vite/deps/@tanstack_react-query.js?v=79d50edd:2805:3)
+    at App
+221
+chunk-WERSD76P.js?v=79d50edd:521 Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.
+    at https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…ner/workspace/node_modules/.vite/deps/chunk-KVEAQMMF.js?v=79d50edd:1961:13
+    at https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…node_modules/.vite/deps/@radix-ui_react-dropdown-menu.js?v=79d50edd:142:13
+    at https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…node_modules/.vite/deps/@radix-ui_react-dropdown-menu.js?v=79d50edd:941:13
+    at Provider (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…unner/workspace/node_modules/.vite/deps/chunk-VJRUVGTI.js?v=79d50edd:38:15)
+    at Provider (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…unner/workspace/node_modules/.vite/deps/chunk-VJRUVGTI.js?v=79d50edd:38:15)
+    at Provider (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…unner/workspace/node_modules/.vite/deps/chunk-VJRUVGTI.js?v=79d50edd:38:15)
+    at Popper (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…ner/workspace/node_modules/.vite/deps/chunk-KVEAQMMF.js?v=79d50edd:1953:11)
+    at Menu (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…/node_modules/.vite/deps/@radix-ui_react-dropdown-menu.js?v=79d50edd:96:11)
+    at Provider (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…unner/workspace/node_modules/.vite/deps/chunk-VJRUVGTI.js?v=79d50edd:38:15)
+    at DropdownMenu (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…/node_modules/.vite/deps/@radix-ui_react-dropdown-menu.js?v=79d50edd:907:5)
+    at div
+    at div
+    at div
+    at nav
+    at header
+    at Header (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit.dev/src/components/layout/header.tsx:30:48)
+    at div
+    at Profile (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit.dev/src/pages/profile.tsx:49:21)
+    at Route (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=79d50edd:323:16)
+    at Switch (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=79d50edd:379:17)
+    at Router
+    at div
+    at Provider (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…unner/workspace/node_modules/.vite/deps/chunk-VJRUVGTI.js?v=79d50edd:38:15)
+    at TooltipProvider (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…rkspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=79d50edd:62:5)
+    at QueryClientProvider (https://bb95b527-9c37-4958-98bd-df35d2ebca82-00-2mnvjjlmkgq8j.picard.replit…rkspace/node_modules/.vite/deps/@tanstack_react-query.js?v=79d50edd:2805:3)
+    at App
+﻿

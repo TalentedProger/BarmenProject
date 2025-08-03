@@ -37,7 +37,7 @@ export default function Profile() {
   const [editingProfile, setEditingProfile] = useState(false);
   const [nickname, setNickname] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [location, setLocation] = useLocation();
+  const [, setLocation] = useLocation();
   const { user, isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function Profile() {
   });
 
   useEffect(() => {
-    if (favoriteRecipes) {
+    if (favoriteRecipes?.length > 0) {
       setUserFavorites(new Set(favoriteRecipes.map((recipe: Recipe) => recipe.id)));
     }
   }, [favoriteRecipes]);
