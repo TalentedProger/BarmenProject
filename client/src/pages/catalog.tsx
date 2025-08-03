@@ -49,7 +49,7 @@ const CocktailCard = ({
   };
 
   return (
-    <Card className="group relative overflow-hidden glass-effect border-none shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-b from-slate-800/50 to-slate-900/50 w-full max-w-sm mx-auto">
+    <Card className="group relative overflow-hidden glass-effect border-none shadow-xl hover:shadow-2xl transition-all duration-300 bg-gradient-to-b from-slate-800/50 to-slate-900/50 w-full max-w-sm mx-auto">
       {/* Фоновое изображение */}
       <div className="absolute inset-0">
         <img 
@@ -112,10 +112,7 @@ const CocktailCard = ({
             <span className="text-white/90 font-medium">Объем: <span className="text-neon-purple font-semibold">{cocktail.volume}мл</span></span>
           </div>
           <div className="flex items-center text-sm">
-            <span className="text-white/90 font-medium">Рейтинг: </span>
-            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 ml-1 mr-1" />
-            <span className="text-white font-medium">{cocktail.rating}</span>
-            <span className="text-white/60 ml-1">({cocktail.reviewCount})</span>
+            <span className="text-white/90 font-medium">Рейтинг: <span className="text-white font-medium">{cocktail.rating}</span><Star className="h-4 w-4 fill-yellow-400 text-yellow-400 inline ml-0.5" /><span className="text-white/60">({cocktail.reviewCount})</span></span>
           </div>
           <div className="flex items-center text-sm">
             <span className="text-white/90 font-medium">Стоимость: <span className="text-neon-amber font-semibold">{cocktail.cost}₽</span></span>
@@ -140,6 +137,7 @@ const CocktailCard = ({
                   const img = card.querySelector('img');
                   if (img) {
                     img.style.transform = 'scale(1.1)';
+                    img.style.transition = 'transform 0.3s ease';
                   }
                 }
               }}
@@ -150,6 +148,7 @@ const CocktailCard = ({
                   const img = card.querySelector('img');
                   if (img) {
                     img.style.transform = 'scale(1)';
+                    img.style.transition = 'transform 0.3s ease';
                   }
                 }
               }}
