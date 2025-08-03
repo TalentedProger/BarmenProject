@@ -55,7 +55,7 @@ const CocktailCard = ({
         <img 
           src={cocktail.image} 
           alt={cocktail.name}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-300"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
       </div>
@@ -84,11 +84,18 @@ const CocktailCard = ({
         </div>
 
         {/* Теги */}
-        <div className="flex flex-wrap gap-1 p-2 min-h-[50px] items-start">
-          <span className={`px-2 py-1 rounded-full text-xs font-medium bg-neon-amber/20 text-neon-amber border border-neon-amber/30`}>
+        <div className="flex flex-wrap gap-2 p-2 min-h-[50px] items-start">
+          <span className={`px-3 py-1.5 rounded-full text-xs font-semibold bg-neon-amber/40 text-neon-amber border border-neon-amber/60 shadow-lg`}
+            style={{
+              textShadow: '0 0 8px rgba(255, 193, 7, 0.8)',
+              boxShadow: '0 0 12px rgba(255, 193, 7, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+            }}>
             {getCategoryLabel(cocktail.category)}
           </span>
-          <span className={`px-2 py-1 rounded-full text-xs font-medium bg-white/10 border border-white/20 ${getDifficultyColor(cocktail.difficulty)}`}>
+          <span className={`px-3 py-1.5 rounded-full text-xs font-semibold bg-white/30 border border-white/50 shadow-lg ${getDifficultyColor(cocktail.difficulty)}`}
+            style={{
+              boxShadow: '0 0 12px rgba(255, 255, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+            }}>
             {getDifficultyLabel(cocktail.difficulty)}
           </span>
         </div>
@@ -98,30 +105,57 @@ const CocktailCard = ({
 
         {/* Статистика - без прозрачного фона и в новом формате */}
         <div className="p-3 space-y-2">
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center text-sm">
             <span className="text-white/90 font-medium">Крепость: <span className="text-neon-turquoise font-semibold">{cocktail.abv}%</span></span>
           </div>
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center text-sm">
             <span className="text-white/90 font-medium">Объем: <span className="text-neon-purple font-semibold">{cocktail.volume}мл</span></span>
           </div>
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center text-sm">
             <span className="text-white/90 font-medium">Рейтинг: </span>
-            <div className="flex items-center space-x-1">
-              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-              <span className="text-white font-medium">{cocktail.rating}</span>
-              <span className="text-white/60">({cocktail.reviewCount})</span>
-            </div>
+            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 ml-1 mr-1" />
+            <span className="text-white font-medium">{cocktail.rating}</span>
+            <span className="text-white/60 ml-1">({cocktail.reviewCount})</span>
           </div>
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center text-sm">
             <span className="text-white/90 font-medium">Стоимость: <span className="text-neon-amber font-semibold">{cocktail.cost}₽</span></span>
           </div>
         </div>
 
         {/* Кнопка просмотра */}
-        <div className="p-3 pt-2">
-          <Link href={`/recipe/${cocktail.id}`}>
-            <Button className="w-full bg-gradient-to-r from-purple-500/90 to-cyan-500/90 text-white font-medium hover:from-purple-600/90 hover:to-cyan-600/90 transition-all duration-200 shadow-lg hover:shadow-xl text-sm py-2">
-              Открыть рецепт
+        <div className="p-3 pt-2 flex justify-center">
+          <Link href={`/recipe/${cocktail.id}`} className="w-3/5">
+            <Button 
+              className="w-full text-white font-medium transition-all duration-500 text-sm py-2 rounded-lg shadow-lg hover:shadow-2xl relative overflow-hidden group"
+              style={{
+                background: 'linear-gradient(45deg, rgba(139, 69, 255, 0.9), rgba(0, 247, 239, 0.9), rgba(255, 20, 147, 0.9), rgba(139, 69, 255, 0.9))',
+                backgroundSize: '300% 300%',
+                animation: 'shimmer 3s ease-in-out infinite',
+                boxShadow: '0 4px 15px rgba(139, 69, 255, 0.4), 0 2px 8px rgba(0, 247, 239, 0.3)'
+              }}
+              onMouseEnter={(e) => {
+                const target = e.currentTarget;
+                const card = target.closest('.group');
+                if (card) {
+                  const img = card.querySelector('img');
+                  if (img) {
+                    img.style.transform = 'scale(1.1)';
+                  }
+                }
+              }}
+              onMouseLeave={(e) => {
+                const target = e.currentTarget;
+                const card = target.closest('.group');
+                if (card) {
+                  const img = card.querySelector('img');
+                  if (img) {
+                    img.style.transform = 'scale(1)';
+                  }
+                }
+              }}
+            >
+              <span className="relative z-10">Открыть рецепт</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
             </Button>
           </Link>
         </div>
