@@ -133,8 +133,13 @@ const CocktailCard = ({
               }}
               onMouseEnter={(e) => {
                 const button = e.currentTarget;
-                const card = button.closest('.group');
+                const card = button.closest('.group') as HTMLElement;
                 if (card) {
+                  // Увеличиваем контейнер карточки
+                  card.style.transform = 'scale(1.05)';
+                  card.style.transition = 'transform 0.4s ease';
+                  
+                  // Увеличиваем картинку
                   const img = card.querySelector('#cocktail-image') as HTMLImageElement;
                   if (img) {
                     img.style.transform = 'scale(1.1)';
@@ -144,8 +149,13 @@ const CocktailCard = ({
               }}
               onMouseLeave={(e) => {
                 const button = e.currentTarget;
-                const card = button.closest('.group');
+                const card = button.closest('.group') as HTMLElement;
                 if (card) {
+                  // Возвращаем контейнер карточки к нормальному размеру
+                  card.style.transform = 'scale(1)';
+                  card.style.transition = 'transform 0.4s ease';
+                  
+                  // Возвращаем картинку к нормальному размеру
                   const img = card.querySelector('#cocktail-image') as HTMLImageElement;
                   if (img) {
                     img.style.transform = 'scale(1)';
