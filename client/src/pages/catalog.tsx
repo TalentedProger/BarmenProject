@@ -99,14 +99,14 @@ export default function Catalog() {
     <div className="min-h-screen bg-night-blue text-ice-white">
       <Header />
       
-      <section className="pt-20 pb-16 bg-gradient-to-b from-night-blue to-charcoal">
+      <section className="pt-32 pb-16 bg-gradient-to-b from-night-blue to-charcoal">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4 text-neon-amber">
-              <Search className="inline mr-3 h-10 w-10" />
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-neon-amber via-yellow-400 to-neon-amber bg-clip-text text-transparent" 
+                style={{ textShadow: '0 0 20px rgba(255, 193, 7, 0.5), 0 0 40px rgba(255, 193, 7, 0.3)' }}>
               Каталог Рецептов
             </h2>
-            <p className="text-xl text-cream max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-cream max-w-2xl mx-auto">
               Откройте для себя тысячи проверенных рецептов от профессиональных барменов
             </p>
           </div>
@@ -114,8 +114,8 @@ export default function Catalog() {
           {/* Search and Filters */}
           <Card className="glass-effect border-none mb-8">
             <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1">
+              <div className="flex flex-col gap-4">
+                <div className="w-full">
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
@@ -128,9 +128,9 @@ export default function Catalog() {
                   </div>
                 </div>
                 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex gap-2 sm:gap-3">
                   <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger className="w-[180px] bg-night-blue border-gray-600 focus:border-neon-turquoise">
+                    <SelectTrigger className="flex-1 min-w-0 bg-night-blue border-gray-600 focus:border-neon-turquoise">
                       <SelectValue placeholder="Все категории" />
                     </SelectTrigger>
                     <SelectContent className="bg-night-blue border-gray-600">
@@ -143,7 +143,7 @@ export default function Catalog() {
                   </Select>
                   
                   <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-                    <SelectTrigger className="w-[180px] bg-night-blue border-gray-600 focus:border-neon-turquoise">
+                    <SelectTrigger className="flex-1 min-w-0 bg-night-blue border-gray-600 focus:border-neon-turquoise">
                       <SelectValue placeholder="Любая сложность" />
                     </SelectTrigger>
                     <SelectContent className="bg-night-blue border-gray-600">
@@ -153,12 +153,17 @@ export default function Catalog() {
                       <SelectItem value="hard">Сложная</SelectItem>
                     </SelectContent>
                   </Select>
-                  
+                </div>
+                
+                <div className="flex justify-center">
                   <Button
                     onClick={handleSearch}
-                    className="bg-neon-turquoise text-night-blue hover:bg-neon-turquoise/90"
+                    className="bg-neon-turquoise text-night-blue hover:bg-neon-turquoise/90 px-8 py-3 text-lg font-semibold rounded-xl shadow-lg"
+                    style={{
+                      boxShadow: '0 0 15px rgba(0, 247, 239, 0.4), 0 0 30px rgba(0, 247, 239, 0.2), 0 8px 20px rgba(0, 0, 0, 0.3)'
+                    }}
                   >
-                    <Filter className="mr-2 h-4 w-4" />
+                    <Filter className="mr-2 h-5 w-5" />
                     Поиск
                   </Button>
                 </div>
