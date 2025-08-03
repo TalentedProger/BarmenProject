@@ -136,9 +136,14 @@ export async function setupAuth(app: Express) {
   passport.deserializeUser(async (id: string, done) => {
     try {
       const user = await storage.getUser(id);
+      if (!user) {
+        console.error('Failed to deserialize user out of session');
+        return done(null, false);
+      }
       done(null, user);
     } catch (error) {
-      done(error, null);
+      console.error('Failed to deserialize user out of session:', error);
+      done(null, false);
     }
   });
 
