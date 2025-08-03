@@ -60,7 +60,7 @@ const CocktailCard = React.memo(({
           decoding="async"
           style={{ contentVisibility: 'auto' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 transition-all duration-300" />
       </div>
 
       {/* Кнопка избранного */}
@@ -115,7 +115,11 @@ const CocktailCard = React.memo(({
             <span className="text-white/90 font-medium">Объем: <span className="text-neon-purple font-semibold">{cocktail.volume}мл</span></span>
           </div>
           <div className="flex items-center text-sm">
-            <span className="text-white/90 font-medium">Рейтинг: <span className="text-white font-medium">{cocktail.rating}</span><Star className="h-4 w-4 fill-yellow-400 text-yellow-400 inline ml-0.5" /><span className="text-white/60">({cocktail.reviewCount})</span></span>
+            <span className="text-white/90 font-medium flex items-center">
+              Рейтинг: <span className="text-white font-medium">{cocktail.rating}</span>
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mx-1" />
+              <span className="text-white/60">({cocktail.reviewCount})</span>
+            </span>
           </div>
           <div className="flex items-center text-sm">
             <span className="text-white/90 font-medium">Стоимость: <span className="text-neon-amber font-semibold">{cocktail.cost}₽</span></span>

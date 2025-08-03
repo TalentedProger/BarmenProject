@@ -87,6 +87,12 @@
   transform: scale(1.05);
 }
 
+/* Исправляем темный эффект наложения при увеличении карточки */
+.cocktail-card:has(.recipe-button:hover) .bg-gradient-to-t {
+  transform: scale(1.03);
+  transform-origin: center;
+}
+
 .recipe-button:hover {
   box-shadow: 0 6px 20px rgba(139, 69, 255, 0.5), 0 3px 10px rgba(0, 247, 239, 0.3);
 }
