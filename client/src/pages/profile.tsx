@@ -285,8 +285,8 @@ export default function Profile() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <div className="flex items-center justify-center mb-4">
-                <UserIcon className="mr-3 h-10 w-10 text-pink-800" />
-                <h2 className="font-bold text-pink-800 text-[40px]">
+                <UserIcon className="mr-3 h-8 w-8 text-neon-pink" />
+                <h2 className="font-bold text-neon-pink text-[28px]">
                   Мой Профиль
                 </h2>
               </div>
