@@ -80,7 +80,7 @@ export default function Landing() {
             <div className="flex items-center space-x-3">
               <Button 
                 onClick={handleGetStarted}
-                className="bg-gradient-to-r from-neon-turquoise to-electric text-night-blue px-5 py-1.5 rounded-lg font-semibold hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/30 max-[480px]:hidden"
+                className="bg-gradient-to-r from-neon-turquoise to-electric text-night-blue px-5 py-1.5 rounded-lg font-semibold hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/30 max-[560px]:hidden"
               >
                 <WandSparkles className="mr-2 h-3 w-3" />
                 Начать
