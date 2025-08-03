@@ -350,7 +350,7 @@ export default function Profile() {
                             onChange={handlePhotoUpload}
                           />
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 justify-center mt-6">
                           <Button
                             size="sm"
                             onClick={handleSaveProfile}
