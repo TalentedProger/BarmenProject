@@ -400,7 +400,7 @@ export default function RecipePage() {
           <div className="flex flex-col max-[800px]:space-y-0 min-[800px]:flex-row min-[800px]:items-center min-[800px]:justify-between min-[800px]:space-y-0">
             
             {/* Кнопка "В избранное" - слева на больших экранах */}
-            <div className="min-[800px]:order-1 max-[800px]:order-2 max-[800px]:w-[60%] max-[800px]:mx-auto max-[800px]:mb-4">
+            <div className="min-[800px]:order-1 max-[800px]:order-2 max-[800px]:w-[60%] max-[800px]:mx-auto max-[800px]:mb-4 max-[800px]:mt-4">
               <Button
                 onClick={() => setIsFavorite(!isFavorite)}
                 className={`${
