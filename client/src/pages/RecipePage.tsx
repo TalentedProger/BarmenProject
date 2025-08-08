@@ -48,110 +48,105 @@ const mojitorecipeData = {
   ]
 };
 
-const TasteRadar = ({ taste }: { taste: any }) => {
-  const radius = 80;
-  const centerX = 120;
-  const centerY = 120;
-  
-  const points = [
-    { label: "Сладость", value: taste.sweetness, angle: 0 },
-    { label: "Кислотность", value: taste.sourness, angle: 72 },
-    { label: "Горечь", value: taste.bitterness, angle: 144 },
-    { label: "Крепость", value: taste.strength, angle: 216 },
-    { label: "Освежающая сила", value: taste.refreshing, angle: 288 }
+const TasteSemicircles = ({ taste }: { taste: any }) => {
+  const characteristics = [
+    { label: "Сладость", value: taste.sweetness, color: "#FF006E", shadowColor: "rgba(255, 0, 110, 0.6)" }, // Неоново-розовый
+    { label: "Кислотность", value: taste.sourness, color: "#FFBE0B", shadowColor: "rgba(255, 190, 11, 0.6)" }, // Неоново-желтый
+    { label: "Горечь", value: taste.bitterness, color: "#FB5607", shadowColor: "rgba(251, 86, 7, 0.6)" }, // Неоново-оранжевый
+    { label: "Крепость", value: taste.strength, color: "#8338EC", shadowColor: "rgba(131, 56, 236, 0.6)" }, // Неоново-фиолетовый
+    { label: "Освежающая сила", value: taste.refreshing, color: "#06FFA5", shadowColor: "rgba(6, 255, 165, 0.6)" } // Неоново-зеленый
   ];
 
-  const getCoordinates = (angle: number, distance: number) => {
-    const radian = (angle - 90) * Math.PI / 180;
-    return {
-      x: centerX + distance * Math.cos(radian),
-      y: centerY + distance * Math.sin(radian)
-    };
-  };
+  const SemicircleChart = ({ value, color, shadowColor, label }: { value: number, color: string, shadowColor: string, label: string }) => {
+    const radius = 50;
+    const strokeWidth = 12;
+    const segments = 5;
+    const segmentAngle = 180 / segments; // Полукруг разделен на 5 частей
+    const centerX = 70;
+    const centerY = 70;
 
-  const pathData = points.map((point, index) => {
-    const coords = getCoordinates(point.angle, (point.value / 5) * radius);
-    return `${index === 0 ? 'M' : 'L'} ${coords.x} ${coords.y}`;
-  }).join(' ') + ' Z';
-
-  return (
-    <div className="relative flex items-center justify-center">
-      <svg width="240" height="240" className="mx-auto">
-        {/* Background circles */}
-        {[1, 2, 3, 4, 5].map((level) => (
-          <circle
-            key={level}
-            cx={centerX}
-            cy={centerY}
-            r={(level / 5) * radius}
-            fill="none"
-            stroke="rgba(255, 255, 255, 0.1)"
-            strokeWidth="1"
-          />
-        ))}
-        
-        {/* Axis lines */}
-        {points.map((point) => {
-          const coords = getCoordinates(point.angle, radius);
-          return (
-            <line
-              key={point.label}
-              x1={centerX}
-              y1={centerY}
-              x2={coords.x}
-              y2={coords.y}
-              stroke="rgba(255, 255, 255, 0.2)"
+    return (
+      <div className="flex flex-col items-center">
+        <div className="relative mb-4">
+          <svg width="140" height="80" className="overflow-visible">
+            {/* Фоновые сегменты */}
+            {Array.from({ length: segments }, (_, i) => {
+              const startAngle = i * segmentAngle;
+              const endAngle = (i + 1) * segmentAngle;
+              
+              // Преобразование в радианы и смещение для полукруга (начиная с левой стороны)
+              const startRadian = (180 - startAngle) * Math.PI / 180;
+              const endRadian = (180 - endAngle) * Math.PI / 180;
+              
+              const startX = centerX + radius * Math.cos(startRadian);
+              const startY = centerY - radius * Math.sin(startRadian);
+              const endX = centerX + radius * Math.cos(endRadian);
+              const endY = centerY - radius * Math.sin(endRadian);
+              
+              const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+              
+              const pathData = [
+                `M ${centerX} ${centerY}`,
+                `L ${startX} ${startY}`,
+                `A ${radius} ${radius} 0 ${largeArcFlag} 0 ${endX} ${endY}`,
+                `Z`
+              ].join(' ');
+              
+              const isActive = i < value;
+              
+              return (
+                <path
+                  key={i}
+                  d={pathData}
+                  fill={isActive ? color : "rgba(128, 128, 128, 0.2)"}
+                  stroke={isActive ? color : "rgba(128, 128, 128, 0.4)"}
+                  strokeWidth="1"
+                  filter={isActive ? `drop-shadow(0 0 8px ${shadowColor})` : "none"}
+                  className="transition-all duration-300"
+                />
+              );
+            })}
+            
+            {/* Центральный круг для эстетики */}
+            <circle
+              cx={centerX}
+              cy={centerY}
+              r="8"
+              fill="rgba(255, 255, 255, 0.1)"
+              stroke="rgba(255, 255, 255, 0.3)"
               strokeWidth="1"
             />
-          );
-        })}
+          </svg>
+        </div>
         
-        {/* Data polygon */}
-        <path
-          d={pathData}
-          fill="rgba(6, 182, 212, 0.2)"
-          stroke="rgba(6, 182, 212, 0.8)"
-          strokeWidth="3"
-          filter="drop-shadow(0 0 12px rgba(6, 182, 212, 0.6))"
-        />
-        
-        {/* Data points */}
-        {points.map((point) => {
-          const coords = getCoordinates(point.angle, (point.value / 5) * radius);
-          return (
-            <circle
-              key={point.label}
-              cx={coords.x}
-              cy={coords.y}
-              r="6"
-              fill="#06B6D4"
-              filter="drop-shadow(0 0 8px rgba(6, 182, 212, 0.8))"
-            />
-          );
-        })}
-      </svg>
-      
-      {/* Labels positioned around the circle */}
-      {points.map((point) => {
-        const labelDistance = radius + 30;
-        const coords = getCoordinates(point.angle, labelDistance);
-        return (
-          <div
-            key={point.label}
-            className="absolute text-center"
-            style={{
-              left: coords.x - 40,
-              top: coords.y - 12,
-              width: 80
+        {/* Название характеристики */}
+        <div className="text-center">
+          <div className="text-white font-semibold text-sm mb-1">{label}</div>
+          <div 
+            className="text-lg font-bold"
+            style={{ 
+              color: color,
+              textShadow: `0 0 8px ${shadowColor}`
             }}
           >
-            <div className="text-white font-semibold text-xs mb-1">{point.label}</div>
-            <div className="text-cyan-400 text-sm font-bold" style={{ textShadow: '0 0 6px rgba(6, 182, 212, 0.6)' }}>
-              {point.value}/5
-            </div>
+            {value}/5
           </div>
-        );
-      })}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 justify-items-center">
+      {characteristics.map((char, index) => (
+        <SemicircleChart
+          key={index}
+          value={char.value}
+          color={char.color}
+          shadowColor={char.shadowColor}
+          label={char.label}
+        />
+      ))}
     </div>
   );
 };
@@ -414,7 +409,7 @@ export default function RecipePage() {
         {/* Taste Analysis */}
         <section className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
           <h2 className="text-3xl font-bold text-white mb-8 text-center">🧠 Анализ вкуса</h2>
-          <TasteRadar taste={recipe.taste} />
+          <TasteSemicircles taste={recipe.taste} />
         </section>
 
         {/* Social Functions - адаптивная компоновка */}
