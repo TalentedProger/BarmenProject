@@ -58,37 +58,53 @@ const TasteSemicircles = ({ taste }: { taste: any }) => {
   ];
 
   const SemicircleChart = ({ value, color, shadowColor, label }: { value: number, color: string, shadowColor: string, label: string }) => {
-    const radius = 50;
-    const strokeWidth = 12;
+    const radius = 80;
+    const strokeWidth = 16;
     const segments = 5;
-    const segmentAngle = 180 / segments; // Полукруг разделен на 5 частей
-    const centerX = 70;
-    const centerY = 70;
+    const gapAngle = 3; // Угол зазора между сегментами
+    const segmentAngle = (180 - (segments - 1) * gapAngle) / segments; // Угол каждого сегмента с учетом зазоров
+    const centerX = 100;
+    const centerY = 100;
 
     return (
       <div className="flex flex-col items-center">
-        <div className="relative mb-4">
-          <svg width="140" height="80" className="overflow-visible">
-            {/* Фоновые сегменты */}
+        <div className="relative mb-6">
+          <svg width="200" height="120" className="overflow-visible">
+            {/* Сегменты полукруга */}
             {Array.from({ length: segments }, (_, i) => {
-              const startAngle = i * segmentAngle;
-              const endAngle = (i + 1) * segmentAngle;
+              const startAngle = i * (segmentAngle + gapAngle);
+              const endAngle = startAngle + segmentAngle;
               
-              // Преобразование в радианы и смещение для полукруга (начиная с левой стороны)
-              const startRadian = (180 - startAngle) * Math.PI / 180;
-              const endRadian = (180 - endAngle) * Math.PI / 180;
+              // Преобразование в радианы для правильного полукруга
+              const startRadian = (startAngle) * Math.PI / 180;
+              const endRadian = (endAngle) * Math.PI / 180;
               
-              const startX = centerX + radius * Math.cos(startRadian);
+              const startX = centerX - radius * Math.cos(startRadian);
               const startY = centerY - radius * Math.sin(startRadian);
-              const endX = centerX + radius * Math.cos(endRadian);
+              const endX = centerX - radius * Math.cos(endRadian);
               const endY = centerY - radius * Math.sin(endRadian);
               
-              const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+              const largeArcFlag = (endAngle - startAngle) > 180 ? 1 : 0;
+              
+              // Создаем толстую дугу вместо сектора
+              const outerRadius = radius;
+              const innerRadius = radius - strokeWidth;
+              
+              const outerStartX = centerX - outerRadius * Math.cos(startRadian);
+              const outerStartY = centerY - outerRadius * Math.sin(startRadian);
+              const outerEndX = centerX - outerRadius * Math.cos(endRadian);
+              const outerEndY = centerY - outerRadius * Math.sin(endRadian);
+              
+              const innerStartX = centerX - innerRadius * Math.cos(startRadian);
+              const innerStartY = centerY - innerRadius * Math.sin(startRadian);
+              const innerEndX = centerX - innerRadius * Math.cos(endRadian);
+              const innerEndY = centerY - innerRadius * Math.sin(endRadian);
               
               const pathData = [
-                `M ${centerX} ${centerY}`,
-                `L ${startX} ${startY}`,
-                `A ${radius} ${radius} 0 ${largeArcFlag} 0 ${endX} ${endY}`,
+                `M ${outerStartX} ${outerStartY}`,
+                `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${outerEndX} ${outerEndY}`,
+                `L ${innerEndX} ${innerEndY}`,
+                `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${innerStartX} ${innerStartY}`,
                 `Z`
               ].join(' ');
               
@@ -98,35 +114,35 @@ const TasteSemicircles = ({ taste }: { taste: any }) => {
                 <path
                   key={i}
                   d={pathData}
-                  fill={isActive ? color : "rgba(128, 128, 128, 0.2)"}
-                  stroke={isActive ? color : "rgba(128, 128, 128, 0.4)"}
-                  strokeWidth="1"
-                  filter={isActive ? `drop-shadow(0 0 8px ${shadowColor})` : "none"}
+                  fill={isActive ? color : "rgba(128, 128, 128, 0.15)"}
+                  stroke={isActive ? color : "rgba(128, 128, 128, 0.3)"}
+                  strokeWidth="2"
+                  filter={isActive ? `drop-shadow(0 0 12px ${shadowColor})` : "none"}
                   className="transition-all duration-300"
                 />
               );
             })}
             
-            {/* Центральный круг для эстетики */}
-            <circle
-              cx={centerX}
-              cy={centerY}
-              r="8"
-              fill="rgba(255, 255, 255, 0.1)"
-              stroke="rgba(255, 255, 255, 0.3)"
-              strokeWidth="1"
+            {/* Базовая линия полукруга */}
+            <line
+              x1={centerX - radius}
+              y1={centerY}
+              x2={centerX + radius}
+              y2={centerY}
+              stroke="rgba(255, 255, 255, 0.2)"
+              strokeWidth="2"
             />
           </svg>
         </div>
         
         {/* Название характеристики */}
         <div className="text-center">
-          <div className="text-white font-semibold text-sm mb-1">{label}</div>
+          <div className="text-white font-semibold text-base mb-2">{label}</div>
           <div 
-            className="text-lg font-bold"
+            className="text-xl font-bold"
             style={{ 
               color: color,
-              textShadow: `0 0 8px ${shadowColor}`
+              textShadow: `0 0 12px ${shadowColor}`
             }}
           >
             {value}/5
@@ -137,7 +153,7 @@ const TasteSemicircles = ({ taste }: { taste: any }) => {
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 justify-items-center">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 justify-items-center">
       {characteristics.map((char, index) => (
         <SemicircleChart
           key={index}
