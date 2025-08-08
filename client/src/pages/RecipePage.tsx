@@ -289,6 +289,11 @@ export default function RecipePage() {
                   <div className="text-white font-semibold text-base">{item.name}</div>
                 </div>
               ))}
+              {/* Дополнительная карточка только для симметрии в 2-колоночной компоновке */}
+              <div className="text-center p-4 bg-gradient-to-br from-white/5 to-white/10 rounded-xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105 md:block lg:hidden xl:block hidden">
+                <div className="text-4xl mb-3 transform hover:scale-110 transition-transform duration-200">😊</div>
+                <div className="text-white font-semibold text-base">Хорошее настроение</div>
+              </div>
             </div>
             
             {/* Единая кнопка Посетить магазин */}
