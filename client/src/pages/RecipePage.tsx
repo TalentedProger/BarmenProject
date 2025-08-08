@@ -245,9 +245,9 @@ export default function RecipePage() {
       <div className="max-w-6xl mx-auto px-6 py-12 space-y-16">
         
         {/* Ingredients & Calculations */}
-        <section className="grid md:grid-cols-2 gap-8">
+        <section className="flex flex-col md:flex-row gap-8">
           {/* Ingredients */}
-          <div>
+          <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">
               🧪 Что внутри?
             </h2>
@@ -267,9 +267,9 @@ export default function RecipePage() {
           </div>
 
           {/* Calculations - тёмный фон как у ингредиентов */}
-          <div>
+          <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">📊 Расчёты</h2>
-            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 flex items-center">
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-4 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl border border-purple-400/30 shadow-lg shadow-purple-500/20">
                   <div className="text-2xl font-bold text-purple-300" style={{ textShadow: '0 0 10px rgba(168, 85, 247, 0.8)' }}>{recipe.abv}%</div>
@@ -293,9 +293,9 @@ export default function RecipePage() {
         </section>
 
         {/* Main Content Grid - Equipment and Video */}
-        <section className="grid lg:grid-cols-2 gap-8">
+        <section className="flex flex-col lg:flex-row gap-8">
           {/* Equipment Section - Left side */}
-          <div>
+          <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">Что потребуется ?</h2>
             <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
               <div className="grid md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 mb-6">
@@ -327,8 +327,8 @@ export default function RecipePage() {
           </div>
 
           {/* Video Section - Right side */}
-          <div>
-            <h2 className="text-3xl font-bold text-white mb-6 text-center">📽 Видео приготовления</h2>
+          <div className="flex-1">
+            <h2 className="text-3xl font-bold text-white mb-6 text-center">Видео приготовления</h2>
             <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 flex flex-col">
               
               <div className="flex-1 flex items-center justify-center">
@@ -360,10 +360,7 @@ export default function RecipePage() {
 
         {/* Recipe Steps - квадратные карточки с описанием */}
         <section>
-          <h2 className="text-3xl font-bold text-white mb-4 text-center">Пошаговый рецепт</h2>
-          <p className="text-zinc-400 text-center mb-8 text-sm">
-            Нажмите на карточку для перехода к следующему шагу
-          </p>
+          <h2 className="text-3xl font-bold text-white mb-8 text-center">Пошаговый рецепт</h2>
           <div className="w-full">
             {recipe.steps.map((step, index) => {
               // Подробные описания для каждого шага
@@ -505,8 +502,8 @@ export default function RecipePage() {
 
         {/* Recommendations */}
         <section>
-          <h2 className="text-3xl font-bold text-white mb-6 text-center">🧬 Если понравилось — попробуй ещё</h2>
           <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+            <h2 className="text-3xl font-bold text-white mb-6 text-center">🧬 Если понравилось — попробуй ещё</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {recipe.recommendations.map((rec, index) => (
                 <div key={index} className="bg-white/5 rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-200 cursor-pointer">
