@@ -400,7 +400,7 @@ export default function RecipePage() {
           <div className="flex flex-col max-[800px]:space-y-0 min-[800px]:flex-row min-[800px]:items-center min-[800px]:justify-between min-[800px]:space-y-0">
             
             {/* Кнопка "В избранное" - слева на больших экранах */}
-            <div className="min-[800px]:order-1 max-[800px]:order-2 max-[800px]:w-[60%] max-[800px]:mx-auto max-[800px]:mb-4 max-[800px]:mt-4">
+            <div className="min-[800px]:order-1 max-[800px]:order-2 max-[800px]:w-[60%] max-[500px]:w-[80%] max-[800px]:mx-auto max-[800px]:mb-4 max-[800px]:mt-4">
               <Button
                 onClick={() => setIsFavorite(!isFavorite)}
                 className={`${
@@ -441,7 +441,7 @@ export default function RecipePage() {
             </div>
 
             {/* Кнопка "Поделиться" - справа на больших экранах */}
-            <div className="min-[800px]:order-3 max-[800px]:order-3 max-[800px]:w-[60%] max-[800px]:mx-auto">
+            <div className="min-[800px]:order-3 max-[800px]:order-3 max-[800px]:w-[60%] max-[500px]:w-[80%] max-[800px]:mx-auto">
               <Button 
                 className="bg-gradient-to-r from-neon-turquoise/20 to-electric/20 hover:from-neon-turquoise/30 hover:to-electric/30 backdrop-blur-sm border-2 border-cyan-400/50 px-6 py-3 text-base font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 w-full min-[800px]:w-auto min-[800px]:min-w-[160px]"
                 style={{
