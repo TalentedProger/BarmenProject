@@ -330,8 +330,8 @@ export default function Landing() {
               </p>
               
               <form onSubmit={handleHeroEmailSubmit} className="flex flex-col gap-4 justify-center md:justify-start max-[480px]:items-center max-[480px]:w-full">
-                <div className="flex flex-col sm:flex-row gap-4 max-[480px]:w-full max-[480px]:items-center">
-                  <div className="flex flex-col w-full sm:w-auto min-w-[280px] max-[480px]:w-full">
+                <div className="flex flex-col md:flex-row gap-4 max-[767px]:w-full max-[767px]:items-center">
+                  <div className="flex flex-col w-full md:w-auto min-w-[280px] max-[767px]:w-full">
                     <input
                       type="email"
                       value={heroEmail}
@@ -349,7 +349,7 @@ export default function Landing() {
                   </div>
                   <Button 
                     type="submit"
-                    className="rounded-full px-6 py-3 ml-0 sm:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30 max-[480px]:w-1/2 max-[480px]:ml-0 max-[480px]:mt-2"
+                    className="rounded-full px-6 py-3 ml-0 md:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30 max-[767px]:w-1/2 max-[767px]:ml-0 max-[767px]:mt-2"
                   >
                     Подписаться
                   </Button>
