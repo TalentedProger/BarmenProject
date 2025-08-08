@@ -345,49 +345,69 @@ export default function RecipePage() {
           <p className="text-zinc-400 text-center mb-8 text-sm">
             Нажмите на карточку для перехода к следующему шагу
           </p>
-          <div className="max-w-4xl mx-auto">
-            {recipe.steps.map((step, index) => (
-              <div
-                key={index}
-                className={`${
-                  currentStep === step.step ? 'block' : 'hidden'
-                } transition-all duration-500`}
-              >
+          <div className="w-full">
+            {recipe.steps.map((step, index) => {
+              // Подробные описания для каждого шага
+              const getStepDescription = (stepNumber: number) => {
+                switch(stepNumber) {
+                  case 1: return "Возьмите свежие листья мяты и аккуратно разомните их в барном стакане вместе с сахаром и кусочками лайма. Этот процесс называется мадлинг - он поможет извлечь эфирные масла из мяты, которые придадут коктейлю неповторимый аромат. Не переусердствуйте, чтобы не сделать напиток горьким.";
+                  case 2: return "Добавьте светлый ром в стакан с размятой мятой. Следом аккуратно насыпьте колотый лёд до верха стакана. Лёд должен быть достаточно мелким, чтобы хорошо охладить напиток, но не слишком мелким, чтобы не разбавить его слишком быстро. Идеально подойдёт лёд размером с орех.";
+                  case 3: return "Медленно долейте содовую воду до верха стакана. Наливайте её тонкой струйкой по барной ложке, чтобы не разрушить слоистость напитка. Содовая придаст мохито лёгкую игристость и освежающий эффект. Важно не переборщить - содовая должна дополнять, а не доминировать во вкусе.";
+                  case 4: return "Осторожно перемешайте коктейль барной ложкой движениями снизу вверх. Цель - объединить все ингредиенты, не повредив листья мяты. Перемешивайте 3-4 раза, этого достаточно. Украсьте веточкой свежей мяты и долькой лайма на краю стакана. Ваш идеальный мохито готов!";
+                  default: return "Следуйте инструкции для выполнения данного шага приготовления коктейля.";
+                }
+              };
+              
+              return (
                 <div
-                  className="cursor-pointer transform hover:scale-[1.02] transition-all duration-300"
-                  onClick={() => {
-                    if (currentStep < recipe.steps.length) {
-                      setCurrentStep(currentStep + 1);
-                    } else {
-                      setCurrentStep(1);
-                    }
-                  }}
+                  key={index}
+                  className={`${
+                    currentStep === step.step ? 'block' : 'hidden'
+                  } transition-all duration-500`}
                 >
-                  {/* Квадратный контейнер с заголовком вверху и описанием внизу */}
-                  <div className="aspect-square max-w-md mx-auto bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 rounded-2xl flex flex-col p-8">
-                    {/* Заголовок в верхней части */}
-                    <div className="text-center mb-4">
-                      <div className="text-cyan-300 text-lg font-medium mb-2">Шаг {step.step}</div>
-                      <div className="text-white text-xl font-semibold">{step.text}</div>
-                    </div>
-                    
-                    {/* Иконка в центре */}
-                    <div className="flex-1 flex items-center justify-center">
-                      <div className="text-6xl transform transition-all duration-300 hover:scale-125 hover:rotate-12">
-                        {step.icon}
+                  <div
+                    className="cursor-pointer transform hover:scale-[1.01] transition-all duration-300 group"
+                    onClick={() => {
+                      if (currentStep < recipe.steps.length) {
+                        setCurrentStep(currentStep + 1);
+                      } else {
+                        setCurrentStep(1);
+                      }
+                    }}
+                  >
+                    {/* Полноширинная карточка с неоновым эффектом */}
+                    <div className="w-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 rounded-2xl p-8 group-hover:border-cyan-300/70 group-hover:shadow-xl group-hover:shadow-cyan-500/40 group-active:border-cyan-200 group-active:shadow-2xl group-active:shadow-cyan-500/60 transition-all duration-300">
+                      {/* Заголовок */}
+                      <div className="text-center mb-6">
+                        <div className="text-cyan-300 text-lg font-medium mb-3">Шаг {step.step}</div>
+                        <div className="text-white text-2xl font-semibold mb-4">{step.text}</div>
+                        
+                        {/* Иконка сразу после заголовка */}
+                        <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-white/10 to-white/5 rounded-full border border-white/20 mb-6">
+                          <div className="text-5xl transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                            {step.icon}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    
-                    {/* Описание в нижней части */}
-                    <div className="text-center mt-4">
-                      <p className="text-zinc-300 text-sm leading-relaxed">
-                        Следуйте инструкции выше для выполнения данного шага приготовления коктейля.
-                      </p>
+                      
+                      {/* Подробное описание */}
+                      <div className="text-center">
+                        <p className="text-zinc-300 text-base leading-relaxed max-w-3xl mx-auto">
+                          {getStepDescription(step.step)}
+                        </p>
+                      </div>
+                      
+                      {/* Индикатор клика */}
+                      <div className="text-center mt-8">
+                        <p className="text-cyan-400/60 text-sm font-medium group-hover:text-cyan-300/80 transition-colors duration-300">
+                          Нажмите для перехода к следующему шагу
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
