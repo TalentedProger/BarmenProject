@@ -394,13 +394,13 @@ export default function RecipePage() {
 
         {/* Social Functions - адаптивная компоновка */}
         <section className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-          <div className="text-white max-[800px]:mb-3 min-[800px]:mb-6 text-xl font-medium text-center">Ваша оценка</div>
+          <div className="text-white max-[800px]:mb-1.5 min-[800px]:mb-6 text-xl font-medium text-center">Ваша оценка</div>
           
           {/* Адаптивная компоновка для рейтинга и кнопок */}
-          <div className="flex flex-col max-[800px]:space-y-8 min-[800px]:flex-row min-[800px]:items-center min-[800px]:justify-between min-[800px]:space-y-0">
+          <div className="flex flex-col max-[800px]:space-y-0 min-[800px]:flex-row min-[800px]:items-center min-[800px]:justify-between min-[800px]:space-y-0">
             
             {/* Кнопка "В избранное" - слева на больших экранах */}
-            <div className="min-[800px]:order-1 max-[800px]:order-2 max-[800px]:w-[60%] max-[800px]:mx-auto">
+            <div className="min-[800px]:order-1 max-[800px]:order-2 max-[800px]:w-[60%] max-[800px]:mx-auto max-[800px]:mb-4">
               <Button
                 onClick={() => setIsFavorite(!isFavorite)}
                 className={`${
@@ -418,7 +418,7 @@ export default function RecipePage() {
             </div>
 
             {/* Рейтинг звездочками - по центру */}
-            <div className="min-[800px]:order-2 max-[800px]:order-1 text-center">
+            <div className="min-[800px]:order-2 max-[800px]:order-1 text-center max-[800px]:mb-10">
               <div className="flex justify-center space-x-2 mb-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Star
