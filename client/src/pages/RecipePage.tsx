@@ -192,12 +192,12 @@ export default function RecipePage() {
         {/* Hero Content */}
         <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
           {/* Cocktail Glass - круглое изображение с неоновым свечением */}
-          <div className="mb-16 flex justify-center">
+          <div className="mt-8 mb-16 flex justify-center">
             <div className="relative">
               <img
                 src={recipe.image}
                 alt={recipe.name}
-                className="w-[28rem] h-[28rem] mx-auto object-cover rounded-full shadow-2xl transition-transform duration-500 hover:scale-105 border-4 border-cyan-400/30"
+                className="w-64 h-64 max-[500px]:w-56 max-[500px]:h-56 sm:w-80 sm:h-80 lg:w-[28rem] lg:h-[28rem] mx-auto object-cover rounded-full shadow-2xl transition-transform duration-500 hover:scale-105 border-4 border-cyan-400/30"
                 style={{
                   filter: 'drop-shadow(0 0 40px rgba(6, 182, 212, 0.6))'
                 }}
