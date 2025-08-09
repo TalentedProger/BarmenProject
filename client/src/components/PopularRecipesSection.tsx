@@ -246,103 +246,104 @@ const popularRecipes: Recipe[] = [
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   return (
     <div className="recipe-card relative">
-      <div 
-        className="bg-[#1A1A1E] rounded-2xl transition-all duration-200 ease-out overflow-hidden group h-[460px] flex flex-col relative z-10 will-change-auto max-[480px]:h-[420px] max-[480px]:w-[85%] max-[480px]:mx-auto"
-        style={{
-          filter: 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))',
-          transform: 'translateZ(0)', // Force hardware acceleration
-          backfaceVisibility: 'hidden', // Prevent flickering
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.filter = 'drop-shadow(0 0 16px rgba(6, 182, 212, 0.2)) drop-shadow(0 6px 24px rgba(0, 0, 0, 0.3))';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.filter = 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))';
-        }}
-      >
-        {/* Background Image covering entire card */}
-        <div className="absolute inset-0 overflow-hidden will-change-transform rounded-2xl">
-          <img
-            src={recipe.image}
-            alt={recipe.name}
-            className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform"
-            loading="lazy"
-            decoding="async"
-
-            style={{
-              transform: 'translateZ(0)', // Force hardware acceleration
-              contentVisibility: 'auto', // Optimize rendering
-            }}
-          />
-          {/* Enhanced gradient overlay for better text readability - always visible */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 pointer-events-none" />
-        </div>
-
-        {/* Content overlay */}
-        <div className="relative z-10 flex flex-col h-full">
-          {/* Tags - переносим в верхнюю часть, ограничиваем двумя тегами */}
-          <div className="flex gap-2 px-4 py-4 max-[480px]:gap-1 max-[480px]:px-3 max-[480px]:py-3">
-            {recipe.tags.slice(0, 2).map((tag, index) => (
-              <span
-                key={index}
-                className="text-sm bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-white font-medium whitespace-nowrap max-[480px]:text-xs max-[480px]:px-2 border border-white/20"
-              >
-                {tag}
-              </span>
-            ))}
+      <Link href={`/recipe/${recipe.id}`}>
+        <div 
+          className="bg-[#1A1A1E] rounded-2xl transition-all duration-200 ease-out overflow-hidden group h-[460px] flex flex-col relative z-10 will-change-auto max-[480px]:h-[420px] max-[480px]:w-[85%] max-[480px]:mx-auto cursor-pointer"
+          style={{
+            filter: 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))',
+            transform: 'translateZ(0)', // Force hardware acceleration
+            backfaceVisibility: 'hidden', // Prevent flickering
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.filter = 'drop-shadow(0 0 16px rgba(6, 182, 212, 0.2)) drop-shadow(0 6px 24px rgba(0, 0, 0, 0.3))';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.filter = 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))';
+          }}
+        >
+          {/* Background Image covering entire card */}
+          <div className="absolute inset-0 overflow-hidden will-change-transform rounded-2xl">
+            <img
+              src={recipe.image}
+              alt={recipe.name}
+              className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform"
+              loading="lazy"
+              decoding="async"
+              style={{
+                transform: 'translateZ(0)', // Force hardware acceleration
+                contentVisibility: 'auto', // Optimize rendering
+              }}
+            />
+            {/* Enhanced gradient overlay for better text readability - always visible */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 pointer-events-none" />
           </div>
 
-          {/* Main spacer - takes up remaining space */}
-          <div className="flex-1"></div>
+          {/* Content overlay */}
+          <div className="relative z-10 flex flex-col h-full">
+            {/* Tags - переносим в верхнюю часть, ограничиваем двумя тегами, выровнены по ширине */}
+            <div className="flex justify-between px-4 py-4 max-[480px]:px-3 max-[480px]:py-3">
+              {recipe.tags.slice(0, 2).map((tag, index) => (
+                <span
+                  key={index}
+                  className="text-sm bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-white font-medium whitespace-nowrap max-[480px]:text-xs max-[480px]:px-2 border border-white/20 flex-1 text-center mx-1"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
 
-          {/* Stats container - уменьшенный размер текста */}
-          <div className="space-y-1.5 text-base text-white font-semibold max-[480px]:text-sm px-4 py-3 max-[480px]:px-3 max-[480px]:py-2" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>
-            {/* Row 1: Объем */}
-            <div className="flex items-center text-left">
-              <span>💧 {recipe.volume} мл</span>
-            </div>
-            
-            {/* Row 2: ABV */}
-            <div className="flex items-center text-left">
-              <span>🍹 {recipe.abv}%</span>
-            </div>
-            
-            {/* Row 3: Цена */}
-            <div className="flex items-center text-left">
-              <span>💰 {recipe.price || '150'} ₽</span>
-            </div>
-            
-            {/* Row 4: Рейтинг */}
-            <div className="flex items-center space-x-2 text-left">
-              <div className="flex">
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 max-[480px]:w-3.5 max-[480px]:h-3.5 ${
-                      i < Math.floor(recipe.rating)
-                        ? 'fill-yellow-400 text-yellow-400'
-                        : 'text-white/40'
-                    }`}
-                    style={{ filter: 'drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8))' }}
-                  />
-                ))}
+            {/* Main spacer - takes up remaining space */}
+            <div className="flex-1"></div>
+
+            {/* Stats container - уменьшенный размер текста */}
+            <div className="space-y-1.5 text-base text-white font-semibold max-[480px]:text-sm px-4 py-3 max-[480px]:px-3 max-[480px]:py-2" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>
+              {/* Row 1: Объем */}
+              <div className="flex items-center text-left">
+                <span>💧 {recipe.volume} мл</span>
               </div>
-              <span className="text-sm text-white font-medium max-[480px]:text-xs" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>({recipe.reviewCount})</span>
+              
+              {/* Row 2: ABV */}
+              <div className="flex items-center text-left">
+                <span>🍹 {recipe.abv}%</span>
+              </div>
+              
+              {/* Row 3: Цена */}
+              <div className="flex items-center text-left">
+                <span>💰 {recipe.price || '150'} ₽</span>
+              </div>
+              
+              {/* Row 4: Рейтинг */}
+              <div className="flex items-center space-x-2 text-left">
+                <div className="flex">
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 max-[480px]:w-3.5 max-[480px]:h-3.5 ${
+                        i < Math.floor(recipe.rating)
+                          ? 'fill-yellow-400 text-yellow-400'
+                          : 'text-white/40'
+                      }`}
+                      style={{ filter: 'drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8))' }}
+                    />
+                  ))}
+                </div>
+                <span className="text-sm text-white font-medium max-[480px]:text-xs" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>({recipe.reviewCount})</span>
+              </div>
             </div>
-          </div>
 
-          {/* Title and Description container - перенесен в нижнюю часть */}
-          <div className="bg-black/40 backdrop-blur-sm rounded-b-2xl p-3 max-[480px]:p-2.5 border-t border-white/10 text-center">
-            {/* Title */}
-            <h3 className="text-white text-xl font-bold max-[480px]:text-lg drop-shadow-lg mb-0.5">{recipe.name}</h3>
-            
-            {/* Description - Compact height */}
-            <div className="h-8 flex items-center justify-center max-[480px]:h-6">
-              <p className="text-white/90 text-sm italic leading-tight max-[480px]:text-xs line-clamp-2 drop-shadow-md mb-0">{recipe.description}</p>
+            {/* Title and Description container - перенесен в нижнюю часть */}
+            <div className="bg-black/40 backdrop-blur-sm rounded-b-2xl p-3 max-[480px]:p-2.5 border-t border-white/10 text-center">
+              {/* Title */}
+              <h3 className="text-white text-xl font-bold max-[480px]:text-lg drop-shadow-lg mb-0.5">{recipe.name}</h3>
+              
+              {/* Description - Compact height */}
+              <div className="h-8 flex items-center justify-center max-[480px]:h-6">
+                <p className="text-white/90 text-sm italic leading-tight max-[480px]:text-xs line-clamp-2 drop-shadow-md mb-0">{recipe.description}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     </div>
   );
 };
