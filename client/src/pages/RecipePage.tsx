@@ -360,7 +360,7 @@ export default function RecipePage() {
 
         {/* Recipe Steps - уменьшенные по ширине карточки */}
         <section>
-          <h2 className="text-3xl font-bold text-white mt-6 mb-8 text-center">Пошаговый рецепт</h2>
+          <h2 className="text-3xl font-bold text-white mt-12 mb-8 text-center">Пошаговый рецепт</h2>
           <div className="max-w-4xl mx-auto">
             {recipe.steps.map((step, index) => {
               // Подробные описания для каждого шага
