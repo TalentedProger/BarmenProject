@@ -251,7 +251,7 @@ export default function RecipePage() {
             <h2 className="text-3xl font-bold text-white mb-6 text-center">
               🧪 Что внутри?
             </h2>
-            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full">
               <div className="space-y-4">
                 {recipe.ingredients.map((ingredient, index) => (
                   <div key={index} className="flex items-center justify-between text-white">
@@ -269,8 +269,8 @@ export default function RecipePage() {
           {/* Calculations - тёмный фон как у ингредиентов */}
           <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">📊 Расчёты</h2>
-            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 flex items-center">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full flex items-center justify-center">
+              <div className="grid grid-cols-2 gap-4 w-full">
                 <div className="text-center p-4 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl border border-purple-400/30 shadow-lg shadow-purple-500/20">
                   <div className="text-2xl font-bold text-purple-300" style={{ textShadow: '0 0 10px rgba(168, 85, 247, 0.8)' }}>{recipe.abv}%</div>
                   <div className="text-white/80">ABV</div>
@@ -297,8 +297,8 @@ export default function RecipePage() {
           {/* Equipment Section - Left side */}
           <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">Что потребуется ?</h2>
-            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-              <div className="grid md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 mb-6">
+            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full flex flex-col">
+              <div className="grid md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 mb-6 flex-1">
                 {recipe.equipment.map((item, index) => (
                   <div key={index} className="text-center p-4 bg-gradient-to-br from-white/5 to-white/10 rounded-xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105">
                     <div className="text-4xl mb-3 transform hover:scale-110 transition-transform duration-200">{item.icon}</div>
@@ -313,7 +313,7 @@ export default function RecipePage() {
               </div>
               
               {/* Единая кнопка Посетить магазин */}
-              <div className="text-center">
+              <div className="text-center mt-auto">
                 <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 px-8 py-4 text-lg font-semibold rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 border border-orange-400/30"
                   style={{
                     boxShadow: '0 0 20px rgba(234, 88, 12, 0.4)'
@@ -329,7 +329,7 @@ export default function RecipePage() {
           {/* Video Section - Right side */}
           <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">Видео приготовления</h2>
-            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 flex flex-col">
+            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full flex flex-col">
               
               <div className="flex-1 flex items-center justify-center">
                 <div className="relative w-full max-w-lg">
@@ -345,12 +345,12 @@ export default function RecipePage() {
               <div className="text-center mt-4">
                 <Button
                   onClick={() => window.open(recipe.videoUrl, '_blank')}
-                  className="bg-gradient-to-r from-purple-600/90 to-cyan-600/90 hover:from-purple-500/90 hover:to-cyan-500/90 px-12 py-6 text-xl font-semibold rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300 border border-white/30 backdrop-blur-sm"
+                  className="bg-gradient-to-r from-purple-600/90 to-cyan-600/90 hover:from-purple-500/90 hover:to-cyan-500/90 px-8 py-4 text-lg font-semibold rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300 border border-white/30 backdrop-blur-sm"
                   style={{
                     boxShadow: '0 0 30px rgba(168, 85, 247, 0.4), 0 0 60px rgba(6, 182, 212, 0.2)'
                   }}
                 >
-                  <Play className="w-8 h-8 mr-3" />
+                  <Play className="w-6 h-6 mr-2" />
                   Смотреть видео
                 </Button>
               </div>
@@ -358,10 +358,10 @@ export default function RecipePage() {
           </div>
         </section>
 
-        {/* Recipe Steps - квадратные карточки с описанием */}
+        {/* Recipe Steps - уменьшенные по ширине карточки */}
         <section>
           <h2 className="text-3xl font-bold text-white mb-8 text-center">Пошаговый рецепт</h2>
-          <div className="w-full">
+          <div className="max-w-4xl mx-auto">
             {recipe.steps.map((step, index) => {
               // Подробные описания для каждого шага
               const getStepDescription = (stepNumber: number) => {
@@ -391,7 +391,7 @@ export default function RecipePage() {
                       }
                     }}
                   >
-                    {/* Полноширинная карточка с неоновым эффектом */}
+                    {/* Карточка с неоновым эффектом, уменьшенная по ширине */}
                     <div className="w-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 rounded-2xl p-8 group-hover:border-cyan-300/70 group-hover:shadow-xl group-hover:shadow-cyan-500/40 group-active:border-cyan-200 group-active:shadow-2xl group-active:shadow-cyan-500/60 transition-all duration-300">
                       {/* Заголовок */}
                       <div className="text-center mb-6">
