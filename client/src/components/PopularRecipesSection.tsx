@@ -280,20 +280,9 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
 
         {/* Content overlay */}
         <div className="relative z-10 flex flex-col h-full">
-          {/* Title and Description container - centered text, compact */}
-          <div className="bg-black/40 backdrop-blur-sm rounded-t-2xl p-2 max-[480px]:p-1.5 border-b border-white/10 text-center">
-            {/* Title */}
-            <h3 className="text-white text-xl font-bold max-[480px]:text-lg drop-shadow-lg mb-0.5">{recipe.name}</h3>
-            
-            {/* Description - Compact height */}
-            <div className="h-8 flex items-center justify-center max-[480px]:h-6">
-              <p className="text-white/90 text-sm italic leading-tight max-[480px]:text-xs line-clamp-2 drop-shadow-md mb-0">{recipe.description}</p>
-            </div>
-          </div>
-
-          {/* Tags - Fixed height to prevent layout shift */}
-          <div className="flex flex-wrap gap-2 min-h-[60px] items-start content-start px-4 py-4 max-[480px]:min-h-[50px] max-[480px]:gap-1 max-[480px]:px-3 max-[480px]:py-3">
-            {recipe.tags.map((tag, index) => (
+          {/* Tags - переносим в верхнюю часть, ограничиваем двумя тегами */}
+          <div className="flex gap-2 px-4 py-4 max-[480px]:gap-1 max-[480px]:px-3 max-[480px]:py-3">
+            {recipe.tags.slice(0, 2).map((tag, index) => (
               <span
                 key={index}
                 className="text-sm bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-white font-medium whitespace-nowrap max-[480px]:text-xs max-[480px]:px-2 border border-white/20"
@@ -306,8 +295,8 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           {/* Main spacer - takes up remaining space */}
           <div className="flex-1"></div>
 
-          {/* All stats in one container - 4 rows */}
-          <div className="space-y-2 text-lg text-white font-bold max-[480px]:text-base px-4 py-3 max-[480px]:px-3" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>
+          {/* Stats container - уменьшенный размер текста */}
+          <div className="space-y-1.5 text-base text-white font-semibold max-[480px]:text-sm px-4 py-3 max-[480px]:px-3 max-[480px]:py-2" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>
             {/* Row 1: Объем */}
             <div className="flex items-center text-left">
               <span>💧 {recipe.volume} мл</span>
@@ -329,7 +318,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                 {Array.from({ length: 5 }, (_, i) => (
                   <Star
                     key={i}
-                    className={`w-5 h-5 max-[480px]:w-4 max-[480px]:h-4 ${
+                    className={`w-4 h-4 max-[480px]:w-3.5 max-[480px]:h-3.5 ${
                       i < Math.floor(recipe.rating)
                         ? 'fill-yellow-400 text-yellow-400'
                         : 'text-white/40'
@@ -338,28 +327,19 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                   />
                 ))}
               </div>
-              <span className="text-base text-white font-medium max-[480px]:text-sm" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>({recipe.reviewCount})</span>
+              <span className="text-sm text-white font-medium max-[480px]:text-xs" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>({recipe.reviewCount})</span>
             </div>
           </div>
 
-          {/* Single centered button - at bottom with symmetric margin */}
-          <div className="flex justify-center px-4 py-4 max-[480px]:px-3 max-[480px]:py-3">
-            <Link href={`/recipe/${recipe.id}`}>
-              <Button
-                className="bg-gradient-to-r from-purple-500/90 to-cyan-500/90 backdrop-blur-sm text-white font-medium rounded-lg px-8 py-3 hover:from-purple-600/90 hover:to-cyan-600/90 transition-all duration-200 ease-out shadow-xl hover:shadow-2xl will-change-transform border border-white/20"
-                style={{
-                  transform: 'translateZ(0)', // Force hardware acceleration
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateZ(0) scale(1.02)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateZ(0) scale(1)';
-                }}
-              >
-                Открыть рецепт
-              </Button>
-            </Link>
+          {/* Title and Description container - перенесен в нижнюю часть */}
+          <div className="bg-black/40 backdrop-blur-sm rounded-b-2xl p-3 max-[480px]:p-2.5 border-t border-white/10 text-center">
+            {/* Title */}
+            <h3 className="text-white text-xl font-bold max-[480px]:text-lg drop-shadow-lg mb-0.5">{recipe.name}</h3>
+            
+            {/* Description - Compact height */}
+            <div className="h-8 flex items-center justify-center max-[480px]:h-6">
+              <p className="text-white/90 text-sm italic leading-tight max-[480px]:text-xs line-clamp-2 drop-shadow-md mb-0">{recipe.description}</p>
+            </div>
           </div>
         </div>
       </div>
