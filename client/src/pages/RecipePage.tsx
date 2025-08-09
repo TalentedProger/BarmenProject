@@ -296,7 +296,7 @@ export default function RecipePage() {
         <section className="flex flex-col lg:flex-row gap-8">
           {/* Equipment Section - Left side */}
           <div className="flex-1">
-            <h2 className="text-3xl font-bold text-white mb-8 text-center">Что потребуется ?</h2>
+            <h2 className="text-3xl font-bold text-white mt-6 mb-6 text-center">Что потребуется ?</h2>
             <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full flex flex-col">
               <div className="grid md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 mb-6 flex-1">
                 {recipe.equipment.map((item, index) => (
@@ -328,7 +328,7 @@ export default function RecipePage() {
 
           {/* Video Section - Right side */}
           <div className="flex-1">
-            <h2 className="text-3xl font-bold text-white mb-8 text-center">Видео приготовления</h2>
+            <h2 className="text-3xl font-bold text-white mt-6 mb-6 text-center">Видео приготовления</h2>
             <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full flex flex-col">
               
               <div className="flex-1 flex items-center justify-center">
@@ -360,7 +360,7 @@ export default function RecipePage() {
 
         {/* Recipe Steps - уменьшенные по ширине карточки */}
         <section>
-          <h2 className="text-3xl font-bold text-white mb-10 text-center">Пошаговый рецепт</h2>
+          <h2 className="text-3xl font-bold text-white mt-6 mb-8 text-center">Пошаговый рецепт</h2>
           <div className="max-w-4xl mx-auto">
             {recipe.steps.map((step, index) => {
               // Подробные описания для каждого шага
