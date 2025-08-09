@@ -269,21 +269,21 @@ export default function RecipePage() {
           {/* Calculations - тёмный фон как у ингредиентов */}
           <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">📊 Расчёты</h2>
-            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full flex items-center justify-center">
-              <div className="grid grid-cols-2 gap-4 w-full">
-                <div className="text-center p-4 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl border border-purple-400/30 shadow-lg shadow-purple-500/20">
+            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-3 border border-white/10 h-full flex items-center justify-center">
+              <div className="grid grid-cols-2 gap-4 w-full h-full">
+                <div className="text-center p-6 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl border border-purple-400/30 shadow-lg shadow-purple-500/20 flex flex-col items-center justify-center h-full">
                   <div className="text-2xl font-bold text-purple-300" style={{ textShadow: '0 0 10px rgba(168, 85, 247, 0.8)' }}>{recipe.abv}%</div>
                   <div className="text-white/80">ABV</div>
                 </div>
-                <div className="text-center p-4 bg-gradient-to-br from-cyan-500/20 to-cyan-600/20 rounded-xl border border-cyan-400/30 shadow-lg shadow-cyan-500/20">
+                <div className="text-center p-6 bg-gradient-to-br from-cyan-500/20 to-cyan-600/20 rounded-xl border border-cyan-400/30 shadow-lg shadow-cyan-500/20 flex flex-col items-center justify-center h-full">
                   <div className="text-2xl font-bold text-cyan-300" style={{ textShadow: '0 0 10px rgba(6, 182, 212, 0.8)' }}>{recipe.volume} мл</div>
                   <div className="text-white/80">Объём</div>
                 </div>
-                <div className="text-center p-4 bg-gradient-to-br from-pink-500/20 to-pink-600/20 rounded-xl border border-pink-400/30 shadow-lg shadow-pink-500/20">
+                <div className="text-center p-6 bg-gradient-to-br from-pink-500/20 to-pink-600/20 rounded-xl border border-pink-400/30 shadow-lg shadow-pink-500/20 flex flex-col items-center justify-center h-full">
                   <div className="text-2xl font-bold text-pink-300" style={{ textShadow: '0 0 10px rgba(236, 72, 153, 0.8)' }}>{recipe.calories} ккал</div>
                   <div className="text-white/80">Калории</div>
                 </div>
-                <div className="text-center p-4 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-xl border border-green-400/30 shadow-lg shadow-green-500/20">
+                <div className="text-center p-6 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-xl border border-green-400/30 shadow-lg shadow-green-500/20 flex flex-col items-center justify-center h-full">
                   <div className="text-2xl font-bold text-green-300" style={{ textShadow: '0 0 10px rgba(34, 197, 94, 0.8)' }}>{recipe.price} ₽</div>
                   <div className="text-white/80">Стоимость</div>
                 </div>
@@ -298,15 +298,15 @@ export default function RecipePage() {
           <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mt-6 mb-6 text-center">Что потребуется ?</h2>
             <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full flex flex-col">
-              <div className="grid md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 mb-6 flex-1">
+              <div className="grid md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 mb-6 flex-1 items-center">
                 {recipe.equipment.map((item, index) => (
-                  <div key={index} className="text-center p-4 bg-gradient-to-br from-white/5 to-white/10 rounded-xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105">
+                  <div key={index} className="text-center p-4 bg-gradient-to-br from-white/5 to-white/10 rounded-xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105 flex flex-col items-center justify-center h-full">
                     <div className="text-4xl mb-3 transform hover:scale-110 transition-transform duration-200">{item.icon}</div>
                     <div className="text-white font-semibold text-base">{item.name}</div>
                   </div>
                 ))}
                 {/* Дополнительная карточка только для симметрии в 2-колоночной компоновке */}
-                <div className="text-center p-4 bg-gradient-to-br from-white/5 to-white/10 rounded-xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105 md:block lg:hidden xl:block hidden">
+                <div className="text-center p-4 bg-gradient-to-br from-white/5 to-white/10 rounded-xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105 md:block lg:hidden xl:block hidden flex flex-col items-center justify-center h-full">
                   <div className="text-4xl mb-3 transform hover:scale-110 transition-transform duration-200">😊</div>
                   <div className="text-white font-semibold text-base">Хорошее настроение</div>
                 </div>
@@ -359,8 +359,8 @@ export default function RecipePage() {
         </section>
 
         {/* Recipe Steps - уменьшенные по ширине карточки */}
-        <section>
-          <h2 className="text-3xl font-bold text-white mt-12 mb-8 text-center">Пошаговый рецепт</h2>
+        <section className="relative z-10">
+          <h2 className="text-3xl font-bold text-white mt-16 mb-8 text-center relative">Пошаговый рецепт</h2>
           <div className="max-w-4xl mx-auto">
             {recipe.steps.map((step, index) => {
               // Подробные описания для каждого шага
