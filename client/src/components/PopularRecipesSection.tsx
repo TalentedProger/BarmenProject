@@ -4,7 +4,6 @@ import { Navigation, Autoplay } from 'swiper/modules';
 import { ArrowLeft, ArrowRight, Star, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
-import OptimizedImage from '@/components/ui/optimized-image';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -264,14 +263,12 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
         >
           {/* Background Image covering entire card */}
           <div className="absolute inset-0 overflow-hidden will-change-transform rounded-2xl">
-            <OptimizedImage
+            <img
               src={recipe.image}
               alt={recipe.name}
               className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform"
               loading="lazy"
-              quality="medium"
-              placeholder="skeleton"
-              sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 33vw"
+              decoding="async"
               style={{
                 transform: 'translateZ(0)', // Force hardware acceleration
                 contentVisibility: 'auto', // Optimize rendering

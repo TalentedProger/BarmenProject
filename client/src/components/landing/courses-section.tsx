@@ -1,5 +1,4 @@
 import { BookOpen, Video, Beaker, Award } from "lucide-react";
-import OptimizedImage from '@/components/ui/optimized-image';
 
 const CoursesSection = () => {
   const courses = [
@@ -102,13 +101,10 @@ const CoursesSection = () => {
             <div className="relative">
               {/* Bartender Image */}
               <div className="relative w-80 h-96 rounded-2xl overflow-hidden border border-slate-700/50 animate-shimmer-shadow">
-                <OptimizedImage
+                <img 
                   src="/attached_assets/Leonardo_Phoenix_10_A_stylish_male_bartender_with_rolledup_sle_2 (1)_1752845021301.jpg"
                   alt="Professional bartender creating cocktails"
                   className="w-full h-full object-cover"
-                  loading="lazy"
-                  quality="medium"
-                  placeholder="skeleton"
                 />
                 {/* Dynamic glow overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-pink-400/10 rounded-2xl"></div>
@@ -133,13 +129,10 @@ const CoursesSection = () => {
           <div className="relative flex justify-center">
             <div className="relative">
               <div className="relative w-80 h-96 rounded-2xl overflow-hidden border border-slate-700/50 animate-shimmer-shadow max-[480px]:w-72 max-[480px]:h-80">
-                <OptimizedImage
+                <img 
                   src="/attached_assets/Leonardo_Phoenix_10_A_stylish_male_bartender_with_rolledup_sle_2 (1)_1752845021301.jpg"
                   alt="Professional bartender creating cocktails"
                   className="w-full h-full object-cover"
-                  loading="lazy"
-                  quality="medium"
-                  placeholder="skeleton"
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-pink-400/10 rounded-2xl"></div>
               </div>
@@ -179,14 +172,10 @@ const CoursesSection = () => {
               <div key={index} className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-xl p-6 border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-slate-900/20 flex flex-col">
                 {/* Course Image */}
                 <div className="w-full h-64 rounded-lg mb-4 overflow-hidden">
-                  <OptimizedImage
+                  <img 
                     src={course.image} 
                     alt={course.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    loading="lazy"
-                    quality="medium"
-                    placeholder="skeleton"
-                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 </div>
                 

@@ -4,7 +4,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Martini, WandSparkles, Dice2, BookOpen, GraduationCap, ShoppingCart, Users, LogIn, UserPlus, User } from "lucide-react";
 import CoursesSection from "@/components/landing/courses-section";
 import PopularRecipesSection from "@/components/PopularRecipesSection";
-import OptimizedImage from "@/components/ui/optimized-image";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -145,14 +144,13 @@ export default function Landing() {
             {/* Right side - Interactive cocktail creation image */}
             <div className="flex justify-center md:justify-end items-center animate-slide-up max-[480px]:mt-2">
               <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg">
-                <OptimizedImage
+                <img 
                   src="/attached_assets/Leonardo_Phoenix_10_A_futuristic_interactive_cocktail_creation_0 (1)_1752851226590.png"
                   alt="Interactive cocktail creation with layered colors"
                   className="hero-image relative z-10"
-                  priority={true}
-                  quality="high"
-                  placeholder="skeleton"
-                  draggable={false}
+                  loading="eager"
+                  decoding="async"
+                  draggable="false"
                 />
                 {/* Subtle glow effect behind the image */}
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/20 to-purple-400/20 rounded-full blur-2xl transform scale-75"></div>
@@ -362,7 +360,7 @@ export default function Landing() {
             {/* Right side - Cocktail image with elegant shadows */}
             <div className="flex-1 flex justify-center md:justify-end">
               <div className="relative hover:scale-105 transition-all duration-300">
-                <OptimizedImage
+                <img 
                   src="/attached_assets/Flux_Dev_a_lush_3d_render_of_A_stylized_artistic_illustration__3-Photoroom_1752879813613.png"
                   alt="Стилизованный коктейль с градиентными эффектами"
                   className="w-80 h-auto object-contain relative z-10"
@@ -370,8 +368,6 @@ export default function Landing() {
                     filter: 'drop-shadow(0 25px 50px rgba(138, 43, 226, 0.3)) drop-shadow(0 15px 30px rgba(0, 255, 255, 0.2))',
                   }}
                   loading="lazy"
-                  quality="medium"
-                  placeholder="skeleton"
                 />
                 
                 {/* Elegant glow effects behind the cocktail */}
@@ -409,13 +405,11 @@ export default function Landing() {
             {/* Mobile layout: Phone image second */}
             <div className="w-full flex justify-center md:hidden mb-4">
               <div className="relative">
-                <OptimizedImage
+                <img 
                   src="/attached_assets/ChatGPT Image 18 июл. 2025 г., 23_50_01-Photoroom_1752872369395.png"
                   alt="Cocktailo mobile app with pineapple daiquiri"
                   className="w-96 h-auto object-contain hover:scale-105 transition-all duration-300 relative z-10"
                   loading="lazy"
-                  quality="medium"
-                  placeholder="skeleton"
                 />
                 {/* Soft glow effects behind the image */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-cyan-400/15 to-purple-500/15 rounded-full blur-3xl -z-10"></div>
@@ -472,13 +466,11 @@ export default function Landing() {
             {/* Desktop layout: Right side - Phone image */}
             <div className="hidden md:flex flex-1 justify-end mr-16">
               <div className="relative">
-                <OptimizedImage
+                <img 
                   src="/attached_assets/ChatGPT Image 18 июл. 2025 г., 23_50_01-Photoroom_1752872369395.png"
                   alt="Cocktailo mobile app with pineapple daiquiri"
                   className="w-96 h-auto object-contain hover:scale-105 transition-all duration-300 relative z-10"
                   loading="lazy"
-                  quality="medium"
-                  placeholder="skeleton"
                 />
                 {/* Soft glow effects behind the image */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-cyan-400/15 to-purple-500/15 rounded-full blur-3xl -z-10"></div>
