@@ -1,10 +1,10 @@
 import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
-import { Plus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useCocktailStore } from "@/store/cocktail-store";
+import IngredientCard from "./IngredientCard";
 import type { Ingredient } from "@shared/schema";
 
 const CATEGORIES = [
@@ -18,7 +18,7 @@ const CATEGORIES = [
 export default function IngredientRecommendations() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('alcohol');
-  const { addIngredient } = useCocktailStore();
+  const { ingredients, addIngredient } = useCocktailStore();
 
   // Fetch all categories to enable search across all ingredients
   const { data: alcoholIngredients = [] } = useQuery<Ingredient[]>({
@@ -60,9 +60,13 @@ export default function IngredientRecommendations() {
     return categoryIngredients;
   }, [searchQuery, allIngredients, categoryIngredients]);
 
-  const handleAddIngredient = (ingredient: Ingredient) => {
-    const defaultAmount = ingredient.unit === 'ml' ? 30 : 1;
-    addIngredient(ingredient, defaultAmount);
+  const handleAddIngredient = (ingredient: Ingredient, amount: number) => {
+    const existingIngredient = ingredients.find(item => item.ingredient.id === ingredient.id);
+    if (existingIngredient) {
+      return; // Already added
+    }
+    
+    addIngredient(ingredient, amount, ingredient.unit);
   };
 
   return (
@@ -86,14 +90,17 @@ export default function IngredientRecommendations() {
       {!searchQuery.trim() && (
         <div className="flex flex-wrap gap-2 mb-4">
           {CATEGORIES.map((category) => (
-            <Button
+            <button
               key={category.id}
-              variant={selectedCategory === category.id ? "default" : "outline"}
-              size="sm"
               onClick={() => setSelectedCategory(category.id)}
+              className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                selectedCategory === category.id
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              }`}
             >
               {category.label}
-            </Button>
+            </button>
           ))}
         </div>
       )}
@@ -118,33 +125,18 @@ export default function IngredientRecommendations() {
               {searchQuery.trim() ? 'Ингредиенты не найдены' : 'Нет доступных ингредиентов'}
             </p>
           ) : (
-            <div className="space-y-2">
-              {filteredIngredients.map((ingredient) => (
-                <div
-                  key={ingredient.id}
-                  className="flex items-center justify-between p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div 
-                      className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: ingredient.color }}
-                    ></div>
-                    <div>
-                      <p className="font-semibold text-foreground">{ingredient.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {ingredient.abv}% ABV • ₽{ingredient.pricePerLiter}/л
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    size="sm"
-                    onClick={() => handleAddIngredient(ingredient)}
-                    className="h-8 w-8 p-0"
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
+            <div className="space-y-3">
+              {filteredIngredients.map((ingredient) => {
+                const existingIngredient = ingredients.find(item => item.ingredient.id === ingredient.id);
+                return (
+                  <IngredientCard
+                    key={ingredient.id}
+                    ingredient={ingredient}
+                    onAdd={handleAddIngredient}
+                    disabled={!!existingIngredient}
+                  />
+                );
+              })}
             </div>
           )}
         </ScrollArea>

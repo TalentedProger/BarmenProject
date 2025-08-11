@@ -83,61 +83,151 @@ export class MemoryStorage implements IStorage {
   }
 
   private initializeData() {
-    // Initialize sample ingredients
+    // Initialize enhanced ingredients database (3 per category)
     const sampleIngredients: InsertIngredient[] = [
+      // Alcohol (3 items)
       {
-        name: "Водка",
+        name: "Водка Premium",
         category: "alcohol",
-        color: "#ffffff",
+        color: "#FFFFFF",
+        abv: "40.00",
+        pricePerLiter: "1200.00",
+        tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 9 },
+        unit: "ml"
+      },
+      {
+        name: "Белый ром Bacardi",
+        category: "alcohol", 
+        color: "#FFFACD",
         abv: "40.00",
         pricePerLiter: "1500.00",
-        tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 8 },
+        tasteProfile: { sweet: 2, sour: 0, bitter: 0, alcohol: 8 },
         unit: "ml"
       },
       {
-        name: "Ром",
-        category: "alcohol", 
-        color: "#8B4513",
-        abv: "40.00",
-        pricePerLiter: "2000.00",
-        tasteProfile: { sweet: 3, sour: 0, bitter: 0, alcohol: 8 },
+        name: "Джин Bombay",
+        category: "alcohol",
+        color: "#F8F8FF", 
+        abv: "42.00",
+        pricePerLiter: "1800.00",
+        tasteProfile: { sweet: 0, sour: 0, bitter: 3, alcohol: 9 },
         unit: "ml"
       },
+
+      // Juices (3 items)  
       {
         name: "Апельсиновый сок",
         category: "juice",
         color: "#FFA500",
         abv: "0.00",
-        pricePerLiter: "300.00",
+        pricePerLiter: "200.00",
         tasteProfile: { sweet: 7, sour: 3, bitter: 0, alcohol: 0 },
         unit: "ml"
       },
       {
-        name: "Лимонный сок",
+        name: "Ананасовый сок", 
         category: "juice",
-        color: "#FFFF00",
+        color: "#FFE135",
+        abv: "0.00",
+        pricePerLiter: "250.00", 
+        tasteProfile: { sweet: 8, sour: 2, bitter: 0, alcohol: 0 },
+        unit: "ml"
+      },
+      {
+        name: "Клюквенный сок",
+        category: "juice",
+        color: "#DC143C",
+        abv: "0.00", 
+        pricePerLiter: "300.00",
+        tasteProfile: { sweet: 4, sour: 6, bitter: 1, alcohol: 0 },
+        unit: "ml"
+      },
+
+      // Syrups (3 items)
+      {
+        name: "Простой сироп",
+        category: "syrup",
+        color: "#FFFFFF",
+        abv: "0.00",
+        pricePerLiter: "150.00",
+        tasteProfile: { sweet: 10, sour: 0, bitter: 0, alcohol: 0 },
+        unit: "ml"
+      },
+      {
+        name: "Сироп граната",
+        category: "syrup",
+        color: "#B22222",
+        abv: "0.00",
+        pricePerLiter: "350.00",
+        tasteProfile: { sweet: 9, sour: 1, bitter: 0, alcohol: 0 },
+        unit: "ml"
+      },
+      {
+        name: "Кокосовый сироп",
+        category: "syrup", 
+        color: "#FFFACD",
         abv: "0.00",
         pricePerLiter: "400.00",
-        tasteProfile: { sweet: 1, sour: 9, bitter: 0, alcohol: 0 },
+        tasteProfile: { sweet: 8, sour: 0, bitter: 0, alcohol: 0 },
         unit: "ml"
       },
+
+      // Fruits (3 items) - price per kg  
       {
-        name: "Гренадин",
-        category: "syrup",
-        color: "#DC143C",
+        name: "Лайм свежий",
+        category: "fruit",
+        color: "#32CD32", 
         abv: "0.00",
-        pricePerLiter: "800.00",
-        tasteProfile: { sweet: 9, sour: 0, bitter: 0, alcohol: 0 },
-        unit: "ml"
+        pricePerLiter: "500.00", // per kg
+        tasteProfile: { sweet: 2, sour: 7, bitter: 0, alcohol: 0 },
+        unit: "kg"
       },
       {
-        name: "Лед",
+        name: "Лимон свежий",
+        category: "fruit",
+        color: "#FFFF00",
+        abv: "0.00",
+        pricePerLiter: "400.00", // per kg
+        tasteProfile: { sweet: 2, sour: 8, bitter: 0, alcohol: 0 },
+        unit: "kg"
+      },
+      {
+        name: "Мята свежая",
+        category: "fruit",
+        color: "#00FF00",
+        abv: "0.00", 
+        pricePerLiter: "800.00", // per kg
+        tasteProfile: { sweet: 1, sour: 0, bitter: 3, alcohol: 0 },
+        unit: "kg" 
+      },
+
+      // Ice (3 items)
+      {
+        name: "Лёд кубиками",
         category: "ice",
-        color: "#E0FFFF",
+        color: "#E0E0E0",
         abv: "0.00",
-        pricePerLiter: "50.00",
+        pricePerLiter: "50.00", // per kg
         tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 0 },
-        unit: "piece"
+        unit: "kg"
+      },
+      {
+        name: "Лёд дроблёный",
+        category: "ice", 
+        color: "#D3D3D3",
+        abv: "0.00",
+        pricePerLiter: "60.00", // per kg
+        tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 0 },
+        unit: "kg"
+      },
+      {
+        name: "Лёд сферический",
+        category: "ice",
+        color: "#F0F8FF", 
+        abv: "0.00",
+        pricePerLiter: "100.00", // per kg
+        tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 0 },
+        unit: "kg"
       }
     ];
 
