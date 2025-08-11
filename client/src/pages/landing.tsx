@@ -192,7 +192,7 @@ export default function Landing() {
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 text-platinum">Возможности платформы</h2>
+            <h2 className="text-3xl font-bold mb-4 text-platinum max-[480px]:text-2xl">Возможности платформы</h2>
             <p className="text-lg text-zinc max-w-2xl mx-auto">
               Все инструменты для создания идеальных коктейлей в одном месте
             </p>

@@ -361,8 +361,8 @@ export default function PopularRecipesSection() {
       <div className="container mx-auto px-6 relative z-10 max-w-7xl max-[480px]:px-4">
         {/* Section Title */}
         <div className="text-center mb-10 max-[480px]:mb-4">
-          <h2 className="md:text-5xl font-bold text-[#F1F1F1] mb-4 text-[40px] max-[480px]:text-3xl max-[480px]:mb-2" 
-              style={{ textShadow: '0 0 20px rgba(6, 182, 212, 0.3)' }}>
+          <h2 className="md:text-5xl font-bold text-[#FF4D9D] mb-4 text-[40px] max-[480px]:text-2xl max-[480px]:mb-2" 
+              style={{ textShadow: '0 0 20px rgba(255, 77, 157, 0.3)' }}>
             Популярные рецепты коктейлей
           </h2>
           <div className="h-px w-16 mx-auto bg-gradient-to-r from-purple-400 to-cyan-400 max-[480px]:hidden" />
