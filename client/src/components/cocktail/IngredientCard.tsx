@@ -16,8 +16,8 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
   const getIngredientImage = (ingredient: Ingredient) => {
     // Create SVG gradient placeholder based on ingredient color
     const color = ingredient.color || '#CCCCCC';
-    return `data:image/svg+xml;base64,${btoa(`
-      <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+    // Use encodeURIComponent instead of btoa to handle cyrillic characters
+    const svgContent = `<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="grad" cx="50%" cy="30%" r="60%">
             <stop offset="0%" style="stop-color:${color};stop-opacity:0.9" />
@@ -26,9 +26,9 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
         </defs>
         <rect width="80" height="80" rx="12" fill="url(#grad)"/>
         <circle cx="40" cy="35" r="15" fill="white" opacity="0.3"/>
-        <text x="40" y="65" text-anchor="middle" fill="white" font-size="8" font-weight="bold">${ingredient.name.slice(0, 8)}</text>
-      </svg>
-    `)}`;
+        <text x="40" y="65" text-anchor="middle" fill="white" font-size="8" font-weight="bold">${ingredient.name.slice(0, 6)}</text>
+      </svg>`;
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgContent)}`;
   };
 
   const handleAmountChange = (delta: number) => {

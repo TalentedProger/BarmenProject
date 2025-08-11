@@ -22,23 +22,29 @@ export default function IngredientRecommendations() {
 
   // Fetch all categories to enable search across all ingredients
   const { data: alcoholIngredients = [] } = useQuery<Ingredient[]>({
-    queryKey: ['/api/ingredients', 'alcohol'],
+    queryKey: ['/api/ingredients', { category: 'alcohol' }],
+    queryFn: () => fetch('/api/ingredients?category=alcohol').then(res => res.json()),
   });
   const { data: juiceIngredients = [] } = useQuery<Ingredient[]>({
-    queryKey: ['/api/ingredients', 'juice'],
+    queryKey: ['/api/ingredients', { category: 'juice' }],
+    queryFn: () => fetch('/api/ingredients?category=juice').then(res => res.json()),
   });
   const { data: syrupIngredients = [] } = useQuery<Ingredient[]>({
-    queryKey: ['/api/ingredients', 'syrup'],
+    queryKey: ['/api/ingredients', { category: 'syrup' }],
+    queryFn: () => fetch('/api/ingredients?category=syrup').then(res => res.json()),
   });
   const { data: fruitIngredients = [] } = useQuery<Ingredient[]>({
-    queryKey: ['/api/ingredients', 'fruit'],
+    queryKey: ['/api/ingredients', { category: 'fruit' }],
+    queryFn: () => fetch('/api/ingredients?category=fruit').then(res => res.json()),
   });
   const { data: iceIngredients = [] } = useQuery<Ingredient[]>({
-    queryKey: ['/api/ingredients', 'ice'],
+    queryKey: ['/api/ingredients', { category: 'ice' }],
+    queryFn: () => fetch('/api/ingredients?category=ice').then(res => res.json()),
   });
 
   const { data: categoryIngredients = [], isLoading } = useQuery<Ingredient[]>({
-    queryKey: ['/api/ingredients', selectedCategory],
+    queryKey: ['/api/ingredients', { category: selectedCategory }],
+    queryFn: () => fetch(`/api/ingredients?category=${selectedCategory}`).then(res => res.json()),
   });
 
   // Combine all ingredients for search
@@ -66,7 +72,7 @@ export default function IngredientRecommendations() {
       return; // Already added
     }
     
-    addIngredient(ingredient, amount, ingredient.unit);
+    addIngredient(ingredient, amount);
   };
 
   return (
