@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import { ArrowLeft, ArrowRight, Star, RefreshCw } from 'lucide-react';
@@ -248,11 +248,12 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
     <div className="recipe-card relative">
       <Link href={`/recipe/${recipe.id}`}>
         <div 
-          className="bg-[#1A1A1E] rounded-2xl transition-all duration-200 ease-out overflow-hidden group h-[460px] flex flex-col relative z-10 will-change-auto max-[480px]:h-[420px] max-[480px]:w-[85%] max-[480px]:mx-auto cursor-pointer"
+          className="bg-[#1A1A1E] rounded-2xl transition-all duration-300 ease-out overflow-hidden group h-[460px] flex flex-col relative z-10 max-[480px]:h-[420px] max-[480px]:w-[85%] max-[480px]:mx-auto cursor-pointer"
           style={{
             filter: 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))',
-            transform: 'translateZ(0)', // Force hardware acceleration
+            transform: 'translate3d(0, 0, 0)', // Force hardware acceleration
             backfaceVisibility: 'hidden', // Prevent flickering
+            willChange: 'transform, filter', // Optimize for animations
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.filter = 'drop-shadow(0 0 16px rgba(6, 182, 212, 0.2)) drop-shadow(0 6px 24px rgba(0, 0, 0, 0.3))';
@@ -266,16 +267,23 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             <img
               src={recipe.image}
               alt={recipe.name}
-              className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-105 will-change-transform"
+              className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
               loading="lazy"
               decoding="async"
               style={{
-                transform: 'translateZ(0)', // Force hardware acceleration
-                contentVisibility: 'auto', // Optimize rendering
+                transform: 'translate3d(0, 0, 0)', // Force hardware acceleration
+                backfaceVisibility: 'hidden',
+                willChange: 'transform',
               }}
             />
-            {/* Enhanced gradient overlay for better text readability - always visible */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 pointer-events-none" />
+            {/* Enhanced gradient overlay for better text readability - immediately visible */}
+            <div 
+              className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 pointer-events-none"
+              style={{
+                transform: 'translate3d(0, 0, 0)',
+                willChange: 'auto',
+              }}
+            />
           </div>
 
           {/* Content overlay */}
@@ -350,6 +358,18 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
 
 export default function PopularRecipesSection() {
   const [swiperRef, setSwiperRef] = useState<any>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile devices
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 480);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   return (
     <section className="py-12 bg-[#0C0C0F] relative overflow-hidden max-[480px]:py-8">
@@ -375,11 +395,16 @@ export default function PopularRecipesSection() {
           grabCursor={true}
           centeredSlides={true}
           loop={true}
-          autoplay={{
+          autoplay={isMobile ? false : {
             delay: 5000,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
           }}
+          speed={400}
+          preventInteractionOnTransition={false}
+          touchRatio={1}
+          threshold={8}
+          allowTouchMove={true}
           slidesPerView={1}
           spaceBetween={20}
           breakpoints={{
@@ -392,7 +417,7 @@ export default function PopularRecipesSection() {
               spaceBetween: 40,
             },
           }}
-          className="popular-recipes-swiper mb-8 max-[480px]:mb-4"
+          className="popular-recipes-swiper mb-8 max-[480px]:mb-4 swiper-mobile-optimized"
         >
           {popularRecipes.map((recipe) => (
             <SwiperSlide key={recipe.id}>
