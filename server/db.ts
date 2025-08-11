@@ -5,11 +5,20 @@ import * as schema from "@shared/schema";
 
 neonConfig.webSocketConstructor = ws;
 
-if (!process.env.DATABASE_URL) {
-  throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
-  );
+// For Replit migration: Allow running without database for in-memory storage mode
+let db: any = null;
+let pool: any = null;
+
+if (process.env.DATABASE_URL) {
+  pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  db = drizzle({ client: pool, schema });
+} else {
+  console.log("No DATABASE_URL provided - running in memory storage mode");
+  // Create a minimal mock db object for compatibility
+  db = {
+    select: () => ({ from: () => ({ limit: () => [] }) }),
+    insert: () => ({ values: () => Promise.resolve() })
+  };
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-export const db = drizzle({ client: pool, schema });
+export { pool, db };

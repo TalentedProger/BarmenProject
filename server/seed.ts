@@ -52,6 +52,11 @@ const sampleGlassTypes: InsertGlassType[] = [
 
 export async function seedDatabase() {
   try {
+    if (!process.env.DATABASE_URL) {
+      console.log("Running in memory storage mode - database seeding skipped (data preloaded in MemoryStorage)");
+      return;
+    }
+    
     console.log("Seeding database...");
     
     // Check if data already exists
