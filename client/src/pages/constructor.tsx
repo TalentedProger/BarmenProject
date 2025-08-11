@@ -175,6 +175,11 @@ export default function Constructor() {
                 )}
               </div>
               
+              {/* Added Ingredients - show on mobile as third element */}
+              <div className="bg-card border border-border rounded-lg p-4 lg:hidden">
+                <IngredientSelector />
+              </div>
+              
               {/* Small Recommendations Container - hidden on mobile */}
               <div className="bg-card border border-border rounded-lg p-4 h-32 hidden lg:block">
                 <h4 className="text-lg font-semibold text-foreground mb-2">Быстрые советы</h4>
@@ -205,8 +210,8 @@ export default function Constructor() {
                 </p>
               </div>
               
-              {/* Added Ingredients */}
-              <div className="bg-card border border-border rounded-lg p-4 flex-1">
+              {/* Added Ingredients - show on desktop only */}
+              <div className="bg-card border border-border rounded-lg p-4 flex-1 hidden lg:block">
                 <IngredientSelector />
               </div>
             </div>
