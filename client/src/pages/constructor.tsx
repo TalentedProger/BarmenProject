@@ -175,9 +175,9 @@ export default function Constructor() {
                 )}
               </div>
               
-              {/* Small Recommendations Container */}
-              <div className="bg-card border border-border rounded-lg p-4 h-32">
-                <h4 className="text-sm font-semibold text-foreground mb-2">Быстрые советы</h4>
+              {/* Small Recommendations Container - hidden on mobile */}
+              <div className="bg-card border border-border rounded-lg p-4 h-32 hidden lg:block">
+                <h4 className="text-lg font-semibold text-foreground mb-2">Быстрые советы</h4>
                 <p className="text-xs text-muted-foreground">
                   {ingredients.length === 0 
                     ? "Добавьте ингредиенты из левого меню для получения советов"
@@ -192,6 +192,17 @@ export default function Constructor() {
               {/* Cocktail Metrics */}
               <div className="bg-card border border-border rounded-lg p-4 flex-1">
                 <CocktailMetrics />
+              </div>
+              
+              {/* Quick Tips - moved here for mobile */}
+              <div className="bg-card border border-border rounded-lg p-4 h-32 lg:hidden">
+                <h4 className="text-lg font-semibold text-foreground mb-2">Быстрые советы</h4>
+                <p className="text-xs text-muted-foreground">
+                  {ingredients.length === 0 
+                    ? "Добавьте ингредиенты из левого меню для получения советов"
+                    : "Рецепт выглядит сбалансированно! Попробуйте добавить лед для охлаждения."
+                  }
+                </p>
               </div>
               
               {/* Added Ingredients */}
