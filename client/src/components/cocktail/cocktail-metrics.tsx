@@ -85,7 +85,7 @@ export function CocktailMetrics() {
 
   return (
     <div className="flex flex-col h-full">
-      <h3 className="text-lg font-semibold mb-4 text-foreground">Характеристики</h3>
+      <h3 className="text-lg font-semibold mb-4 text-foreground text-center">Характеристики</h3>
       
       <div className="space-y-4 flex-1">
         <div className="flex items-center justify-between">
@@ -93,7 +93,7 @@ export function CocktailMetrics() {
             <Droplets className="h-5 w-5 text-blue-500" />
             <span className="text-foreground">Объем:</span>
           </div>
-          <span className={`font-mono text-lg ${getVolumeColor()}`}>
+          <span className={`font-semibold text-lg text-blue-500`}>
             {stats.totalVolume}ml
           </span>
         </div>
@@ -103,7 +103,7 @@ export function CocktailMetrics() {
             <Zap className="h-5 w-5 text-yellow-500" />
             <span className="text-foreground">Крепость:</span>
           </div>
-          <span className={`font-mono text-lg ${getAbvColor()}`}>
+          <span className={`font-semibold text-lg text-yellow-500`}>
             {stats.totalAbv.toFixed(1)}%
           </span>
         </div>
@@ -113,7 +113,7 @@ export function CocktailMetrics() {
             <DollarSign className="h-5 w-5 text-green-500" />
             <span className="text-foreground">Стоимость:</span>
           </div>
-          <span className={`font-mono text-lg ${getCostColor()}`}>
+          <span className={`font-semibold text-lg text-foreground`}>
             ₽{stats.totalCost.toFixed(0)}
           </span>
         </div>

@@ -10,7 +10,9 @@ interface IngredientCardProps {
 }
 
 export default function IngredientCard({ ingredient, onAdd, disabled = false }: IngredientCardProps) {
-  const [amount, setAmount] = useState(30); // Default amount
+  // Default amounts: 10g for fruits (kg), 30ml for liquids (ml)
+  const defaultAmount = ingredient.unit === 'kg' ? 0.01 : 30; // 0.01 kg = 10g
+  const [amount, setAmount] = useState(defaultAmount);
 
   // Generate placeholder images with gradients based on ingredient color
   const getIngredientImage = (ingredient: Ingredient) => {
@@ -32,8 +34,16 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
   };
 
   const handleAmountChange = (delta: number) => {
-    const newAmount = Math.max(5, amount + delta);
-    setAmount(newAmount);
+    if (ingredient.unit === 'kg') {
+      // For fruits: work in grams, 5g increments, minimum 10g
+      const currentGrams = Math.round(amount * 1000);
+      const newGrams = Math.max(10, currentGrams + delta * 5);
+      setAmount(newGrams / 1000); // Convert back to kg
+    } else {
+      // For liquids: 5ml increments, minimum 5ml
+      const newAmount = Math.max(5, amount + delta * 5);
+      setAmount(newAmount);
+    }
   };
 
   const formatPrice = (price: string, unit: string) => {
@@ -84,19 +94,25 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => handleAmountChange(-5)}
-                disabled={amount <= 5}
+                onClick={() => handleAmountChange(-1)}
+                disabled={ingredient.unit === 'kg' ? 
+                  Math.round(amount * 1000) <= 10 : // 10g minimum for fruits
+                  amount <= 5 // 5ml minimum for liquids
+                }
                 className="h-7 w-7 p-0"
               >
                 <Minus className="h-3 w-3" />
               </Button>
-              <span className="text-sm font-medium min-w-[40px] text-center">
-                {amount} {ingredient.unit}
+              <span className="text-sm font-medium min-w-[50px] text-center">
+                {ingredient.unit === 'kg' ? 
+                  `${Math.round(amount * 1000)} г` : 
+                  `${Math.round(amount)} ${ingredient.unit}`
+                }
               </span>
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => handleAmountChange(5)}
+                onClick={() => handleAmountChange(1)}
                 className="h-7 w-7 p-0"
               >
                 <Plus className="h-3 w-3" />
