@@ -77,9 +77,16 @@ export default function DrinkVisualizer() {
       );
     }
 
-    const totalVolume = ingredients.reduce((sum, item) => sum + parseFloat(item.amount.toString()), 0);
+    const totalVolume = ingredients.reduce((sum, item) => {
+      const amount = parseFloat(item.amount.toString());
+      // Convert kg to ml for fruits (density approximation)
+      const volumeInMl = item.ingredient.unit === 'kg' ? amount * 1000 : amount;
+      return sum + volumeInMl;
+    }, 0);
+    
     const glassHeight = 192; // 48 * 4 = 192px
     const filledHeight = Math.min(glassHeight * 0.8, (totalVolume / selectedGlass.capacity) * glassHeight);
+    const isFull = totalVolume >= selectedGlass.capacity;
 
     let currentHeight = 0;
     const layers = ingredients.map((item, index) => {
@@ -100,12 +107,18 @@ export default function DrinkVisualizer() {
       <div className="flex justify-center">
         <div className="relative">
           <div 
-            className="relative w-32 h-48 bg-gradient-to-b from-gray-700/20 to-gray-900/40 border-2 border-gray-500 overflow-hidden shadow-2xl"
+            className={`relative w-32 h-48 bg-gradient-to-b from-gray-700/20 to-gray-900/40 border-2 overflow-hidden shadow-2xl transition-all duration-1000 ease-out ${
+              isFull ? 'border-red-500 animate-pulse' : 'border-gray-500'
+            }`}
             style={{ 
               clipPath: 'polygon(15% 0%, 85% 0%, 90% 100%, 10% 100%)',
               borderRadius: '3px 3px 8px 8px',
-              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.1)',
-              filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))',
+              boxShadow: isFull ? 
+                '0 0 40px rgba(239, 68, 68, 0.6), 0 0 60px rgba(239, 68, 68, 0.4), 0 8px 25px rgba(239, 68, 68, 0.3), inset 0 0 20px rgba(239, 68, 68, 0.2)' :
+                '0 8px 25px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.1)',
+              filter: isFull ? 
+                'drop-shadow(0 0 20px rgba(239, 68, 68, 0.7)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))' :
+                'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))',
             }}
           >
             {/* Liquid layers */}
@@ -135,6 +148,20 @@ export default function DrinkVisualizer() {
             
             {/* Subtle inner highlight */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-5 w-2"></div>
+            
+            {/* Full glass warning overlay */}
+            {isFull && (
+              <div 
+                className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-lg z-30 animate-fadeInUp shadow-lg"
+                style={{
+                  animation: 'fadeInUp 0.8s ease-out forwards',
+                  boxShadow: '0 4px 20px rgba(239, 68, 68, 0.5)'
+                }}
+              >
+                Стакан полон
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-red-500"></div>
+              </div>
+            )}
           </div>
           
           {/* Tooltip */}
