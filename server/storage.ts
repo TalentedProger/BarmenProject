@@ -244,10 +244,22 @@ export class MemoryStorage implements IStorage {
 
     // Initialize sample glass types
     const sampleGlassTypes: InsertGlassType[] = [
-      { name: "Мартини", capacity: 180, shape: "martini" },
-      { name: "Хайбол", capacity: 350, shape: "highball" },
-      { name: "Олд фэшенд", capacity: 250, shape: "old-fashioned" },
-      { name: "Шот", capacity: 50, shape: "shot" }
+      { name: "Шот", capacity: 50, shape: "shot" },
+      { name: "Олд Фэшн", capacity: 300, shape: "old-fashioned" },
+      { name: "Double Old Fashioned", capacity: 450, shape: "double-old-fashioned" },
+      { name: "Хайбол", capacity: 270, shape: "highball" },
+      { name: "Коллинз", capacity: 300, shape: "collins" },
+      { name: "Коктейльная рюмка (Martini Glass)", capacity: 150, shape: "martini" },
+      { name: "Маргарита", capacity: 250, shape: "margarita" },
+      { name: "Харрикейн", capacity: 450, shape: "hurricane" },
+      { name: "Тумблер", capacity: 300, shape: "tumbler" },
+      { name: "Коньячный бокал (Snifter)", capacity: 350, shape: "snifter" },
+      { name: "Фужер для шампанского (Champagne Flute)", capacity: 170, shape: "champagne-flute" },
+      { name: "Пивная кружка", capacity: 500, shape: "beer-mug" },
+      { name: "Бокал для красного вина", capacity: 300, shape: "red-wine" },
+      { name: "Бокал для белого вина", capacity: 260, shape: "white-wine" },
+      { name: "Бокал сауэр", capacity: 120, shape: "sour" },
+      { name: "Чаша для шампанского (Champagne Saucer)", capacity: 180, shape: "champagne-saucer" }
     ];
 
     sampleGlassTypes.forEach(glassType => {

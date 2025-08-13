@@ -3,19 +3,49 @@ import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCocktailStore } from '@/store/cocktail-store';
 
-// Import glass images
-import martiniGlass from '@/assets/glass-images/martini.svg';
-import highballGlass from '@/assets/glass-images/highball.svg';
-import shotGlass from '@/assets/glass-images/shot.svg';
-import rocksGlass from '@/assets/glass-images/rocks.svg';
-import wineGlass from '@/assets/glass-images/wine.svg';
+// Local glass type for UI components
+interface LocalGlassType {
+  id: string;
+  name: string;
+  capacity: number;
+  image: string;
+}
 
-const glassTypes = [
-  { id: 'martini', name: 'Мартини', capacity: 150, image: martiniGlass },
-  { id: 'highball', name: 'Хайбол', capacity: 350, image: highballGlass },
-  { id: 'shot', name: 'Шот', capacity: 50, image: shotGlass },
-  { id: 'rocks', name: 'Рокс', capacity: 200, image: rocksGlass },
-  { id: 'wine', name: 'Вино', capacity: 180, image: wineGlass },
+// Import glass images
+import shotImage from '@/assets/glass-images-new/shot.png';
+import oldFashionedImage from '@/assets/glass-images-new/old-fashioned.png';
+import doubleOldFashionedImage from '@/assets/glass-images-new/double-old-fashioned.png';
+import highballImage from '@/assets/glass-images-new/highball.png';
+import collinsImage from '@/assets/glass-images-new/collins.png';
+import martiniImage from '@/assets/glass-images-new/martini.png';
+import margaritaImage from '@/assets/glass-images-new/margarita.png';
+import hurricaneImage from '@/assets/glass-images-new/hurricane.png';
+import tumblerImage from '@/assets/glass-images-new/tumbler.png';
+import snifterImage from '@/assets/glass-images-new/snifter.png';
+import champagneFlute from '@/assets/glass-images-new/champagne-flute.png';
+import beerMugImage from '@/assets/glass-images-new/beer-mug.png';
+import redWineImage from '@/assets/glass-images-new/red-wine.png';
+import whiteWineImage from '@/assets/glass-images-new/white-wine.png';
+import sourImage from '@/assets/glass-images-new/sour.png';
+import champagneSaucer from '@/assets/glass-images-new/champagne-saucer.png';
+
+const glassTypes: LocalGlassType[] = [
+  { id: 'shot', name: 'Шот', capacity: 50, image: shotImage },
+  { id: 'old-fashioned', name: 'Олд Фэшн', capacity: 300, image: oldFashionedImage },
+  { id: 'double-old-fashioned', name: 'Double Old Fashioned', capacity: 450, image: doubleOldFashionedImage },
+  { id: 'highball', name: 'Хайбол', capacity: 270, image: highballImage },
+  { id: 'collins', name: 'Коллинз', capacity: 300, image: collinsImage },
+  { id: 'martini', name: 'Коктейльная рюмка (Martini Glass)', capacity: 150, image: martiniImage },
+  { id: 'margarita', name: 'Маргарита', capacity: 250, image: margaritaImage },
+  { id: 'hurricane', name: 'Харрикейн', capacity: 450, image: hurricaneImage },
+  { id: 'tumbler', name: 'Тумблер', capacity: 300, image: tumblerImage },
+  { id: 'snifter', name: 'Коньячный бокал (Snifter)', capacity: 350, image: snifterImage },
+  { id: 'champagne-flute', name: 'Фужер для шампанского (Champagne Flute)', capacity: 170, image: champagneFlute },
+  { id: 'beer-mug', name: 'Пивная кружка', capacity: 500, image: beerMugImage },
+  { id: 'red-wine', name: 'Бокал для красного вина', capacity: 300, image: redWineImage },
+  { id: 'white-wine', name: 'Бокал для белого вина', capacity: 260, image: whiteWineImage },
+  { id: 'sour', name: 'Бокал сауэр', capacity: 120, image: sourImage },
+  { id: 'champagne-saucer', name: 'Чаша для шампанского (Champagne Saucer)', capacity: 180, image: champagneSaucer },
 ];
 
 export function CompactGlassSelector() {
@@ -33,14 +63,16 @@ export function CompactGlassSelector() {
   const selectCurrentGlass = () => {
     const glass = glassTypes[currentIndex];
     setSelectedGlass({
-      id: glass.id,
+      id: currentIndex + 1, // Convert to numeric ID for database compatibility
       name: glass.name,
       capacity: glass.capacity,
+      shape: glass.id, // Use string ID as shape
+      createdAt: new Date()
     });
   };
 
   const currentGlass = glassTypes[currentIndex];
-  const isSelected = selectedGlass?.id === currentGlass.id;
+  const isSelected = selectedGlass?.shape === currentGlass.id;
 
   return (
     <div className="relative flex flex-col items-center h-full justify-between">
