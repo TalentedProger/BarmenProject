@@ -123,8 +123,8 @@ export function CocktailMetrics() {
             <DollarSign className="h-5 w-5 text-green-500" />
             <span className="text-foreground">Стоимость:</span>
           </div>
-          <span className={`font-semibold text-lg text-foreground`}>
-            ₽{stats.totalCost.toFixed(0)}
+          <span className={`font-semibold text-lg text-green-500`}>
+            {stats.totalCost.toFixed(0)}₽
           </span>
         </div>
 
