@@ -56,7 +56,7 @@ export default function IngredientSelector() {
                     <X className="h-3 w-3" />
                   </Button>
 
-                  <div className="flex items-center space-x-3 flex-1 pr-8">
+                  <div className="flex items-center space-x-3 flex-1 pr-12">
                     <div 
                       className="w-4 h-4 rounded-full"
                       style={{ backgroundColor: item.ingredient.color }}
@@ -70,7 +70,7 @@ export default function IngredientSelector() {
                   </div>
 
                   {/* Amount controls */}
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 mr-2">
                     <Button
                       size="sm"
                       variant="outline"
