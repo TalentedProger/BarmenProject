@@ -71,11 +71,11 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
           </div>
         </div>
         <div className="text-right flex-shrink-0">
-          <p className="text-xs font-medium text-foreground">
+          <p className="text-xs font-medium text-neon-turquoise">
             {formatPrice(ingredient.pricePerLiter, ingredient.unit)}
           </p>
           {ingredient.abv && parseFloat(ingredient.abv) > 0 && (
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-neon-turquoise">
               {ingredient.abv}%
             </p>
           )}
@@ -118,7 +118,7 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
           size="sm"
           onClick={() => onAdd(ingredient, amount)}
           disabled={disabled}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 h-6 text-xs w-full"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 h-6 text-xs w-3/5"
         >
           Добавить
         </Button>

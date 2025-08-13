@@ -112,8 +112,8 @@ export default function IngredientRecommendations() {
       )}
 
       {/* Available Ingredients */}
-      <div className="flex-1">
-        <ScrollArea className="h-80">
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full overflow-y-auto">
           {isLoading && !searchQuery.trim() ? (
             <div className="space-y-2">
               {[...Array(3)].map((_, i) => (
@@ -131,7 +131,7 @@ export default function IngredientRecommendations() {
               {searchQuery.trim() ? 'Ингредиенты не найдены' : 'Нет доступных ингредиентов'}
             </p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2 pb-2">
               {filteredIngredients.map((ingredient) => {
                 const existingIngredient = ingredients.find(item => item.ingredient.id === ingredient.id);
                 return (
@@ -145,7 +145,7 @@ export default function IngredientRecommendations() {
               })}
             </div>
           )}
-        </ScrollArea>
+        </div>
       </div>
     </div>
   );
