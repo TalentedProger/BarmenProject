@@ -108,7 +108,7 @@ export default function DrinkVisualizer() {
         <div className="relative">
           <div 
             className={`relative w-32 h-48 bg-gradient-to-b from-gray-700/20 to-gray-900/40 border-2 overflow-hidden shadow-2xl transition-all duration-1000 ease-out ${
-              isFull ? 'border-red-500 animate-pulse' : 'border-gray-500'
+              isFull ? 'border-red-500' : 'border-gray-500'
             }`}
             style={{ 
               clipPath: 'polygon(15% 0%, 85% 0%, 90% 100%, 10% 100%)',
@@ -184,7 +184,7 @@ export default function DrinkVisualizer() {
       {isFull && (
         <div className="text-center mb-2 animate-fadeInUp">
           <p 
-            className="text-sm md:text-lg font-bold animate-pulse"
+            className="text-sm md:text-lg font-bold"
             style={{
               color: '#ff073a',
               textShadow: '0 0 10px rgba(255, 7, 58, 0.8), 0 0 20px rgba(255, 7, 58, 0.5), 0 0 30px rgba(255, 7, 58, 0.3)',
