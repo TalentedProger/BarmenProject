@@ -118,7 +118,7 @@ export function CompactGlassSelector() {
         {/* Glass Image - centered without navigation interference */}
         <div className="flex items-center justify-center w-full">          
           <div className="flex flex-col items-center space-y-2">
-            {/* Enlarged glass image with animation and neon glow */}
+            {/* Enlarged glass image with elegant drop shadow */}
             <div className="w-64 h-72 flex items-center justify-center overflow-hidden relative">
               <div className={`glass-container relative transition-all duration-300 ease-in-out ${
                 isTransitioning ? 'scale-95 opacity-70' : 'scale-100 opacity-100'
@@ -132,46 +132,14 @@ export function CompactGlassSelector() {
                   style={{ 
                     imageRendering: 'crisp-edges',
                     willChange: 'transform, opacity',
-                    filter: 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.3))'
+                    filter: 'drop-shadow(0 25px 50px rgba(138, 43, 226, 0.3)) drop-shadow(0 15px 30px rgba(0, 255, 255, 0.2))'
                   }}
                 />
-                {/* Компактные динамические неоновые тени */}
-                <div className="absolute inset-0 z-0 animate-pulse-glow">
-                  {/* Внешнее свечение - синий */}
-                  <div className="absolute inset-3 rounded-full opacity-50 animate-glow-rotate"
-                    style={{
-                      background: `radial-gradient(ellipse at center, 
-                        transparent 45%, 
-                        rgba(59, 130, 246, 0.2) 55%, 
-                        rgba(59, 130, 246, 0.1) 65%, 
-                        transparent 75%)`,
-                      filter: 'blur(3px)'
-                    }}
-                  />
-                  {/* Внутреннее свечение - фиолетовый */}
-                  <div className="absolute inset-4 rounded-full opacity-35 animate-glow-rotate-reverse"
-                    style={{
-                      background: `radial-gradient(ellipse at center, 
-                        transparent 40%, 
-                        rgba(147, 51, 234, 0.25) 50%, 
-                        rgba(147, 51, 234, 0.1) 60%, 
-                        transparent 70%)`,
-                      filter: 'blur(2px)',
-                      animationDelay: '1.5s'
-                    }}
-                  />
-                  {/* Тонкий контурный свет */}
-                  <div className="absolute inset-6 rounded-full opacity-60 animate-glow-rotate"
-                    style={{
-                      background: `radial-gradient(ellipse at center, 
-                        transparent 35%, 
-                        rgba(34, 197, 94, 0.15) 45%, 
-                        transparent 55%)`,
-                      filter: 'blur(1px)',
-                      animationDelay: '0.5s'
-                    }}
-                  />
-                </div>
+                
+                {/* Elegant glow effects behind the glass - only for center area */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-r from-purple-500/20 to-cyan-400/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-gradient-to-br from-pink-400/15 to-blue-400/15 rounded-full blur-2xl -z-20"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-t from-violet-400/25 to-cyan-300/25 rounded-full blur-xl -z-30"></div>
               </div>
             </div>
           </div>

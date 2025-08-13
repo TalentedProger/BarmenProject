@@ -74,77 +74,13 @@
   will-change: transform;
 }
 
-/* Компактные неоновые анимации для стаканов */
-@keyframes glow-rotate {
-  0% {
-    transform: rotate(0deg) scale(1);
-    opacity: 0.5;
-  }
-  33% {
-    transform: rotate(120deg) scale(1.02);
-    opacity: 0.7;
-  }
-  66% {
-    transform: rotate(240deg) scale(0.98);
-    opacity: 0.6;
-  }
-  100% {
-    transform: rotate(360deg) scale(1);
-    opacity: 0.5;
-  }
-}
-
-@keyframes glow-rotate-reverse {
-  0% {
-    transform: rotate(360deg) scale(1.01);
-    opacity: 0.35;
-  }
-  50% {
-    transform: rotate(180deg) scale(0.99);
-    opacity: 0.55;
-  }
-  100% {
-    transform: rotate(0deg) scale(1.01);
-    opacity: 0.35;
-  }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 0.9;
-  }
-}
-
-.animate-glow-rotate {
-  animation: glow-rotate 6s ease-in-out infinite;
-}
-
-.animate-glow-rotate-reverse {
-  animation: glow-rotate-reverse 4s ease-in-out infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-/* Контейнер стакана с неоновым эффектом */
+/* Контейнер стакана с элегантным эффектом */
 .glass-container {
   will-change: transform, opacity;
 }
 
 .glass-container:hover {
   transform: scale(1.02);
-}
-
-.glass-container:hover .animate-glow-rotate {
-  animation-duration: 2s;
-}
-
-.glass-container:hover .animate-glow-rotate-reverse {
-  animation-duration: 1.5s;
 }
 
 .cocktail-image {
