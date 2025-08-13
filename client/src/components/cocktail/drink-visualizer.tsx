@@ -39,12 +39,12 @@ const glassImageMap: Record<string, string> = {
 
 export default function DrinkVisualizer() {
   const { selectedGlass, ingredients, cocktailStats } = useCocktailStore();
-  const [hoveredLayer, setHoveredLayer] = useState<string | null>(null);
+  const [hoveredLayer, setHoveredLayer] = useState<{ name: string; color: string } | null>(null);
 
   const renderGlassImage = () => {
     if (!selectedGlass) {
       return (
-        <div className="w-40 h-52 bg-gray-800 rounded-lg border-2 border-gray-600 flex items-center justify-center">
+        <div className="w-32 h-48 bg-gray-800 rounded-lg border-2 border-gray-600 flex items-center justify-center">
           <p className="text-gray-400 text-sm">Выберите стакан</p>
         </div>
       );
@@ -54,7 +54,7 @@ export default function DrinkVisualizer() {
 
     return (
       <div className="flex justify-center">
-        <div className="relative w-40 h-52">
+        <div className="relative w-32 h-48">
           <img
             src={glassImage}
             alt={selectedGlass.name}
@@ -127,7 +127,7 @@ export default function DrinkVisualizer() {
                   background: `linear-gradient(to top, ${layer.color}, ${layer.color}dd)`,
                   transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
-                onMouseEnter={() => setHoveredLayer(layer.name)}
+                onMouseEnter={() => setHoveredLayer({ name: layer.name, color: layer.color })}
                 onMouseLeave={() => setHoveredLayer(null)}
               />
             ))}
@@ -147,8 +147,9 @@ export default function DrinkVisualizer() {
           
           {/* Tooltip */}
           {hoveredLayer && (
-            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20">
-              {hoveredLayer}
+            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-xs px-2 py-1 rounded whitespace-nowrap z-20"
+                 style={{ color: hoveredLayer.color }}>
+              {hoveredLayer.name}
               <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-2 border-r-2 border-t-2 border-transparent border-t-gray-900"></div>
             </div>
           )}
