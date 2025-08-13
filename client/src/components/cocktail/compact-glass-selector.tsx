@@ -87,13 +87,13 @@ export function CompactGlassSelector() {
 
   return (
     <div className="relative flex flex-col items-center h-full justify-between">
-      {/* Navigation buttons positioned at main container edges */}
+      {/* Navigation buttons positioned at main container edges with higher z-index */}
       <Button
         variant="ghost"
         size="icon"
         onClick={prevGlass}
         disabled={isTransitioning}
-        className={`absolute left-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-16 h-16 z-10 transition-all duration-200 ${
+        className={`absolute left-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-16 h-16 z-50 transition-all duration-200 ${
           isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
         }`}
       >
@@ -105,7 +105,7 @@ export function CompactGlassSelector() {
         size="icon"
         onClick={nextGlass}
         disabled={isTransitioning}
-        className={`absolute right-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-16 h-16 z-10 transition-all duration-200 ${
+        className={`absolute right-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-16 h-16 z-50 transition-all duration-200 ${
           isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
         }`}
       >
@@ -119,7 +119,7 @@ export function CompactGlassSelector() {
         <div className="flex items-center justify-center w-full">          
           <div className="flex flex-col items-center space-y-2">
             {/* Enlarged glass image with animation and elegant shadows */}
-            <div className="w-64 h-72 flex items-center justify-center overflow-visible relative">
+            <div className="w-64 h-72 flex items-center justify-center overflow-visible relative pointer-events-none">
               <div className="relative">
                 <img
                   src={currentGlass.image}
@@ -132,17 +132,17 @@ export function CompactGlassSelector() {
                   style={{ 
                     imageRendering: 'crisp-edges',
                     willChange: 'transform, opacity',
-                    filter: 'drop-shadow(0 25px 50px rgba(138, 43, 226, 0.3)) drop-shadow(0 15px 30px rgba(0, 255, 255, 0.2))'
+                    filter: 'drop-shadow(0 30px 60px rgba(138, 43, 226, 0.5)) drop-shadow(0 20px 40px rgba(0, 255, 255, 0.4))'
                   }}
                 />
                 
-                {/* Elegant glow effects behind the glass - matching landing page */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-cyan-400/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-pink-400/15 to-blue-400/15 rounded-full blur-2xl -z-20"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-t from-violet-400/25 to-cyan-300/25 rounded-full blur-xl -z-30"></div>
+                {/* Enhanced glow effects behind the glass - more expressive */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-purple-500/30 to-cyan-400/30 rounded-full blur-3xl -z-10 animate-pulse"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-pink-400/25 to-blue-400/25 rounded-full blur-2xl -z-20"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-t from-violet-400/35 to-cyan-300/35 rounded-full blur-xl -z-30"></div>
                 
-                {/* Soft base shadow */}
-                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-4 bg-black/20 rounded-full blur-lg -z-40"></div>
+                {/* Enhanced base shadow */}
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black/30 rounded-full blur-lg -z-40"></div>
               </div>
             </div>
           </div>
