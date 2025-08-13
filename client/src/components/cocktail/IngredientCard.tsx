@@ -82,10 +82,10 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
         </div>
       </div>
 
-      {/* Responsive bottom section */}
-      <div className="flex items-center justify-between gap-2 sm:flex-col sm:items-center sm:gap-2">
+      {/* Bottom section - always in one row */}
+      <div className="flex items-center justify-between gap-2">
         {/* Amount controls */}
-        <div className="flex items-center gap-2 sm:order-1">
+        <div className="flex items-center gap-2">
           <Button
             size="sm"
             variant="outline"
@@ -115,12 +115,12 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
         </div>
 
         {/* Add button */}
-        <div className="flex justify-center sm:order-2 sm:w-full">
+        <div className="flex justify-center">
           <Button
             size="sm"
             onClick={() => onAdd(ingredient, amount)}
             disabled={disabled}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 h-6 text-xs sm:w-3/5"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 h-6 text-xs"
           >
             Добавить
           </Button>
