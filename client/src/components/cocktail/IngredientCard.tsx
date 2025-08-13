@@ -3,6 +3,20 @@ import { Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Ingredient } from "@shared/schema";
 
+const getCategoryLabel = (category: string) => {
+  switch (category) {
+    case 'alcohol': return 'Алкоголь';
+    case 'juice': return 'Соки';
+    case 'syrup': return 'Сиропы';
+    case 'fruit': return 'Фрукты';
+    case 'ice': return 'Лёд';
+    case 'mixer': return 'Миксеры';
+    case 'bitter': return 'Биттеры';
+    case 'garnish': return 'Декор';
+    default: return category;
+  }
+};
+
 interface IngredientCardProps {
   ingredient: Ingredient;
   onAdd: (ingredient: Ingredient, amount: number) => void;
@@ -65,8 +79,8 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
             <h3 className="font-semibold text-foreground text-sm truncate">
               {ingredient.name}
             </h3>
-            <p className="text-xs text-muted-foreground capitalize">
-              {ingredient.category}
+            <p className="text-xs text-muted-foreground">
+              {getCategoryLabel(ingredient.category)}
             </p>
           </div>
         </div>

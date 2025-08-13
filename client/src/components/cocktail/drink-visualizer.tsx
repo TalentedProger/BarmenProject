@@ -100,22 +100,14 @@ export default function DrinkVisualizer() {
       <div className="flex justify-center">
         <div className="relative">
           <div 
-            className="relative w-32 h-48 overflow-hidden"
+            className="relative w-32 h-48 bg-gradient-to-b from-gray-700/20 to-gray-900/40 border-2 border-gray-500 overflow-hidden shadow-2xl"
             style={{ 
               clipPath: 'polygon(15% 0%, 85% 0%, 90% 100%, 10% 100%)',
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 30%, transparent 50%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0.2) 100%)',
               borderRadius: '3px 3px 8px 8px',
-              border: '2px solid rgba(200, 200, 200, 0.4)',
-              boxShadow: 'inset 0 0 20px rgba(255,255,255,0.1), inset 0 0 40px rgba(255,255,255,0.05)',
+              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.1)',
+              filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))',
             }}
           >
-            {/* Glass background with subtle texture */}
-            <div 
-              className="absolute inset-0 opacity-30"
-              style={{
-                background: 'radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.3) 0%, transparent 50%), linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.2) 100%)',
-              }}
-            />
             {/* Liquid layers */}
             {layers.map((layer, index) => (
               <div
@@ -141,24 +133,8 @@ export default function DrinkVisualizer() {
               </>
             )}
             
-            {/* Enhanced glass shine effects */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-15 w-3 animate-pulse"></div>
-            
-            {/* Left edge highlight */}
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-white/40 via-white/20 to-transparent"></div>
-            
-            {/* Right edge shadow */}
-            <div className="absolute right-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-black/10 to-black/20"></div>
-            
-            {/* Surface reflection */}
-            <div 
-              className="absolute top-2 left-2 w-6 h-12 opacity-20 animate-pulse"
-              style={{
-                background: 'linear-gradient(45deg, white 0%, transparent 70%)',
-                borderRadius: '2px',
-                transform: 'skewX(-10deg)'
-              }}
-            ></div>
+            {/* Subtle inner highlight */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-5 w-2"></div>
           </div>
           
           {/* Tooltip */}

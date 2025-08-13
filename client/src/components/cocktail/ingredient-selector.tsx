@@ -3,6 +3,20 @@ import { Badge } from "@/components/ui/badge";
 import { Minus, Plus, X } from "lucide-react";
 import { useCocktailStore } from "@/store/cocktail-store";
 
+const getCategoryLabel = (category: string) => {
+  switch (category) {
+    case 'alcohol': return 'Алкоголь';
+    case 'juice': return 'Соки';
+    case 'syrup': return 'Сиропы';
+    case 'fruit': return 'Фрукты';
+    case 'ice': return 'Лёд';
+    case 'mixer': return 'Миксеры';
+    case 'bitter': return 'Биттеры';
+    case 'garnish': return 'Декор';
+    default: return category;
+  }
+};
+
 export default function IngredientSelector() {
   const { ingredients, updateIngredient, removeIngredient } = useCocktailStore();
 
@@ -51,9 +65,9 @@ export default function IngredientSelector() {
                     size="sm"
                     variant="destructive"
                     onClick={() => removeIngredient(index)}
-                    className="absolute top-2 right-2 h-6 w-6 p-0 rounded-full z-10"
+                    className="absolute top-2 right-2 h-5 w-5 p-0 rounded-full z-10"
                   >
-                    <X className="h-3 w-3" />
+                    <X className="h-2.5 w-2.5" />
                   </Button>
 
                   {/* Responsive layout */}
@@ -65,7 +79,7 @@ export default function IngredientSelector() {
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-foreground truncate text-sm">{item.ingredient.name}</p>
                       <Badge variant="outline" className="text-xs">
-                        {item.ingredient.category}
+                        {getCategoryLabel(item.ingredient.category)}
                       </Badge>
                     </div>
                     
