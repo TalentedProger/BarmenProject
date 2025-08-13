@@ -118,21 +118,32 @@ export function CompactGlassSelector() {
         {/* Glass Image - centered without navigation interference */}
         <div className="flex items-center justify-center w-full">          
           <div className="flex flex-col items-center space-y-2">
-            {/* Enlarged glass image with animation */}
-            <div className="w-64 h-72 flex items-center justify-center overflow-hidden">
-              <img
-                src={currentGlass.image}
-                alt={currentGlass.name}
-                className={`w-full h-full object-contain filter drop-shadow-lg transition-all duration-300 ease-in-out ${
-                  isTransitioning ? 'scale-95 opacity-70' : 'scale-100 opacity-100'
-                }`}
-                loading="eager"
-                decoding="async"
-                style={{ 
-                  imageRendering: 'crisp-edges',
-                  willChange: 'transform, opacity'
-                }}
-              />
+            {/* Enlarged glass image with animation and elegant shadows */}
+            <div className="w-64 h-72 flex items-center justify-center overflow-visible relative">
+              <div className="relative">
+                <img
+                  src={currentGlass.image}
+                  alt={currentGlass.name}
+                  className={`w-full h-full object-contain relative z-10 transition-all duration-300 ease-in-out ${
+                    isTransitioning ? 'scale-95 opacity-70' : 'scale-100 opacity-100'
+                  }`}
+                  loading="eager"
+                  decoding="async"
+                  style={{ 
+                    imageRendering: 'crisp-edges',
+                    willChange: 'transform, opacity',
+                    filter: 'drop-shadow(0 25px 50px rgba(138, 43, 226, 0.3)) drop-shadow(0 15px 30px rgba(0, 255, 255, 0.2))'
+                  }}
+                />
+                
+                {/* Elegant glow effects behind the glass - matching landing page */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-cyan-400/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-pink-400/15 to-blue-400/15 rounded-full blur-2xl -z-20"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-t from-violet-400/25 to-cyan-300/25 rounded-full blur-xl -z-30"></div>
+                
+                {/* Soft base shadow */}
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-4 bg-black/20 rounded-full blur-lg -z-40"></div>
+              </div>
             </div>
           </div>
         </div>
