@@ -199,16 +199,7 @@ export default function Constructor() {
                 <CocktailMetrics />
               </div>
               
-              {/* Quick Tips - moved here for mobile */}
-              <div className="bg-card border border-border rounded-lg p-4 h-32 lg:hidden">
-                <h4 className="text-lg font-semibold text-foreground mb-2">Быстрые советы</h4>
-                <p className="text-xs text-muted-foreground">
-                  {ingredients.length === 0 
-                    ? "Добавьте ингредиенты из левого меню для получения советов"
-                    : "Рецепт выглядит сбалансированно! Попробуйте добавить лед для охлаждения."
-                  }
-                </p>
-              </div>
+
               
               {/* Added Ingredients - show on desktop only */}
               <div className="bg-card border border-border rounded-lg p-4 flex-1 hidden lg:block">
