@@ -106,19 +106,30 @@ export default function DrinkVisualizer() {
     return (
       <div className="flex justify-center">
         <div className="relative">
+          {/* Background circular glow when full */}
+          {isFull && (
+            <div 
+              className="absolute inset-0 rounded-full transition-all duration-1000 ease-out"
+              style={{
+                background: 'radial-gradient(circle, rgba(239, 68, 68, 0.4) 0%, rgba(239, 68, 68, 0.2) 40%, transparent 70%)',
+                width: '200px',
+                height: '200px',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: -1,
+                filter: 'blur(20px)'
+              }}
+            />
+          )}
+          
           <div 
-            className={`relative w-32 h-48 bg-gradient-to-b from-gray-700/20 to-gray-900/40 border-2 overflow-hidden shadow-2xl transition-all duration-1000 ease-out ${
-              isFull ? 'border-red-500' : 'border-gray-500'
-            }`}
+            className="relative w-32 h-48 bg-gradient-to-b from-gray-700/20 to-gray-900/40 border-2 border-gray-500 overflow-hidden shadow-2xl transition-all duration-1000 ease-out"
             style={{ 
-              clipPath: 'polygon(15% 0%, 85% 0%, 90% 100%, 10% 100%)',
-              borderRadius: '3px 3px 8px 8px',
-              boxShadow: isFull ? 
-                '0 0 40px rgba(239, 68, 68, 0.6), 0 0 60px rgba(239, 68, 68, 0.4), 0 8px 25px rgba(239, 68, 68, 0.3), inset 0 0 20px rgba(239, 68, 68, 0.2)' :
-                '0 8px 25px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.1)',
-              filter: isFull ? 
-                'drop-shadow(0 0 20px rgba(239, 68, 68, 0.7)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))' :
-                'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))',
+              clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)',
+              borderRadius: '0 0 8px 8px',
+              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.1)',
+              filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))',
             }}
           >
             {/* Liquid layers */}
@@ -180,11 +191,11 @@ export default function DrinkVisualizer() {
         Визуализация
       </h3>
       
-      {/* Full glass warning text */}
-      {isFull && (
-        <div className="text-center mb-2 animate-fadeInUp">
+      {/* Full glass warning text - with fixed height container */}
+      <div className="text-center mb-2 h-8 flex items-center justify-center">
+        {isFull && (
           <p 
-            className="text-sm md:text-lg font-bold"
+            className="text-sm md:text-lg font-bold animate-fadeInUp"
             style={{
               color: '#ff073a',
               textShadow: '0 0 10px rgba(255, 7, 58, 0.8), 0 0 20px rgba(255, 7, 58, 0.5), 0 0 30px rgba(255, 7, 58, 0.3)',
@@ -193,8 +204,8 @@ export default function DrinkVisualizer() {
           >
             Стакан заполнен
           </p>
-        </div>
-      )}
+        )}
+      </div>
       
       <div className="mb-6 flex-1 flex items-center justify-center gap-6">
         {/* Glass Image */}
