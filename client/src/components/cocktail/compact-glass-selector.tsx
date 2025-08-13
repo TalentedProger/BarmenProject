@@ -93,15 +93,11 @@ export function CompactGlassSelector() {
         size="icon"
         onClick={prevGlass}
         disabled={isTransitioning}
-        className={`absolute left-2 top-1/2 -translate-y-1/2 w-20 h-20 z-50 rounded-full bg-muted/20 hover:bg-muted/40 border-2 border-muted/30 hover:border-primary/50 transition-all duration-300 shadow-lg ${
-          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110 hover:shadow-xl'
+        className={`absolute left-2 top-1/2 -translate-y-1/2 w-16 h-16 z-50 p-0 transition-all duration-300 ${
+          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110 text-primary hover:text-primary/80'
         }`}
-        style={{
-          backdropFilter: 'blur(8px)',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-        }}
       >
-        <ChevronLeft className="h-10 w-10" />
+        <ChevronLeft className="h-16 w-16" />
       </Button>
       
       <Button
@@ -109,15 +105,11 @@ export function CompactGlassSelector() {
         size="icon"
         onClick={nextGlass}
         disabled={isTransitioning}
-        className={`absolute right-2 top-1/2 -translate-y-1/2 w-20 h-20 z-50 rounded-full bg-muted/20 hover:bg-muted/40 border-2 border-muted/30 hover:border-primary/50 transition-all duration-300 shadow-lg ${
-          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110 hover:shadow-xl'
+        className={`absolute right-2 top-1/2 -translate-y-1/2 w-16 h-16 z-50 p-0 transition-all duration-300 ${
+          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110 text-primary hover:text-primary/80'
         }`}
-        style={{
-          backdropFilter: 'blur(8px)',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-        }}
       >
-        <ChevronRight className="h-10 w-10" />
+        <ChevronRight className="h-16 w-16" />
       </Button>
 
       <div className="flex flex-col items-center space-y-6">
