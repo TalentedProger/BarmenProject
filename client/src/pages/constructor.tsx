@@ -193,9 +193,9 @@ export default function Constructor() {
             </div>
 
             {/* Right Sidebar - Metrics and Ingredients */}
-            <div className="lg:col-span-4 flex flex-col space-y-4">
+            <div className="lg:col-span-4 flex flex-col space-y-4 h-full">
               {/* Cocktail Metrics */}
-              <div className="bg-card border border-border rounded-lg p-4">
+              <div className="bg-card border border-border rounded-lg p-4 flex-shrink-0">
                 <CocktailMetrics />
               </div>
               
@@ -273,7 +273,7 @@ export default function Constructor() {
               </div>
               
               {/* Added Ingredients - show on desktop only */}
-              <div className="bg-card border border-border rounded-lg p-4 hidden lg:block overflow-hidden" style={{ minHeight: '300px', maxHeight: '400px' }}>
+              <div className="bg-card border border-border rounded-lg p-4 hidden lg:flex flex-col overflow-hidden flex-1">
                 <IngredientSelector />
               </div>
             </div>
