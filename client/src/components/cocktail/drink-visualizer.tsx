@@ -91,24 +91,12 @@ export default function DrinkVisualizer() {
         {renderGlass()}
       </div>
       
-      {/* Drink Stats */}
+      {/* Glass Info */}
       <div className="space-y-3">
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Объем:</span>
           <span className="text-foreground font-semibold">
-            {cocktailStats.totalVolume}ml
-          </span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-muted-foreground">Крепость:</span>
-          <span className="text-foreground font-semibold">
-            {cocktailStats.totalAbv}%
-          </span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-muted-foreground">Стоимость:</span>
-          <span className="text-foreground font-semibold">
-            {cocktailStats.totalCost}₽
+            {selectedGlass?.capacity || 0}ml
           </span>
         </div>
       </div>
