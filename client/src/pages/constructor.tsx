@@ -199,7 +199,78 @@ export default function Constructor() {
                 <CocktailMetrics />
               </div>
               
-
+              {/* Quick Tips - moved here for mobile */}
+              <div className="bg-card border border-border rounded-lg p-4 h-32 lg:hidden">
+                <h4 className="text-lg font-semibold text-foreground mb-2">Быстрые советы</h4>
+                <div className="space-y-1 text-xs">
+                  {(() => {
+                    const stats = calculateCocktailStats(ingredients);
+                    const recommendations = [];
+                    
+                    // Check for overflow first - highest priority
+                    if (selectedGlass && stats.totalVolume > selectedGlass.capacity) {
+                      recommendations.push({
+                        text: `Объем превышен! Уменьшите на ${(stats.totalVolume - selectedGlass.capacity).toFixed(0)}ml`,
+                        color: "text-red-500"
+                      });
+                      return recommendations;
+                    }
+                    
+                    if (stats.tasteBalance?.sweet > 7) {
+                      recommendations.push({
+                        text: "Слишком сладко - добавьте кислоты",
+                        color: "text-yellow-400"
+                      });
+                    }
+                    
+                    if (stats.tasteBalance?.sour > 7) {
+                      recommendations.push({
+                        text: "Слишком кисло - добавьте сладости",
+                        color: "text-yellow-400"
+                      });
+                    }
+                    
+                    if (stats.tasteBalance?.bitter > 6) {
+                      recommendations.push({
+                        text: "Горьковато - добавьте сладкий сироп",
+                        color: "text-orange-400"
+                      });
+                    }
+                    
+                    if (stats.totalAbv > 30) {
+                      recommendations.push({
+                        text: "Высокая крепость - добавьте разбавитель",
+                        color: "text-red-400"
+                      });
+                    }
+                    
+                    if (stats.totalVolume > 0 && selectedGlass && stats.totalVolume < selectedGlass.capacity * 0.3) {
+                      recommendations.push({
+                        text: "Мало жидкости - добавьте ингредиенты",
+                        color: "text-blue-400"
+                      });
+                    }
+                    
+                    if (recommendations.length === 0 && stats.totalVolume > 0) {
+                      recommendations.push({
+                        text: "Отличный баланс!",
+                        color: "text-green-400"
+                      });
+                    }
+                    
+                    if (ingredients.length === 0) {
+                      recommendations.push({
+                        text: "Добавьте ингредиенты из левого меню для получения советов",
+                        color: "text-muted-foreground"
+                      });
+                    }
+                    
+                    return recommendations;
+                  })().map((rec, index) => (
+                    <p key={index} className={rec.color}>• {rec.text}</p>
+                  ))}
+                </div>
+              </div>
               
               {/* Added Ingredients - show on desktop only */}
               <div className="bg-card border border-border rounded-lg p-4 flex-1 hidden lg:block">

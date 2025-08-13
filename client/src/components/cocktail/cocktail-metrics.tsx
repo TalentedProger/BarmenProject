@@ -150,18 +150,7 @@ export function CocktailMetrics() {
           </div>
         )}
 
-        {/* Quick tips */}
-        <div className="mt-6 p-4 bg-card/50 rounded-lg border border-border/50">
-          <h4 className="text-sm font-semibold text-foreground mb-2">Быстрые советы</h4>
-          <div className="space-y-1 text-xs">
-            {getTasteRecommendations().map((rec, index) => (
-              <div key={index} className={`flex items-center space-x-2 ${rec.color}`}>
-                {rec.icon}
-                <span>{rec.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+
 
 
       </div>
