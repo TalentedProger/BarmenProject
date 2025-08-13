@@ -71,11 +71,11 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
           </div>
         </div>
         <div className="text-right flex-shrink-0">
-          <p className="text-xs font-medium text-neon-turquoise">
+          <p className="text-xs font-medium text-green-500">
             {formatPrice(ingredient.pricePerLiter, ingredient.unit)}
           </p>
           {ingredient.abv && parseFloat(ingredient.abv) > 0 && (
-            <p className="text-xs text-neon-turquoise">
+            <p className="text-xs text-yellow-500">
               {ingredient.abv}%
             </p>
           )}
@@ -96,7 +96,7 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
         >
           <Minus className="h-3 w-3" />
         </Button>
-        <span className="text-xs font-medium min-w-[40px] text-center">
+        <span className="text-xs font-medium min-w-[40px] text-center text-blue-500">
           {ingredient.unit === 'kg' ? 
             `${Math.round(amount * 1000)} г` : 
             `${Math.round(amount)} ml`
