@@ -118,21 +118,61 @@ export function CompactGlassSelector() {
         {/* Glass Image - centered without navigation interference */}
         <div className="flex items-center justify-center w-full">          
           <div className="flex flex-col items-center space-y-2">
-            {/* Enlarged glass image with animation */}
-            <div className="w-64 h-72 flex items-center justify-center overflow-hidden">
-              <img
-                src={currentGlass.image}
-                alt={currentGlass.name}
-                className={`w-full h-full object-contain filter drop-shadow-lg transition-all duration-300 ease-in-out ${
-                  isTransitioning ? 'scale-95 opacity-70' : 'scale-100 opacity-100'
-                }`}
-                loading="eager"
-                decoding="async"
-                style={{ 
-                  imageRendering: 'crisp-edges',
-                  willChange: 'transform, opacity'
-                }}
-              />
+            {/* Enlarged glass image with animation and neon glow */}
+            <div className="w-64 h-72 flex items-center justify-center overflow-hidden relative">
+              <div className={`glass-container relative transition-all duration-300 ease-in-out ${
+                isTransitioning ? 'scale-95 opacity-70' : 'scale-100 opacity-100'
+              }`}>
+                <img
+                  src={currentGlass.image}
+                  alt={currentGlass.name}
+                  className="w-full h-full object-contain relative z-10"
+                  loading="eager"
+                  decoding="async"
+                  style={{ 
+                    imageRendering: 'crisp-edges',
+                    willChange: 'transform, opacity',
+                    filter: 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.3))'
+                  }}
+                />
+                {/* Компактные динамические неоновые тени */}
+                <div className="absolute inset-0 z-0 animate-pulse-glow">
+                  {/* Внешнее свечение - синий */}
+                  <div className="absolute inset-3 rounded-full opacity-50 animate-glow-rotate"
+                    style={{
+                      background: `radial-gradient(ellipse at center, 
+                        transparent 45%, 
+                        rgba(59, 130, 246, 0.2) 55%, 
+                        rgba(59, 130, 246, 0.1) 65%, 
+                        transparent 75%)`,
+                      filter: 'blur(3px)'
+                    }}
+                  />
+                  {/* Внутреннее свечение - фиолетовый */}
+                  <div className="absolute inset-4 rounded-full opacity-35 animate-glow-rotate-reverse"
+                    style={{
+                      background: `radial-gradient(ellipse at center, 
+                        transparent 40%, 
+                        rgba(147, 51, 234, 0.25) 50%, 
+                        rgba(147, 51, 234, 0.1) 60%, 
+                        transparent 70%)`,
+                      filter: 'blur(2px)',
+                      animationDelay: '1.5s'
+                    }}
+                  />
+                  {/* Тонкий контурный свет */}
+                  <div className="absolute inset-6 rounded-full opacity-60 animate-glow-rotate"
+                    style={{
+                      background: `radial-gradient(ellipse at center, 
+                        transparent 35%, 
+                        rgba(34, 197, 94, 0.15) 45%, 
+                        transparent 55%)`,
+                      filter: 'blur(1px)',
+                      animationDelay: '0.5s'
+                    }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
