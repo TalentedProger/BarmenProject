@@ -149,19 +149,7 @@ export default function DrinkVisualizer() {
             {/* Subtle inner highlight */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-5 w-2"></div>
             
-            {/* Full glass warning overlay */}
-            {isFull && (
-              <div 
-                className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-lg z-30 animate-fadeInUp shadow-lg"
-                style={{
-                  animation: 'fadeInUp 0.8s ease-out forwards',
-                  boxShadow: '0 4px 20px rgba(239, 68, 68, 0.5)'
-                }}
-              >
-                Стакан полон
-                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-red-500"></div>
-              </div>
-            )}
+
           </div>
           
           {/* Tooltip */}
@@ -177,11 +165,36 @@ export default function DrinkVisualizer() {
     );
   };
 
+  // Calculate if glass is full for the warning text
+  const totalVolume = ingredients.reduce((sum, item) => {
+    const amount = parseFloat(item.amount.toString());
+    const volumeInMl = item.ingredient.unit === 'kg' ? amount * 1000 : amount;
+    return sum + volumeInMl;
+  }, 0);
+  
+  const isFull = selectedGlass && totalVolume >= selectedGlass.capacity;
+
   return (
     <div className="flex flex-col h-full">
       <h3 className="text-2xl font-semibold mb-4 text-foreground">
         Визуализация
       </h3>
+      
+      {/* Full glass warning text */}
+      {isFull && (
+        <div className="text-center mb-2 animate-fadeInUp">
+          <p 
+            className="text-sm md:text-lg font-bold animate-pulse"
+            style={{
+              color: '#ff073a',
+              textShadow: '0 0 10px rgba(255, 7, 58, 0.8), 0 0 20px rgba(255, 7, 58, 0.5), 0 0 30px rgba(255, 7, 58, 0.3)',
+              filter: 'drop-shadow(0 2px 4px rgba(255, 7, 58, 0.4))'
+            }}
+          >
+            Стакан заполнен
+          </p>
+        </div>
+      )}
       
       <div className="mb-6 flex-1 flex items-center justify-center gap-6">
         {/* Glass Image */}
