@@ -96,25 +96,15 @@ export default function DrinkVisualizer() {
       return layer;
     });
 
-    const getGlassShape = () => {
-      switch (selectedGlass.shape) {
-        case 'martini':
-          return 'polygon(30% 0%, 70% 0%, 90% 100%, 10% 100%)';
-        case 'shot':
-          return 'polygon(25% 0%, 75% 0%, 80% 100%, 20% 100%)';
-        case 'highball':
-          return 'polygon(20% 0%, 80% 0%, 85% 100%, 15% 100%)';
-        default: // old-fashioned, rocks
-          return 'polygon(15% 0%, 85% 0%, 90% 100%, 10% 100%)';
-      }
-    };
-
     return (
       <div className="flex justify-center">
         <div className="relative">
           <div 
-            className="relative w-32 h-48 bg-gradient-to-b from-transparent to-gray-800 border-2 border-gray-400 overflow-hidden"
-            style={{ clipPath: getGlassShape() }}
+            className="relative w-32 h-48 bg-gradient-to-b from-transparent to-gray-800 border-2 border-gray-400 overflow-hidden rounded-b-sm"
+            style={{ 
+              clipPath: 'polygon(20% 0%, 80% 0%, 85% 100%, 15% 100%)',
+              borderRadius: '4px 4px 6px 6px'
+            }}
           >
             {/* Liquid layers */}
             {layers.map((layer, index) => (
