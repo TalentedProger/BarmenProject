@@ -14,9 +14,7 @@ interface LocalGlassType {
 // Import glass images
 import shotImage from '@/assets/glass-images-new/shot.png';
 import oldFashionedImage from '@/assets/glass-images-new/old-fashioned.png';
-import doubleOldFashionedImage from '@/assets/glass-images-new/double-old-fashioned.png';
 import highballImage from '@/assets/glass-images-new/highball.png';
-import collinsImage from '@/assets/glass-images-new/collins.png';
 import martiniImage from '@/assets/glass-images-new/martini.png';
 import margaritaImage from '@/assets/glass-images-new/margarita.png';
 import hurricaneImage from '@/assets/glass-images-new/hurricane.png';
@@ -32,9 +30,7 @@ import champagneSaucer from '@/assets/glass-images-new/champagne-saucer.png';
 const glassTypes: LocalGlassType[] = [
   { id: 'shot', name: 'Шот', capacity: 50, image: shotImage },
   { id: 'old-fashioned', name: 'Олд Фэшн', capacity: 300, image: oldFashionedImage },
-  { id: 'double-old-fashioned', name: 'Double Old Fashioned', capacity: 450, image: doubleOldFashionedImage },
   { id: 'highball', name: 'Хайбол', capacity: 270, image: highballImage },
-  { id: 'collins', name: 'Коллинз', capacity: 300, image: collinsImage },
   { id: 'martini', name: 'Коктейльная рюмка (Martini Glass)', capacity: 150, image: martiniImage },
   { id: 'margarita', name: 'Маргарита', capacity: 250, image: margaritaImage },
   { id: 'hurricane', name: 'Харрикейн', capacity: 450, image: hurricaneImage },
@@ -102,7 +98,7 @@ export function CompactGlassSelector() {
         <div className="flex items-center justify-center w-full">          
           <div className="flex flex-col items-center space-y-2">
             {/* Enlarged glass image */}
-            <div className="w-48 h-56 flex items-center justify-center">
+            <div className="w-64 h-72 flex items-center justify-center">
               <img
                 src={currentGlass.image}
                 alt={currentGlass.name}

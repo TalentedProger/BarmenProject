@@ -246,9 +246,7 @@ export class MemoryStorage implements IStorage {
     const sampleGlassTypes: InsertGlassType[] = [
       { name: "Шот", capacity: 50, shape: "shot" },
       { name: "Олд Фэшн", capacity: 300, shape: "old-fashioned" },
-      { name: "Double Old Fashioned", capacity: 450, shape: "double-old-fashioned" },
       { name: "Хайбол", capacity: 270, shape: "highball" },
-      { name: "Коллинз", capacity: 300, shape: "collins" },
       { name: "Коктейльная рюмка (Martini Glass)", capacity: 150, shape: "martini" },
       { name: "Маргарита", capacity: 250, shape: "margarita" },
       { name: "Харрикейн", capacity: 450, shape: "hurricane" },
