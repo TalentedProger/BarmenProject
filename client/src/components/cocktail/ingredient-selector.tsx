@@ -56,8 +56,8 @@ export default function IngredientSelector() {
                     <X className="h-3 w-3" />
                   </Button>
 
-                  {/* Ingredient info */}
-                  <div className="flex items-center space-x-3 pr-8 mb-3">
+                  {/* Responsive layout */}
+                  <div className="flex items-center space-x-3 pr-8 mb-3 sm:mb-0 sm:pr-8">
                     <div 
                       className="w-4 h-4 rounded-full flex-shrink-0"
                       style={{ backgroundColor: item.ingredient.color }}
@@ -68,10 +68,36 @@ export default function IngredientSelector() {
                         {item.ingredient.category}
                       </Badge>
                     </div>
+                    
+                    {/* Amount controls - on same line for small screens */}
+                    <div className="hidden sm:flex items-center space-x-2 flex-shrink-0">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleUpdateAmount(index, -1)}
+                        className="h-6 w-6 p-0"
+                        disabled={displayAmount <= (item.ingredient.unit === 'kg' ? 10 : 5)}
+                      >
+                        <Minus className="h-3 w-3" />
+                      </Button>
+                      
+                      <span className="text-xs font-medium min-w-[50px] text-center">
+                        {displayAmount} {displayUnit}
+                      </span>
+                      
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleUpdateAmount(index, 1)}
+                        className="h-6 w-6 p-0"
+                      >
+                        <Plus className="h-3 w-3" />
+                      </Button>
+                    </div>
                   </div>
 
-                  {/* Amount controls - centered below */}
-                  <div className="flex items-center justify-center space-x-2">
+                  {/* Amount controls - centered below for larger screens */}
+                  <div className="flex items-center justify-center space-x-2 sm:hidden">
                     <Button
                       size="sm"
                       variant="outline"

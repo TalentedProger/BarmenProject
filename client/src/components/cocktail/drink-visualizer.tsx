@@ -108,7 +108,7 @@ export default function DrinkVisualizer() {
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Стоимость:</span>
           <span className="text-foreground font-semibold">
-            ₽{cocktailStats.totalCost}
+            {cocktailStats.totalCost}₽
           </span>
         </div>
       </div>

@@ -82,46 +82,49 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
         </div>
       </div>
 
-      {/* Middle row - Amount controls */}
-      <div className="flex items-center justify-center gap-2 mb-2">
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => handleAmountChange(-1)}
-          disabled={ingredient.unit === 'kg' ? 
-            Math.round(amount * 1000) <= 10 : // 10g minimum for fruits
-            amount <= 5 // 5ml minimum for liquids
-          }
-          className="h-6 w-6 p-0"
-        >
-          <Minus className="h-3 w-3" />
-        </Button>
-        <span className="text-xs font-medium min-w-[40px] text-center text-blue-500">
-          {ingredient.unit === 'kg' ? 
-            `${Math.round(amount * 1000)} г` : 
-            `${Math.round(amount)} ml`
-          }
-        </span>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => handleAmountChange(1)}
-          className="h-6 w-6 p-0"
-        >
-          <Plus className="h-3 w-3" />
-        </Button>
-      </div>
+      {/* Responsive bottom section */}
+      <div className="flex items-center justify-between gap-2 sm:flex-col sm:items-center sm:gap-2">
+        {/* Amount controls */}
+        <div className="flex items-center gap-2 sm:order-1">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => handleAmountChange(-1)}
+            disabled={ingredient.unit === 'kg' ? 
+              Math.round(amount * 1000) <= 10 : // 10g minimum for fruits
+              amount <= 5 // 5ml minimum for liquids
+            }
+            className="h-6 w-6 p-0"
+          >
+            <Minus className="h-3 w-3" />
+          </Button>
+          <span className="text-xs font-medium min-w-[40px] text-center text-blue-500">
+            {ingredient.unit === 'kg' ? 
+              `${Math.round(amount * 1000)} г` : 
+              `${Math.round(amount)} ml`
+            }
+          </span>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => handleAmountChange(1)}
+            className="h-6 w-6 p-0"
+          >
+            <Plus className="h-3 w-3" />
+          </Button>
+        </div>
 
-      {/* Bottom row - Add button */}
-      <div className="flex justify-center">
-        <Button
-          size="sm"
-          onClick={() => onAdd(ingredient, amount)}
-          disabled={disabled}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 h-6 text-xs w-3/5"
-        >
-          Добавить
-        </Button>
+        {/* Add button */}
+        <div className="flex justify-center sm:order-2 sm:w-full">
+          <Button
+            size="sm"
+            onClick={() => onAdd(ingredient, amount)}
+            disabled={disabled}
+            className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 h-6 text-xs sm:w-3/5"
+          >
+            Добавить
+          </Button>
+        </div>
       </div>
     </div>
   );
