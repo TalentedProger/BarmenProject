@@ -93,11 +93,15 @@ export function CompactGlassSelector() {
         size="icon"
         onClick={prevGlass}
         disabled={isTransitioning}
-        className={`absolute left-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-16 h-16 z-50 transition-all duration-200 ${
-          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
+        className={`absolute left-2 top-1/2 -translate-y-1/2 w-20 h-20 z-50 rounded-full bg-muted/20 hover:bg-muted/40 border-2 border-muted/30 hover:border-primary/50 transition-all duration-300 shadow-lg ${
+          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110 hover:shadow-xl'
         }`}
+        style={{
+          backdropFilter: 'blur(8px)',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+        }}
       >
-        <ChevronLeft className="h-24 w-24" />
+        <ChevronLeft className="h-10 w-10" />
       </Button>
       
       <Button
@@ -105,11 +109,15 @@ export function CompactGlassSelector() {
         size="icon"
         onClick={nextGlass}
         disabled={isTransitioning}
-        className={`absolute right-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-16 h-16 z-50 transition-all duration-200 ${
-          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
+        className={`absolute right-2 top-1/2 -translate-y-1/2 w-20 h-20 z-50 rounded-full bg-muted/20 hover:bg-muted/40 border-2 border-muted/30 hover:border-primary/50 transition-all duration-300 shadow-lg ${
+          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110 hover:shadow-xl'
         }`}
+        style={{
+          backdropFilter: 'blur(8px)',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+        }}
       >
-        <ChevronRight className="h-24 w-24" />
+        <ChevronRight className="h-10 w-10" />
       </Button>
 
       <div className="flex flex-col items-center space-y-6">
@@ -117,7 +125,7 @@ export function CompactGlassSelector() {
         
         {/* Glass Image - centered without navigation interference */}
         <div className="flex items-center justify-center w-full">          
-          <div className="flex flex-col items-center space-y-2">
+          <div className="flex flex-col items-center space-y-8">
             {/* Enlarged glass image with animation and elegant shadows */}
             <div className="w-64 h-72 flex items-center justify-center overflow-visible relative pointer-events-none">
               <div className="relative">
