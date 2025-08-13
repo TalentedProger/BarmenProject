@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCocktailStore } from '@/store/cocktail-store';
@@ -31,29 +31,44 @@ const glassTypes: LocalGlassType[] = [
   { id: 'shot', name: 'Шот', capacity: 50, image: shotImage },
   { id: 'old-fashioned', name: 'Олд Фэшн', capacity: 300, image: oldFashionedImage },
   { id: 'highball', name: 'Хайбол', capacity: 270, image: highballImage },
-  { id: 'martini', name: 'Коктейльная рюмка (Martini Glass)', capacity: 150, image: martiniImage },
+  { id: 'martini', name: 'Коктейльная рюмка', capacity: 150, image: martiniImage },
   { id: 'margarita', name: 'Маргарита', capacity: 250, image: margaritaImage },
   { id: 'hurricane', name: 'Харрикейн', capacity: 450, image: hurricaneImage },
   { id: 'tumbler', name: 'Тумблер', capacity: 300, image: tumblerImage },
-  { id: 'snifter', name: 'Коньячный бокал (Snifter)', capacity: 350, image: snifterImage },
-  { id: 'champagne-flute', name: 'Фужер для шампанского (Champagne Flute)', capacity: 170, image: champagneFlute },
+  { id: 'snifter', name: 'Коньячный бокал', capacity: 350, image: snifterImage },
+  { id: 'champagne-flute', name: 'Фужер для шампанского', capacity: 170, image: champagneFlute },
   { id: 'beer-mug', name: 'Пивная кружка', capacity: 500, image: beerMugImage },
   { id: 'red-wine', name: 'Бокал для красного вина', capacity: 300, image: redWineImage },
   { id: 'white-wine', name: 'Бокал для белого вина', capacity: 260, image: whiteWineImage },
   { id: 'sour', name: 'Бокал сауэр', capacity: 120, image: sourImage },
-  { id: 'champagne-saucer', name: 'Чаша для шампанского (Champagne Saucer)', capacity: 180, image: champagneSaucer },
+  { id: 'champagne-saucer', name: 'Чаша для шампанского', capacity: 180, image: champagneSaucer },
 ];
 
 export function CompactGlassSelector() {
   const { selectedGlass, setSelectedGlass } = useCocktailStore();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Предзагрузка изображений для плавной анимации
+  useEffect(() => {
+    glassTypes.forEach(glass => {
+      const img = new Image();
+      img.src = glass.image;
+    });
+  }, []);
 
   const nextGlass = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
     setCurrentIndex((prev) => (prev + 1) % glassTypes.length);
+    setTimeout(() => setIsTransitioning(false), 300);
   };
 
   const prevGlass = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
     setCurrentIndex((prev) => (prev - 1 + glassTypes.length) % glassTypes.length);
+    setTimeout(() => setIsTransitioning(false), 300);
   };
 
   const selectCurrentGlass = () => {
@@ -77,7 +92,10 @@ export function CompactGlassSelector() {
         variant="ghost"
         size="icon"
         onClick={prevGlass}
-        className="absolute left-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-16 h-16 z-10"
+        disabled={isTransitioning}
+        className={`absolute left-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-16 h-16 z-10 transition-all duration-200 ${
+          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
+        }`}
       >
         <ChevronLeft className="h-24 w-24" />
       </Button>
@@ -86,7 +104,10 @@ export function CompactGlassSelector() {
         variant="ghost"
         size="icon"
         onClick={nextGlass}
-        className="absolute right-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-16 h-16 z-10"
+        disabled={isTransitioning}
+        className={`absolute right-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 hover:bg-primary/10 w-16 h-16 z-10 transition-all duration-200 ${
+          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
+        }`}
       >
         <ChevronRight className="h-24 w-24" />
       </Button>
@@ -97,19 +118,29 @@ export function CompactGlassSelector() {
         {/* Glass Image - centered without navigation interference */}
         <div className="flex items-center justify-center w-full">          
           <div className="flex flex-col items-center space-y-2">
-            {/* Enlarged glass image */}
-            <div className="w-64 h-72 flex items-center justify-center">
+            {/* Enlarged glass image with animation */}
+            <div className="w-64 h-72 flex items-center justify-center overflow-hidden">
               <img
                 src={currentGlass.image}
                 alt={currentGlass.name}
-                className="w-full h-full object-contain filter drop-shadow-lg"
+                className={`w-full h-full object-contain filter drop-shadow-lg transition-all duration-300 ease-in-out ${
+                  isTransitioning ? 'scale-95 opacity-70' : 'scale-100 opacity-100'
+                }`}
+                loading="eager"
+                decoding="async"
+                style={{ 
+                  imageRendering: 'crisp-edges',
+                  willChange: 'transform, opacity'
+                }}
               />
             </div>
           </div>
         </div>
 
         {/* Glass name closer to button */}
-        <div className="text-center">
+        <div className={`text-center transition-all duration-300 ease-in-out ${
+          isTransitioning ? 'opacity-70 transform translate-y-1' : 'opacity-100 transform translate-y-0'
+        }`}>
           <h4 className="text-foreground font-medium text-lg">{currentGlass.name}</h4>
           <p className="text-muted-foreground text-sm">{currentGlass.capacity}ml</p>
         </div>
@@ -138,11 +169,16 @@ export function CompactGlassSelector() {
           {glassTypes.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`w-2 h-2 rounded-full transition-colors ${
+              onClick={() => {
+                if (isTransitioning) return;
+                setIsTransitioning(true);
+                setCurrentIndex(index);
+                setTimeout(() => setIsTransitioning(false), 300);
+              }}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
                 index === currentIndex
-                  ? 'bg-primary'
-                  : 'bg-muted-foreground hover:bg-muted-foreground/80'
+                  ? 'bg-primary scale-125'
+                  : 'bg-muted-foreground hover:bg-muted-foreground/80 hover:scale-110'
               }`}
             />
           ))}
