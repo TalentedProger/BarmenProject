@@ -156,18 +156,18 @@ export default function Constructor() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-6 min-h-[600px]">
-            {/* Left Sidebar - Expanded by 15% */}
-            <div className="lg:col-span-3 flex flex-col">
-              <div className="bg-card border border-border rounded-lg p-6 flex-1">
+          <div className="grid lg:grid-cols-12 gap-4 min-h-[600px]">
+            {/* Left Sidebar - Ingredients */}
+            <div className="lg:col-span-4 flex flex-col">
+              <div className="bg-card border border-border rounded-lg p-4 flex-1 overflow-hidden">
                 <IngredientRecommendations />
               </div>
             </div>
 
-            {/* Center Content - Reduced by 15% */}
-            <div className="lg:col-span-6 flex flex-col space-y-6">
+            {/* Center Content - Reduced width */}
+            <div className="lg:col-span-4 flex flex-col space-y-4">
               {/* Glass Selector or Drink Visualizer */}
-              <div className="bg-card border border-border rounded-lg p-8 flex-1">
+              <div className="bg-card border border-border rounded-lg p-6 flex-1">
                 {!selectedGlass ? (
                   <CompactGlassSelector />
                 ) : (
@@ -176,31 +176,31 @@ export default function Constructor() {
               </div>
               
               {/* Added Ingredients - show on mobile as third element */}
-              <div className="bg-card border border-border rounded-lg p-4 lg:hidden">
+              <div className="bg-card border border-border rounded-lg p-4 lg:hidden overflow-hidden">
                 <IngredientSelector />
               </div>
               
               {/* Small Recommendations Container - hidden on mobile */}
-              <div className="bg-card border border-border rounded-lg p-4 h-32 hidden lg:block">
-                <h4 className="text-lg font-semibold text-foreground mb-2">Быстрые советы</h4>
-                <p className="text-xs text-muted-foreground">
+              <div className="bg-card border border-border rounded-lg p-4 h-24 hidden lg:block">
+                <h4 className="text-sm font-semibold text-foreground mb-2">Быстрые советы</h4>
+                <p className="text-xs text-muted-foreground line-clamp-2">
                   {ingredients.length === 0 
-                    ? "Добавьте ингредиенты из левого меню для получения советов"
-                    : "Рецепт выглядит сбалансированно! Попробуйте добавить лед для охлаждения."
+                    ? "Добавьте ингредиенты из левого меню"
+                    : "Рецепт сбалансирован! Добавьте лёд."
                   }
                 </p>
               </div>
             </div>
 
-            {/* Right Sidebar - Expanded by 15% */}
-            <div className="lg:col-span-3 flex flex-col space-y-6">
+            {/* Right Sidebar - Metrics and Ingredients */}
+            <div className="lg:col-span-4 flex flex-col space-y-4">
               {/* Cocktail Metrics */}
-              <div className="bg-card border border-border rounded-lg p-4 flex-1">
+              <div className="bg-card border border-border rounded-lg p-4">
                 <CocktailMetrics />
               </div>
               
               {/* Quick Tips - moved here for mobile */}
-              <div className="bg-card border border-border rounded-lg p-4 h-32 lg:hidden">
+              <div className="bg-card border border-border rounded-lg p-4 h-32 lg:hidden overflow-hidden">
                 <h4 className="text-lg font-semibold text-foreground mb-2">Быстрые советы</h4>
                 <div className="space-y-1 text-xs">
                   {(() => {
@@ -273,7 +273,7 @@ export default function Constructor() {
               </div>
               
               {/* Added Ingredients - show on desktop only */}
-              <div className="bg-card border border-border rounded-lg p-4 flex-1 hidden lg:block">
+              <div className="bg-card border border-border rounded-lg p-4 hidden lg:block overflow-hidden" style={{ minHeight: '300px', maxHeight: '400px' }}>
                 <IngredientSelector />
               </div>
             </div>

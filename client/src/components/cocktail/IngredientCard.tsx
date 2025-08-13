@@ -53,83 +53,75 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg p-4 hover:shadow-lg transition-all duration-200 hover:border-primary/50">
-      <div className="flex gap-4 items-center">
-        {/* Image on the left */}
-        <div className="flex-shrink-0">
-          <img
-            src={getIngredientImage(ingredient)}
-            alt={ingredient.name}
-            className="w-16 h-16 rounded-lg object-cover border border-border/50"
+    <div className="bg-card border border-border rounded-lg p-3 hover:shadow-lg transition-all duration-200 hover:border-primary/50">
+      {/* Top row - Name and info */}
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          <div 
+            className="w-3 h-3 rounded-full flex-shrink-0"
             style={{ backgroundColor: ingredient.color }}
-          />
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <div className="flex justify-between items-start mb-2">
-            <div>
-              <h3 className="font-semibold text-foreground text-sm truncate">
-                {ingredient.name}
-              </h3>
-              <p className="text-xs text-muted-foreground capitalize">
-                {ingredient.category}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm font-medium text-foreground">
-                {formatPrice(ingredient.pricePerLiter, ingredient.unit)}
-              </p>
-              {ingredient.abv && parseFloat(ingredient.abv) > 0 && (
-                <p className="text-xs text-muted-foreground">
-                  {ingredient.abv}% ABV
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Amount controls and Add button */}
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleAmountChange(-1)}
-                disabled={ingredient.unit === 'kg' ? 
-                  Math.round(amount * 1000) <= 10 : // 10g minimum for fruits
-                  amount <= 5 // 5ml minimum for liquids
-                }
-                className="h-7 w-7 p-0"
-              >
-                <Minus className="h-3 w-3" />
-              </Button>
-              <span className="text-sm font-medium min-w-[50px] text-center">
-                {ingredient.unit === 'kg' ? 
-                  `${Math.round(amount * 1000)} г` : 
-                  `${Math.round(amount)} ${ingredient.unit}`
-                }
-              </span>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleAmountChange(1)}
-                className="h-7 w-7 p-0"
-              >
-                <Plus className="h-3 w-3" />
-              </Button>
-            </div>
-
-            <Button
-              size="sm"
-              onClick={() => onAdd(ingredient, amount)}
-              disabled={disabled}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 px-3 h-7"
-            >
-              <Plus className="h-3 w-3 mr-1" />
-              Добавить
-            </Button>
+          ></div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-foreground text-sm truncate">
+              {ingredient.name}
+            </h3>
+            <p className="text-xs text-muted-foreground capitalize">
+              {ingredient.category}
+            </p>
           </div>
         </div>
+        <div className="text-right flex-shrink-0">
+          <p className="text-xs font-medium text-foreground">
+            {formatPrice(ingredient.pricePerLiter, ingredient.unit)}
+          </p>
+          {ingredient.abv && parseFloat(ingredient.abv) > 0 && (
+            <p className="text-xs text-muted-foreground">
+              {ingredient.abv}%
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Middle row - Amount controls */}
+      <div className="flex items-center justify-center gap-2 mb-2">
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => handleAmountChange(-1)}
+          disabled={ingredient.unit === 'kg' ? 
+            Math.round(amount * 1000) <= 10 : // 10g minimum for fruits
+            amount <= 5 // 5ml minimum for liquids
+          }
+          className="h-6 w-6 p-0"
+        >
+          <Minus className="h-3 w-3" />
+        </Button>
+        <span className="text-xs font-medium min-w-[40px] text-center">
+          {ingredient.unit === 'kg' ? 
+            `${Math.round(amount * 1000)} г` : 
+            `${Math.round(amount)} ml`
+          }
+        </span>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => handleAmountChange(1)}
+          className="h-6 w-6 p-0"
+        >
+          <Plus className="h-3 w-3" />
+        </Button>
+      </div>
+
+      {/* Bottom row - Add button */}
+      <div className="flex justify-center">
+        <Button
+          size="sm"
+          onClick={() => onAdd(ingredient, amount)}
+          disabled={disabled}
+          className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 h-6 text-xs w-full"
+        >
+          Добавить
+        </Button>
       </div>
     </div>
   );

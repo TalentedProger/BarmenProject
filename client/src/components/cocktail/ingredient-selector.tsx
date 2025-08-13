@@ -44,33 +44,34 @@ export default function IngredientSelector() {
               return (
                 <div
                   key={index}
-                  className="relative flex items-center p-3 bg-muted rounded-lg"
+                  className="relative p-3 bg-muted rounded-lg"
                 >
                   {/* Remove button in top-right corner */}
                   <Button
                     size="sm"
                     variant="destructive"
                     onClick={() => removeIngredient(index)}
-                    className="absolute top-2 right-2 h-6 w-6 p-0 rounded-full"
+                    className="absolute top-2 right-2 h-6 w-6 p-0 rounded-full z-10"
                   >
                     <X className="h-3 w-3" />
                   </Button>
 
-                  <div className="flex items-center space-x-3 w-2/3 pr-4">
+                  {/* Ingredient info */}
+                  <div className="flex items-center space-x-3 pr-8 mb-3">
                     <div 
                       className="w-4 h-4 rounded-full flex-shrink-0"
                       style={{ backgroundColor: item.ingredient.color }}
                     ></div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-foreground truncate">{item.ingredient.name}</p>
+                      <p className="font-semibold text-foreground truncate text-sm">{item.ingredient.name}</p>
                       <Badge variant="outline" className="text-xs">
                         {item.ingredient.category}
                       </Badge>
                     </div>
                   </div>
 
-                  {/* Amount controls - expanded to use 30% more space */}
-                  <div className="flex items-center justify-center space-x-2 w-1/3 min-w-[140px] mr-4">
+                  {/* Amount controls - centered below */}
+                  <div className="flex items-center justify-center space-x-2">
                     <Button
                       size="sm"
                       variant="outline"
@@ -81,7 +82,7 @@ export default function IngredientSelector() {
                       <Minus className="h-3 w-3" />
                     </Button>
                     
-                    <span className="text-sm font-medium min-w-[50px] text-center">
+                    <span className="text-sm font-medium min-w-[60px] text-center">
                       {displayAmount} {displayUnit}
                     </span>
                     
