@@ -32,6 +32,16 @@ export function CocktailMetrics() {
   const getTasteRecommendations = () => {
     const recommendations = [];
     
+    // Check for overflow first - highest priority
+    if (selectedGlass && stats.totalVolume > selectedGlass.capacity) {
+      recommendations.push({
+        icon: <AlertTriangle className="h-4 w-4" />,
+        text: `Объем превышен! Уменьшите на ${(stats.totalVolume - selectedGlass.capacity).toFixed(0)}ml`,
+        color: "text-red-500"
+      });
+      return recommendations; // Return early if overflow
+    }
+    
     if (stats.tasteBalance?.sweet > 7) {
       recommendations.push({
         icon: <AlertTriangle className="h-4 w-4" />,
@@ -123,16 +133,35 @@ export function CocktailMetrics() {
           <div className="mt-4 pt-4 border-t border-border">
             <div className="flex justify-between text-sm text-muted-foreground mb-1">
               <span>Заполнение стакана</span>
-              <span>{((stats.totalVolume / selectedGlass.capacity) * 100).toFixed(0)}%</span>
+              <span className={stats.totalVolume > selectedGlass.capacity ? "text-red-500 font-semibold" : ""}>
+                {((stats.totalVolume / selectedGlass.capacity) * 100).toFixed(0)}%
+              </span>
             </div>
             <div className="w-full bg-muted rounded-full h-2">
               <div 
-                className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full transition-all duration-300"
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  stats.totalVolume > selectedGlass.capacity 
+                    ? "bg-gradient-to-r from-red-500 to-red-600" 
+                    : "bg-gradient-to-r from-blue-500 to-cyan-500"
+                }`}
                 style={{ width: `${Math.min((stats.totalVolume / selectedGlass.capacity) * 100, 100)}%` }}
               />
             </div>
           </div>
         )}
+
+        {/* Quick tips */}
+        <div className="mt-6 p-4 bg-card/50 rounded-lg border border-border/50">
+          <h4 className="text-sm font-semibold text-foreground mb-2">Быстрые советы</h4>
+          <div className="space-y-1 text-xs">
+            {getTasteRecommendations().map((rec, index) => (
+              <div key={index} className={`flex items-center space-x-2 ${rec.color}`}>
+                {rec.icon}
+                <span>{rec.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
 
       </div>

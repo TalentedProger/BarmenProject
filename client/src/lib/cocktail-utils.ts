@@ -34,18 +34,32 @@ export function calculateCocktailStats(
   let totalBitter = 0;
   let totalAlcoholTaste = 0;
 
-  ingredients.forEach(({ ingredient, amount }) => {
-    const volume = parseFloat(amount.toString());
+  ingredients.forEach(({ ingredient, amount, unit }) => {
+    const quantity = parseFloat(amount.toString());
     const abv = parseFloat(ingredient.abv?.toString() || "0");
     const pricePerLiter = parseFloat(ingredient.pricePerLiter.toString());
     const tasteProfile = ingredient.tasteProfile as TasteProfile;
 
-    totalVolume += volume;
-    totalAlcohol += (volume * abv) / 100;
-    totalCost += (volume / 1000) * pricePerLiter;
+    // Convert to volume in ml for liquid ingredients or estimate for solid ingredients
+    let volumeInMl = quantity;
+    let costCalculation = 0;
+
+    if (unit === "g" || ingredient.unit === "g") {
+      // For solid ingredients (fruits, spices), estimate volume and calculate cost per kg
+      volumeInMl = quantity * 0.8; // Approximate density conversion (g to ml)
+      costCalculation = (quantity / 1000) * pricePerLiter; // Price per kg for solid ingredients
+    } else {
+      // For liquid ingredients
+      volumeInMl = quantity;
+      costCalculation = (quantity / 1000) * pricePerLiter; // Price per liter for liquids
+    }
+
+    totalVolume += volumeInMl;
+    totalAlcohol += (volumeInMl * abv) / 100;
+    totalCost += costCalculation;
 
     // Weight taste contributions by volume
-    const weight = volume / 100; // Normalize by 100ml
+    const weight = volumeInMl / 100; // Normalize by 100ml
     totalSweet += (tasteProfile.sweet || 0) * weight;
     totalSour += (tasteProfile.sour || 0) * weight;
     totalBitter += (tasteProfile.bitter || 0) * weight;
@@ -89,7 +103,8 @@ export function generateCocktailName(): string {
 }
 
 export function validateCocktailIngredients(
-  ingredients: (RecipeIngredient & { ingredient: Ingredient })[]
+  ingredients: (RecipeIngredient & { ingredient: Ingredient })[],
+  selectedGlass?: { capacity: number }
 ): string[] {
   const errors: string[] = [];
   
@@ -99,6 +114,11 @@ export function validateCocktailIngredients(
   }
 
   const stats = calculateCocktailStats(ingredients);
+  
+  // Check for glass overflow first
+  if (selectedGlass && stats.totalVolume > selectedGlass.capacity) {
+    errors.push(`Объем превышает вместимость стакана (${selectedGlass.capacity}ml)`);
+  }
   
   if (stats.totalVolume < 30) {
     errors.push("Слишком маленький объем коктейля");

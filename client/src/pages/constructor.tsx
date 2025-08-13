@@ -58,7 +58,7 @@ export default function Constructor() {
   });
 
   const handleSaveRecipe = () => {
-    const validationErrors = validateCocktailIngredients(ingredients);
+    const validationErrors = validateCocktailIngredients(ingredients, selectedGlass || undefined);
     if (validationErrors.length > 0) {
       toast({
         title: "Ошибка валидации",
@@ -227,10 +227,10 @@ export default function Constructor() {
                     <h3 className="text-lg font-semibold text-amber-500">Анализ рецепта</h3>
                   </div>
                   <div className="space-y-2">
-                    {validateCocktailIngredients(ingredients).map((error, index) => (
+                    {validateCocktailIngredients(ingredients, selectedGlass || undefined).map((error, index) => (
                       <p key={index} className="text-yellow-400 text-sm">• {error}</p>
                     ))}
-                    {validateCocktailIngredients(ingredients).length === 0 && (
+                    {validateCocktailIngredients(ingredients, selectedGlass || undefined).length === 0 && (
                       <p className="text-green-400 text-sm">✓ Рецепт готов к сохранению</p>
                     )}
                   </div>
@@ -244,8 +244,13 @@ export default function Constructor() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 onClick={handleSaveRecipe}
-                disabled={ingredients.length === 0 || !selectedGlass || saveRecipeMutation.isPending}
-                className="bg-primary text-primary-foreground px-8 py-3 hover:bg-primary/90"
+                disabled={
+                  ingredients.length === 0 || 
+                  !selectedGlass || 
+                  saveRecipeMutation.isPending ||
+                  validateCocktailIngredients(ingredients, selectedGlass || undefined).length > 0
+                }
+                className="bg-primary text-primary-foreground px-8 py-3 hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Save className="mr-2 h-4 w-4" />
                 {saveRecipeMutation.isPending ? "Сохранение..." : "Сохранить рецепт"}
