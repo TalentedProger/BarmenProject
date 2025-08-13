@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { useCocktailStore } from "@/store/cocktail-store";
 import { getIngredientColor } from "@/lib/cocktail-utils";
+import { useState } from "react";
 
 // Import glass images
 import shotImage from '@/assets/glass-images-new/shot.png';
@@ -38,19 +39,47 @@ const glassImageMap: Record<string, string> = {
 
 export default function DrinkVisualizer() {
   const { selectedGlass, ingredients, cocktailStats } = useCocktailStore();
+  const [hoveredLayer, setHoveredLayer] = useState<string | null>(null);
 
-  const renderGlass = () => {
+  const renderGlassImage = () => {
     if (!selectedGlass) {
       return (
-        <div className="w-48 h-64 bg-gray-800 rounded-lg border-2 border-gray-600 flex items-center justify-center">
+        <div className="w-40 h-52 bg-gray-800 rounded-lg border-2 border-gray-600 flex items-center justify-center">
+          <p className="text-gray-400 text-sm">Выберите стакан</p>
+        </div>
+      );
+    }
+
+    const glassImage = glassImageMap[selectedGlass.shape] || glassImageMap['old-fashioned'];
+
+    return (
+      <div className="flex justify-center">
+        <div className="relative w-40 h-52">
+          <img
+            src={glassImage}
+            alt={selectedGlass.name}
+            className="w-full h-full object-contain"
+            style={{ 
+              filter: 'drop-shadow(0 20px 40px rgba(138, 43, 226, 0.3)) drop-shadow(0 10px 20px rgba(0, 255, 255, 0.2))',
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const renderVisualizationContainer = () => {
+    if (!selectedGlass) {
+      return (
+        <div className="w-32 h-48 bg-gray-800 rounded-lg border-2 border-gray-600 flex items-center justify-center">
           <p className="text-gray-400 text-sm">Выберите стакан</p>
         </div>
       );
     }
 
     const totalVolume = ingredients.reduce((sum, item) => sum + parseFloat(item.amount.toString()), 0);
-    const glassHeight = 256; // 64 * 4 = 256px
-    const filledHeight = Math.min(glassHeight * 0.75, (totalVolume / selectedGlass.capacity) * glassHeight * 0.75);
+    const glassHeight = 192; // 48 * 4 = 192px
+    const filledHeight = Math.min(glassHeight * 0.8, (totalVolume / selectedGlass.capacity) * glassHeight);
 
     let currentHeight = 0;
     const layers = ingredients.map((item, index) => {
@@ -60,63 +89,69 @@ export default function DrinkVisualizer() {
         height: layerHeight,
         bottom: currentHeight,
         color: getIngredientColor(item.ingredient),
-        name: item.ingredient.name
+        name: item.ingredient.name,
+        id: `layer-${index}`
       };
       currentHeight += layerHeight;
       return layer;
     });
 
-    const glassImage = glassImageMap[selectedGlass.shape] || glassImageMap['old-fashioned'];
+    const getGlassShape = () => {
+      switch (selectedGlass.shape) {
+        case 'martini':
+          return 'polygon(30% 0%, 70% 0%, 90% 100%, 10% 100%)';
+        case 'shot':
+          return 'polygon(25% 0%, 75% 0%, 80% 100%, 20% 100%)';
+        case 'highball':
+          return 'polygon(20% 0%, 80% 0%, 85% 100%, 15% 100%)';
+        default: // old-fashioned, rocks
+          return 'polygon(15% 0%, 85% 0%, 90% 100%, 10% 100%)';
+      }
+    };
 
     return (
       <div className="flex justify-center">
-        <div className="relative w-48 h-64">
-          {/* Glass container with liquid layers */}
-          <div className="relative w-full h-full overflow-hidden">
-            {/* Liquid layers background */}
-            <div className="absolute inset-0 flex justify-center items-end">
-              <div className="relative w-32 h-48 overflow-hidden">
-                {/* Liquid layers */}
-                {layers.length > 0 && layers.map((layer, index) => (
-                  <div
-                    key={index}
-                    className="absolute left-4 right-4 liquid-layer opacity-90 rounded-sm"
-                    style={{
-                      height: `${layer.height}px`,
-                      bottom: `${20 + layer.bottom}px`,
-                      background: `linear-gradient(to top, ${layer.color}, ${layer.color}dd)`,
-                      transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-                      borderRadius: '2px',
-                      marginLeft: '10px',
-                      marginRight: '10px',
-                    }}
-                  />
-                ))}
-                
-                {/* Ice cubes effect */}
-                {ingredients.some(item => item.ingredient.category === 'ice') && filledHeight > 20 && (
-                  <>
-                    <div className="absolute w-3 h-3 bg-blue-200 rounded opacity-80 animate-pulse" 
-                         style={{ bottom: `${30 + filledHeight * 0.7}px`, left: '20px' }}></div>
-                    <div className="absolute w-2 h-2 bg-blue-200 rounded opacity-80 animate-pulse"
-                         style={{ bottom: `${25 + filledHeight * 0.5}px`, right: '25px' }}></div>
-                    <div className="absolute w-2 h-2 bg-blue-200 rounded opacity-80 animate-pulse"
-                         style={{ bottom: `${35 + filledHeight * 0.3}px`, left: '25px' }}></div>
-                  </>
-                )}
-              </div>
-            </div>
-
-            {/* Glass image overlay */}
-            <img
-              src={glassImage}
-              alt={selectedGlass.name}
-              className="absolute inset-0 w-full h-full object-contain z-10 pointer-events-none"
-              style={{ 
-                filter: 'drop-shadow(0 20px 40px rgba(138, 43, 226, 0.3)) drop-shadow(0 10px 20px rgba(0, 255, 255, 0.2))',
-              }}
-            />
+        <div className="relative">
+          <div 
+            className="relative w-32 h-48 bg-gradient-to-b from-transparent to-gray-800 border-2 border-gray-400 overflow-hidden"
+            style={{ clipPath: getGlassShape() }}
+          >
+            {/* Liquid layers */}
+            {layers.map((layer, index) => (
+              <div
+                key={index}
+                className="absolute left-0 right-0 liquid-layer opacity-90 cursor-pointer"
+                style={{
+                  height: `${layer.height}px`,
+                  bottom: `${layer.bottom}px`,
+                  background: `linear-gradient(to top, ${layer.color}, ${layer.color}dd)`,
+                  transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+                onMouseEnter={() => setHoveredLayer(layer.name)}
+                onMouseLeave={() => setHoveredLayer(null)}
+              />
+            ))}
+            
+            {/* Ice cubes effect */}
+            {ingredients.some(item => item.ingredient.category === 'ice') && (
+              <>
+                <div className="absolute top-4 left-4 w-4 h-4 bg-blue-200 rounded opacity-80 animate-pulse"></div>
+                <div className="absolute top-8 right-6 w-3 h-3 bg-blue-200 rounded opacity-80 animate-pulse"></div>
+                <div className="absolute top-12 left-6 w-2 h-2 bg-blue-200 rounded opacity-80 animate-pulse"></div>
+              </>
+            )}
+            
+            {/* Glass shine effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10 w-2 animate-pulse"></div>
           </div>
+          
+          {/* Tooltip */}
+          {hoveredLayer && (
+            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20">
+              {hoveredLayer}
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-2 border-r-2 border-t-2 border-transparent border-t-gray-900"></div>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -128,8 +163,16 @@ export default function DrinkVisualizer() {
         Визуализация
       </h3>
       
-      <div className="mb-6 flex-1 flex items-center justify-center">
-        {renderGlass()}
+      <div className="mb-6 flex-1 flex items-center justify-center gap-6">
+        {/* Glass Image */}
+        <div className="flex-shrink-0">
+          {renderGlassImage()}
+        </div>
+        
+        {/* Visualization Container */}
+        <div className="flex-shrink-0">
+          {renderVisualizationContainer()}
+        </div>
       </div>
       
       {/* Glass Info */}
