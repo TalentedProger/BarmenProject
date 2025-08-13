@@ -74,15 +74,6 @@
   will-change: transform;
 }
 
-/* Контейнер стакана с элегантным эффектом */
-.glass-container {
-  will-change: transform, opacity;
-}
-
-.glass-container:hover {
-  transform: scale(1.02);
-}
-
 .cocktail-image {
   will-change: transform;
 }

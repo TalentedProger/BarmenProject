@@ -118,29 +118,21 @@ export function CompactGlassSelector() {
         {/* Glass Image - centered without navigation interference */}
         <div className="flex items-center justify-center w-full">          
           <div className="flex flex-col items-center space-y-2">
-            {/* Enlarged glass image with elegant drop shadow */}
-            <div className="w-64 h-72 flex items-center justify-center overflow-hidden relative">
-              <div className={`glass-container relative transition-all duration-300 ease-in-out ${
-                isTransitioning ? 'scale-95 opacity-70' : 'scale-100 opacity-100'
-              }`}>
-                <img
-                  src={currentGlass.image}
-                  alt={currentGlass.name}
-                  className="w-full h-full object-contain relative z-10"
-                  loading="eager"
-                  decoding="async"
-                  style={{ 
-                    imageRendering: 'crisp-edges',
-                    willChange: 'transform, opacity',
-                    filter: 'drop-shadow(0 25px 50px rgba(138, 43, 226, 0.3)) drop-shadow(0 15px 30px rgba(0, 255, 255, 0.2))'
-                  }}
-                />
-                
-                {/* Elegant circular glow effects behind the glass - only for center area */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-r from-purple-500/20 to-cyan-400/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-gradient-to-br from-pink-400/15 to-blue-400/15 rounded-full blur-2xl -z-20"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-t from-violet-400/25 to-cyan-300/25 rounded-full blur-xl -z-30"></div>
-              </div>
+            {/* Enlarged glass image with animation */}
+            <div className="w-64 h-72 flex items-center justify-center overflow-hidden">
+              <img
+                src={currentGlass.image}
+                alt={currentGlass.name}
+                className={`w-full h-full object-contain filter drop-shadow-lg transition-all duration-300 ease-in-out ${
+                  isTransitioning ? 'scale-95 opacity-70' : 'scale-100 opacity-100'
+                }`}
+                loading="eager"
+                decoding="async"
+                style={{ 
+                  imageRendering: 'crisp-edges',
+                  willChange: 'transform, opacity'
+                }}
+              />
             </div>
           </div>
         </div>
