@@ -56,21 +56,21 @@ export default function IngredientSelector() {
                     <X className="h-3 w-3" />
                   </Button>
 
-                  <div className="flex items-center space-x-3 flex-1 pr-8">
+                  <div className="flex items-center space-x-3 w-2/3 pr-4">
                     <div 
-                      className="w-4 h-4 rounded-full"
+                      className="w-4 h-4 rounded-full flex-shrink-0"
                       style={{ backgroundColor: item.ingredient.color }}
                     ></div>
-                    <div className="flex-1">
-                      <p className="font-semibold text-foreground">{item.ingredient.name}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-foreground truncate">{item.ingredient.name}</p>
                       <Badge variant="outline" className="text-xs">
                         {item.ingredient.category}
                       </Badge>
                     </div>
                   </div>
 
-                  {/* Amount controls - centered in remaining space */}
-                  <div className="flex items-center justify-center space-x-2 min-w-[120px] mr-4">
+                  {/* Amount controls - expanded to use 30% more space */}
+                  <div className="flex items-center justify-center space-x-2 w-1/3 min-w-[140px] mr-4">
                     <Button
                       size="sm"
                       variant="outline"
