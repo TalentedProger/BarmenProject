@@ -44,7 +44,7 @@ export default function IngredientSelector() {
               return (
                 <div
                   key={index}
-                  className="relative flex items-center justify-between p-3 bg-muted rounded-lg"
+                  className="relative flex items-center p-3 bg-muted rounded-lg"
                 >
                   {/* Remove button in top-right corner */}
                   <Button
@@ -56,7 +56,7 @@ export default function IngredientSelector() {
                     <X className="h-3 w-3" />
                   </Button>
 
-                  <div className="flex items-center space-x-3 flex-1 pr-12">
+                  <div className="flex items-center space-x-3 flex-1 pr-8">
                     <div 
                       className="w-4 h-4 rounded-full"
                       style={{ backgroundColor: item.ingredient.color }}
@@ -69,8 +69,8 @@ export default function IngredientSelector() {
                     </div>
                   </div>
 
-                  {/* Amount controls */}
-                  <div className="flex items-center space-x-2 mr-2">
+                  {/* Amount controls - centered in remaining space */}
+                  <div className="flex items-center justify-center space-x-2 min-w-[120px] mr-4">
                     <Button
                       size="sm"
                       variant="outline"
