@@ -93,11 +93,12 @@ export function CompactGlassSelector() {
         size="icon"
         onClick={prevGlass}
         disabled={isTransitioning}
-        className={`absolute left-2 top-1/2 -translate-y-1/2 w-16 h-16 z-50 p-0 transition-all duration-300 ${
-          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110 text-primary hover:text-primary/80'
+        className={`absolute left-2 top-1/2 -translate-y-1/2 w-16 h-16 z-50 p-0 transition-all duration-300 text-white hover:text-white ${
+          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
         }`}
+        style={{ background: 'transparent' }}
       >
-        <ChevronLeft className="h-16 w-16" />
+        <ChevronLeft className="h-16 w-16" strokeWidth={3} />
       </Button>
       
       <Button
@@ -105,11 +106,12 @@ export function CompactGlassSelector() {
         size="icon"
         onClick={nextGlass}
         disabled={isTransitioning}
-        className={`absolute right-2 top-1/2 -translate-y-1/2 w-16 h-16 z-50 p-0 transition-all duration-300 ${
-          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110 text-primary hover:text-primary/80'
+        className={`absolute right-2 top-1/2 -translate-y-1/2 w-16 h-16 z-50 p-0 transition-all duration-300 text-white hover:text-white ${
+          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
         }`}
+        style={{ background: 'transparent' }}
       >
-        <ChevronRight className="h-16 w-16" />
+        <ChevronRight className="h-16 w-16" strokeWidth={3} />
       </Button>
 
       <div className="flex flex-col items-center space-y-6">

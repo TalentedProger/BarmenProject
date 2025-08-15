@@ -58,9 +58,13 @@ export default function DrinkVisualizer() {
           <img
             src={glassImage}
             alt={selectedGlass.name}
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain transition-all duration-1000"
             style={{ 
-              filter: 'drop-shadow(0 20px 40px rgba(138, 43, 226, 0.3)) drop-shadow(0 10px 20px rgba(0, 255, 255, 0.2))',
+              filter: isOverfilled 
+                ? 'drop-shadow(0 20px 40px rgba(239, 68, 68, 0.5)) drop-shadow(0 10px 20px rgba(239, 68, 68, 0.3))'
+                : isFull && !isOverfilled
+                ? 'drop-shadow(0 20px 40px rgba(34, 197, 94, 0.5)) drop-shadow(0 10px 20px rgba(34, 197, 94, 0.3))'
+                : 'none',
             }}
           />
         </div>
@@ -106,12 +110,14 @@ export default function DrinkVisualizer() {
     return (
       <div className="flex justify-center">
         <div className="relative">
-          {/* Background circular glow when full */}
-          {isFull && (
+          {/* Background circular glow when full or overfilled */}
+          {(isFull || isOverfilled) && (
             <div 
               className="absolute inset-0 rounded-full transition-all duration-1000 ease-out"
               style={{
-                background: 'radial-gradient(circle, rgba(239, 68, 68, 0.4) 0%, rgba(239, 68, 68, 0.2) 40%, transparent 70%)',
+                background: isOverfilled 
+                  ? 'radial-gradient(circle, rgba(239, 68, 68, 0.4) 0%, rgba(239, 68, 68, 0.2) 40%, transparent 70%)'
+                  : 'radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, rgba(34, 197, 94, 0.2) 40%, transparent 70%)',
                 width: '200px',
                 height: '200px',
                 left: '50%',
@@ -163,12 +169,12 @@ export default function DrinkVisualizer() {
 
           </div>
           
-          {/* Tooltip */}
+          {/* Tooltip - positioned to the right of the layer */}
           {hoveredLayer && (
-            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-xs px-2 py-1 rounded whitespace-nowrap z-20"
+            <div className="absolute left-full ml-4 top-1/2 transform -translate-y-1/2 bg-gray-900 text-xs px-2 py-1 rounded whitespace-nowrap z-20"
                  style={{ color: hoveredLayer.color }}>
               {hoveredLayer.name}
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-2 border-r-2 border-t-2 border-transparent border-t-gray-900"></div>
+              <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-2 border-b-2 border-r-2 border-transparent border-r-gray-900"></div>
             </div>
           )}
         </div>
@@ -176,14 +182,17 @@ export default function DrinkVisualizer() {
     );
   };
 
-  // Calculate if glass is full for the warning text
+  // Calculate volume and fullness status
   const totalVolume = ingredients.reduce((sum, item) => {
     const amount = parseFloat(item.amount.toString());
     const volumeInMl = item.ingredient.unit === 'kg' ? amount * 1000 : amount;
     return sum + volumeInMl;
   }, 0);
   
-  const isFull = selectedGlass && totalVolume >= selectedGlass.capacity;
+  const capacity = selectedGlass?.capacity || 300;
+  const fillPercentage = totalVolume / capacity;
+  const isFull = selectedGlass && fillPercentage >= 1.0;
+  const isOverfilled = selectedGlass && fillPercentage > 1.0;
 
   return (
     <div className="flex flex-col h-full">
@@ -191,18 +200,30 @@ export default function DrinkVisualizer() {
         Визуализация
       </h3>
       
-      {/* Full glass warning text - with fixed height container */}
+      {/* Status text - with fixed height container */}
       <div className="text-center mb-2 h-8 flex items-center justify-center">
-        {isFull && (
+        {isFull && !isOverfilled && (
           <p 
             className="text-sm md:text-lg font-bold animate-fadeInUp"
             style={{
-              color: '#ff073a',
-              textShadow: '0 0 10px rgba(255, 7, 58, 0.8), 0 0 20px rgba(255, 7, 58, 0.5), 0 0 30px rgba(255, 7, 58, 0.3)',
-              filter: 'drop-shadow(0 2px 4px rgba(255, 7, 58, 0.4))'
+              color: '#22c55e',
+              textShadow: '0 0 10px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.5), 0 0 30px rgba(34, 197, 94, 0.3)',
+              filter: 'drop-shadow(0 2px 4px rgba(34, 197, 94, 0.4))'
             }}
           >
             Стакан заполнен
+          </p>
+        )}
+        {isOverfilled && (
+          <p 
+            className="text-sm md:text-lg font-bold animate-fadeInUp"
+            style={{
+              color: '#ef4444',
+              textShadow: '0 0 10px rgba(239, 68, 68, 0.8), 0 0 20px rgba(239, 68, 68, 0.5), 0 0 30px rgba(239, 68, 68, 0.3)',
+              filter: 'drop-shadow(0 2px 4px rgba(239, 68, 68, 0.4))'
+            }}
+          >
+            Стакан переполнен
           </p>
         )}
       </div>
