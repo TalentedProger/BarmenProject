@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Martini, WandSparkles, Dice2, BookOpen, GraduationCap, ShoppingCart, Users, LogIn, UserPlus, User } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Martini, WandSparkles, Dice2, BookOpen, GraduationCap, ShoppingCart, Users, LogIn, UserPlus, User, Menu, Home, MapPin } from "lucide-react";
 import CoursesSection from "@/components/landing/courses-section";
 import PopularRecipesSection from "@/components/PopularRecipesSection";
 import { useState } from "react";
@@ -86,36 +87,120 @@ export default function Landing() {
                 Начать
               </Button>
               
-              {/* Auth Section - показывает либо кнопку входа, либо профиль пользователя */}
-              {!isLoading && !isAuthenticated ? (
-                <Button 
-                  variant="outline"
-                  className="bg-transparent border border-neon-purple text-neon-purple px-6 py-2 rounded-lg font-semibold hover:bg-neon-purple hover:text-night-blue transition-all duration-300 shadow-md shadow-neon-purple/20 max-[480px]:px-4 max-[480px]:py-1.5 max-[480px]:text-sm"
-                  onClick={() => window.location.href = "/auth"}
-                >
-                  <LogIn className="mr-2 h-4 w-4 max-[480px]:h-3 max-[480px]:w-3" />
-                  Вход
-                </Button>
-              ) : isAuthenticated && user ? (
-                <Button 
-                  variant="ghost" 
-                  className="flex items-center space-x-2 hover:bg-white/10 p-2 rounded-lg transition-all duration-300 hover:scale-105 md:justify-start justify-end"
-                  onClick={() => window.location.href = "/profile"}
-                >
-                  <Avatar className="h-8 w-8 shadow-sm shadow-black/30 ring-1 ring-white/10">
-                    <AvatarImage 
-                      src={(user as any)?.profileImageUrl} 
-                      alt={(user as any)?.nickname || "User"} 
-                    />
-                    <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold text-sm">
-                      {(user as any)?.nickname?.charAt(0)?.toUpperCase() || (user as any)?.email?.charAt(0)?.toUpperCase() || 'U'}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-white font-medium hidden md:inline">
-                    {(user as any)?.nickname || 'Пользователь'}
-                  </span>
-                </Button>
-              ) : null}
+              {/* Desktop Auth Section */}
+              <div className="hidden min-[481px]:flex">
+                {!isLoading && !isAuthenticated ? (
+                  <Button 
+                    variant="outline"
+                    className="bg-transparent border border-neon-purple text-neon-purple px-6 py-2 rounded-lg font-semibold hover:bg-neon-purple hover:text-night-blue transition-all duration-300 shadow-md shadow-neon-purple/20"
+                    onClick={() => window.location.href = "/auth"}
+                  >
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Вход
+                  </Button>
+                ) : isAuthenticated && user ? (
+                  <Button 
+                    variant="ghost" 
+                    className="flex items-center space-x-2 hover:bg-white/10 p-2 rounded-lg transition-all duration-300 hover:scale-105"
+                    onClick={() => window.location.href = "/profile"}
+                  >
+                    <Avatar className="h-8 w-8 shadow-sm shadow-black/30 ring-1 ring-white/10">
+                      <AvatarImage 
+                        src={(user as any)?.profileImageUrl} 
+                        alt={(user as any)?.nickname || "User"} 
+                      />
+                      <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold text-sm">
+                        {(user as any)?.nickname?.charAt(0)?.toUpperCase() || (user as any)?.email?.charAt(0)?.toUpperCase() || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-white font-medium">
+                      {(user as any)?.nickname || 'Пользователь'}
+                    </span>
+                  </Button>
+                ) : null}
+              </div>
+              
+              {/* Mobile Burger Menu */}
+              <div className="max-[480px]:flex hidden">
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" size="icon" className="text-neon-turquoise">
+                      <Menu className="h-5 w-5" />
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="bg-gradient-to-br from-night-blue/95 to-graphite/95 backdrop-blur-md border-neon-turquoise/30">
+                    <div className="flex flex-col space-y-6 mt-8">
+                      {/* Navigation Items */}
+                      <div className="space-y-4">
+                        <Button 
+                          variant="ghost" 
+                          className="w-full justify-start text-left p-3 hover:bg-white/10 transition-colors"
+                          onClick={() => window.location.href = "/"}
+                        >
+                          <Home className="mr-3 h-5 w-5 text-neon-turquoise" />
+                          <span className="text-white font-medium">Главная</span>
+                        </Button>
+                        
+                        <Button 
+                          variant="ghost" 
+                          className="w-full justify-start text-left p-3 hover:bg-white/10 transition-colors"
+                          onClick={() => window.location.href = "/courses"}
+                        >
+                          <GraduationCap className="mr-3 h-5 w-5 text-neon-turquoise" />
+                          <span className="text-white font-medium">Курсы</span>
+                        </Button>
+                      </div>
+                      
+                      {/* User Profile Section */}
+                      <div className="pt-6 border-t border-white/20">
+                        {!isLoading && !isAuthenticated ? (
+                          <>
+                            <Button 
+                              className="w-full mb-3 bg-gradient-to-r from-neon-turquoise to-electric text-black font-semibold"
+                              onClick={() => window.location.href = "/constructor"}
+                            >
+                              <WandSparkles className="mr-2 h-4 w-4" />
+                              Начать
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              className="w-full border-neon-purple text-neon-purple hover:bg-neon-purple hover:text-black"
+                              onClick={() => window.location.href = "/auth"}
+                            >
+                              <LogIn className="mr-2 h-4 w-4" />
+                              Вход
+                            </Button>
+                          </>
+                        ) : isAuthenticated && user ? (
+                          <>
+                            <div className="flex items-center space-x-3 p-4 bg-white/10 rounded-lg mb-4">
+                              <Avatar className="h-12 w-12 shadow-sm shadow-black/30 ring-2 ring-neon-turquoise/50">
+                                <AvatarImage src={(user as any)?.profileImageUrl || undefined} alt={(user as any)?.nickname || "User"} />
+                                <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
+                                  {(user as any)?.nickname?.charAt(0) || (user as any)?.email?.charAt(0) || 'U'}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <p className="text-white font-medium text-lg">
+                                  {(user as any)?.nickname || (user as any)?.email?.split('@')[0] || 'Пользователь'}
+                                </p>
+                                <p className="text-white/70 text-sm">{(user as any)?.email}</p>
+                              </div>
+                            </div>
+                            <Button 
+                              className="w-full bg-gradient-to-r from-neon-turquoise to-electric text-black font-semibold"
+                              onClick={() => window.location.href = "/profile"}
+                            >
+                              <User className="mr-2 h-4 w-4" />
+                              Профиль
+                            </Button>
+                          </>
+                        ) : null}
+                      </div>
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              </div>
             </div>
           </div>
         </nav>
