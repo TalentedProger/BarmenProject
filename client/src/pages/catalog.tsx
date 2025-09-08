@@ -87,15 +87,15 @@ const CocktailCard = React.memo(({
         </div>
 
         {/* Теги */}
-        <div className="flex flex-wrap gap-2 p-2 min-h-[50px] items-start">
-          <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-800/90 text-neon-amber border border-neon-amber/60 shadow-lg backdrop-blur-sm"
+        <div className="flex gap-2 p-2 min-h-[50px] items-start">
+          <span className="flex-1 text-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-800/90 text-neon-amber border border-neon-amber/60 shadow-lg backdrop-blur-sm"
             style={{
               textShadow: '0 0 8px rgba(255, 193, 7, 0.8)',
               boxShadow: '0 0 12px rgba(255, 193, 7, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
             }}>
             {getCategoryLabel(cocktail.category)}
           </span>
-          <span className={`px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-800/90 border border-white/30 shadow-lg backdrop-blur-sm ${getDifficultyColor(cocktail.difficulty)}`}
+          <span className={`flex-1 text-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-800/90 border border-white/30 shadow-lg backdrop-blur-sm ${getDifficultyColor(cocktail.difficulty)}`}
             style={{
               boxShadow: '0 0 12px rgba(255, 255, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
             }}>
@@ -286,10 +286,14 @@ export default function Catalog() {
             </div>
           ) : (
             <>
-              {/* Адаптивная сетка: 1 на мобильных, 2 на планшетах, 3 на десктопе */}
+              {/* Адаптивная сетка с фиксированным лейаутом */}
               <div 
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 justify-items-center"
-                style={{ containIntrinsicSize: '300px 400px', contentVisibility: 'auto' }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 auto-rows-fr"
+                style={{ 
+                  containIntrinsicSize: '300px 400px', 
+                  contentVisibility: 'auto',
+                  gridAutoFlow: 'row dense'
+                }}
               >
                 {displayedCocktails.map((cocktail) => (
                   <CocktailCard
