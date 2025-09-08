@@ -169,14 +169,7 @@ export default function DrinkVisualizer() {
 
           </div>
           
-          {/* Tooltip - positioned to the right of the layer */}
-          {hoveredLayer && (
-            <div className="absolute left-full ml-4 top-1/2 transform -translate-y-1/2 bg-gray-900 text-xs px-2 py-1 rounded whitespace-nowrap z-20"
-                 style={{ color: hoveredLayer.color }}>
-              {hoveredLayer.name}
-              <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-2 border-b-2 border-r-2 border-transparent border-r-gray-900"></div>
-            </div>
-          )}
+          {/* Tooltip removed - now shown above visualization */}
         </div>
       </div>
     );
@@ -200,8 +193,35 @@ export default function DrinkVisualizer() {
         Визуализация
       </h3>
       
-      {/* Status text - with fixed height container */}
+      {/* Hovered ingredient name display */}
       <div className="text-center mb-2 h-8 flex items-center justify-center">
+        {hoveredLayer && (
+          <p 
+            className="text-sm font-medium animate-fadeIn"
+            style={{
+              color: hoveredLayer.color,
+              textShadow: `0 0 10px ${hoveredLayer.color}88`,
+            }}
+          >
+            {hoveredLayer.name}
+          </p>
+        )}
+      </div>
+      
+      <div className="mb-4 flex-1 flex items-center justify-center gap-6">
+        {/* Glass Image */}
+        <div className="flex-shrink-0">
+          {renderGlassImage()}
+        </div>
+        
+        {/* Visualization Container */}
+        <div className="flex-shrink-0">
+          {renderVisualizationContainer()}
+        </div>
+      </div>
+      
+      {/* Status text - moved after visualization */}
+      <div className="text-center mb-4 h-8 flex items-center justify-center">
         {isFull && !isOverfilled && (
           <p 
             className="text-sm md:text-lg font-bold animate-fadeInUp"
@@ -226,18 +246,6 @@ export default function DrinkVisualizer() {
             Стакан переполнен
           </p>
         )}
-      </div>
-      
-      <div className="mb-6 flex-1 flex items-center justify-center gap-6">
-        {/* Glass Image */}
-        <div className="flex-shrink-0">
-          {renderGlassImage()}
-        </div>
-        
-        {/* Visualization Container */}
-        <div className="flex-shrink-0">
-          {renderVisualizationContainer()}
-        </div>
       </div>
       
       {/* Glass Info */}
