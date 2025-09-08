@@ -87,16 +87,16 @@ export default function Constructor() {
       name: recipeName,
       description: recipeDescription,
       glassTypeId: selectedGlass?.id,
-      totalVolume: currentStats.totalVolume,
-      totalAbv: currentStats.totalAbv,
-      totalCost: currentStats.totalCost,
+      totalVolume: Math.round(currentStats.totalVolume),
+      totalAbv: currentStats.totalAbv.toString(),
+      totalCost: currentStats.totalCost.toString(),
       tasteBalance: currentStats.tasteBalance,
       category: "custom",
       difficulty: "easy",
       isPublic: true,
       ingredients: ingredients.map((item, index) => ({
         ingredientId: item.ingredient.id,
-        amount: parseFloat(item.amount.toString()),
+        amount: parseFloat(item.amount.toString()).toString(),
         unit: item.unit,
         order: index + 1
       }))
