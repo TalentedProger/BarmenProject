@@ -195,7 +195,10 @@ export default function Generator() {
             {/* Generation Modes */}
             <Card className="glass-effect border-none mb-8">
               <CardContent className="p-6">
-                <h3 className="text-2xl font-semibold mb-4 text-neon-turquoise">Режим генерации</h3>
+                <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-neon-turquoise to-electric bg-clip-text text-transparent"
+                    style={{ textShadow: '0 0 15px rgba(0, 247, 239, 0.7)' }}>
+                  Режим генерации
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                   {GENERATION_MODES.map((mode) => {
                     const IconComponent = mode.icon;
@@ -227,7 +230,11 @@ export default function Generator() {
               <Button
                 onClick={handleGenerate}
                 disabled={isGenerating || generateRecipeMutation.isPending}
-                className="glow-button bg-gradient-to-r from-neon-purple to-neon-pink text-night-blue px-12 py-4 text-xl hover:scale-105 transition-all"
+                className="glow-button bg-gradient-to-r from-neon-purple to-neon-pink text-night-blue px-12 py-4 text-xl hover:scale-105 transition-all duration-300 shadow-lg relative overflow-hidden"
+                style={{
+                  boxShadow: '0 0 20px rgba(139, 69, 255, 0.6), 0 0 40px rgba(255, 20, 147, 0.4), 0 8px 30px rgba(0, 0, 0, 0.3)',
+                  animation: 'neon-pulse 2s ease-in-out infinite'
+                }}
               >
                 <Sparkles className="mr-3 h-6 w-6" />
                 {isGenerating ? "Создание..." : "Создать напиток"}

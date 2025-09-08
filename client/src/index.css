@@ -550,3 +550,12 @@
     @apply grid-cols-3 gap-6;
   }
 }
+
+@keyframes neon-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(139, 69, 255, 0.6), 0 0 40px rgba(255, 20, 147, 0.4), 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(139, 69, 255, 0.8), 0 0 60px rgba(255, 20, 147, 0.6), 0 8px 40px rgba(0, 0, 0, 0.4);
+  }
+}
