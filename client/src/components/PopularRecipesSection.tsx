@@ -426,6 +426,20 @@ export default function PopularRecipesSection() {
           ))}
         </Swiper>
 
+        {/* Mobile Swipe Hint */}
+        <div className="hidden max-[480px]:flex justify-center mt-4">
+          <p 
+            className="text-sm font-medium text-center animate-pulse"
+            style={{
+              color: '#06b6d4',
+              textShadow: '0 0 10px rgba(6, 182, 212, 0.8), 0 0 20px rgba(6, 182, 212, 0.5), 0 0 30px rgba(6, 182, 212, 0.3)',
+              filter: 'drop-shadow(0 2px 4px rgba(6, 182, 212, 0.4))'
+            }}
+          >
+            Свайпните для перехода к другому коктейлю
+          </p>
+        </div>
+
         {/* Navigation Arrows */}
         <div className="flex justify-center items-center gap-6 mt-5 max-[480px]:hidden">
           <button
