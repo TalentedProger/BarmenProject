@@ -77,8 +77,8 @@ export default function IngredientRecommendations() {
 
   return (
     <div className="flex flex-col h-full">
-      <h3 className="text-lg font-semibold mb-4 text-foreground">
-        Рекомендации
+      <h3 className="text-lg font-semibold mb-4 text-foreground text-center">
+        Ингредиенты
       </h3>
       
       {/* Search Input */}
