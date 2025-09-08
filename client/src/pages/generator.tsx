@@ -178,11 +178,12 @@ export default function Generator() {
     <div className="min-h-screen bg-night-blue text-ice-white">
       <Header />
       
-      <section className="pt-20 pb-16 bg-gradient-to-b from-graphite to-night-blue">
+      <section className="pt-32 pb-16 bg-gradient-to-b from-graphite to-night-blue">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4 text-neon-purple">
-              <Dice2 className="inline mr-3 h-10 w-10" />
+            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-neon-purple to-neon-turquoise bg-clip-text text-transparent"
+                style={{ textShadow: '0 0 20px rgba(139, 69, 255, 0.8), 0 0 40px rgba(0, 247, 239, 0.6)' }}>
+              <Dice2 className="inline mr-3 h-10 w-10 text-neon-purple" />
               Генератор Рецептов
             </h2>
             <p className="text-xl text-cream max-w-2xl mx-auto">
