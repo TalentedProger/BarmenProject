@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, ChevronRight, ChevronDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useCocktailStore } from "@/store/cocktail-store";
 import IngredientCard from "./IngredientCard";
@@ -11,13 +11,29 @@ const CATEGORIES = [
   { id: 'alcohol', label: 'Алкоголь', color: 'bg-neon-turquoise' },
   { id: 'juice', label: 'Соки', color: 'bg-neon-amber' },
   { id: 'syrup', label: 'Сиропы', color: 'bg-neon-pink' },
-  { id: 'fruit', label: 'Фрукты', color: 'bg-neon-purple' },
-  { id: 'ice', label: 'Лёд', color: 'bg-gray-500' },
+];
+
+const ALCOHOL_TYPES = [
+  'Пиво', 'Вино красное', 'Вино белое', 'Вино розовое', 'Игристое вино', 
+  'Виски', 'Водка', 'Джин', 'Ром', 'Текила', 'Сидр', 'Бренди', 'Коньяк', 
+  'Мартини', 'Ликёры', 'Абсент', 'Кальвадос'
+];
+
+const JUICE_TYPES = [
+  'Апельсиновый', 'Яблочный', 'Ананасовый', 'Клюквенный', 'Лимонный',
+  'Лаймовый', 'Томатный', 'Грейпфрутовый', 'Вишневый'
+];
+
+const SYRUP_TYPES = [
+  'Сахарный', 'Кокосовый', 'Гренадин', 'Карамельный', 'Ванильный',
+  'Мятный', 'Малиновый', 'Клубничный', 'Шоколадный'
 ];
 
 export default function IngredientRecommendations() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('alcohol');
+  const [selectedSubtype, setSelectedSubtype] = useState<string>('');
+  const [showMoreCategories, setShowMoreCategories] = useState(false);
   const { ingredients, addIngredient } = useCocktailStore();
 
   // Fetch all categories to enable search across all ingredients
@@ -56,15 +72,33 @@ export default function IngredientRecommendations() {
     ...iceIngredients,
   ], [alcoholIngredients, juiceIngredients, syrupIngredients, fruitIngredients, iceIngredients]);
 
-  // Filter ingredients based on search query
+  // Filter ingredients based on search query and subtype
   const filteredIngredients = useMemo(() => {
     if (searchQuery.trim()) {
       return allIngredients.filter(ingredient =>
         ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    return categoryIngredients;
-  }, [searchQuery, allIngredients, categoryIngredients]);
+    
+    let ingredients = categoryIngredients;
+    
+    if (selectedSubtype) {
+      ingredients = categoryIngredients.filter(ingredient =>
+        ingredient.name.toLowerCase().includes(selectedSubtype.toLowerCase())
+      );
+    }
+    
+    return ingredients;
+  }, [searchQuery, allIngredients, categoryIngredients, selectedSubtype]);
+  
+  const getSubtypeOptions = (category: string) => {
+    switch (category) {
+      case 'alcohol': return ALCOHOL_TYPES;
+      case 'juice': return JUICE_TYPES;
+      case 'syrup': return SYRUP_TYPES;
+      default: return [];
+    }
+  };
 
   const handleAddIngredient = (ingredient: Ingredient, amount: number) => {
     const existingIngredient = ingredients.find(item => item.ingredient.id === ingredient.id);
@@ -94,20 +128,74 @@ export default function IngredientRecommendations() {
       
       {/* Category Tabs - hide when searching */}
       {!searchQuery.trim() && (
-        <div className="flex flex-wrap gap-2 mb-4">
-          {CATEGORIES.map((category) => (
+        <div className="mb-4">
+          <div className="flex flex-wrap gap-2 mb-3">
+            {CATEGORIES.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => {
+                  setSelectedCategory(category.id);
+                  setSelectedSubtype('');
+                }}
+                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                  selectedCategory === category.id
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                }`}
+              >
+                {category.label}
+              </button>
+            ))}
+            
             <button
-              key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
-              className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                selectedCategory === category.id
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
-              }`}
+              onClick={() => setShowMoreCategories(!showMoreCategories)}
+              className="px-3 py-1.5 text-sm rounded-md bg-muted text-muted-foreground hover:bg-muted/80 flex items-center gap-1"
             >
-              {category.label}
+              {showMoreCategories ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
             </button>
-          ))}
+          </div>
+          
+          {/* Expanded categories */}
+          {showMoreCategories && (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {[
+                { id: 'fruit', label: 'Фрукты', color: 'bg-neon-purple' },
+                { id: 'ice', label: 'Лёд', color: 'bg-gray-500' },
+              ].map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => {
+                    setSelectedCategory(category.id);
+                    setSelectedSubtype('');
+                  }}
+                  className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                    selectedCategory === category.id
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                  }`}
+                >
+                  {category.label}
+                </button>
+              ))}
+            </div>
+          )}
+          
+          {/* Type selector */}
+          {getSubtypeOptions(selectedCategory).length > 0 && (
+            <div className="mb-3">
+              <h4 className="text-sm font-medium text-foreground mb-2 text-center">Выберите тип</h4>
+              <select
+                value={selectedSubtype}
+                onChange={(e) => setSelectedSubtype(e.target.value)}
+                className="w-full p-2 text-sm rounded-md bg-muted border border-border text-foreground"
+              >
+                <option value="">Все типы</option>
+                {getSubtypeOptions(selectedCategory).map((type) => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
       )}
 
