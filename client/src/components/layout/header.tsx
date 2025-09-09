@@ -9,10 +9,12 @@ import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useCallback, useMemo } from "react";
+import { useLocation } from "wouter";
 
 export default function Header() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
+  const [location] = useLocation();
 
   const userDisplayData = useMemo(() => {
     if (!user) return null;
@@ -46,26 +48,26 @@ export default function Header() {
     logoutMutation.mutate();
   }, [logoutMutation]);
 
-  const NavItems = () => (
-    <>
-      <Link href="/constructor">
-        <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg">
-          Конструктор
-        </Button>
-      </Link>
-      <Link href="/generator">
-        <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg">
-          Генератор
-        </Button>
-      </Link>
-      <Link href="/catalog">
-        <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg">
-          Каталог
-        </Button>
-      </Link>
-
-    </>
-  );
+  const NavItems = ({ currentPath }: { currentPath?: string }) => {
+    const navItems = [
+      { href: '/', label: 'Главная', icon: 'Home' },
+      { href: '/constructor', label: 'Конструктор', icon: 'WandSparkles' },
+      { href: '/generator', label: 'Генератор', icon: 'Dice2' },
+      { href: '/catalog', label: 'Каталог', icon: 'BookOpen' }
+    ];
+    
+    return (
+      <>
+        {navItems.filter(item => item.href !== currentPath).map((item) => (
+          <Link key={item.href} href={item.href}>
+            <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg">
+              {item.label}
+            </Button>
+          </Link>
+        ))}
+      </>
+    );
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-graphite border-b border-border">
@@ -79,7 +81,7 @@ export default function Header() {
           </Link>
           
           <div className="hidden md:flex items-center space-x-6">
-            <NavItems />
+            <NavItems currentPath={location} />
           </div>
           
           <div className="flex items-center space-x-4">
@@ -148,7 +150,33 @@ export default function Header() {
               </SheetTrigger>
               <SheetContent side="right" className="glass-effect border-none">
                 <div className="flex flex-col space-y-4 mt-8">
-                  <NavItems />
+                  {/* User Profile Section - At top when logged in */}
+                  {isAuthenticated && user && (
+                    <div className="pb-4 border-b border-white/20">
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-start text-left p-3 hover:bg-white/10 transition-colors"
+                        onClick={() => window.location.href = "/profile"}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <Avatar className="h-10 w-10 shadow-sm shadow-black/30 ring-1 ring-white/10">
+                            <AvatarImage src={userDisplayData?.profileImageUrl || undefined} alt={userDisplayData?.nickname || "User"} />
+                            <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
+                              {userDisplayData?.avatar}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="text-white font-medium text-sm">
+                              {userDisplayData?.nickname}
+                            </p>
+                            <p className="text-white/70 text-xs">{userDisplayData?.email}</p>
+                          </div>
+                        </div>
+                      </Button>
+                    </div>
+                  )}
+                  
+                  <NavItems currentPath={location} />
                   {/* Mobile Auth Buttons */}
                   <div className="pt-4 border-t border-white/20">
                     {!isLoading && !isAuthenticated ? (
@@ -167,20 +195,6 @@ export default function Header() {
                       </>
                     ) : isAuthenticated && user ? (
                       <>
-                        <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-lg mb-3">
-                          <Avatar className="h-10 w-10 shadow-sm shadow-black/30 ring-1 ring-white/10">
-                            <AvatarImage src={(user as any)?.profileImageUrl || undefined} alt={(user as any)?.nickname || "User"} />
-                            <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
-                              {(user as any)?.nickname?.charAt(0) || (user as any)?.email?.charAt(0) || 'U'}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="text-white font-medium">
-                              {(user as any)?.nickname || (user as any)?.email?.split('@')[0] || 'Пользователь'}
-                            </p>
-                            <p className="text-white/70 text-sm">{(user as any)?.email}</p>
-                          </div>
-                        </div>
                         <Button 
                           onClick={handleLogoutClick}
                           disabled={logoutMutation.isPending}
