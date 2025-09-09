@@ -110,6 +110,7 @@ export default function IngredientSelector() {
                         className="min-w-[50px]"
                         glassCapacity={selectedGlass?.capacity}
                         currentTotalVolume={cocktailStats.totalVolume}
+                        ingredientIndex={index}
                       />
                       
                       <Button
@@ -145,6 +146,7 @@ export default function IngredientSelector() {
                       className="min-w-[60px]"
                       glassCapacity={selectedGlass?.capacity}
                       currentTotalVolume={cocktailStats.totalVolume}
+                      ingredientIndex={index}
                     />
                     
                     <Button

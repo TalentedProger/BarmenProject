@@ -181,8 +181,11 @@ export default function Generator() {
       <section className="pt-32 pb-16 bg-gradient-to-b from-graphite to-night-blue">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-neon-purple to-neon-turquoise bg-clip-text text-transparent"
-                style={{ textShadow: '0 0 20px rgba(139, 69, 255, 0.8), 0 0 40px rgba(0, 247, 239, 0.6)' }}>
+            <h2 className="text-4xl font-bold mb-4 text-neon-purple"
+                style={{ 
+                  textShadow: '0 0 20px rgba(139, 69, 255, 0.8), 0 0 40px rgba(139, 69, 255, 0.6)',
+                  color: '#8b45ff'
+                }}>
               <Dice2 className="inline mr-3 h-10 w-10 text-neon-purple" />
               Генератор Рецептов
             </h2>
@@ -199,7 +202,7 @@ export default function Generator() {
                     style={{ textShadow: '0 0 15px rgba(0, 247, 239, 0.7)' }}>
                   Режим генерации
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   {GENERATION_MODES.map((mode) => {
                     const IconComponent = mode.icon;
                     return (
@@ -230,10 +233,9 @@ export default function Generator() {
               <Button
                 onClick={handleGenerate}
                 disabled={isGenerating || generateRecipeMutation.isPending}
-                className="glow-button bg-gradient-to-r from-neon-purple to-neon-pink text-night-blue px-12 py-4 text-xl hover:scale-105 transition-all duration-300 shadow-lg relative overflow-hidden"
+                className="bg-gradient-to-r from-neon-purple to-neon-pink text-night-blue px-12 py-4 text-xl transition-all duration-200 shadow-lg"
                 style={{
-                  boxShadow: '0 0 20px rgba(139, 69, 255, 0.6), 0 0 40px rgba(255, 20, 147, 0.4), 0 8px 30px rgba(0, 0, 0, 0.3)',
-                  animation: 'neon-pulse 2s ease-in-out infinite'
+                  boxShadow: '0 0 20px rgba(139, 69, 255, 0.6), 0 0 40px rgba(255, 20, 147, 0.4), 0 8px 30px rgba(0, 0, 0, 0.3)'
                 }}
               >
                 <Sparkles className="mr-3 h-6 w-6" />
@@ -249,7 +251,7 @@ export default function Generator() {
                     <h3 className="text-3xl font-bold text-neon-amber mb-2">
                       {generatedRecipe.name}
                     </h3>
-                    <p className="text-cream">{generatedRecipe.description}</p>
+                    <p className="text-cream">Летний коктейль с освежающим вкусом тропических фруктов</p>
                     <div className="mt-4">
                       <Badge className="bg-neon-turquoise text-night-blue">
                         {generatedRecipe.category}
@@ -287,19 +289,23 @@ export default function Generator() {
                       
                       <div className="grid grid-cols-3 gap-4 text-center">
                         <div>
-                          <div className="text-lg font-bold text-neon-turquoise">
+                          <div className="text-lg font-bold" style={{ color: '#3b82f6' }}>
                             {generatedRecipe.totalVolume}ml
                           </div>
                           <div className="text-sm text-cream">Объем</div>
                         </div>
                         <div>
-                          <div className="text-lg font-bold text-neon-amber">
-                            {generatedRecipe.glass.name}
+                          <div className="text-lg font-bold" style={{ color: '#eab308' }}>
+                            {generatedRecipe.ingredients.reduce((sum, item) => {
+                              const totalVolume = generatedRecipe.ingredients.reduce((s, i) => s + i.amount, 0);
+                              const totalAlcohol = generatedRecipe.ingredients.reduce((s, i) => s + (i.amount * (i.ingredient.abv / 100)), 0);
+                              return totalVolume > 0 ? (totalAlcohol / totalVolume) * 100 : 0;
+                            }, 0).toFixed(1)}%
                           </div>
-                          <div className="text-sm text-cream">Стакан</div>
+                          <div className="text-sm text-cream">Крепость</div>
                         </div>
                         <div>
-                          <div className="text-lg font-bold text-neon-pink">
+                          <div className="text-lg font-bold" style={{ color: '#22c55e' }}>
                             {generatedRecipe.ingredients.reduce((sum, item) => {
                               return sum + (item.amount / 1000) * item.ingredient.pricePerLiter;
                             }, 0).toFixed(0)}₽
@@ -329,11 +335,11 @@ export default function Generator() {
                         ))}
                       </div>
                       
-                      <div className="flex gap-4">
+                      <div className="flex flex-col gap-3 items-center">
                         <Button
                           onClick={handleSaveGenerated}
                           disabled={saveRecipeMutation.isPending}
-                          className="glow-button bg-neon-turquoise text-night-blue px-6 py-2 flex-1 hover:bg-neon-turquoise/90"
+                          className="glow-button bg-neon-turquoise text-night-blue px-8 py-2 w-48 hover:bg-neon-turquoise/90"
                         >
                           <Save className="mr-2 h-4 w-4" />
                           {saveRecipeMutation.isPending ? "Сохранение..." : "Сохранить"}
@@ -341,7 +347,7 @@ export default function Generator() {
                         <Link href="/constructor">
                           <Button
                             variant="outline"
-                            className="neon-border bg-transparent text-neon-purple px-6 py-2 flex-1 hover:bg-neon-purple hover:text-night-blue"
+                            className="neon-border bg-transparent text-neon-purple px-8 py-2 w-48 hover:bg-neon-purple hover:text-night-blue"
                           >
                             <Edit className="mr-2 h-4 w-4" />
                             Редактировать

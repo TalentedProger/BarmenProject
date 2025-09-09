@@ -89,7 +89,8 @@ export default function DrinkVisualizer() {
     }, 0);
     
     const glassHeight = 192; // 48 * 4 = 192px
-    const filledHeight = Math.min(glassHeight * 0.8, (totalVolume / selectedGlass.capacity) * glassHeight);
+    // Увеличиваем максимальную высоту заполнения до 95%
+    const filledHeight = Math.min(glassHeight * 0.95, (totalVolume / selectedGlass.capacity) * glassHeight);
     const isFull = totalVolume >= selectedGlass.capacity;
 
     let currentHeight = 0;
@@ -106,6 +107,18 @@ export default function DrinkVisualizer() {
       currentHeight += layerHeight;
       return layer;
     });
+    
+    // Добавляем последний слой для полного заполнения верха (пирамиды)
+    if (layers.length > 0 && currentHeight < glassHeight * 0.95) {
+      const topLayerColor = layers[layers.length - 1].color;
+      layers.push({
+        height: (glassHeight * 0.95) - currentHeight,
+        bottom: currentHeight,
+        color: topLayerColor + '44', // Полупрозрачность
+        name: 'Пена',
+        id: 'top-layer'
+      });
+    }
 
     return (
       <div className="flex justify-center">

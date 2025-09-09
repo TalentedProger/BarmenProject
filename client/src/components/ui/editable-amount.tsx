@@ -12,6 +12,7 @@ interface EditableAmountProps {
   displayUnit?: string; // Для отображения (например, "г" вместо "kg")
   glassCapacity?: number; // Емкость стакана в ml
   currentTotalVolume?: number; // Текущий общий объем всех ингредиентов
+  ingredientIndex?: number; // Индекс текущего ингредиента (для логики первого ингредиента)
 }
 
 export function EditableAmount({
@@ -24,7 +25,8 @@ export function EditableAmount({
   className,
   displayUnit,
   glassCapacity,
-  currentTotalVolume = 0
+  currentTotalVolume = 0,
+  ingredientIndex
 }: EditableAmountProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -52,19 +54,39 @@ export function EditableAmount({
   };
 
   const handleSubmit = () => {
-    const numericValue = parseInt(inputValue) || minAmount;
+    let numericValue = parseInt(inputValue) || minAmount;
     
-    // Применяем ограничения
+    // Делаем значения кратными 5
+    if (unit === 'kg') {
+      // Для фруктов в граммах: минимум 10г, кратно 5
+      numericValue = Math.max(10, Math.ceil(numericValue / 5) * 5);
+    } else {
+      // Для жидкостей в мл: минимум 5мл, кратно 5  
+      numericValue = Math.max(5, Math.ceil(numericValue / 5) * 5);
+    }
+    
+    // Применяем стандартные ограничения
     let finalValue = Math.max(minAmount, Math.min(maxAmount, numericValue));
     
     // Проверяем ограничение по емкости стакана (только для жидкостей)
     if (glassCapacity && unit !== 'kg') {
-      const currentAmount = unit === 'kg' ? Math.round(amount * 1000) : Math.round(amount);
+      const currentAmount = Math.round(amount);
       const otherIngredientsVolume = currentTotalVolume - currentAmount;
-      const maxAllowedAmount = glassCapacity - otherIngredientsVolume;
+      
+      // Логика для первого ингредиента vs последующих
+      let maxAllowedAmount;
+      if (ingredientIndex === 0) {
+        // Первый ингредиент может занять весь стакан
+        maxAllowedAmount = glassCapacity;
+      } else {
+        // Последующие ингредиенты ограничены оставшимся местом
+        maxAllowedAmount = glassCapacity - otherIngredientsVolume;
+      }
       
       if (maxAllowedAmount > 0) {
-        finalValue = Math.min(finalValue, maxAllowedAmount);
+        // Также делаем максимальное значение кратным 5
+        const roundedMaxAmount = Math.floor(maxAllowedAmount / 5) * 5;
+        finalValue = Math.min(finalValue, Math.max(5, roundedMaxAmount));
       }
     }
     
@@ -112,7 +134,7 @@ export function EditableAmount({
             "bg-blue-500/20 border border-blue-400/50 rounded-sm",
             "text-blue-400 placeholder:text-blue-300/60",
             "focus:outline-none focus:border-blue-300 focus:bg-blue-500/30",
-            "backdrop-blur-sm transition-all duration-200"
+            "backdrop-blur-sm transition-all duration-300 ease-in-out"
           )}
           placeholder="0"
         />
@@ -127,7 +149,7 @@ export function EditableAmount({
         "bg-blue-500/10 border border-blue-400/30 rounded-sm",
         "text-xs font-medium text-center text-blue-500",
         "cursor-pointer hover:bg-blue-500/20 hover:border-blue-400/50",
-        "backdrop-blur-sm transition-all duration-200",
+        "backdrop-blur-sm transition-all duration-300 ease-in-out",
         "flex items-center justify-center",
         "hover:shadow-sm hover:shadow-blue-400/25",
         className
