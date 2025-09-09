@@ -112,20 +112,20 @@ export default function Generator() {
         description: "Созданный коктейль добавлен в ваш профиль",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/recipes"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/users", user?.id, "recipes"] });
+      // queryClient.invalidateQueries({ queryKey: ["/api/users", user?.id, "recipes"] });
     },
     onError: (error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Ошибка авторизации",
-          description: "Выполняется перенаправление на страницу входа...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
+      // if (isUnauthorizedError(error)) {
+      //   toast({
+      //     title: "Ошибка авторизации",
+      //     description: "Выполняется перенаправление на страницу входа...",
+      //     variant: "destructive",
+      //   });
+      //   setTimeout(() => {
+      //     window.location.href = "/api/login";
+      //   }, 500);
+      //   return;
+      // }
       toast({
         title: "Ошибка сохранения",
         description: "Не удалось сохранить рецепт. Попробуйте еще раз.",
