@@ -88,7 +88,7 @@ export default function Landing() {
               </Button>
               
               {/* Desktop Auth Section */}
-              <div className="hidden min-[481px]:flex">
+              <div className="hidden min-[561px]:flex">
                 {!isLoading && !isAuthenticated ? (
                   <Button 
                     variant="outline"
@@ -121,7 +121,7 @@ export default function Landing() {
               </div>
               
               {/* Mobile Burger Menu */}
-              <div className="max-[480px]:flex hidden">
+              <div className="max-[560px]:flex hidden">
                 <Sheet>
                   <SheetTrigger asChild>
                     <Button variant="ghost" size="icon" className="text-neon-turquoise">
@@ -208,26 +208,12 @@ export default function Landing() {
                           </>
                         ) : isAuthenticated && user ? (
                           <>
-                            <div className="flex items-center space-x-3 p-4 bg-white/10 rounded-lg mb-4">
-                              <Avatar className="h-12 w-12 shadow-sm shadow-black/30 ring-2 ring-neon-turquoise/50">
-                                <AvatarImage src={(user as any)?.profileImageUrl || undefined} alt={(user as any)?.nickname || "User"} />
-                                <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
-                                  {(user as any)?.nickname?.charAt(0) || (user as any)?.email?.charAt(0) || 'U'}
-                                </AvatarFallback>
-                              </Avatar>
-                              <div>
-                                <p className="text-white font-medium text-lg">
-                                  {(user as any)?.nickname || (user as any)?.email?.split('@')[0] || 'Пользователь'}
-                                </p>
-                                <p className="text-white/70 text-sm">{(user as any)?.email}</p>
-                              </div>
-                            </div>
                             <Button 
-                              className="w-full bg-gradient-to-r from-neon-turquoise to-electric text-black font-semibold"
-                              onClick={() => window.location.href = "/profile"}
+                              className="w-full mb-3 bg-gradient-to-r from-neon-turquoise to-electric text-black font-semibold"
+                              onClick={() => window.location.href = "/constructor"}
                             >
-                              <User className="mr-2 h-4 w-4" />
-                              Профиль
+                              <WandSparkles className="mr-2 h-4 w-4" />
+                              Начать
                             </Button>
                           </>
                         ) : null}
@@ -439,19 +425,39 @@ export default function Landing() {
         </div>
         
         <div className="container mx-auto px-6 max-w-6xl relative z-10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-12">
-            {/* Left side - Newsletter content */}
-            <div className="flex-1 text-center md:text-left">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#F1F1F1] mb-2" style={{ textShadow: '0 0 5px #00f7ef33' }}>
+          {/* Mobile Layout - Custom Order */}
+          <div className="md:hidden flex flex-col items-center gap-8">
+            {/* 1. Title */}
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-[#F1F1F1] mb-2" style={{ textShadow: '0 0 5px #00f7ef33' }}>
                 Будь в курсе новых рецептов и фишек
               </h2>
-              <p className="text-sm md:text-base text-zinc-400 mt-2 mb-8">
+              <p className="text-sm text-zinc-400 mt-2">
                 Мы не спамим. Только крафтовые новости.
               </p>
-              
-              <form onSubmit={handleHeroEmailSubmit} className="flex flex-col gap-4 justify-center md:justify-start max-[480px]:items-center max-[480px]:w-full">
-                <div className="flex flex-col md:flex-row gap-4 max-[767px]:w-full max-[767px]:items-center">
-                  <div className="flex flex-col w-full md:w-auto min-w-[280px] max-[767px]:w-full">
+            </div>
+            
+            {/* 2. Glass image */}
+            <div className="flex justify-center">
+              <div className="relative hover:scale-105 transition-all duration-300">
+                <img 
+                  src="/attached_assets/Flux_Dev_a_lush_3d_render_of_A_stylized_artistic_illustration__3-Photoroom_1752879813613.png"
+                  alt="Стилизованный коктейль с градиентными эффектами"
+                  className="w-60 h-auto object-contain relative z-10"
+                  style={{
+                    filter: 'drop-shadow(0 25px 50px rgba(138, 43, 226, 0.3)) drop-shadow(0 15px 30px rgba(0, 255, 255, 0.2))',
+                  }}
+                  loading="lazy"
+                />
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-cyan-400/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
+              </div>
+            </div>
+            
+            {/* 3. Form */}
+            <div className="w-full max-w-sm">
+              <form onSubmit={handleHeroEmailSubmit} className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col">
                     <input
                       type="email"
                       value={heroEmail}
@@ -469,7 +475,47 @@ export default function Landing() {
                   </div>
                   <Button 
                     type="submit"
-                    className="rounded-full px-6 py-3 ml-0 md:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30 max-[767px]:w-full max-[767px]:ml-0 max-[767px]:mt-2"
+                    className="rounded-full px-6 py-3 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30 w-full"
+                  >
+                    Подписаться
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          {/* Desktop Layout */}
+          <div className="hidden md:flex flex-col md:flex-row items-center justify-between gap-12">
+            {/* Left side - Newsletter content */}
+            <div className="flex-1 text-center md:text-left">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#F1F1F1] mb-2" style={{ textShadow: '0 0 5px #00f7ef33' }}>
+                Будь в курсе новых рецептов и фишек
+              </h2>
+              <p className="text-sm md:text-base text-zinc-400 mt-2 mb-8">
+                Мы не спамим. Только крафтовые новости.
+              </p>
+              
+              <form onSubmit={handleHeroEmailSubmit} className="flex flex-col gap-4 justify-center md:justify-start">
+                <div className="flex flex-col md:flex-row gap-4">
+                  <div className="flex flex-col w-full md:w-auto min-w-[280px]">
+                    <input
+                      type="email"
+                      value={heroEmail}
+                      onChange={(e) => setHeroEmail(e.target.value)}
+                      placeholder="Введи свой email"
+                      className={`rounded-full px-6 py-3 text-sm bg-[#1A1A1E] text-white border focus:outline-none transition-all duration-300 w-full ${
+                        heroEmailError 
+                          ? 'border-red-500 focus:border-red-400' 
+                          : 'border-zinc-700 focus:border-cyan-500'
+                      }`}
+                    />
+                    {heroEmailError && (
+                      <p className="text-red-400 text-xs mt-1 pl-4">{heroEmailError}</p>
+                    )}
+                  </div>
+                  <Button 
+                    type="submit"
+                    className="rounded-full px-6 py-3 ml-0 md:ml-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 shadow-md shadow-cyan-500/30"
                   >
                     Подписаться
                   </Button>
