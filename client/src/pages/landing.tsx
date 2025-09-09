@@ -130,24 +130,59 @@ export default function Landing() {
                   </SheetTrigger>
                   <SheetContent side="right" className="bg-gradient-to-br from-night-blue/95 to-graphite/95 backdrop-blur-md border-neon-turquoise/30">
                     <div className="flex flex-col space-y-6 mt-8">
+                      {/* User Profile Section - At top when logged in */}
+                      {isAuthenticated && user && (
+                        <div className="pb-4 border-b border-white/20">
+                          <Button 
+                            variant="ghost" 
+                            className="w-full justify-start text-left p-3 hover:bg-white/10 transition-colors"
+                            onClick={() => window.location.href = "/profile"}
+                          >
+                            <div className="flex items-center space-x-3">
+                              <Avatar className="h-10 w-10 shadow-sm shadow-black/30 ring-1 ring-white/10">
+                                <AvatarImage src={(user as any)?.profileImageUrl || undefined} alt={(user as any)?.nickname || "User"} />
+                                <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
+                                  {(user as any)?.nickname?.charAt(0) || (user as any)?.email?.charAt(0) || 'U'}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <p className="text-white font-medium text-sm">
+                                  {(user as any)?.nickname || (user as any)?.email?.split('@')[0] || 'Пользователь'}
+                                </p>
+                                <p className="text-white/70 text-xs">{(user as any)?.email}</p>
+                              </div>
+                            </div>
+                          </Button>
+                        </div>
+                      )}
+                      
                       {/* Navigation Items */}
                       <div className="space-y-4">
                         <Button 
                           variant="ghost" 
                           className="w-full justify-start text-left p-3 hover:bg-white/10 transition-colors"
-                          onClick={() => window.location.href = "/"}
+                          onClick={() => window.location.href = "/constructor"}
                         >
-                          <Home className="mr-3 h-5 w-5 text-neon-turquoise" />
-                          <span className="text-white font-medium">Главная</span>
+                          <WandSparkles className="mr-3 h-5 w-5 text-neon-turquoise" />
+                          <span className="text-white font-medium">Конструктор</span>
                         </Button>
                         
                         <Button 
                           variant="ghost" 
                           className="w-full justify-start text-left p-3 hover:bg-white/10 transition-colors"
-                          onClick={() => window.location.href = "/courses"}
+                          onClick={() => window.location.href = "/generator"}
                         >
-                          <GraduationCap className="mr-3 h-5 w-5 text-neon-turquoise" />
-                          <span className="text-white font-medium">Курсы</span>
+                          <Dice2 className="mr-3 h-5 w-5 text-neon-turquoise" />
+                          <span className="text-white font-medium">Генератор</span>
+                        </Button>
+                        
+                        <Button 
+                          variant="ghost" 
+                          className="w-full justify-start text-left p-3 hover:bg-white/10 transition-colors"
+                          onClick={() => window.location.href = "/catalog"}
+                        >
+                          <BookOpen className="mr-3 h-5 w-5 text-neon-turquoise" />
+                          <span className="text-white font-medium">Каталог</span>
                         </Button>
                       </div>
                       
