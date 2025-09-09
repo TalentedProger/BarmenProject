@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Ingredient } from "@shared/schema";
+import { EditableAmount } from "@/components/ui/editable-amount";
 
 const getCategoryLabel = (category: string) => {
   switch (category) {
@@ -112,12 +113,14 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
           >
             <Minus className="h-3 w-3" />
           </Button>
-          <span className="text-xs font-medium min-w-[40px] text-center text-blue-500">
-            {ingredient.unit === 'kg' ? 
-              `${Math.round(amount * 1000)} г` : 
-              `${Math.round(amount)} ml`
-            }
-          </span>
+          <EditableAmount
+            amount={amount}
+            unit={ingredient.unit}
+            minAmount={ingredient.unit === 'kg' ? 10 : 5}
+            maxAmount={ingredient.unit === 'kg' ? 500 : 500}
+            onAmountChange={setAmount}
+            displayUnit={ingredient.unit === 'kg' ? 'г' : 'ml'}
+          />
           <Button
             size="sm"
             variant="outline"

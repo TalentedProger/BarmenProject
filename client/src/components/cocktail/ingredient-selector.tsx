@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Minus, Plus, X } from "lucide-react";
 import { useCocktailStore } from "@/store/cocktail-store";
+import { EditableAmount } from "@/components/ui/editable-amount";
 
 const getCategoryLabel = (category: string) => {
   switch (category) {
@@ -35,6 +36,10 @@ export default function IngredientSelector() {
       const newAmount = Math.max(5, currentAmount + delta * 5);
       updateIngredient(index, newAmount);
     }
+  };
+
+  const handleDirectAmountChange = (index: number, newAmount: number) => {
+    updateIngredient(index, newAmount);
   };
 
   return (
@@ -95,9 +100,15 @@ export default function IngredientSelector() {
                         <Minus className="h-3 w-3" />
                       </Button>
                       
-                      <span className="text-xs font-medium min-w-[50px] text-center">
-                        {displayAmount} {displayUnit}
-                      </span>
+                      <EditableAmount
+                        amount={numericAmount}
+                        unit={item.ingredient.unit}
+                        minAmount={item.ingredient.unit === 'kg' ? 10 : 5}
+                        maxAmount={item.ingredient.unit === 'kg' ? 500 : 500}
+                        onAmountChange={(newAmount) => handleDirectAmountChange(index, newAmount)}
+                        displayUnit={displayUnit}
+                        className="min-w-[50px]"
+                      />
                       
                       <Button
                         size="sm"
@@ -122,9 +133,15 @@ export default function IngredientSelector() {
                       <Minus className="h-3 w-3" />
                     </Button>
                     
-                    <span className="text-sm font-medium min-w-[60px] text-center">
-                      {displayAmount} {displayUnit}
-                    </span>
+                    <EditableAmount
+                      amount={numericAmount}
+                      unit={item.ingredient.unit}
+                      minAmount={item.ingredient.unit === 'kg' ? 10 : 5}
+                      maxAmount={item.ingredient.unit === 'kg' ? 500 : 500}
+                      onAmountChange={(newAmount) => handleDirectAmountChange(index, newAmount)}
+                      displayUnit={displayUnit}
+                      className="min-w-[60px]"
+                    />
                     
                     <Button
                       size="sm"
