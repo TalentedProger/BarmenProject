@@ -19,7 +19,7 @@ const getCategoryLabel = (category: string) => {
 };
 
 export default function IngredientSelector() {
-  const { ingredients, updateIngredient, removeIngredient } = useCocktailStore();
+  const { ingredients, updateIngredient, removeIngredient, selectedGlass, cocktailStats } = useCocktailStore();
 
   const handleUpdateAmount = (index: number, delta: number) => {
     const currentAmount = parseFloat(ingredients[index].amount) || 0;
@@ -108,6 +108,8 @@ export default function IngredientSelector() {
                         onAmountChange={(newAmount) => handleDirectAmountChange(index, newAmount)}
                         displayUnit={displayUnit}
                         className="min-w-[50px]"
+                        glassCapacity={selectedGlass?.capacity}
+                        currentTotalVolume={cocktailStats.totalVolume}
                       />
                       
                       <Button
@@ -141,6 +143,8 @@ export default function IngredientSelector() {
                       onAmountChange={(newAmount) => handleDirectAmountChange(index, newAmount)}
                       displayUnit={displayUnit}
                       className="min-w-[60px]"
+                      glassCapacity={selectedGlass?.capacity}
+                      currentTotalVolume={cocktailStats.totalVolume}
                     />
                     
                     <Button

@@ -10,6 +10,8 @@ interface EditableAmountProps {
   onAmountChange: (newAmount: number) => void;
   className?: string;
   displayUnit?: string; // Для отображения (например, "г" вместо "kg")
+  glassCapacity?: number; // Емкость стакана в ml
+  currentTotalVolume?: number; // Текущий общий объем всех ингредиентов
 }
 
 export function EditableAmount({
@@ -20,7 +22,9 @@ export function EditableAmount({
   step = 5,
   onAmountChange,
   className,
-  displayUnit
+  displayUnit,
+  glassCapacity,
+  currentTotalVolume = 0
 }: EditableAmountProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -52,6 +56,17 @@ export function EditableAmount({
     
     // Применяем ограничения
     let finalValue = Math.max(minAmount, Math.min(maxAmount, numericValue));
+    
+    // Проверяем ограничение по емкости стакана (только для жидкостей)
+    if (glassCapacity && unit !== 'kg') {
+      const currentAmount = unit === 'kg' ? Math.round(amount * 1000) : Math.round(amount);
+      const otherIngredientsVolume = currentTotalVolume - currentAmount;
+      const maxAllowedAmount = glassCapacity - otherIngredientsVolume;
+      
+      if (maxAllowedAmount > 0) {
+        finalValue = Math.min(finalValue, maxAllowedAmount);
+      }
+    }
     
     // Если единица kg, конвертируем граммы обратно в кг
     if (unit === 'kg') {
@@ -118,7 +133,8 @@ export function EditableAmount({
         className
       )}
       onClick={handleClick}
-      title="Кликните для изменения объема"
+      title="Кликните для изменения объема" 
+      data-testid="editable-amount"
     >
       {formatDisplayValue()}
     </div>
