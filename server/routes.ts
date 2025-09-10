@@ -349,9 +349,12 @@ function generateRandomRecipe(ingredients: any[], glassTypes: any[], mode: strin
       ];
   }
   
+  // Combine duplicate ingredients
+  const combinedIngredients = combineDuplicateIngredients(selectedIngredients.filter(Boolean));
+  
   // Generate amounts with 100% filling and multiple of 5
   const totalCapacity = glassType.capacity;
-  const numIngredients = selectedIngredients.filter(Boolean).length;
+  const numIngredients = combinedIngredients.length;
   
   // Base amount per ingredient (multiple of 5)
   const baseAmount = Math.floor((totalCapacity / numIngredients) / 5) * 5;
@@ -362,7 +365,7 @@ function generateRandomRecipe(ingredients: any[], glassTypes: any[], mode: strin
   // Ensure remaining volume is multiple of 5
   remainingVolume = Math.floor(remainingVolume / 5) * 5;
   
-  const recipeIngredients = selectedIngredients.filter(Boolean).map((ingredient, index) => {
+  const recipeIngredients = combinedIngredients.map((ingredient, index) => {
     let finalAmount = baseAmount;
     
     // Distribute remaining volume randomly but in multiples of 5
@@ -387,12 +390,30 @@ function generateRandomRecipe(ingredients: any[], glassTypes: any[], mode: strin
   
   return {
     name: generateRandomName(),
-    description: `A ${mode} cocktail with ${selectedIngredients.filter(Boolean).map(i => i.name).join(', ')}`,
+    description: `A ${mode} cocktail with ${combinedIngredients.map(i => i.name).join(', ')},`
     glass: glassType,
     ingredients: recipeIngredients,
     totalVolume: recipeIngredients.reduce((sum, ri) => sum + ri.amount, 0),
     category: mode
   };
+}
+
+// Helper function to combine duplicate ingredients
+function combineDuplicateIngredients(ingredients: any[]): any[] {
+  const ingredientMap = new Map();
+  
+  for (const ingredient of ingredients) {
+    if (ingredientMap.has(ingredient.id)) {
+      // If ingredient already exists, we'll handle volume combining later
+      // For now, just track that it's a duplicate
+      const existing = ingredientMap.get(ingredient.id);
+      existing.count = (existing.count || 1) + 1;
+    } else {
+      ingredientMap.set(ingredient.id, { ...ingredient, count: 1 });
+    }
+  }
+  
+  return Array.from(ingredientMap.values());
 }
 
 function generateRandomName(): string {
