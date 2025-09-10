@@ -390,7 +390,7 @@ function generateRandomRecipe(ingredients: any[], glassTypes: any[], mode: strin
   
   return {
     name: generateRandomName(),
-    description: `A ${mode} cocktail with ${combinedIngredients.map(i => i.name).join(', ')},`
+    description: `A ${mode} cocktail with ${combinedIngredients.map(i => i.name).join(', ')}`,
     glass: glassType,
     ingredients: recipeIngredients,
     totalVolume: recipeIngredients.reduce((sum, ri) => sum + ri.amount, 0),

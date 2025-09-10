@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dice2, Crown, Bolt, Sun, Leaf, Flame, Save, Edit, Sparkles } from "lucide-react";
+import { useCocktailStore } from "@/store/cocktail-store";
+import { useLocation } from "wouter";
 
 // Import glass images for visualization
 import shotImage from '@/assets/glass-images-new/shot.png';
@@ -54,7 +56,6 @@ function translateCategory(category: string): string {
   };
   return translations[category] || category;
 }
-import { Link } from "wouter";
 
 interface GeneratedRecipe {
   name: string;
@@ -124,6 +125,8 @@ export default function Generator() {
   const [selectedMode, setSelectedMode] = useState('classic');
   const [generatedRecipe, setGeneratedRecipe] = useState<GeneratedRecipe | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const { loadRecipe } = useCocktailStore();
+  const [, setLocation] = useLocation();
 
   const generateRecipeMutation = useMutation({
     mutationFn: async (mode: string) => {
@@ -201,7 +204,7 @@ export default function Generator() {
     const recipeData = {
       name: generatedRecipe.name,
       description: generatedRecipe.description,
-      glassTypeId: 1, // Default glass type
+      glassTypeId: generatedRecipe.glass?.id || 1,
       totalVolume,
       totalAbv,
       totalCost,
@@ -218,6 +221,16 @@ export default function Generator() {
     };
 
     saveRecipeMutation.mutate(recipeData);
+  };
+  
+  const handleEditRecipe = () => {
+    if (!generatedRecipe) return;
+    
+    // Load the recipe into the cocktail store
+    loadRecipe(generatedRecipe.glass, generatedRecipe.ingredients);
+    
+    // Navigate to constructor
+    setLocation('/constructor');
   };
 
   return (
@@ -414,15 +427,14 @@ export default function Generator() {
                           <Save className="mr-2 h-4 w-4" />
                           {saveRecipeMutation.isPending ? "Сохранение..." : "Сохранить"}
                         </Button>
-                        <Link href="/constructor" className="w-full sm:w-[45%]">
-                          <Button
-                            variant="outline"
-                            className="neon-border bg-transparent text-neon-purple px-8 py-2 w-full hover:bg-neon-purple hover:text-night-blue"
-                          >
-                            <Edit className="mr-2 h-4 w-4" />
-                            Редактировать
-                          </Button>
-                        </Link>
+                        <Button
+                          onClick={handleEditRecipe}
+                          variant="outline"
+                          className="neon-border bg-transparent text-neon-purple px-8 py-2 w-full sm:w-[45%] hover:bg-neon-purple hover:text-night-blue"
+                        >
+                          <Edit className="mr-2 h-4 w-4" />
+                          Редактировать
+                        </Button>
                       </div>
                     </div>
                   </div>

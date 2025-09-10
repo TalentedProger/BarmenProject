@@ -19,6 +19,7 @@ interface CocktailStore {
   removeIngredient: (index: number) => void;
   clearIngredients: () => void;
   reorderIngredients: (startIndex: number, endIndex: number) => void;
+  loadRecipe: (glass: GlassType, ingredients: { ingredient: Ingredient; amount: number; unit: string }[]) => void;
   
   // Computed
   recalculateStats: () => void;
@@ -106,5 +107,25 @@ export const useCocktailStore = create<CocktailStore>((set, get) => ({
   recalculateStats: () => {
     const stats = calculateCocktailStats(get().ingredients);
     set({ cocktailStats: stats });
+  },
+  
+  loadRecipe: (glass, recipeIngredients) => {
+    const cocktailIngredients: CocktailIngredient[] = recipeIngredients.map((item, index) => ({
+      id: Date.now() + index,
+      recipeId: '',
+      ingredientId: item.ingredient.id!,
+      amount: item.amount.toString(),
+      unit: item.unit,
+      order: index + 1,
+      ingredient: item.ingredient,
+      createdAt: new Date()
+    }));
+    
+    set({ 
+      selectedGlass: glass,
+      ingredients: cocktailIngredients
+    });
+    
+    get().recalculateStats();
   }
 }));
