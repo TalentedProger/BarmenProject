@@ -61,9 +61,11 @@ interface GeneratedRecipe {
   name: string;
   description: string;
   glass: {
+    id?: number;
     name: string;
     capacity: number;
     shape: string;
+    createdAt?: Date | null;
   };
   ingredients: {
     ingredient: {
@@ -226,8 +228,32 @@ export default function Generator() {
   const handleEditRecipe = () => {
     if (!generatedRecipe) return;
     
+    // Convert generated recipe glass to proper GlassType format
+    const glassType = {
+      id: generatedRecipe.glass?.id || 1,
+      name: generatedRecipe.glass.name,
+      shape: generatedRecipe.glass.shape,
+      capacity: generatedRecipe.glass.capacity,
+      createdAt: new Date()
+    };
+    
+    // Convert ingredients to proper format
+    const ingredients = generatedRecipe.ingredients.map(item => ({
+      ingredient: {
+        ...item.ingredient,
+        createdAt: new Date(),
+        category: 'alcohol', // Default category
+        abv: item.ingredient.abv.toString(),
+        pricePerLiter: item.ingredient.pricePerLiter.toString(),
+        tasteProfile: { sweet: 5, sour: 5, bitter: 5, alcohol: 5 },
+        unit: 'ml'
+      },
+      amount: item.amount,
+      unit: item.unit
+    }));
+    
     // Load the recipe into the cocktail store
-    loadRecipe(generatedRecipe.glass, generatedRecipe.ingredients);
+    loadRecipe(glassType, ingredients);
     
     // Navigate to constructor
     setLocation('/constructor');

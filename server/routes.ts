@@ -113,10 +113,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Current user recipes route - must come before /:id route
-  app.get('/api/recipes/user', async (req: any, res) => {
+  app.get('/api/recipes/user', isAuthenticated, async (req: any, res) => {
     try {
-      // For demo purposes, return empty array since no auth
-      res.json([]);
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: 'Not authenticated' });
+      }
+      
+      const userRecipes = await storage.getUserRecipes(userId);
+      res.json(userRecipes);
     } catch (error) {
       console.error("Error fetching user recipes:", error);
       res.status(500).json({ message: "Failed to fetch user recipes" });
@@ -136,11 +141,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/recipes', async (req: any, res) => {
+  app.post('/api/recipes', isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: 'Not authenticated' });
+      }
+      
       const recipeData = insertRecipeSchema.parse({
         ...req.body,
-        createdBy: null // Demo mode - no user ID
+        createdBy: userId
       });
       
       const recipe = await storage.createRecipe(recipeData);
@@ -220,11 +230,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 
 
-  // User favorite routes (simplified for demo)
-  app.get('/api/users/:userId/favorites', async (req: any, res) => {
+  // User favorite routes
+  app.get('/api/favorites', isAuthenticated, async (req: any, res) => {
     try {
-      // For demo purposes, return empty array
-      res.json([]);
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: 'Not authenticated' });
+      }
+      
+      const favorites = await storage.getUserFavorites(userId);
+      res.json(favorites.map(fav => fav.recipe));
     } catch (error) {
       console.error("Error fetching user favorites:", error);
       res.status(500).json({ message: "Failed to fetch user favorites" });
