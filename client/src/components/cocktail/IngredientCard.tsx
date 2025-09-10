@@ -22,9 +22,19 @@ interface IngredientCardProps {
   ingredient: Ingredient;
   onAdd: (ingredient: Ingredient, amount: number) => void;
   disabled?: boolean;
+  glassCapacity?: number; // Емкость выбранного стакана
+  currentTotalVolume?: number; // Текущий общий объем всех ингредиентов
+  ingredientIndex?: number; // Индекс для логики первого ингредиента
 }
 
-export default function IngredientCard({ ingredient, onAdd, disabled = false }: IngredientCardProps) {
+export default function IngredientCard({ 
+  ingredient, 
+  onAdd, 
+  disabled = false, 
+  glassCapacity,
+  currentTotalVolume = 0,
+  ingredientIndex
+}: IngredientCardProps) {
   // Default amounts: 10g for fruits (kg), 30ml for liquids (ml)
   const defaultAmount = ingredient.unit === 'kg' ? 0.01 : 30; // 0.01 kg = 10g
   const [amount, setAmount] = useState(defaultAmount);
@@ -120,6 +130,10 @@ export default function IngredientCard({ ingredient, onAdd, disabled = false }: 
             maxAmount={ingredient.unit === 'kg' ? 500 : 500}
             onAmountChange={setAmount}
             displayUnit={ingredient.unit === 'kg' ? 'г' : 'ml'}
+            glassCapacity={glassCapacity}
+            currentTotalVolume={currentTotalVolume}
+            ingredientIndex={ingredientIndex}
+            enableDynamicVolumeLimit={true}
           />
           <Button
             size="sm"

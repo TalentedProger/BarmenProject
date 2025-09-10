@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Search, ChevronRight, ChevronDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useCocktailStore } from "@/store/cocktail-store";
+import { calculateCocktailStats } from "@/lib/cocktail-utils";
 import IngredientCard from "./IngredientCard";
 import type { Ingredient } from "@shared/schema";
 
@@ -34,7 +35,10 @@ export default function IngredientRecommendations() {
   const [selectedCategory, setSelectedCategory] = useState('alcohol');
   const [selectedSubtype, setSelectedSubtype] = useState<string>('');
   const [showMoreCategories, setShowMoreCategories] = useState(false);
-  const { ingredients, addIngredient } = useCocktailStore();
+  const { ingredients, addIngredient, selectedGlass } = useCocktailStore();
+  
+  // Вычисляем текущий общий объем для передачи в IngredientCard
+  const currentStats = calculateCocktailStats(ingredients);
 
   // Fetch all categories to enable search across all ingredients
   const { data: alcoholIngredients = [] } = useQuery<Ingredient[]>({
@@ -228,6 +232,9 @@ export default function IngredientRecommendations() {
                     ingredient={ingredient}
                     onAdd={handleAddIngredient}
                     disabled={!!existingIngredient}
+                    glassCapacity={selectedGlass?.capacity}
+                    currentTotalVolume={currentStats.totalVolume}
+                    ingredientIndex={ingredients.length}
                   />
                 );
               })}

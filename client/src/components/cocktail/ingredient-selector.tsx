@@ -108,9 +108,7 @@ export default function IngredientSelector() {
                         onAmountChange={(newAmount) => handleDirectAmountChange(index, newAmount)}
                         displayUnit={displayUnit}
                         className="min-w-[50px]"
-                        glassCapacity={selectedGlass?.capacity}
-                        currentTotalVolume={cocktailStats.totalVolume}
-                        ingredientIndex={index}
+                        enableDynamicVolumeLimit={false}
                       />
                       
                       <Button
@@ -144,9 +142,7 @@ export default function IngredientSelector() {
                       onAmountChange={(newAmount) => handleDirectAmountChange(index, newAmount)}
                       displayUnit={displayUnit}
                       className="min-w-[60px]"
-                      glassCapacity={selectedGlass?.capacity}
-                      currentTotalVolume={cocktailStats.totalVolume}
-                      ingredientIndex={index}
+                      enableDynamicVolumeLimit={false}
                     />
                     
                     <Button

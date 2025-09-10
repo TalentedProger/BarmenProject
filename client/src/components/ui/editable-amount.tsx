@@ -13,6 +13,7 @@ interface EditableAmountProps {
   glassCapacity?: number; // Емкость стакана в ml
   currentTotalVolume?: number; // Текущий общий объем всех ингредиентов
   ingredientIndex?: number; // Индекс текущего ингредиента (для логики первого ингредиента)
+  enableDynamicVolumeLimit?: boolean; // Включить ли динамические ограничения по объему
 }
 
 export function EditableAmount({
@@ -26,7 +27,8 @@ export function EditableAmount({
   displayUnit,
   glassCapacity,
   currentTotalVolume = 0,
-  ingredientIndex
+  ingredientIndex,
+  enableDynamicVolumeLimit = false
 }: EditableAmountProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -68,23 +70,28 @@ export function EditableAmount({
     // Применяем стандартные ограничения
     let finalValue = Math.max(minAmount, Math.min(maxAmount, numericValue));
     
-    // Проверяем ограничение по емкости стакана (только для жидкостей)
-    if (glassCapacity && unit !== 'kg') {
-      const currentAmount = Math.round(amount);
-      const otherIngredientsVolume = currentTotalVolume - currentAmount;
-      
-      // Логика для первого ингредиента vs последующих
+    // Проверяем ограничение по емкости стакана (только для жидкостей и только если включены динамические ограничения)
+    if (enableDynamicVolumeLimit && unit !== 'kg') {
       let maxAllowedAmount;
-      if (ingredientIndex === 0) {
-        // Первый ингредиент может занять весь стакан
-        maxAllowedAmount = glassCapacity;
+      
+      if (!glassCapacity) {
+        // Если стакан не выбран - максимум 500ml
+        maxAllowedAmount = 500;
       } else {
-        // Последующие ингредиенты ограничены оставшимся местом
-        maxAllowedAmount = glassCapacity - otherIngredientsVolume;
+        // Если стакан выбран
+        if (ingredientIndex === 0) {
+          // Первый ингредиент - максимум равен емкости стакана
+          maxAllowedAmount = glassCapacity;
+        } else {
+          // Последующие ингредиенты - максимум равен оставшемуся месту в стакане
+          const currentAmount = Math.round(amount);
+          const otherIngredientsVolume = currentTotalVolume - currentAmount;
+          maxAllowedAmount = glassCapacity - otherIngredientsVolume;
+        }
       }
       
       if (maxAllowedAmount > 0) {
-        // Также делаем максимальное значение кратным 5
+        // Делаем максимальное значение кратным 5
         const roundedMaxAmount = Math.floor(maxAllowedAmount / 5) * 5;
         finalValue = Math.min(finalValue, Math.max(5, roundedMaxAmount));
       }
