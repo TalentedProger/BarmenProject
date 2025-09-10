@@ -232,11 +232,7 @@ export default function Profile() {
   };
 
   const handleViewRecipe = (recipeId: string) => {
-    // In a real app, this would navigate to recipe detail page
-    toast({
-      title: "Функция в разработке",
-      description: "Просмотр детальной информации о рецепте будет доступен в следующих версиях",
-    });
+    setLocation(`/recipe/${recipeId}`);
   };
 
   const handleDeleteRecipe = (recipeId: string) => {

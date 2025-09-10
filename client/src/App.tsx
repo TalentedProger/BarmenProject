@@ -11,7 +11,7 @@ import Generator from "@/pages/generator";
 import Catalog from "@/pages/catalog";
 import Profile from "@/pages/profile";
 import Auth from "@/pages/auth";
-import RecipePage from "@/pages/RecipePage";
+import RecipeDetails from "@/pages/recipe-details";
 
 function Router() {
   return (
@@ -23,7 +23,7 @@ function Router() {
       <Route path="/generator" component={Generator} />
       <Route path="/catalog" component={Catalog} />
       <Route path="/profile" component={Profile} />
-      <Route path="/recipe/:id" component={RecipePage} />
+      <Route path="/recipe/:id" component={RecipeDetails} />
       <Route component={NotFound} />
     </Switch>
   );
