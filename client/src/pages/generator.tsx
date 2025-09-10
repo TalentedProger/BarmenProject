@@ -226,7 +226,7 @@ export default function Generator() {
       
       <section className="pt-32 pb-16 bg-gradient-to-b from-graphite to-night-blue">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-24">
             <h2 className="text-4xl font-bold mb-4 text-neon-purple"
                 style={{ 
                   textShadow: '0 0 20px rgba(139, 69, 255, 0.8), 0 0 40px rgba(139, 69, 255, 0.6)',
