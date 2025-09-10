@@ -349,14 +349,41 @@ function generateRandomRecipe(ingredients: any[], glassTypes: any[], mode: strin
       ];
   }
   
-  // Generate random amounts based on glass capacity
-  const baseAmount = Math.floor(glassType.capacity / selectedIngredients.length);
-  const recipeIngredients = selectedIngredients.filter(Boolean).map((ingredient, index) => ({
-    ingredient,
-    amount: baseAmount + Math.floor(Math.random() * 20) - 10, // ±10ml variance
-    unit: 'ml',
-    order: index + 1
-  }));
+  // Generate amounts with 100% filling and multiple of 5
+  const totalCapacity = glassType.capacity;
+  const numIngredients = selectedIngredients.filter(Boolean).length;
+  
+  // Base amount per ingredient (multiple of 5)
+  const baseAmount = Math.floor((totalCapacity / numIngredients) / 5) * 5;
+  
+  // Calculate remaining volume to distribute
+  let remainingVolume = totalCapacity - (baseAmount * numIngredients);
+  
+  // Ensure remaining volume is multiple of 5
+  remainingVolume = Math.floor(remainingVolume / 5) * 5;
+  
+  const recipeIngredients = selectedIngredients.filter(Boolean).map((ingredient, index) => {
+    let finalAmount = baseAmount;
+    
+    // Distribute remaining volume randomly but in multiples of 5
+    if (remainingVolume > 0 && Math.random() > 0.5) {
+      const additionalAmount = Math.min(remainingVolume, Math.floor(Math.random() * 4 + 1) * 5); // 5-20ml extra
+      finalAmount += additionalAmount;
+      remainingVolume -= additionalAmount;
+    }
+    
+    return {
+      ingredient,
+      amount: finalAmount,
+      unit: 'ml',
+      order: index + 1
+    };
+  });
+  
+  // If there's still remaining volume, add it to the first ingredient
+  if (remainingVolume > 0) {
+    recipeIngredients[0].amount += remainingVolume;
+  }
   
   return {
     name: generateRandomName(),
