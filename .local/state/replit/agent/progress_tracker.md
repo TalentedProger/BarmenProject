@@ -5,3 +5,4 @@
 [x] 5. Updated generator page design as requested by user
 [x] 6. Fixed volume management system in cocktail constructor
 [x] 7. Implemented proper security practices and client/server separation
+[x] 8. Fixed cocktail recipe detail page navigation - restored static Mojito page
