@@ -50,19 +50,19 @@ const mojitorecipeData = {
 
 const TasteSemicircles = ({ taste }: { taste: any }) => {
   const characteristics = [
-    { label: "Сладость", value: taste.sweetness, color: "#FF006E", shadowColor: "rgba(255, 0, 110, 0.6)" }, // Неоново-розовый
-    { label: "Кислотность", value: taste.sourness, color: "#FFBE0B", shadowColor: "rgba(255, 190, 11, 0.6)" }, // Неоново-желтый
-    { label: "Горечь", value: taste.bitterness, color: "#FB5607", shadowColor: "rgba(251, 86, 7, 0.6)" }, // Неоново-оранжевый
-    { label: "Крепость", value: taste.strength, color: "#8338EC", shadowColor: "rgba(131, 56, 236, 0.6)" }, // Неоново-фиолетовый
-    { label: "Освежающая сила", value: taste.refreshing, color: "#06FFA5", shadowColor: "rgba(6, 255, 165, 0.6)" } // Неоново-зеленый
+    { label: "Сладость", value: taste.sweetness, color: "#FF006E", shadowColor: "rgba(255, 0, 110, 0.6)" },
+    { label: "Кислотность", value: taste.sourness, color: "#FFBE0B", shadowColor: "rgba(255, 190, 11, 0.6)" },
+    { label: "Горечь", value: taste.bitterness, color: "#FB5607", shadowColor: "rgba(251, 86, 7, 0.6)" },
+    { label: "Крепость", value: taste.strength, color: "#8338EC", shadowColor: "rgba(131, 56, 236, 0.6)" },
+    { label: "Освежающая сила", value: taste.refreshing, color: "#06FFA5", shadowColor: "rgba(6, 255, 165, 0.6)" }
   ];
 
   const SemicircleChart = ({ value, color, shadowColor, label }: { value: number, color: string, shadowColor: string, label: string }) => {
     const radius = 80;
     const strokeWidth = 16;
     const segments = 5;
-    const gapAngle = 3; // Угол зазора между сегментами
-    const segmentAngle = (180 - (segments - 1) * gapAngle) / segments; // Угол каждого сегмента с учетом зазоров
+    const gapAngle = 3;
+    const segmentAngle = (180 - (segments - 1) * gapAngle) / segments;
     const centerX = 100;
     const centerY = 100;
 
@@ -70,12 +70,10 @@ const TasteSemicircles = ({ taste }: { taste: any }) => {
       <div className="flex flex-col items-center">
         <div className="relative mb-6">
           <svg width="200" height="120" className="overflow-visible">
-            {/* Сегменты полукруга */}
             {Array.from({ length: segments }, (_, i) => {
               const startAngle = i * (segmentAngle + gapAngle);
               const endAngle = startAngle + segmentAngle;
               
-              // Преобразование в радианы для правильного полукруга
               const startRadian = (startAngle) * Math.PI / 180;
               const endRadian = (endAngle) * Math.PI / 180;
               
@@ -86,7 +84,6 @@ const TasteSemicircles = ({ taste }: { taste: any }) => {
               
               const largeArcFlag = (endAngle - startAngle) > 180 ? 1 : 0;
               
-              // Создаем толстую дугу вместо сектора
               const outerRadius = radius;
               const innerRadius = radius - strokeWidth;
               
@@ -123,7 +120,6 @@ const TasteSemicircles = ({ taste }: { taste: any }) => {
               );
             })}
             
-            {/* Базовая линия полукруга */}
             <line
               x1={centerX - radius}
               y1={centerY}
@@ -135,7 +131,6 @@ const TasteSemicircles = ({ taste }: { taste: any }) => {
           </svg>
         </div>
         
-        {/* Название характеристики */}
         <div className="text-center">
           <div className="text-white font-semibold text-base mb-2">{label}</div>
           <div 
@@ -173,11 +168,10 @@ export default function RecipePage() {
   const [isFavorite, setIsFavorite] = useState(false);
   const [userRating, setUserRating] = useState(0);
 
-  const recipe = mojitorecipeData; // В будущем здесь будет загрузка по ID
+  const recipe = mojitorecipeData;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0A0A0D] via-[#1B1B1F] to-[#0A0A0D]">
-      {/* Back Button - исправлена позиция для мобильных */}
       <div className="absolute top-6 left-6 z-20 md:top-6 md:left-6">
         <Button
           onClick={() => window.history.back()}
@@ -188,38 +182,21 @@ export default function RecipePage() {
         </Button>
       </div>
 
-      {/* Hero Section */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
         <div className="absolute inset-0">
-          <img
-            src={recipe.image}
-            alt={recipe.name}
-            className="w-full h-full object-cover scale-110 blur-sm"
-          />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src="/attached_assets/IMG_4960_1760139603930.MP4" type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
         </div>
 
-        {/* Hero Content */}
         <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
-          {/* Cocktail Glass - круглое изображение с неоновым свечением */}
-          <div className="mt-8 mb-16 flex justify-center">
-            <div className="relative">
-              <img
-                src={recipe.image}
-                alt={recipe.name}
-                className="w-64 h-64 max-[500px]:w-56 max-[500px]:h-56 sm:w-80 sm:h-80 lg:w-[28rem] lg:h-[28rem] mx-auto object-cover rounded-full shadow-2xl transition-transform duration-500 hover:scale-105 border-4 border-cyan-400/30"
-                style={{
-                  filter: 'drop-shadow(0 0 40px rgba(6, 182, 212, 0.6))'
-                }}
-              />
-              {/* Дополнительные неоновые кольца */}
-              <div className="absolute inset-0 rounded-full border-2 border-purple-400/40 animate-pulse"></div>
-              <div className="absolute -inset-2 rounded-full border border-cyan-300/30 animate-pulse" style={{ animationDelay: '1s' }}></div>
-            </div>
-          </div>
-
-          {/* Title */}
           <h1 
             className="text-6xl font-bold text-white mb-8 max-[480px]:text-4xl mt-12"
             style={{ textShadow: '0 0 20px rgba(0, 255, 240, 0.5)' }}
@@ -227,7 +204,6 @@ export default function RecipePage() {
             {recipe.name}
           </h1>
 
-          {/* Tags */}
           <div className="flex flex-wrap justify-center gap-3 mb-16">
             {recipe.tags.map((tag, index) => (
               <span
@@ -241,12 +217,9 @@ export default function RecipePage() {
         </div>
       </section>
 
-      {/* Main Content */}
       <div className="max-w-6xl mx-auto px-6 py-12 space-y-16">
         
-        {/* Ingredients & Calculations */}
         <section className="flex flex-col md:flex-row gap-8">
-          {/* Ingredients */}
           <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">
               🧪 Что внутри?
@@ -266,7 +239,6 @@ export default function RecipePage() {
             </div>
           </div>
 
-          {/* Calculations - тёмный фон как у ингредиентов */}
           <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">📊 Расчёты</h2>
             <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-3 border border-white/10 h-full flex items-center justify-center">
@@ -292,9 +264,7 @@ export default function RecipePage() {
           </div>
         </section>
 
-        {/* Main Content Grid - Equipment and Video */}
         <section className="flex flex-col lg:flex-row gap-8">
-          {/* Equipment Section - Left side */}
           <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mt-6 mb-6 text-center">Что потребуется ?</h2>
             <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full flex flex-col">
@@ -305,14 +275,12 @@ export default function RecipePage() {
                     <div className="text-white font-semibold text-base">{item.name}</div>
                   </div>
                 ))}
-                {/* Дополнительная карточка только для симметрии в 2-колоночной компоновке */}
-                <div className="text-center p-4 bg-gradient-to-br from-white/5 to-white/10 rounded-xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105 md:block lg:hidden xl:block hidden flex flex-col items-center justify-center h-full">
+                <div className="text-center p-4 bg-gradient-to-br from-white/5 to-white/10 rounded-xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105 md:flex lg:hidden xl:flex hidden flex-col items-center justify-center h-full">
                   <div className="text-4xl mb-3 transform hover:scale-110 transition-transform duration-200">😊</div>
                   <div className="text-white font-semibold text-base">Хорошее настроение</div>
                 </div>
               </div>
               
-              {/* Единая кнопка Посетить магазин */}
               <div className="text-center mt-auto">
                 <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 px-8 py-4 text-lg font-semibold rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 border border-orange-400/30"
                   style={{
@@ -326,7 +294,6 @@ export default function RecipePage() {
             </div>
           </div>
 
-          {/* Video Section - Right side */}
           <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mt-6 mb-6 text-center">Видео приготовления</h2>
             <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full flex flex-col">
@@ -334,7 +301,6 @@ export default function RecipePage() {
               <div className="flex-1 flex items-center justify-center">
                 <div className="relative w-full max-w-lg">
                   <div className="aspect-video bg-gradient-to-br from-purple-900/30 to-cyan-900/30 rounded-2xl flex items-center justify-center border-2 border-white/20 backdrop-blur-md overflow-hidden">
-                    {/* Background pattern */}
                     <div className="absolute inset-0 opacity-20">
                       <div className="w-full h-full bg-gradient-to-br from-white/5 to-transparent"></div>
                     </div>
@@ -358,12 +324,10 @@ export default function RecipePage() {
           </div>
         </section>
 
-        {/* Recipe Steps - уменьшенные по ширине карточки */}
-        <section className="relative z-10">
-          <h2 className="text-3xl font-bold text-white mt-16 mb-8 text-center relative">Пошаговый рецепт</h2>
-          <div className="max-w-4xl mx-auto">
+        <section className="relative z-10 mt-24">
+          <h2 className="text-3xl font-bold text-white mb-8 text-center relative">Пошаговый рецепт</h2>
+          <div className="max-w-xl mx-auto">
             {recipe.steps.map((step, index) => {
-              // Подробные описания для каждого шага
               const getStepDescription = (stepNumber: number) => {
                 switch(stepNumber) {
                   case 1: return "Возьмите свежие листья мяты и аккуратно разомните их в барном стакане вместе с сахаром и кусочками лайма. Этот процесс называется мадлинг - он поможет извлечь эфирные масла из мяты, которые придадут коктейлю неповторимый аромат. Не переусердствуйте, чтобы не сделать напиток горьким.";
@@ -391,14 +355,11 @@ export default function RecipePage() {
                       }
                     }}
                   >
-                    {/* Карточка с неоновым эффектом, уменьшенная по ширине */}
-                    <div className="w-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 rounded-2xl p-8 group-hover:border-cyan-300/70 group-hover:shadow-xl group-hover:shadow-cyan-500/40 group-active:border-cyan-200 group-active:shadow-2xl group-active:shadow-cyan-500/60 transition-all duration-300">
-                      {/* Заголовок */}
+                    <div className="w-full aspect-square bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 rounded-2xl p-8 group-hover:border-cyan-300/70 group-hover:shadow-xl group-hover:shadow-cyan-500/40 group-active:border-cyan-200 group-active:shadow-2xl group-active:shadow-cyan-500/60 transition-all duration-300 flex flex-col justify-center">
                       <div className="text-center mb-6">
                         <div className="text-cyan-300 text-lg font-medium mb-3">Шаг {step.step}</div>
                         <div className="text-white text-2xl font-semibold mb-4">{step.text}</div>
                         
-                        {/* Иконка сразу после заголовка */}
                         <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-white/10 to-white/5 rounded-full border border-white/20 mb-6">
                           <div className="text-5xl transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
                             {step.icon}
@@ -406,14 +367,12 @@ export default function RecipePage() {
                         </div>
                       </div>
                       
-                      {/* Подробное описание */}
                       <div className="text-center">
                         <p className="text-zinc-300 text-base leading-relaxed max-w-3xl mx-auto">
                           {getStepDescription(step.step)}
                         </p>
                       </div>
                       
-                      {/* Индикатор клика */}
                       <div className="text-center mt-8">
                         <p className="text-cyan-400/60 text-sm font-medium group-hover:text-cyan-300/80 transition-colors duration-300">
                           Нажмите для перехода к следующему шагу
@@ -427,7 +386,6 @@ export default function RecipePage() {
           </div>
         </section>
 
-        {/* Taste Analysis */}
         <section>
           <h2 className="text-3xl font-bold text-white mb-6 text-center">🧠 Анализ вкуса</h2>
           <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
@@ -435,15 +393,12 @@ export default function RecipePage() {
           </div>
         </section>
 
-        {/* Social Functions - адаптивная компоновка */}
         <section>
           <h2 className="text-3xl font-bold text-white mb-6 text-center">Ваша оценка</h2>
           <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
           
-          {/* Адаптивная компоновка для рейтинга и кнопок */}
           <div className="flex flex-col max-[800px]:space-y-0 min-[800px]:flex-row min-[800px]:items-center min-[800px]:justify-between min-[800px]:space-y-0">
             
-            {/* Кнопка "В избранное" - слева на больших экранах */}
             <div className="min-[800px]:order-1 max-[800px]:order-2 max-[800px]:w-[60%] max-[500px]:w-[80%] max-[800px]:mx-auto max-[800px]:mb-4 max-[800px]:mt-4">
               <Button
                 onClick={() => setIsFavorite(!isFavorite)}
@@ -456,12 +411,11 @@ export default function RecipePage() {
                   boxShadow: '0 0 20px rgba(168, 85, 247, 0.4), 0 0 40px rgba(139, 69, 193, 0.2)'
                 }}
               >
-                <Heart className={`w-5 h-5 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
+                <Heart className={`w-5 h-5 mr-2 flex-shrink-0 ${isFavorite ? 'fill-current' : ''}`} />
                 {isFavorite ? 'В избранном' : 'В избранное'}
               </Button>
             </div>
 
-            {/* Рейтинг звездочками - по центру */}
             <div className="min-[800px]:order-2 max-[800px]:order-1 text-center max-[800px]:mb-10">
               <div className="flex justify-center space-x-2 mb-2">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -484,7 +438,6 @@ export default function RecipePage() {
               </div>
             </div>
 
-            {/* Кнопка "Поделиться" - справа на больших экранах */}
             <div className="min-[800px]:order-3 max-[800px]:order-3 max-[800px]:w-[60%] max-[500px]:w-[80%] max-[800px]:mx-auto">
               <Button 
                 className="bg-gradient-to-r from-neon-turquoise/20 to-electric/20 hover:from-neon-turquoise/30 hover:to-electric/30 backdrop-blur-sm border-2 border-cyan-400/50 px-6 py-3 text-base font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 w-full min-[800px]:w-auto min-[800px]:min-w-[160px]"
@@ -492,7 +445,7 @@ export default function RecipePage() {
                   boxShadow: '0 0 20px rgba(0, 255, 255, 0.4), 0 0 40px rgba(54, 152, 255, 0.2)'
                 }}
               >
-                <Share2 className="w-5 h-5 mr-2" />
+                <Share2 className="w-5 h-5 mr-2 flex-shrink-0" />
                 Поделиться
               </Button>
             </div>
@@ -500,7 +453,6 @@ export default function RecipePage() {
           </div>
         </section>
 
-        {/* Recommendations */}
         <section>
           <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">🧬 Если понравилось — попробуй ещё</h2>

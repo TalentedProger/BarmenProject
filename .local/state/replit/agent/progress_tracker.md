@@ -6,3 +6,11 @@
 [x] 6. Fixed volume management system in cocktail constructor
 [x] 7. Implemented proper security practices and client/server separation
 [x] 8. Fixed cocktail recipe detail page navigation - restored static Mojito page
+[x] 9. Updated recipe page design:
+  - Replaced background image with looping video (no sound)
+  - Removed central photo container
+  - Kept tags below title
+  - Fixed "Пошаговый рецепт" heading positioning with proper margins
+  - Fixed "Хорошее настроение" card text centering
+  - Fixed jumping icons in "В избранное" and "Поделиться" buttons (added flex-shrink-0)
+  - Made step cards square shape (aspect-square)
