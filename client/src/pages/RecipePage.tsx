@@ -1,6 +1,6 @@
 import { useParams } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Star, ArrowLeft, Heart, Share2, Play, ShoppingCart } from "lucide-react";
+import { Star, ArrowLeft, Heart, Share2 } from "lucide-react";
 import { useState } from "react";
 
 // Данные для коктейля Мохито
@@ -280,109 +280,63 @@ export default function RecipePage() {
                   <div className="text-white font-semibold text-base">Хорошее настроение</div>
                 </div>
               </div>
-              
-              <div className="text-center mt-auto">
-                <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 px-8 py-4 text-lg font-semibold rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 border border-orange-400/30"
-                  style={{
-                    boxShadow: '0 0 20px rgba(234, 88, 12, 0.4)'
-                  }}
-                >
-                  <ShoppingCart className="w-6 h-6 mr-3" />
-                  Посетить магазин
-                </Button>
-              </div>
             </div>
           </div>
 
           <div className="flex-1">
-            <h2 className="text-3xl font-bold text-white mt-6 mb-6 text-center">Видео приготовления</h2>
-            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full flex flex-col">
-              
-              <div className="flex-1 flex items-center justify-center">
-                <div className="relative w-full max-w-lg">
-                  <div className="aspect-video bg-gradient-to-br from-purple-900/30 to-cyan-900/30 rounded-2xl flex items-center justify-center border-2 border-white/20 backdrop-blur-md overflow-hidden">
-                    <div className="absolute inset-0 opacity-20">
-                      <div className="w-full h-full bg-gradient-to-br from-white/5 to-transparent"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="text-center mt-4">
-                <Button
-                  onClick={() => window.open(recipe.videoUrl, '_blank')}
-                  className="bg-gradient-to-r from-purple-600/90 to-cyan-600/90 hover:from-purple-500/90 hover:to-cyan-500/90 px-8 py-4 text-lg font-semibold rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300 border border-white/30 backdrop-blur-sm"
-                  style={{
-                    boxShadow: '0 0 30px rgba(168, 85, 247, 0.4), 0 0 60px rgba(6, 182, 212, 0.2)'
-                  }}
-                >
-                  <Play className="w-6 h-6 mr-2" />
-                  Смотреть видео
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="relative z-10 mt-24">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center relative">Пошаговый рецепт</h2>
-          <div className="max-w-xl mx-auto">
-            {recipe.steps.map((step, index) => {
-              const getStepDescription = (stepNumber: number) => {
-                switch(stepNumber) {
-                  case 1: return "Возьмите свежие листья мяты и аккуратно разомните их в барном стакане вместе с сахаром и кусочками лайма. Этот процесс называется мадлинг - он поможет извлечь эфирные масла из мяты, которые придадут коктейлю неповторимый аромат. Не переусердствуйте, чтобы не сделать напиток горьким.";
-                  case 2: return "Добавьте светлый ром в стакан с размятой мятой. Следом аккуратно насыпьте колотый лёд до верха стакана. Лёд должен быть достаточно мелким, чтобы хорошо охладить напиток, но не слишком мелким, чтобы не разбавить его слишком быстро. Идеально подойдёт лёд размером с орех.";
-                  case 3: return "Медленно долейте содовую воду до верха стакана. Наливайте её тонкой струйкой по барной ложке, чтобы не разрушить слоистость напитка. Содовая придаст мохито лёгкую игристость и освежающий эффект. Важно не переборщить - содовая должна дополнять, а не доминировать во вкусе.";
-                  case 4: return "Осторожно перемешайте коктейль барной ложкой движениями снизу вверх. Цель - объединить все ингредиенты, не повредив листья мяты. Перемешивайте 3-4 раза, этого достаточно. Украсьте веточкой свежей мяты и долькой лайма на краю стакана. Ваш идеальный мохито готов!";
-                  default: return "Следуйте инструкции для выполнения данного шага приготовления коктейля.";
-                }
-              };
-              
-              return (
-                <div
-                  key={index}
-                  className={`${
-                    currentStep === step.step ? 'block' : 'hidden'
-                  } transition-all duration-500`}
-                >
+            <h2 className="text-3xl font-bold text-white mt-6 mb-6 text-center">Пошаговый рецепт</h2>
+            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full">
+              {recipe.steps.map((step, index) => {
+                const getStepDescription = (stepNumber: number) => {
+                  switch(stepNumber) {
+                    case 1: return "Возьмите свежие листья мяты и аккуратно разомните их в барном стакане вместе с сахаром и кусочками лайма.";
+                    case 2: return "Добавьте светлый ром в стакан с размятой мятой. Следом аккуратно насыпьте колотый лёд до верха стакана.";
+                    case 3: return "Медленно долейте содовую воду до верха стакана. Наливайте её тонкой струйкой по барной ложке.";
+                    case 4: return "Осторожно перемешайте коктейль барной ложкой движениями снизу вверх. Украсьте веточкой мяты и долькой лайма.";
+                    default: return "Следуйте инструкции для выполнения данного шага приготовления коктейля.";
+                  }
+                };
+                
+                return (
                   <div
-                    className="cursor-pointer transform hover:scale-[1.01] transition-all duration-300 group"
-                    onClick={() => {
-                      if (currentStep < recipe.steps.length) {
-                        setCurrentStep(currentStep + 1);
-                      } else {
-                        setCurrentStep(1);
-                      }
-                    }}
+                    key={index}
+                    className={`${
+                      currentStep === step.step ? 'block' : 'hidden'
+                    } transition-all duration-500`}
                   >
-                    <div className="w-full aspect-square bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 rounded-2xl p-8 group-hover:border-cyan-300/70 group-hover:shadow-xl group-hover:shadow-cyan-500/40 group-active:border-cyan-200 group-active:shadow-2xl group-active:shadow-cyan-500/60 transition-all duration-300 flex flex-col justify-center">
-                      <div className="text-center mb-6">
-                        <div className="text-cyan-300 text-lg font-medium mb-3">Шаг {step.step}</div>
-                        <div className="text-white text-2xl font-semibold mb-4">{step.text}</div>
+                    <div
+                      className="cursor-pointer transform hover:scale-[1.01] transition-all duration-300 group h-full"
+                      onClick={() => {
+                        if (currentStep < recipe.steps.length) {
+                          setCurrentStep(currentStep + 1);
+                        } else {
+                          setCurrentStep(1);
+                        }
+                      }}
+                    >
+                      <div className="bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 rounded-2xl p-6 group-hover:border-cyan-300/70 group-hover:shadow-xl group-hover:shadow-cyan-500/40 transition-all duration-300 flex flex-col items-center justify-center h-full">
+                        <div className="text-cyan-300 text-lg font-medium mb-2">Шаг {step.step}</div>
+                        <div className="text-white text-xl font-semibold mb-4">{step.text}</div>
                         
-                        <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-white/10 to-white/5 rounded-full border border-white/20 mb-6">
-                          <div className="text-5xl transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-white/10 to-white/5 rounded-full border border-white/20 mb-4">
+                          <div className="text-4xl transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
                             {step.icon}
                           </div>
                         </div>
-                      </div>
-                      
-                      <div className="text-center">
-                        <p className="text-zinc-300 text-base leading-relaxed max-w-3xl mx-auto">
+                        
+                        <p className="text-zinc-300 text-sm leading-relaxed text-center mb-4">
                           {getStepDescription(step.step)}
                         </p>
-                      </div>
-                      
-                      <div className="text-center mt-8">
-                        <p className="text-cyan-400/60 text-sm font-medium group-hover:text-cyan-300/80 transition-colors duration-300">
+                        
+                        <p className="text-cyan-400/60 text-xs font-medium group-hover:text-cyan-300/80 transition-colors duration-300">
                           Нажмите для перехода к следующему шагу
                         </p>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </section>
 

@@ -14,3 +14,8 @@
   - Fixed "Хорошее настроение" card text centering
   - Fixed jumping icons in "В избранное" and "Поделиться" buttons (added flex-shrink-0)
   - Made step cards square shape (aspect-square)
+[x] 10. Reorganized recipe page layout:
+  - Removed "Видео приготовления" section
+  - Moved "Пошаговый рецепт" to the position of removed video section
+  - Made step-by-step card compact to match "Что потребуется?" container dimensions
+  - Removed "Посетить магазин" button from "Что потребуется?" section
