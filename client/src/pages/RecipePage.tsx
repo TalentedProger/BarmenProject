@@ -217,9 +217,9 @@ export default function RecipePage() {
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-6 py-12 space-y-16">
+      <div className="max-w-6xl mx-auto px-6 py-12">
         
-        <section className="flex flex-col md:flex-row gap-8">
+        <section className="flex flex-col md:flex-row gap-8 mb-16">
           <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">
               🧪 Что внутри?
@@ -264,7 +264,7 @@ export default function RecipePage() {
           </div>
         </section>
 
-        <section className="flex flex-col lg:flex-row gap-8 mb-8">
+        <section className="flex flex-col lg:flex-row gap-8 mb-16">
           <div className="flex-1">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">Что потребуется ?</h2>
             <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full flex flex-col">
@@ -283,9 +283,9 @@ export default function RecipePage() {
             </div>
           </div>
 
-          <div className="flex-1">
+          <div className="flex-1 flex flex-col">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">Пошаговый рецепт</h2>
-            <div className="rounded-2xl p-6 h-full">
+            <div className="rounded-2xl p-6 flex-1">
               {recipe.steps.map((step, index) => {
                 const getStepDescription = (stepNumber: number) => {
                   switch(stepNumber) {
@@ -314,7 +314,7 @@ export default function RecipePage() {
                         }
                       }}
                     >
-                      <div className="bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 rounded-2xl p-6 group-hover:border-cyan-300/70 group-hover:shadow-xl group-hover:shadow-cyan-500/40 transition-all duration-300 flex flex-col items-center justify-center h-full">
+                      <div className="bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/25 rounded-2xl p-6 group-hover:border-cyan-300/70 group-hover:shadow-xl group-hover:shadow-cyan-500/40 transition-all duration-300 flex flex-col items-center justify-center min-h-full">
                         <div className="text-cyan-300 text-lg font-medium mb-2">Шаг {step.step}</div>
                         <div className="text-white text-xl font-semibold mb-4">{step.text}</div>
                         
@@ -340,14 +340,14 @@ export default function RecipePage() {
           </div>
         </section>
 
-        <section>
+        <section className="mb-16">
           <h2 className="text-3xl font-bold text-white mb-6 text-center">🧠 Анализ вкуса</h2>
           <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
             <TasteSemicircles taste={recipe.taste} />
           </div>
         </section>
 
-        <section>
+        <section className="mb-16">
           <h2 className="text-3xl font-bold text-white mb-6 text-center">Ваша оценка</h2>
           <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
           
@@ -407,7 +407,7 @@ export default function RecipePage() {
           </div>
         </section>
 
-        <section>
+        <section className="mb-16">
           <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">🧬 Если понравилось — попробуй ещё</h2>
             <div className="grid md:grid-cols-2 gap-6">
