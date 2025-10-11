@@ -2,10 +2,6 @@
 [x] 2. Restart the workflow to see if the project is working
 [x] 3. Verify the project is working using the feedback tool
 [x] 4. Inform user the import is completed and they can start building, mark the import as completed using the complete_project_import tool
-[x] 17. Packages reinstalled successfully (October 11, 2025)
-[x] 18. Workflow restarted and running on port 5000
-[x] 19. Frontend verified - application displaying correctly
-[x] 20. Migration to Replit environment completed successfully
 [x] 5. Updated generator page design as requested by user
 [x] 6. Fixed volume management system in cocktail constructor
 [x] 7. Implemented proper security practices and client/server separation
@@ -34,13 +30,27 @@
   - Changed "Cocktailo — теперь" to "Cocktailo — скоро в твоём кармане"
   - Added modal dialog for App Store/Google Play buttons with development notice
 [x] 15. Updated recipe page design:
-  - Removed dark background from "Пошаговый рецепт" card (line 288: rounded-2xl p-6 h-full without bg-black/40)
-  - Fixed vertical spacing to prevent overlap with "Анализ вкуса" heading (mb-8 on section line 267)
+  - Removed dark background from "Пошаговый рецепт" card
+  - Fixed vertical spacing to prevent overlap with "Анализ вкуса" heading
 [x] 16. Code verification completed:
-  - Landing page features: 4 cards confirmed (Martini, Dice2, BookOpen, GraduationCap)
-  - Popular recipes heading: text-4xl text-[#00FFF0] confirmed (line 384)
-  - Newsletter spacing: mb-16 confirmed (line 484)
-  - Mobile app heading: "скоро в твоём кармане" confirmed (lines 554, 606)
-  - Modal dialog: DialogTitle and DialogDescription for accessibility (lines 892-897)
-  - Recipe page step card: Dark background removed, proper spacing added
-  - Browser console: Clean, no accessibility warnings or errors
+  - Landing page features: 4 cards confirmed
+  - Popular recipes heading styling verified
+  - Newsletter spacing confirmed
+  - Mobile app heading updated
+  - Modal dialog accessibility confirmed
+  - Recipe page step card styling fixed
+  - Browser console clean
+[x] 17. Packages reinstalled successfully (October 11, 2025)
+[x] 18. Workflow restarted and running on port 5000
+[x] 19. Frontend verified - application displaying correctly
+[x] 20. Migration to Replit environment completed successfully
+[x] 21. Design improvements (October 11, 2025):
+  - Platform features cards: Changed from 4-column to 2x2 grid layout on desktop
+  - Recipe page: Standardized all section spacing with consistent mb-16
+  - Recipe page: Fixed step-by-step card to match "Что потребуется?" container height
+  - Modal dialog: Removed duplicate close button (kept only the main close button)
+  - App Store/Google Play buttons: Added flex-shrink-0 to prevent icon jumping on hover
+  - Removed unused DialogClose import
+  - All changes reviewed and approved by architect
+  - Workflow restarted successfully
+  - Visual verification completed
