@@ -2,7 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Martini, WandSparkles, Dice2, BookOpen, GraduationCap, ShoppingCart, Users, LogIn, UserPlus, User, Menu, Home, MapPin } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
+import { Martini, WandSparkles, Dice2, BookOpen, GraduationCap, LogIn, UserPlus, User, Menu, Home, MapPin, X } from "lucide-react";
 import CoursesSection from "@/components/landing/courses-section";
 import PopularRecipesSection from "@/components/PopularRecipesSection";
 import { useState } from "react";
@@ -15,6 +16,7 @@ export default function Landing() {
   const [emailError, setEmailError] = useState("");
   const [heroEmail, setHeroEmail] = useState("");
   const [heroEmailError, setHeroEmailError] = useState("");
+  const [isAppModalOpen, setIsAppModalOpen] = useState(false);
   const { user, isAuthenticated, isLoading } = useAuth();
   
   const handleGetStarted = () => {
@@ -305,7 +307,7 @@ export default function Landing() {
           </div>
           
           <motion.div 
-            className="grid md:grid-cols-3 gap-8"
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -337,18 +339,6 @@ export default function Landing() {
                 title: "Каталог",
                 description: "Тысячи проверенных рецептов от профессиональных барменов",
                 bgColor: "bg-neon-amber"
-              },
-              {
-                icon: Users,
-                title: "Сообщество",
-                description: "Присоединяйтесь к сообществу барменов, делитесь опытом и находите единомышленников",
-                bgColor: "bg-red-500"
-              },
-              {
-                icon: ShoppingCart,
-                title: "Магазин барного инвентаря",
-                description: "Профессиональное барное оборудование и ингредиенты для создания идеальных коктейлей",
-                bgColor: "bg-orange-500"
               },
               {
                 icon: GraduationCap,
@@ -491,7 +481,7 @@ export default function Landing() {
               <h2 className="text-3xl md:text-4xl font-bold text-[#F1F1F1] mb-2" style={{ textShadow: '0 0 5px #00f7ef33' }}>
                 Будь в курсе новых рецептов и фишек
               </h2>
-              <p className="text-sm md:text-base text-zinc-400 mt-2 mb-8">
+              <p className="text-sm md:text-base text-zinc-400 mt-2 mb-16">
                 Мы не спамим. Только крафтовые новости.
               </p>
               
@@ -561,7 +551,7 @@ export default function Landing() {
             {/* Mobile layout: Title first */}
             <div className="w-full text-center md:hidden mb-4">
               <h2 className="text-3xl font-bold text-white mb-4" style={{ textShadow: '0 0 4px #8F00FF88' }}>
-                Cocktailo — теперь в твоём кармане
+                Cocktailo — скоро в твоём кармане
               </h2>
               <p className="text-zinc-400 text-base">
                 Создавай, сохраняй, делись на ходу
@@ -586,13 +576,21 @@ export default function Landing() {
             {/* Mobile layout: Buttons third */}
             <div className="w-full flex justify-center md:hidden">
               <div className="flex flex-col gap-4 w-full max-w-sm">
-                <Button className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-white text-black font-semibold hover:scale-105 transition-all duration-300">
+                <Button 
+                  onClick={() => setIsAppModalOpen(true)}
+                  className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-white text-black font-semibold hover:scale-105 transition-all duration-300"
+                  data-testid="button-app-store-mobile"
+                >
                   <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                   </svg>
                   App Store
                 </Button>
-                <Button className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-white text-black font-semibold hover:scale-105 transition-all duration-300">
+                <Button 
+                  onClick={() => setIsAppModalOpen(true)}
+                  className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-white text-black font-semibold hover:scale-105 transition-all duration-300"
+                  data-testid="button-google-play-mobile"
+                >
                   <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
                   </svg>
@@ -605,7 +603,7 @@ export default function Landing() {
             <div className="hidden md:flex flex-1 text-left">
               <div>
                 <h2 className="text-4xl font-bold text-white mb-4" style={{ textShadow: '0 0 4px #8F00FF88' }}>
-                  Cocktailo — теперь в твоём кармане
+                  Cocktailo — скоро в твоём кармане
                 </h2>
                 <p className="text-zinc-400 text-base mt-2 mb-8">
                   Создавай, сохраняй, делись на ходу
@@ -613,13 +611,21 @@ export default function Landing() {
                 
                 {/* Download buttons */}
                 <div className="flex flex-row gap-4">
-                  <Button className="inline-flex items-center px-5 py-3 rounded-xl bg-white text-black font-semibold hover:scale-105 transition-all duration-300">
+                  <Button 
+                    onClick={() => setIsAppModalOpen(true)}
+                    className="inline-flex items-center px-5 py-3 rounded-xl bg-white text-black font-semibold hover:scale-105 transition-all duration-300"
+                    data-testid="button-app-store"
+                  >
                     <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                     </svg>
                     App Store
                   </Button>
-                  <Button className="inline-flex items-center px-5 py-3 rounded-xl bg-white text-black font-semibold hover:scale-105 transition-all duration-300">
+                  <Button 
+                    onClick={() => setIsAppModalOpen(true)}
+                    className="inline-flex items-center px-5 py-3 rounded-xl bg-white text-black font-semibold hover:scale-105 transition-all duration-300"
+                    data-testid="button-google-play"
+                  >
                     <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
                     </svg>
@@ -874,6 +880,49 @@ export default function Landing() {
           </div>
         </div>
       </footer>
+
+      {/* App Coming Soon Modal */}
+      <Dialog open={isAppModalOpen} onOpenChange={setIsAppModalOpen}>
+        <DialogContent className="bg-gradient-to-br from-[#1A1A1E] to-[#0C0C0F] border border-white/10 text-white max-w-md rounded-2xl p-8">
+          <DialogHeader className="text-center">
+            <div className="text-5xl mb-4 flex justify-center">📱</div>
+            <DialogTitle className="text-3xl font-bold text-[#00FFF0]">
+              Мы над этим работаем!
+            </DialogTitle>
+            <DialogDescription className="text-lg text-zinc-300 leading-relaxed pt-4">
+              Наши приложения для App Store и Google Play ещё в разработке. Но мы активно трудимся, чтобы они появились как можно скорее!
+            </DialogDescription>
+          </DialogHeader>
+          <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+            <X className="h-5 w-5 text-white" />
+            <span className="sr-only">Close</span>
+          </DialogClose>
+          
+          <div className="space-y-6 mt-4">
+            <div className="space-y-4 text-center">
+              
+              <p className="text-base text-zinc-400">
+                Если вы покажете интерес и активность, это ускорит появление приложений.
+              </p>
+              
+              <p className="text-base text-cyan-400 font-medium italic">
+                Спасибо за ваше терпение – совсем скоро вы сможете скачать их!
+              </p>
+            </div>
+            
+            <div className="pt-4">
+              <Button 
+                onClick={() => setIsAppModalOpen(false)}
+                className="w-full bg-gradient-to-r from-purple-500 to-cyan-400 text-black font-semibold hover:scale-105 transition-all duration-300 py-6 text-lg rounded-xl"
+                data-testid="button-close-modal"
+              >
+                <X className="w-5 h-5 mr-2" />
+                Закрыть
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
