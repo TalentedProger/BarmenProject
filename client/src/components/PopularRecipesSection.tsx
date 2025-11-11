@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo, useMemo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
-import { ArrowLeft, ArrowRight, Star, RefreshCw } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Star, RefreshCw, Droplet, Percent, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 
@@ -36,7 +36,7 @@ const popularRecipes: Recipe[] = [
     name: "Маргарита",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_classic_Margarita_cocktail_in_a_0_1753377591761.jpg",
     description: "Классика текилы с лаймом и солью",
-    tags: ["❄️ Освежающий", "🍋 Кислый", "⚡ Крепкий"],
+    tags: ["Освежающий", "Кислый"],
     abv: 13,
     volume: 150,
     rating: 4.8,
@@ -50,7 +50,7 @@ const popularRecipes: Recipe[] = [
     name: "Мохито",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_refreshing_Mojito_in_a_tall_hig_0_1753377591761.jpg",
     description: "Мята, лайм и ром — вечная классика",
-    tags: ["🌿 Лёгкий", "🌿 Мятный", "❄️ Освежающий"],
+    tags: ["Лёгкий", "Мятный"],
     abv: 10,
     volume: 200,
     rating: 4.9,
@@ -64,7 +64,7 @@ const popularRecipes: Recipe[] = [
     name: "Сангрия",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_vibrant_red_Sangria_in_a_large__1_1753377591760.jpg",
     description: "Фруктово-винный коктейль из Испании",
-    tags: ["🍓 Фруктовый", "🌿 Лёгкий", "🌈 Яркий"],
+    tags: ["Фруктовый", "Яркий"],
     abv: 9,
     volume: 250,
     rating: 4.7,
@@ -78,7 +78,7 @@ const popularRecipes: Recipe[] = [
     name: "Апероль шприц",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_An_Aperol_Spritz_in_a_large_ballo_0_1753377591760.jpg",
     description: "Итальянская классика с апельсиновыми нотами",
-    tags: ["🍸 Горьковатый", "🍊 Цитрус", "❄️ Освежающий"],
+    tags: ["Горьковатый", "Цитрус"],
     abv: 11,
     volume: 180,
     rating: 4.6,
@@ -92,7 +92,7 @@ const popularRecipes: Recipe[] = [
     name: "Пина Колада",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Pia_Colada_in_a_tall_hurricane__0_1753377591760.jpg",
     description: "Тропический рай из ананаса и кокоса",
-    tags: ["🍬 Сладкий", "🥥 Кремовый", "🌴 Экзотический"],
+    tags: ["Сладкий", "Кремовый"],
     abv: 10,
     volume: 200,
     rating: 4.9,
@@ -106,7 +106,7 @@ const popularRecipes: Recipe[] = [
     name: "Дайкири",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Daiquiri_in_a_sleek_cocktail_gl_0_1753377591759.jpg",
     description: "Минимализм с лаймом и ромом",
-    tags: ["🍋 Кислый", "⚡ Крепкий", "🍊 Цитрус"],
+    tags: ["Кислый", "Крепкий"],
     abv: 14,
     volume: 120,
     rating: 4.8,
@@ -120,7 +120,7 @@ const popularRecipes: Recipe[] = [
     name: "Манхэттен",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_deep_amber_Manhattan_in_a_short_0_1753377591759.jpg",
     description: "Горький и сильный коктейль с вермутом",
-    tags: ["⚡ Крепкий", "🍸 Горький", "🔥 Пряный"],
+    tags: ["Крепкий", "Пряный"],
     abv: 18,
     volume: 90,
     rating: 4.7,
@@ -134,7 +134,7 @@ const popularRecipes: Recipe[] = [
     name: "Мартини Фиеро Тоник",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_vibrant_orange_Martini_Fiero__T_1_1753377591758.jpg",
     description: "Лёгкий коктейль на базе апельсинового мартини",
-    tags: ["🌿 Лёгкий", "🍊 Цитрус", "💫 Пузырьки"],
+    tags: ["Лёгкий", "Цитрус"],
     abv: 8,
     volume: 180,
     rating: 4.5,
@@ -148,7 +148,7 @@ const popularRecipes: Recipe[] = [
     name: "Б-52",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_layered_B52_shot_in_a_small_sho_3_1753377591758.jpg",
     description: "Слоистый шот с ликёрами",
-    tags: ["🍬 Сладкий", "🥃 Шот", "🥛 Густой"],
+    tags: ["Сладкий", "Шот"],
     abv: 22,
     volume: 50,
     rating: 4.6,
@@ -162,7 +162,7 @@ const popularRecipes: Recipe[] = [
     name: "Космополитен",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_bright_pink_Cosmopolitan_in_a_m_0_1753377591757.jpg",
     description: "Яркий коктейль с клюквой и лаймом",
-    tags: ["🌈 Яркий", "🍓 Фруктовый", "💃 Женственный"],
+    tags: ["Яркий", "Фруктовый"],
     abv: 13,
     volume: 130,
     rating: 4.8,
@@ -176,7 +176,7 @@ const popularRecipes: Recipe[] = [
     name: "Белый русский",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_White_Russian_in_a_short_glass__2_1753377591757.jpg",
     description: "Кофейно-сливочный коктейль на водке",
-    tags: ["🥛 Сливочный", "⚡ Крепкий", "🍮 Десертный"],
+    tags: ["Сливочный", "Десертный"],
     abv: 20,
     volume: 120,
     rating: 4.7,
@@ -190,7 +190,7 @@ const popularRecipes: Recipe[] = [
     name: "Лонг Айленд Айс Ти",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Long_Island_Iced_Tea_in_a_tall__1_1753377591756.jpg",
     description: "Мощный коктейль из 5 спиртов",
-    tags: ["⚡ Крепкий", "🍊 Цитрус", "🧊 Лёд"],
+    tags: ["Крепкий", "Цитрус"],
     abv: 22,
     volume: 250,
     rating: 4.9,
@@ -204,7 +204,7 @@ const popularRecipes: Recipe[] = [
     name: "Куба либре",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Cuba_Libre_in_a_tall_glass_dark_2_1753377591756.jpg",
     description: "Кола + ром + лайм — просто и эффектно",
-    tags: ["🥂 Классика", "💫 Газированный", "⚡ Крепкий"],
+    tags: ["Классика", "Газированный"],
     abv: 12,
     volume: 200,
     rating: 4.6,
@@ -218,7 +218,7 @@ const popularRecipes: Recipe[] = [
     name: "Текила Санрайз",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Tequila_Sunrise_in_a_tall_glass_2_1753377591754.jpg",
     description: "Солнечный градиент апельсина и гренадина",
-    tags: ["🌈 Яркий", "🍊 Цитрус", "🌴 Экзотика"],
+    tags: ["Яркий", "Экзотика"],
     abv: 13,
     volume: 160,
     rating: 4.8,
@@ -232,7 +232,7 @@ const popularRecipes: Recipe[] = [
     name: "Негрони",
     image: "/attached_assets/Flux_Dev_A_classic_Negroni_in_a_short_glass_with_a_large_ice_c_3_1753377591753.jpg",
     description: "Горький и стильный коктейль с джином",
-    tags: ["⚡ Крепкий", "🍸 Горький", "🍷 Аперитив"],
+    tags: ["Крепкий", "Аперитив"],
     abv: 20,
     volume: 100,
     rating: 4.5,
@@ -243,24 +243,12 @@ const popularRecipes: Recipe[] = [
   }
 ];
 
-const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
+const RecipeCard = ({ recipe, priority = false }: { recipe: Recipe; priority?: boolean }) => {
   return (
-    <div className="recipe-card relative">
+    <div className="recipe-card relative popular-card-wrapper group py-4">
       <Link href={`/recipe/${recipe.id}`}>
         <div 
-          className="bg-[#1A1A1E] rounded-2xl transition-all duration-300 ease-out overflow-hidden group h-[460px] flex flex-col relative z-10 max-[480px]:h-[420px] max-[480px]:w-[85%] max-[480px]:mx-auto cursor-pointer"
-          style={{
-            filter: 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))',
-            transform: 'translate3d(0, 0, 0)', // Force hardware acceleration
-            backfaceVisibility: 'hidden', // Prevent flickering
-            willChange: 'transform, filter', // Optimize for animations
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.filter = 'drop-shadow(0 0 16px rgba(6, 182, 212, 0.2)) drop-shadow(0 6px 24px rgba(0, 0, 0, 0.3))';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.filter = 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.15)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.25))';
-          }}
+          className="bg-[#1A1A1E] rounded-2xl transition-transform duration-300 ease-out overflow-hidden h-[460px] flex flex-col relative z-10 max-[480px]:h-[420px] max-[480px]:w-[85%] max-[480px]:mx-auto cursor-pointer will-change-transform transform-gpu group-hover:scale-[1.02] popular-card-inner"
         >
           {/* Background Image covering entire card */}
           <div className="absolute inset-0 overflow-hidden will-change-transform rounded-2xl">
@@ -268,10 +256,13 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
               src={recipe.image}
               alt={recipe.name}
               className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
-              loading="lazy"
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : "auto"}
               decoding="async"
+              width="400"
+              height="460"
               style={{
-                transform: 'translate3d(0, 0, 0)', // Force hardware acceleration
+                transform: 'translate3d(0, 0, 0)',
                 backfaceVisibility: 'hidden',
                 willChange: 'transform',
               }}
@@ -288,12 +279,21 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
 
           {/* Content overlay */}
           <div className="relative z-10 flex flex-col h-full">
-            {/* Tags - переносим в верхнюю часть, ограничиваем двумя тегами, выровнены по ширине */}
-            <div className="flex justify-between px-4 py-4 max-[480px]:px-3 max-[480px]:py-3">
+            {/* Tags - Apple-style stickers */}
+            <div className="flex justify-between gap-2 px-4 py-4 max-[480px]:px-3 max-[480px]:py-3">
               {recipe.tags.slice(0, 2).map((tag, index) => (
                 <span
                   key={index}
-                  className="text-sm bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-white font-medium whitespace-nowrap max-[480px]:text-xs max-[480px]:px-2 border border-white/20 flex-1 text-center mx-1"
+                  className="text-sm px-4 py-1.5 rounded-full text-white font-semibold whitespace-nowrap max-[480px]:text-xs max-[480px]:px-3 max-[480px]:py-1 flex-1 text-center shadow-lg transition-all duration-300 hover:scale-105"
+                  style={{
+                    background: index === 0 
+                      ? 'linear-gradient(135deg, rgba(6, 182, 212, 0.6) 0%, rgba(59, 130, 246, 0.6) 100%)'
+                      : 'linear-gradient(135deg, rgba(168, 85, 247, 0.6) 0%, rgba(236, 72, 153, 0.6) 100%)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(255, 255, 255, 0.1) inset',
+                    letterSpacing: '0.3px'
+                  }}
                 >
                   {tag}
                 </span>
@@ -307,21 +307,67 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             <div className="space-y-1.5 text-base text-white font-semibold max-[480px]:text-sm px-4 py-3 max-[480px]:px-3 max-[480px]:py-2" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>
               {/* Row 1: Объем */}
               <div className="flex items-center text-left">
-                <span>💧 {recipe.volume} мл</span>
+                <span className="inline-flex items-center gap-2">
+                  <span
+                    className="inline-flex items-center justify-center w-6 h-6 rounded-full shadow-md"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.35) 0%, rgba(59, 130, 246, 0.35) 100%)',
+                      backdropFilter: 'blur(6px)',
+                      border: '1px solid rgba(255,255,255,0.18)'
+                    }}
+                  >
+                    <Droplet className="w-3.5 h-3.5 text-white" />
+                  </span>
+                  {recipe.volume} мл
+                </span>
               </div>
               
               {/* Row 2: ABV */}
               <div className="flex items-center text-left">
-                <span>🍹 {recipe.abv}%</span>
+                <span className="inline-flex items-center gap-2">
+                  <span
+                    className="inline-flex items-center justify-center w-6 h-6 rounded-full shadow-md"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.35) 0%, rgba(236, 72, 153, 0.35) 100%)',
+                      backdropFilter: 'blur(6px)',
+                      border: '1px solid rgba(255,255,255,0.18)'
+                    }}
+                  >
+                    <Percent className="w-3.5 h-3.5 text-white" />
+                  </span>
+                  {recipe.abv}%
+                </span>
               </div>
               
               {/* Row 3: Цена */}
               <div className="flex items-center text-left">
-                <span>💰 {recipe.price || '150'} ₽</span>
+                <span className="inline-flex items-center gap-2">
+                  <span
+                    className="inline-flex items-center justify-center w-6 h-6 rounded-full shadow-md"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.35) 0%, rgba(5, 150, 105, 0.35) 100%)',
+                      backdropFilter: 'blur(6px)',
+                      border: '1px solid rgba(255,255,255,0.18)'
+                    }}
+                  >
+                    <Coins className="w-3.5 h-3.5 text-white" />
+                  </span>
+                  {recipe.price || '150'} ₽
+                </span>
               </div>
               
               {/* Row 4: Рейтинг */}
               <div className="flex items-center space-x-2 text-left">
+                <span
+                  className="inline-flex items-center justify-center w-6 h-6 rounded-full shadow-md"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(250, 204, 21, 0.35) 0%, rgba(251, 191, 36, 0.35) 100%)',
+                    backdropFilter: 'blur(6px)',
+                    border: '1px solid rgba(255,255,255,0.18)'
+                  }}
+                >
+                  <Star className="w-3.5 h-3.5 text-yellow-300" />
+                </span>
                 <div className="flex">
                   {Array.from({ length: 5 }, (_, i) => (
                     <Star
@@ -356,9 +402,12 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   );
 };
 
-export default function PopularRecipesSection() {
+const PopularRecipesSection = memo(() => {
   const [swiperRef, setSwiperRef] = useState<any>(null);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Display all recipes for swiper
+  const displayedRecipes = useMemo(() => popularRecipes, []);
 
   // Detect mobile devices
   useEffect(() => {
@@ -372,7 +421,7 @@ export default function PopularRecipesSection() {
   }, []);
 
   return (
-    <section className="py-12 bg-[#0C0C0F] relative overflow-hidden max-[480px]:py-8">
+    <section className="py-12 bg-[#0C0C0F] relative overflow-visible max-[480px]:py-8">
       {/* Background gradient effects */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 blur-sm" />
@@ -393,7 +442,7 @@ export default function PopularRecipesSection() {
           grabCursor={true}
           centeredSlides={true}
           loop={true}
-          autoplay={isMobile ? false : {
+          autoplay={{
             delay: 5000,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
@@ -417,9 +466,9 @@ export default function PopularRecipesSection() {
           }}
           className="popular-recipes-swiper mb-8 max-[480px]:mb-4 swiper-mobile-optimized"
         >
-          {popularRecipes.map((recipe) => (
+          {displayedRecipes.map((recipe, index) => (
             <SwiperSlide key={recipe.id}>
-              <RecipeCard recipe={recipe} />
+              <RecipeCard recipe={recipe} priority={index === 0} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -450,4 +499,8 @@ export default function PopularRecipesSection() {
       </div>
     </section>
   );
-}
+});
+
+PopularRecipesSection.displayName = 'PopularRecipesSection';
+
+export default PopularRecipesSection;

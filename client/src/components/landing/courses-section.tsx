@@ -1,6 +1,14 @@
 import { BookOpen, Video, Beaker, Award } from "lucide-react";
+import { Link } from "wouter";
+import { useState, useEffect } from "react";
 
 const CoursesSection = () => {
+  const [isEnrolled, setIsEnrolled] = useState(false);
+
+  useEffect(() => {
+    const enrolled = localStorage.getItem('course_mixology_basics_enrolled');
+    setIsEnrolled(enrolled === 'true');
+  }, []);
   const courses = [
     {
       title: "Основы миксологии",
@@ -90,9 +98,11 @@ const CoursesSection = () => {
 
             {/* CTA Button */}
             <div className="pt-4">
-              <button className="inline-block px-8 py-4 rounded-xl text-white bg-gradient-to-r from-[#FF4D9D] to-[#B388EB] hover:from-[#FF4D9D]/90 hover:to-[#B388EB]/90 shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 transition-all duration-300 font-medium text-lg">
-                Изучить курсы
-              </button>
+              <Link href="/courses" onClick={() => setTimeout(() => window.scrollTo(0, 0), 100)}>
+                <button className="inline-block px-8 py-4 rounded-xl text-white bg-gradient-to-r from-[#FF4D9D] to-[#B388EB] hover:from-[#FF4D9D]/90 hover:to-[#B388EB]/90 shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 transition-all duration-300 font-medium text-lg">
+                  Изучить курсы
+                </button>
+              </Link>
             </div>
           </div>
 
@@ -105,6 +115,10 @@ const CoursesSection = () => {
                   src="/attached_assets/Leonardo_Phoenix_10_A_stylish_male_bartender_with_rolledup_sle_2 (1)_1752845021301.jpg"
                   alt="Professional bartender creating cocktails"
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  width="320"
+                  height="384"
                 />
                 {/* Dynamic glow overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-pink-400/10 rounded-2xl"></div>
@@ -133,6 +147,10 @@ const CoursesSection = () => {
                   src="/attached_assets/Leonardo_Phoenix_10_A_stylish_male_bartender_with_rolledup_sle_2 (1)_1752845021301.jpg"
                   alt="Professional bartender creating cocktails"
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  width="320"
+                  height="384"
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-pink-400/10 rounded-2xl"></div>
               </div>
@@ -157,9 +175,11 @@ const CoursesSection = () => {
 
           {/* 4. CTA Button - Centered and Smaller */}
           <div className="pt-4 text-center">
-            <button className="inline-block px-7 py-3 rounded-xl text-white bg-gradient-to-r from-[#FF4D9D] to-[#B388EB] hover:from-[#FF4D9D]/90 hover:to-[#B388EB]/90 shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 transition-all duration-300 font-medium text-lg max-[480px]:px-6 max-[480px]:py-3 max-[480px]:text-base">
-              Изучить курсы
-            </button>
+            <Link href="/courses">
+              <button className="inline-block px-7 py-3 rounded-xl text-white bg-gradient-to-r from-[#FF4D9D] to-[#B388EB] hover:from-[#FF4D9D]/90 hover:to-[#B388EB]/90 shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 transition-all duration-300 font-medium text-lg max-[480px]:px-6 max-[480px]:py-3 max-[480px]:text-base">
+                Изучить курсы
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -176,6 +196,10 @@ const CoursesSection = () => {
                     src={course.image} 
                     alt={course.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    loading="lazy"
+                    decoding="async"
+                    width="400"
+                    height="256"
                   />
                 </div>
                 
@@ -188,9 +212,17 @@ const CoursesSection = () => {
                     {course.level}
                   </span>
                   
-                  <button className="w-full mt-auto px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white rounded-lg transition-all duration-300 font-medium hover:shadow-lg hover:shadow-pink-500/25 max-[480px]:mx-auto max-[480px]:w-auto max-[480px]:px-6">
-                    Записаться
-                  </button>
+                  {index === 0 ? (
+                    <Link href="/course/mixology-basics">
+                      <button className="w-full mt-auto px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white rounded-lg transition-all duration-300 font-medium hover:shadow-lg hover:shadow-pink-500/25 max-[480px]:mx-auto max-[480px]:w-auto max-[480px]:px-6">
+                        {isEnrolled ? 'Перейти' : 'Записаться'}
+                      </button>
+                    </Link>
+                  ) : (
+                    <button className="w-full mt-auto px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white rounded-lg transition-all duration-300 font-medium hover:shadow-lg hover:shadow-pink-500/25 max-[480px]:mx-auto max-[480px]:w-auto max-[480px]:px-6 opacity-60 cursor-not-allowed">
+                      Скоро откроется
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

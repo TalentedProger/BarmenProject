@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Mail, Lock, Martini, ArrowLeft, User } from "lucide-react";
 import { Link, useLocation } from "wouter";
-import { handleGoogleLogin, handleGuestLogin } from "@/lib/authUtils";
+import { handleGoogleLogin } from "@/lib/authUtils";
 import { useAuth } from "@/hooks/useAuth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -41,7 +41,7 @@ export default function Auth() {
     } else if (error === 'google_oauth_not_configured') {
       toast({
         title: "Google OAuth недоступен",
-        description: "Аутентификация через Google временно недоступна. Попробуйте войти как гость.",
+        description: "Аутентификация через Google временно недоступна.",
         variant: "destructive",
       });
     }
@@ -53,24 +53,6 @@ export default function Auth() {
       setLocation('/');
     }
   }, [isAuthenticated, isLoading, setLocation]);
-
-  const guestLoginMutation = useMutation({
-    mutationFn: handleGuestLogin,
-    onSuccess: () => {
-      toast({
-        title: "Добро пожаловать!",
-        description: "Вы вошли как гость.",
-      });
-      setLocation('/');
-    },
-    onError: () => {
-      toast({
-        title: "Ошибка",
-        description: "Не удалось войти как гость. Попробуйте снова.",
-        variant: "destructive",
-      });
-    },
-  });
 
   const registerMutation = useMutation({
     mutationFn: async (data: { email: string; password: string; nickname: string }) => {
@@ -198,10 +180,6 @@ export default function Auth() {
     }
   };
 
-  const handleGuestLoginClick = () => {
-    guestLoginMutation.mutate();
-  };
-
   const handleGoogleLoginClick = () => {
     handleGoogleLogin();
   };
@@ -219,9 +197,9 @@ export default function Auth() {
       </div>
       {/* Floating Background Elements */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-neon-turquoise rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-32 right-16 w-40 h-40 bg-neon-purple rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-pink-400 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-20 left-10 w-32 h-32 bg-neon-turquoise rounded-full blur-3xl animate-pulse" style={{willChange: 'transform, opacity'}}></div>
+        <div className="absolute bottom-32 right-16 w-40 h-40 bg-neon-purple rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s', willChange: 'transform, opacity'}}></div>
+        <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-pink-400 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s', willChange: 'transform, opacity'}}></div>
       </div>
       {/* Back Button */}
       <Link href="/">
@@ -279,7 +257,8 @@ export default function Auth() {
                     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl animate-pulse opacity-30"
                     style={{
                       background: 'radial-gradient(circle, rgba(192, 132, 252, 0.4) 0%, rgba(0, 255, 247, 0.3) 50%, rgba(255, 110, 199, 0.2) 100%)',
-                      animationDuration: '4s'
+                      animationDuration: '4s',
+                      willChange: 'transform, opacity'
                     }}
                   ></div>
                   
@@ -289,7 +268,8 @@ export default function Auth() {
                     style={{
                       background: 'radial-gradient(circle, rgba(0, 255, 247, 0.5) 0%, rgba(192, 132, 252, 0.4) 70%, transparent 100%)',
                       animationDuration: '6s',
-                      animationDelay: '1s'
+                      animationDelay: '1s',
+                      willChange: 'transform, opacity'
                     }}
                   ></div>
                   
@@ -299,7 +279,8 @@ export default function Auth() {
                     style={{
                       background: 'radial-gradient(circle, rgba(255, 110, 199, 0.4) 0%, rgba(179, 136, 235, 0.3) 60%, transparent 100%)',
                       animationDuration: '8s',
-                      animationDelay: '2s'
+                      animationDelay: '2s',
+                      willChange: 'transform, opacity'
                     }}
                   ></div>
                   
@@ -519,34 +500,6 @@ export default function Auth() {
                   Войти через Google
                 </Button>
 
-                {/* Guest Login */}
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleGuestLoginClick}
-                  disabled={guestLoginMutation.isPending}
-                  className="w-full group relative bg-transparent border border-purple-400/30 text-purple-300 hover:bg-purple-500/10 hover:border-purple-400/60 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg"
-                  style={{ 
-                    textShadow: '0 0 10px rgba(196, 181, 253, 0.4)',
-                    boxShadow: '0 0 15px rgba(196, 181, 253, 0.2)'
-                  }}
-                  onMouseEnter={(e) => {
-                    const target = e.target as HTMLElement;
-                    target.style.textShadow = '0 0 15px rgba(196, 181, 253, 0.8), 0 0 25px rgba(196, 181, 253, 0.5)';
-                    target.style.boxShadow = '0 0 25px rgba(196, 181, 253, 0.4), 0 0 40px rgba(196, 181, 253, 0.2)';
-                  }}
-                  onMouseLeave={(e) => {
-                    const target = e.target as HTMLElement;
-                    target.style.textShadow = '0 0 10px rgba(196, 181, 253, 0.4)';
-                    target.style.boxShadow = '0 0 15px rgba(196, 181, 253, 0.2)';
-                  }}
-                >
-                  <svg className="mr-2 h-4 w-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                  </svg>
-                  Войти как гость
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-400/5 to-cyan-400/0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </Button>
               </form>
             </CardContent>
           </Card>

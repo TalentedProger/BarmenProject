@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Martini, Menu, WandSparkles, LogOut, User } from "lucide-react";
+import { Martini, Menu, WandSparkles, LogOut, User, Heart } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { handleLogout } from "@/lib/authUtils";
 import { useMutation } from "@tanstack/react-query";
@@ -11,7 +11,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useCallback, useMemo } from "react";
 import { useLocation } from "wouter";
 
-export default function Header() {
+interface HeaderProps {
+  useProfileDropdown?: boolean;
+}
+
+export default function Header({ useProfileDropdown = true }: HeaderProps = {}) {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const [location] = useLocation();
@@ -50,17 +54,19 @@ export default function Header() {
 
   const NavItems = ({ currentPath }: { currentPath?: string }) => {
     const navItems = [
-      { href: '/', label: 'Главная', icon: 'Home' },
-      { href: '/constructor', label: 'Конструктор', icon: 'WandSparkles' },
-      { href: '/generator', label: 'Генератор', icon: 'Dice2' },
-      { href: '/catalog', label: 'Каталог', icon: 'BookOpen' }
+      { href: '/', label: 'Главная', icon: 'Home', hideBelowLg: true },
+      { href: '/constructor', label: 'Конструктор', icon: 'WandSparkles', hideBelowLg: false },
+      { href: '/generator', label: 'Генератор', icon: 'Dice2', hideBelowLg: false },
+      { href: '/catalog', label: 'Каталог', icon: 'BookOpen', hideBelowLg: false }
     ];
     
     return (
       <>
-        {navItems.filter(item => item.href !== currentPath).map((item) => (
+        {navItems.map((item) => (
           <Link key={item.href} href={item.href}>
-            <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg">
+            <Button variant="ghost" className={`text-white/70 hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg ${
+              currentPath === item.href ? 'bg-white/10 text-white' : ''
+            } ${item.hideBelowLg ? 'hidden lg:inline-flex' : ''}`}>
               {item.label}
             </Button>
           </Link>
@@ -76,7 +82,7 @@ export default function Header() {
           <Link href="/">
             <div className="flex items-center space-x-3 cursor-pointer">
               <Martini className="text-electric text-2xl" />
-              <h1 className="text-xl font-bold text-platinum">Cocktailo Maker</h1>
+              <h1 className="text-xl font-bold text-platinum whitespace-nowrap">Cocktailo Maker</h1>
             </div>
           </Link>
           
@@ -88,56 +94,74 @@ export default function Header() {
             {/* Desktop Auth Buttons */}
             <div className="hidden md:flex items-center space-x-3">
               {!isLoading && !isAuthenticated ? (
-                <>
-                  <Link href="/constructor">
-                    <Button 
-                      className="bg-gradient-to-r from-neon-turquoise to-electric text-black font-semibold hover:scale-105 transition-all duration-300 shadow-lg shadow-neon-turquoise/30"
-                    >
-                      <WandSparkles className="mr-2 h-4 w-4" />
-                      Начать
-                    </Button>
-                  </Link>
-                  <Link href="/auth">
-                    <Button 
-                      variant="outline"
-                      className="border-neon-purple text-neon-purple hover:bg-neon-purple/10 hover:text-white transition-all duration-300 hover:scale-105"
-                    >
-                      Вход
-                    </Button>
-                  </Link>
-                </>
+                <Link href="/auth">
+                  <Button 
+                    variant="outline"
+                    className="border-neon-purple text-neon-purple hover:bg-neon-purple/10 hover:text-white transition-all duration-300 hover:scale-105"
+                  >
+                    Вход
+                  </Button>
+                </Link>
               ) : isAuthenticated && user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="flex items-center space-x-2 hover:bg-white/10 md:justify-start justify-end">
+                useProfileDropdown ? (
+                  <DropdownMenu modal={false}>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="flex items-center space-x-2 hover:bg-white/10 md:justify-start justify-end focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-turquoise focus-visible:ring-offset-0">
+                        <Avatar className="h-8 w-8 shadow-sm shadow-black/30 ring-1 ring-white/10">
+                          <AvatarImage src={userDisplayData?.profileImageUrl || undefined} alt={userDisplayData?.nickname || "User"} />
+                          <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
+                            {userDisplayData?.avatar}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="text-white font-medium hidden xl:inline">
+                          {userDisplayData?.nickname}
+                        </span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent 
+                      position="popper"
+                      side="bottom"
+                      align="end" 
+                      sideOffset={8} 
+                      className="bg-black/90 backdrop-blur-lg border-white/20 w-48"
+                    >
+                      <DropdownMenuItem asChild>
+                        <Link href="/profile" className="flex items-center cursor-pointer">
+                          <User className="mr-2 h-4 w-4" />
+                          Профиль
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/favorites" className="flex items-center cursor-pointer">
+                          <Heart className="mr-2 h-4 w-4" />
+                          Избранное
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={handleLogoutClick}
+                        disabled={logoutMutation.isPending}
+                        className="flex items-center cursor-pointer"
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Выйти
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Link href="/profile">
+                    <Button variant="ghost" className="flex items-center space-x-2 hover:bg-white/10 p-2 rounded-lg transition-all duration-300 hover:scale-105">
                       <Avatar className="h-8 w-8 shadow-sm shadow-black/30 ring-1 ring-white/10">
                         <AvatarImage src={userDisplayData?.profileImageUrl || undefined} alt={userDisplayData?.nickname || "User"} />
                         <AvatarFallback className="bg-gradient-to-r from-neon-turquoise to-neon-purple text-black font-semibold">
                           {userDisplayData?.avatar}
                         </AvatarFallback>
                       </Avatar>
-                      <span className="text-white font-medium hidden md:inline">
+                      <span className="text-white font-medium hidden xl:inline">
                         {userDisplayData?.nickname}
                       </span>
                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-black/90 backdrop-blur-lg border-white/20">
-                    <DropdownMenuItem asChild>
-                      <Link href="/profile" className="flex items-center cursor-pointer">
-                        <User className="mr-2 h-4 w-4" />
-                        Профиль
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      onClick={handleLogoutClick}
-                      disabled={logoutMutation.isPending}
-                      className="flex items-center cursor-pointer"
-                    >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Выйти
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  </Link>
+                )
               ) : null}
             </div>
 
@@ -155,7 +179,7 @@ export default function Header() {
                     <div className="pb-4 border-b border-white/20">
                       <Button 
                         variant="ghost" 
-                        className="w-full justify-start text-left p-3 hover:bg-white/10 transition-colors"
+                        className="w-full justify-start text-left p-3 hover:bg-white/10 transition-colors mb-2"
                         onClick={() => window.location.href = "/profile"}
                       >
                         <div className="flex items-center space-x-3">
@@ -173,6 +197,15 @@ export default function Header() {
                           </div>
                         </div>
                       </Button>
+                      <Link href="/favorites">
+                        <Button 
+                          variant="ghost" 
+                          className="w-full justify-start text-left p-3 hover:bg-white/10 transition-colors"
+                        >
+                          <Heart className="mr-3 h-4 w-4 text-pink-400" />
+                          <span className="text-white">Избранное</span>
+                        </Button>
+                      </Link>
                     </div>
                   )}
                   
@@ -181,12 +214,6 @@ export default function Header() {
                   <div className="pt-4 border-t border-white/20">
                     {!isLoading && !isAuthenticated ? (
                       <>
-                        <Link href="/constructor">
-                          <Button className="w-full mb-2 bg-gradient-to-r from-neon-turquoise to-electric text-black font-semibold">
-                            <WandSparkles className="mr-2 h-4 w-4" />
-                            Начать
-                          </Button>
-                        </Link>
                         <Link href="/auth">
                           <Button variant="outline" className="w-full border-neon-purple text-neon-purple">
                             Вход

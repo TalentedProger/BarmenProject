@@ -4,10 +4,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import GeneratorFilters, { type GenerationFilters } from "@/components/generator/GeneratorFilters";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Dice2, Crown, Bolt, Sun, Leaf, Flame, Save, Edit, Sparkles } from "lucide-react";
+import { Dice2, Crown, Bolt, Sun, Leaf, Flame, Save, Edit, Sparkles, Settings, RotateCcw } from "lucide-react";
 import { useCocktailStore } from "@/store/cocktail-store";
 import { useLocation } from "wouter";
 
@@ -127,12 +128,32 @@ export default function Generator() {
   const [selectedMode, setSelectedMode] = useState('classic');
   const [generatedRecipe, setGeneratedRecipe] = useState<GeneratedRecipe | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const { loadRecipe } = useCocktailStore();
   const [, setLocation] = useLocation();
 
+  // Состояние фильтров
+  const [filters, setFilters] = useState<GenerationFilters>({
+    mode: 'classic',
+    requiredIngredients: [],
+    requiredCategories: [],
+    maxAlcoholContent: 50,
+    minAlcoholContent: 0,
+    maxPrice: 5000,
+    preferredCategories: [],
+    glassType: 'any',
+    complexity: 'simple',
+    tastePreferences: {
+      sweet: 5,
+      sour: 5,
+      bitter: 5,
+      alcohol: 5
+    }
+  });
+
   const generateRecipeMutation = useMutation({
-    mutationFn: async (mode: string) => {
-      const response = await apiRequest("POST", "/api/recipes/generate", { mode });
+    mutationFn: async (generationFilters: GenerationFilters) => {
+      const response = await apiRequest("POST", "/api/recipes/generate", generationFilters);
       return response.json();
     },
     onSuccess: (data) => {
@@ -187,7 +208,40 @@ export default function Generator() {
 
   const handleGenerate = () => {
     setIsGenerating(true);
-    generateRecipeMutation.mutate(selectedMode);
+    const generationFilters = {
+      ...filters,
+      mode: selectedMode
+    };
+    generateRecipeMutation.mutate(generationFilters);
+  };
+
+  const handleFiltersChange = (newFilters: GenerationFilters) => {
+    setFilters(newFilters);
+  };
+
+  const handleResetFilters = () => {
+    setFilters({
+      mode: selectedMode,
+      requiredIngredients: [],
+      requiredCategories: [],
+      maxAlcoholContent: 50,
+      minAlcoholContent: 0,
+      maxPrice: 5000,
+      preferredCategories: [],
+      glassType: 'any',
+      complexity: 'simple',
+      tastePreferences: {
+        sweet: 5,
+        sour: 5,
+        bitter: 5,
+        alcohol: 5
+      }
+    });
+  };
+
+  const handleModeChange = (mode: string) => {
+    setSelectedMode(mode);
+    setFilters(prev => ({ ...prev, mode }));
   };
 
   const handleSaveGenerated = () => {
@@ -208,15 +262,15 @@ export default function Generator() {
       description: generatedRecipe.description,
       glassTypeId: generatedRecipe.glass?.id || 1,
       totalVolume,
-      totalAbv,
-      totalCost,
+      totalAbv: totalAbv.toFixed(2),
+      totalCost: totalCost.toFixed(2),
       tasteBalance: { sweet: 5, sour: 5, bitter: 5, alcohol: Math.min(10, totalAbv / 5) },
       category: generatedRecipe.category,
       difficulty: "easy",
       isPublic: true,
       ingredients: generatedRecipe.ingredients.map((item) => ({
         ingredientId: item.ingredient.id,
-        amount: item.amount,
+        amount: item.amount.toFixed(2),
         unit: item.unit,
         order: item.order
       }))
@@ -252,8 +306,8 @@ export default function Generator() {
       unit: item.unit
     }));
     
-    // Load the recipe into the cocktail store
-    loadRecipe(glassType, ingredients);
+    // Load the recipe into the cocktail store with name and description
+    loadRecipe(glassType, ingredients, generatedRecipe.name, generatedRecipe.description);
     
     // Navigate to constructor
     setLocation('/constructor');
@@ -263,13 +317,13 @@ export default function Generator() {
     <div className="min-h-screen bg-night-blue text-ice-white">
       <Header />
       
-      <section className="pt-32 pb-16 bg-gradient-to-b from-graphite to-night-blue">
+      <section className="pt-48 pb-16 bg-gradient-to-b from-graphite to-night-blue">
         <div className="container mx-auto px-4">
           <div className="text-center mb-24">
-            <h2 className="text-4xl font-bold mb-4 text-neon-purple"
-                style={{ 
-                  textShadow: '0 0 20px rgba(139, 69, 255, 0.8), 0 0 40px rgba(139, 69, 255, 0.6)',
-                  color: '#8b45ff'
+            <h2 
+              className="text-4xl md:text-5xl font-bold mb-4 text-center drop-shadow-lg"
+              style={{
+                  color: '#b794f4'
                 }}>
               <Dice2 className="hidden sm:inline mr-3 h-10 w-10 text-neon-purple" />
               Генератор Рецептов
@@ -277,11 +331,14 @@ export default function Generator() {
             <p className="text-xl text-cream max-w-2xl mx-auto">
               Позвольте искусственному интеллекту создать для вас уникальный коктейль
             </p>
+            <div className="max-w-3xl mx-auto mt-6">
+              <div className="h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent"></div>
+            </div>
           </div>
 
           <div className="max-w-4xl mx-auto">
             {/* Generation Modes */}
-            <Card className="glass-effect border-none mb-8">
+            <Card className="glass-effect border-none mb-8" style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.2)' }}>
               <CardContent className="p-6">
                 <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-neon-turquoise to-electric bg-clip-text text-transparent"
                     style={{ textShadow: '0 0 15px rgba(0, 247, 239, 0.7)' }}>
@@ -299,7 +356,7 @@ export default function Generator() {
                             ? `${mode.color} text-night-blue` 
                             : 'border-gray-600 hover:border-neon-turquoise'
                         }`}
-                        onClick={() => setSelectedMode(mode.id)}
+                        onClick={() => handleModeChange(mode.id)}
                       >
                         <IconComponent className="h-6 w-6" />
                         <div className="text-center">
@@ -313,24 +370,45 @@ export default function Generator() {
               </CardContent>
             </Card>
 
-            {/* Generate Button */}
-            <div className="text-center mb-8">
+            {/* Action Buttons Container */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center items-stretch max-w-3xl mx-auto">
               <Button
                 onClick={handleGenerate}
                 disabled={isGenerating || generateRecipeMutation.isPending}
-                className="bg-gradient-to-r from-neon-purple to-neon-pink text-night-blue px-12 py-4 text-xl transition-all duration-200 shadow-lg"
-                style={{
-                  boxShadow: '0 0 20px rgba(139, 69, 255, 0.6), 0 0 40px rgba(255, 20, 147, 0.4), 0 8px 30px rgba(0, 0, 0, 0.3)'
-                }}
+                className="bg-gradient-to-r from-neon-purple to-neon-pink text-night-blue w-full sm:flex-1 h-11 text-base transition-all duration-200"
               >
-                <Sparkles className="mr-3 h-6 w-6" />
+                <Sparkles className="mr-2 h-4 w-4" />
                 {isGenerating ? "Создание..." : "Создать напиток"}
+              </Button>
+              
+              <Button
+                variant="outline"
+                onClick={() => setShowFilters(!showFilters)}
+                className="border-neon-turquoise text-neon-turquoise hover:bg-neon-turquoise hover:text-night-blue w-full sm:flex-1 h-11 text-base"
+              >
+                <Settings className="mr-2 h-4 w-4" />
+                {showFilters ? 'Скрыть фильтры' : 'Настроить фильтры'}
               </Button>
             </div>
 
+            {/* Filters Panel */}
+            {showFilters && (
+              <div className="mb-8" style={{ border: '1px solid rgba(156, 163, 175, 0.3)', borderRadius: '0.5rem', padding: '0.5rem' }}>
+                <GeneratorFilters
+                  filters={filters}
+                  onFiltersChange={handleFiltersChange}
+                  onReset={handleResetFilters}
+                />
+              </div>
+            )}
+
             {/* Generated Recipe */}
             {generatedRecipe && (
-              <Card className="glass-effect border-none">
+              <Card className="glass-effect border-none" style={{ 
+                border: '2px solid rgba(139, 69, 255, 0.6)', 
+                borderRadius: '1rem',
+                boxShadow: '0 0 20px rgba(139, 69, 255, 0.4), 0 0 40px rgba(139, 69, 255, 0.2)'
+              }}>
                 <CardContent className="p-8">
                   <div className="text-center mb-6">
                     <h3 className="text-3xl font-bold text-neon-amber mb-2">
@@ -347,7 +425,7 @@ export default function Generator() {
                   <div className="flex flex-col gap-8">
                     {/* Recipe Visual */}
                     <div className="text-center">
-                      <div className="flex justify-center items-center gap-6 mb-4">
+                      <div className="flex justify-center items-center gap-18 mb-4">
                         {/* Glass Image */}
                         <div className="flex-shrink-0">
                           <div className="relative w-32 h-48">
@@ -372,9 +450,9 @@ export default function Generator() {
                           >
                             {generatedRecipe.ingredients.map((item, index) => {
                               const totalVolume = generatedRecipe.ingredients.reduce((sum, i) => sum + i.amount, 0);
-                              const layerHeight = (item.amount / totalVolume) * 180; // 180px max height for pyramid
+                              const layerHeight = (item.amount / totalVolume) * 192; // 192px max height for full pyramid
                               const bottom = generatedRecipe.ingredients.slice(0, index).reduce((sum, i) => {
-                                return sum + (i.amount / totalVolume) * 180;
+                                return sum + (i.amount / totalVolume) * 192;
                               }, 0);
                               
                               return (
@@ -444,11 +522,18 @@ export default function Generator() {
                         ))}
                       </div>
                       
-                      <div className="flex flex-col sm:flex-row gap-3 items-center justify-center">
+                      <div className="flex flex-col sm:flex-row gap-3 items-stretch justify-between">
+                        <Button
+                          onClick={handleGenerate}
+                          disabled={isGenerating}
+                          className="glow-button bg-gradient-to-r from-neon-purple to-neon-pink text-white px-6 py-2 w-full sm:w-[32%] hover:opacity-90 h-12 flex items-center justify-center"
+                        >
+                          <RotateCcw className="h-4 w-4" />
+                        </Button>
                         <Button
                           onClick={handleSaveGenerated}
                           disabled={saveRecipeMutation.isPending}
-                          className="glow-button bg-neon-turquoise text-night-blue px-8 py-2 w-full sm:w-[45%] hover:bg-neon-turquoise/90"
+                          className="glow-button bg-neon-turquoise text-night-blue px-6 py-2 w-full sm:w-[32%] hover:bg-neon-turquoise/90 h-12 flex items-center justify-center"
                         >
                           <Save className="mr-2 h-4 w-4" />
                           {saveRecipeMutation.isPending ? "Сохранение..." : "Сохранить"}
@@ -456,7 +541,7 @@ export default function Generator() {
                         <Button
                           onClick={handleEditRecipe}
                           variant="outline"
-                          className="neon-border bg-transparent text-neon-purple px-8 py-2 w-full sm:w-[45%] hover:bg-neon-purple hover:text-night-blue"
+                          className="neon-border bg-transparent text-neon-purple px-6 py-2 w-full sm:w-[32%] hover:bg-neon-purple hover:text-night-blue h-12 flex items-center justify-center"
                         >
                           <Edit className="mr-2 h-4 w-4" />
                           Редактировать

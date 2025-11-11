@@ -131,6 +131,8 @@ export function CompactGlassSelector() {
                   }`}
                   loading="eager"
                   decoding="async"
+                  width="256"
+                  height="288"
                   style={{ 
                     imageRendering: 'crisp-edges',
                     willChange: 'transform, opacity',

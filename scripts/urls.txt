@@ -1,0 +1,142 @@
+# ════════════════════════════════════════════════════════════════
+#  СПИСОК URL ТОВАРОВ ALKOTEKA ДЛЯ ПАРСИНГА
+# ════════════════════════════════════════════════════════════════
+#
+# ИНСТРУКЦИЯ:
+# 1. Добавьте URL товаров (по одному на строку)
+# 2. Строки начинающиеся с # игнорируются (комментарии)
+# 3. Запустите: npm run parse:batch
+# 4. Результат будет в scripts/parsed-ingredients.ts
+#
+# ФОРМАТ URL:
+# https://alkoteka.com/product/{category}/{slug}_{id}
+#
+# ════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────
+# ПРИМЕРЫ (замените на реальные URL с alkoteka.com)
+# ─────────────────────────────────────────────────────────────────
+
+# Игристые вина
+# https://alkoteka.com/product/vino-igristoe/inkerman-muskat_15530
+
+# Тихие вина  
+# https://alkoteka.com/product/vino-tikhoe/inkerman-vaynmeyker-s-selekshn-pino-nuar_51813
+
+# Крепленые вина
+# https://alkoteka.com/product/vino-kreplenoe/massandra-portveyn_98765
+
+# ─────────────────────────────────────────────────────────────────
+# ДОБАВЬТЕ СВОИ URL НИЖЕ
+# ─────────────────────────────────────────────────────────────────
+
+# Вставьте реальные URL товаров здесь:
+
+# Виски (10 товаров)
+https://alkoteka.com/catalog/krepkiy-alkogol/dzhek-daniels-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/dzheymson-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/ballantayns-finest-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/grants-family-reserve-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/jim-beam-white-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/tullamore-dew-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/johnnie-walker-red-label-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/william-lawsons-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/chivas-regal-12-let-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/white-horse-700-ml/
+
+# Водка (10 товаров)
+https://alkoteka.com/catalog/krepkiy-alkogol/russkiy-standart-original-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/beluga-noble-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/green-mark-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/tsarskaya-original-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/imperia-russian-standart-premium-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/finlandia-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/moskovskaya-osobaya-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/platinum-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/nemiroff-original-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/absolyut-700-ml/
+
+# Джин (10 товаров)
+https://alkoteka.com/catalog/krepkiy-alkogol/bombey-sapfir-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/tankerey-london-dry-dzhin-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/gordons-london-dry-gin-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/beefeater-london-dry-gin-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/greenalls-original-london-dry-gin-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/gin-mare-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/hendricks-gin-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/plymouth-original-dry-gin-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/monkey-47-schwarzwald-dry-gin-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/gin-sul-500-ml/
+
+# Ликёры (10 товаров)
+https://alkoteka.com/catalog/krepkiy-alkogol/baileys-original-irish-cream-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/cointreau-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/jagermeister-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/amaretto-disaronno-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/kahlua-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/sambuca-molinari-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/aperol-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/campari-bitter-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/becherovka-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/malibu-700-ml/
+
+# Настойки (10 товаров)
+https://alkoteka.com/catalog/krepkiy-alkogol/zubrovka-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/starka-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/chernaya-smorodina-na-konyake-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/kedrovaya-na-kedrovykh-orekhakh-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/pertsovka-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/ryabinovaya-na-konyake-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/okhotnichya-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/limon-na-konyake-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/klюkvennaya-na-konyake-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/medovaya-na-konyake-500-ml/
+
+# Ром (10 товаров)
+https://alkoteka.com/catalog/krepkiy-alkogol/bakardi-beliy-rom-500-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/kapitan-morgan-spiced-gold-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/havana-club-anejo-3-anos-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/malibu-original-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/bacardi-carta-negra-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/captain-morgan-original-spiced-gold-1000-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/havana-club-anejo-7-anos-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/bacardi-carta-oro-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/diplomatico-reserva-exclusiva-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/plantation-3-stars-700-ml/
+
+# Текила (10 товаров)
+https://alkoteka.com/catalog/krepkiy-alkogol/tekila-olmeka-blanco-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/olmeca-gold-tekila-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/sauza-silver-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/sauza-gold-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/sierra-silver-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/sierra-gold-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/jose-cuervo-especial-gold-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/jose-cuervo-especial-silver-700-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/patron-silver-750-ml/
+https://alkoteka.com/catalog/krepkiy-alkogol/patron-reposado-750-ml/
+
+# Игристое вино (10 товаров)
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/abrau-durso-brut-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/abrau-durso-polusladkoe-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/bosca-anniversary-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/asti-martini-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/cinzano-asti-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/lambrusco-rosso-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/prosecco-doc-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/freixenet-carta-nevada-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/cava-brut-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/cremant-de-loire-brut-750-ml/
+
+# Шампанское (10 товаров)
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/moet-chandon-brut-imperial-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/veuve-clicquot-brut-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/dom-perignon-vintage-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/piper-heidsieck-brut-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/taittinger-brut-reserve-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/mumm-cordon-rouge-brut-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/laurent-perrier-brut-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/bollinger-special-cuvee-brut-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/pommery-brut-royal-750-ml/
+https://alkoteka.com/catalog/shampanskoe-i-igristoe/ruinart-blanc-de-blancs-750-ml/
+

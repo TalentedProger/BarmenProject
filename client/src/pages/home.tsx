@@ -43,8 +43,8 @@ export default function Home() {
       <section className="pt-20 pb-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-night-blue via-graphite to-charcoal"></div>
         <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-neon-purple rounded-full blur-3xl animate-pulse-slow"></div>
-          <div className="absolute bottom-20 right-10 w-80 h-80 bg-neon-turquoise rounded-full blur-3xl animate-pulse-slow"></div>
+          <div className="absolute top-20 left-10 w-64 h-64 bg-neon-purple rounded-full blur-3xl animate-pulse-slow" style={{willChange: 'transform, opacity'}}></div>
+          <div className="absolute bottom-20 right-10 w-80 h-80 bg-neon-turquoise rounded-full blur-3xl animate-pulse-slow" style={{willChange: 'transform, opacity'}}></div>
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
@@ -88,7 +88,7 @@ export default function Home() {
           
           <div className="grid md:grid-cols-4 gap-6">
             <Link href="/constructor">
-              <Card className="glass-effect border-none hover:scale-105 transition-transform cursor-pointer">
+              <Card className="glass-effect border-none hover:scale-105 transition-all duration-300 cursor-pointer" style={{willChange: 'transform'}}>
                 <CardContent className="p-6 text-center">
                   <div className="w-16 h-16 bg-neon-turquoise rounded-full flex items-center justify-center mx-auto mb-4">
                     <Martini className="text-night-blue text-2xl" />
@@ -102,7 +102,7 @@ export default function Home() {
             </Link>
             
             <Link href="/generator">
-              <Card className="glass-effect border-none hover:scale-105 transition-transform cursor-pointer">
+              <Card className="glass-effect border-none hover:scale-105 transition-all duration-300 cursor-pointer" style={{willChange: 'transform'}}>
                 <CardContent className="p-6 text-center">
                   <div className="w-16 h-16 bg-neon-purple rounded-full flex items-center justify-center mx-auto mb-4">
                     <Dice2 className="text-night-blue text-2xl" />
@@ -116,7 +116,7 @@ export default function Home() {
             </Link>
             
             <Link href="/catalog">
-              <Card className="glass-effect border-none hover:scale-105 transition-transform cursor-pointer">
+              <Card className="glass-effect border-none hover:scale-105 transition-all duration-300 cursor-pointer" style={{willChange: 'transform'}}>
                 <CardContent className="p-6 text-center">
                   <div className="w-16 h-16 bg-neon-amber rounded-full flex items-center justify-center mx-auto mb-4">
                     <BookOpen className="text-night-blue text-2xl" />
@@ -130,7 +130,7 @@ export default function Home() {
             </Link>
             
             <Link href="/profile">
-              <Card className="glass-effect border-none hover:scale-105 transition-transform cursor-pointer">
+              <Card className="glass-effect border-none hover:scale-105 transition-all duration-300 cursor-pointer" style={{willChange: 'transform'}}>
                 <CardContent className="p-6 text-center">
                   <div className="w-16 h-16 bg-neon-pink rounded-full flex items-center justify-center mx-auto mb-4">
                     <Star className="text-night-blue text-2xl" />

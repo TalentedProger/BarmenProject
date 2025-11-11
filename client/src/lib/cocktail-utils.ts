@@ -40,26 +40,46 @@ export function calculateCocktailStats(
     const pricePerLiter = parseFloat(ingredient.pricePerLiter.toString());
     const tasteProfile = ingredient.tasteProfile as TasteProfile;
 
-    // Convert to volume in ml for liquid ingredients or estimate for solid ingredients
-    let volumeInMl = quantity;
+    // Фрукты и декор измеряются в граммах или килограммах
+    const isFruitOrGarnish = ingredient.category === 'fruit' || ingredient.category === 'garnish';
+    const isKgBased = unit === "kg" || ingredient.unit === "kg";
+    const isGramBased = unit === "g" || ingredient.unit === "g";
+    
+    let volumeInMl = 0;
     let costCalculation = 0;
+    let weight = 0;
 
-    if (unit === "g" || ingredient.unit === "g") {
-      // For solid ingredients (fruits, spices), estimate volume and calculate cost per kg
-      volumeInMl = quantity * 0.8; // Approximate density conversion (g to ml)
-      costCalculation = (quantity / 1000) * pricePerLiter; // Price per kg for solid ingredients
+    if (isFruitOrGarnish || isGramBased || isKgBased) {
+      // Для фруктов и декора:
+      // - Добавляем объем пропорционально массе (1г ≈ 1мл для визуализации)
+      // - Цена рассчитывается в зависимости от единиц измерения
+      
+      if (isKgBased) {
+        // Если количество в килограммах (например 0.015 кг = 15г)
+        // pricePerLiter хранится в копейках (24900 = 249₽/кг)
+        // Делим на 100, чтобы получить рубли, затем умножаем на quantity
+        costCalculation = quantity * (pricePerLiter / 100);
+        weight = (quantity * 1000) / 100; // Конвертируем кг в граммы для веса
+        volumeInMl = quantity * 1000; // 1кг = 1000мл для визуализации заполнения
+      } else {
+        // Если количество в граммах
+        // pricePerLiter - это цена за 1кг (1000г) в копейках, делим на 100 для рублей
+        costCalculation = (quantity / 1000) * (pricePerLiter / 100);
+        weight = quantity / 100;
+        volumeInMl = quantity; // 1г = 1мл для визуализации заполнения
+      }
     } else {
-      // For liquid ingredients
+      // Для жидких ингредиентов (мл)
       volumeInMl = quantity;
-      costCalculation = (quantity / 1000) * pricePerLiter; // Price per liter for liquids
+      costCalculation = (quantity / 1000) * pricePerLiter; // цена за литр (1000мл)
+      weight = volumeInMl / 100;
     }
 
     totalVolume += volumeInMl;
     totalAlcohol += (volumeInMl * abv) / 100;
     totalCost += costCalculation;
 
-    // Weight taste contributions by volume
-    const weight = volumeInMl / 100; // Normalize by 100ml
+    // Weight taste contributions
     totalSweet += (tasteProfile.sweet || 0) * weight;
     totalSour += (tasteProfile.sour || 0) * weight;
     totalBitter += (tasteProfile.bitter || 0) * weight;
@@ -67,7 +87,26 @@ export function calculateCocktailStats(
   });
 
   const totalAbv = totalVolume > 0 ? (totalAlcohol / totalVolume) * 100 : 0;
-  const totalWeight = totalVolume / 100;
+  // Calculate total weight from ingredients for taste balance
+  // Weight includes both liquids and solids (fruits/garnish)
+  let totalIngredientWeight = 0;
+  ingredients.forEach(({ ingredient, amount, unit }) => {
+    const quantity = parseFloat(amount.toString());
+    const isFruitOrGarnish = ingredient.category === 'fruit' || ingredient.category === 'garnish';
+    const isKgBased = unit === "kg" || ingredient.unit === "kg";
+    
+    if (isFruitOrGarnish || isKgBased) {
+      if (isKgBased) {
+        totalIngredientWeight += (quantity * 1000) / 100; // kg to grams weight
+      } else {
+        totalIngredientWeight += quantity / 100; // grams weight
+      }
+    } else {
+      totalIngredientWeight += quantity / 100; // ml weight
+    }
+  });
+  
+  const totalWeight = totalIngredientWeight || 1; // Avoid division by zero
 
   return {
     totalVolume: Math.round(totalVolume),

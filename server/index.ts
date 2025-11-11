@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
@@ -42,8 +43,10 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  // Initialize database with sample data
-  await seedDatabase();
+  // Initialize database with sample data (only for PostgreSQL)
+  if (process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('postgresql')) {
+    await seedDatabase();
+  }
   
   const server = await registerRoutes(app);
 
@@ -73,11 +76,9 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
+  const host = process.env.NODE_ENV === 'development' ? 'localhost' : '0.0.0.0';
+  
+  server.listen(port, host, () => {
+    log(`serving on ${host}:${port}`);
   });
 })();

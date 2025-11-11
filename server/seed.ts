@@ -25,10 +25,10 @@ const sampleIngredients: InsertIngredient[] = [
   { name: "Кленовый сироп", category: "syrup", color: "#d2691e", abv: "0", pricePerLiter: "800", tasteProfile: { sweet: 9, sour: 0, bitter: 0, alcohol: 0 }, unit: "ml" },
   
   // Fruits
-  { name: "Лимон", category: "fruit", color: "#fff700", abv: "0", pricePerLiter: "100", tasteProfile: { sweet: 1, sour: 8, bitter: 1, alcohol: 0 }, unit: "piece" },
-  { name: "Лайм", category: "fruit", color: "#32cd32", abv: "0", pricePerLiter: "120", tasteProfile: { sweet: 1, sour: 7, bitter: 0, alcohol: 0 }, unit: "piece" },
-  { name: "Апельсин", category: "fruit", color: "#ffa500", abv: "0", pricePerLiter: "80", tasteProfile: { sweet: 6, sour: 3, bitter: 0, alcohol: 0 }, unit: "piece" },
-  { name: "Вишня", category: "fruit", color: "#dc143c", abv: "0", pricePerLiter: "200", tasteProfile: { sweet: 7, sour: 2, bitter: 0, alcohol: 0 }, unit: "piece" },
+  { name: "Лимон", category: "fruit", color: "#fff700", abv: "0", pricePerLiter: "100", tasteProfile: { sweet: 1, sour: 8, bitter: 1, alcohol: 0 }, unit: "g" },
+  { name: "Лайм", category: "fruit", color: "#32cd32", abv: "0", pricePerLiter: "120", tasteProfile: { sweet: 1, sour: 7, bitter: 0, alcohol: 0 }, unit: "g" },
+  { name: "Апельсин", category: "fruit", color: "#ffa500", abv: "0", pricePerLiter: "80", tasteProfile: { sweet: 6, sour: 3, bitter: 0, alcohol: 0 }, unit: "g" },
+  { name: "Вишня", category: "fruit", color: "#dc143c", abv: "0", pricePerLiter: "200", tasteProfile: { sweet: 7, sour: 2, bitter: 0, alcohol: 0 }, unit: "g" },
   
   // Ice
   { name: "Лед", category: "ice", color: "#e6f3ff", abv: "0", pricePerLiter: "50", tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 0 }, unit: "ml" },

@@ -6,13 +6,6 @@ export function handleGoogleLogin() {
   window.location.href = '/api/auth/google';
 }
 
-export function handleGuestLogin() {
-  return fetch('/api/auth/guest', {
-    method: 'POST',
-    credentials: 'include',
-  }).then(res => res.json());
-}
-
 export function handleLogout() {
   return fetch('/api/auth/logout', {
     method: 'POST',

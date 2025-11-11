@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useDeferredValue, useTransition } from "react";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
@@ -6,59 +6,64 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { Search, Filter, Star, Heart, Clock, TrendingUp } from "lucide-react";
+import { Search, Filter, Star, Heart, Clock, TrendingUp, SlidersHorizontal, X, Grid3X3, List, SortAsc, SortDesc } from "lucide-react";
 import { getCocktails, type CocktailData } from "@/data/cocktails";
 import { Link } from "wouter";
+
+// Вынесены наружу для оптимизации - не будут пересоздаваться при каждом рендере
+const getDifficultyColor = (difficulty: string) => {
+  switch (difficulty) {
+    case 'easy': return 'text-green-400';
+    case 'medium': return 'text-yellow-400';
+    case 'hard': return 'text-red-400';
+    default: return 'text-gray-400';
+  }
+};
+
+const getCategoryLabel = (category: string) => {
+  switch (category) {
+    case 'classic': return 'Классический';
+    case 'summer': return 'Летний';
+    case 'shot': return 'Шот';
+    case 'nonalcoholic': return 'Безалкогольный';
+    default: return category;
+  }
+};
+
+const getDifficultyLabel = (difficulty: string) => {
+  switch (difficulty) {
+    case 'easy': return 'Легкий';
+    case 'medium': return 'Средний';
+    case 'hard': return 'Сложный';
+    default: return difficulty;
+  }
+};
 
 // Компонент карточки коктейля - мемоизирован для оптимизации
 const CocktailCard = React.memo(({ 
   cocktail, 
   isFavorite, 
-  onFavorite 
+  onFavorite,
+  priority = false
 }: { 
   cocktail: CocktailData; 
   isFavorite: boolean;
   onFavorite: (id: string, isFavorite: boolean) => void;
+  priority?: boolean;
 }) => {
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'easy': return 'text-green-400';
-      case 'medium': return 'text-yellow-400';
-      case 'hard': return 'text-red-400';
-      default: return 'text-gray-400';
-    }
-  };
-
-  const getCategoryLabel = (category: string) => {
-    switch (category) {
-      case 'classic': return 'Классический';
-      case 'summer': return 'Летний';
-      case 'shot': return 'Шот';
-      case 'nonalcoholic': return 'Безалкогольный';
-      default: return category;
-    }
-  };
-
-  const getDifficultyLabel = (difficulty: string) => {
-    switch (difficulty) {
-      case 'easy': return 'Легкий';
-      case 'medium': return 'Средний';
-      case 'hard': return 'Сложный';
-      default: return difficulty;
-    }
-  };
 
   return (
-    <Card className="cocktail-card group relative overflow-hidden glass-effect border-none shadow-xl transition-all duration-300 ease-out bg-gradient-to-b from-slate-800/50 to-slate-900/50 w-full max-w-sm mx-auto">
+    <Card className="cocktail-card group relative glass-effect border-none shadow-xl transition-all duration-300 ease-out bg-gradient-to-b from-slate-800/50 to-slate-900/50 w-full max-w-sm mx-auto">
       {/* Фоновое изображение */}
       <div className="absolute inset-0">
         <img 
           src={cocktail.image} 
           alt={cocktail.name}
           className="cocktail-image w-full h-full object-cover transition-transform duration-300 ease-out"
-          loading="lazy"
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "low"}
           decoding="async"
-          style={{ contentVisibility: 'auto' }}
+          style={{ contentVisibility: 'auto', willChange: 'transform' }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 transition-all duration-300" />
       </div>
@@ -153,31 +158,76 @@ export default function Catalog() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
+  const [sortBy, setSortBy] = useState<"name" | "rating" | "difficulty">("name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [minRating, setMinRating] = useState(0);
+  const [maxPreparationTime, setMaxPreparationTime] = useState(30);
   const [displayedItems, setDisplayedItems] = useState(12);
   const [userFavorites, setUserFavorites] = useState<Set<string>>(new Set());
-  const [filteredCocktails, setFilteredCocktails] = useState<CocktailData[]>([]);
+  
+  // Оптимизация: используем useDeferredValue для неблокирующего поиска
+  const deferredSearchQuery = useDeferredValue(searchQuery);
+  const [isPending, startTransition] = useTransition();
+  
+  // Debounce для поиска - улучшает INP
+  const handleSearchChange = useCallback((value: string) => {
+    startTransition(() => {
+      setSearchQuery(value);
+    });
+  }, []);
 
   const ITEMS_PER_LOAD = 12;
 
   // Мемоизированные отфильтрованные коктейли для оптимизации
   const filteredCocktailsData = useMemo(() => {
-    return getCocktails({
-      search: searchQuery,
+    let cocktails = getCocktails({
+      search: deferredSearchQuery,
       category: selectedCategory === "all" ? undefined : selectedCategory,
       difficulty: selectedDifficulty === "all" ? undefined : selectedDifficulty,
     });
-  }, [searchQuery, selectedCategory, selectedDifficulty]);
 
-  // Обновляем состояние когда изменяются фильтры
-  useEffect(() => {
-    setFilteredCocktails(filteredCocktailsData);
-    setDisplayedItems(ITEMS_PER_LOAD);
-  }, [filteredCocktailsData]);
+    // Дополнительные фильтры
+    if (minRating > 0) {
+      cocktails = cocktails.filter(cocktail => parseFloat(cocktail.rating) >= minRating);
+    }
+
+    if (maxPreparationTime < 30) {
+      cocktails = cocktails.filter(cocktail => (cocktail.preparationTime || 10) <= maxPreparationTime);
+    }
+
+    // Сортировка
+    cocktails.sort((a, b) => {
+      let comparison = 0;
+      switch (sortBy) {
+        case "name":
+          comparison = a.name.localeCompare(b.name);
+          break;
+        case "rating":
+          comparison = parseFloat(a.rating) - parseFloat(b.rating);
+          break;
+        case "difficulty":
+          const difficultyOrder = { easy: 1, medium: 2, hard: 3 };
+          comparison = (difficultyOrder[a.difficulty as keyof typeof difficultyOrder] || 2) - 
+                      (difficultyOrder[b.difficulty as keyof typeof difficultyOrder] || 2);
+          break;
+      }
+      return sortOrder === "asc" ? comparison : -comparison;
+    });
+
+    return cocktails;
+  }, [deferredSearchQuery, selectedCategory, selectedDifficulty, sortBy, sortOrder, minRating, maxPreparationTime]);
 
   // Получаем отображаемые коктейли с учетом лимита - мемоизировано
   const displayedCocktails = useMemo(() => {
-    return filteredCocktails.slice(0, displayedItems);
-  }, [filteredCocktails, displayedItems]);
+    return filteredCocktailsData.slice(0, displayedItems);
+  }, [filteredCocktailsData, displayedItems]);
+  
+  // Сброс пагинации при изменении фильтров
+  useEffect(() => {
+    setDisplayedItems(ITEMS_PER_LOAD);
+  }, [deferredSearchQuery, selectedCategory, selectedDifficulty, sortBy, sortOrder, minRating, maxPreparationTime]);
 
   const handleSearch = useCallback(() => {
     // Поиск происходит автоматически через useMemo
@@ -206,7 +256,7 @@ export default function Catalog() {
     <div className="min-h-screen bg-night-blue text-ice-white">
       <Header />
       
-      <section className="pt-32 pb-16 bg-gradient-to-b from-night-blue to-charcoal">
+      <section className="pt-48 pb-16 bg-gradient-to-b from-night-blue to-charcoal">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-neon-amber via-yellow-400 to-neon-amber bg-clip-text text-transparent" 
@@ -217,30 +267,46 @@ export default function Catalog() {
               Откройте для себя тысячи проверенных рецептов от профессиональных барменов
             </p>
           </div>
-
           {/* Search and Filters */}
           <Card className="glass-effect border-none mb-8">
             <CardContent className="p-6">
               <div className="flex flex-col gap-4">
+                {/* Search Bar */}
                 <div className="w-full">
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
-                      placeholder="Поиск коктейлей..."
+                      placeholder="Поиск коктейлей по названию, ингредиентам..."
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                      className="pl-10 bg-night-blue border-gray-600 focus:border-neon-turquoise"
+                      onChange={(e) => handleSearchChange(e.target.value)}
+                      className="pl-10 pr-10 bg-night-blue border-gray-600 focus:border-neon-turquoise"
                     />
+                    {searchQuery && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSearchQuery("")}
+                        className="absolute right-2 top-2 h-6 w-6 p-0 text-gray-400 hover:text-white"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
                   </div>
                 </div>
                 
-                <div className="flex gap-2 sm:gap-3">
-                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger className="flex-1 min-w-0 bg-night-blue border-gray-600 focus:border-neon-turquoise">
+                {/* Main Filters Row */}
+                <div className="flex flex-wrap gap-2 sm:gap-3 items-center">
+                  <Select value={selectedCategory} onValueChange={(value) => startTransition(() => setSelectedCategory(value))} modal={false}>
+                    <SelectTrigger className="flex-1 min-w-[140px] bg-night-blue border-gray-600 focus:border-neon-turquoise">
                       <SelectValue placeholder="Все категории" />
                     </SelectTrigger>
-                    <SelectContent className="bg-night-blue border-gray-600">
+                    <SelectContent 
+                      position="popper"
+                      side="bottom"
+                      align="start"
+                      sideOffset={4}
+                      className="bg-night-blue border-gray-600 max-h-[300px] overflow-y-auto"
+                    >
                       <SelectItem value="all">Все категории</SelectItem>
                       <SelectItem value="classic">Классические</SelectItem>
                       <SelectItem value="summer">Летние</SelectItem>
@@ -249,64 +315,207 @@ export default function Catalog() {
                     </SelectContent>
                   </Select>
                   
-                  <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-                    <SelectTrigger className="flex-1 min-w-0 bg-night-blue border-gray-600 focus:border-neon-turquoise">
-                      <SelectValue placeholder="Любая сложность" />
+                  <Select value={selectedDifficulty} onValueChange={(value) => startTransition(() => setSelectedDifficulty(value))} modal={false}>
+                    <SelectTrigger className="flex-1 min-w-[120px] bg-night-blue border-gray-600 focus:border-neon-turquoise">
+                      <SelectValue placeholder="Сложность" />
                     </SelectTrigger>
-                    <SelectContent className="bg-night-blue border-gray-600">
+                    <SelectContent 
+                      position="popper"
+                      side="bottom"
+                      align="start"
+                      sideOffset={4}
+                      className="bg-night-blue border-gray-600 max-h-[300px] overflow-y-auto"
+                    >
                       <SelectItem value="all">Любая сложность</SelectItem>
-                      <SelectItem value="easy">Легкая</SelectItem>
-                      <SelectItem value="medium">Средняя</SelectItem>
-                      <SelectItem value="hard">Сложная</SelectItem>
+                      <SelectItem value="easy">Легкий</SelectItem>
+                      <SelectItem value="medium">Средний</SelectItem>
+                      <SelectItem value="hard">Сложный</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
-                
-                <div className="flex justify-center">
+
+                  {/* Sort Controls */}
+                  <Select value={sortBy} onValueChange={(value: "name" | "rating" | "difficulty") => startTransition(() => setSortBy(value))} modal={false}>
+                    <SelectTrigger className="flex-1 min-w-[120px] bg-night-blue border-gray-600 focus:border-neon-turquoise">
+                      <SelectValue placeholder="Сортировка" />
+                    </SelectTrigger>
+                    <SelectContent 
+                      position="popper"
+                      side="bottom"
+                      align="start"
+                      sideOffset={4}
+                      className="bg-night-blue border-gray-600 max-h-[300px] overflow-y-auto"
+                    >
+                      <SelectItem value="name">По названию</SelectItem>
+                      <SelectItem value="rating">По рейтингу</SelectItem>
+                      <SelectItem value="difficulty">По сложности</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  
                   <Button
-                    onClick={handleSearch}
-                    className="bg-neon-turquoise text-night-blue hover:bg-neon-turquoise/90 px-8 py-3 text-lg font-semibold rounded-xl shadow-lg"
-                    style={{
-                      boxShadow: '0 0 15px rgba(0, 247, 239, 0.4), 0 0 30px rgba(0, 247, 239, 0.2), 0 8px 20px rgba(0, 0, 0, 0.3)'
-                    }}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                    className="border-gray-600 text-gray-300 hover:text-white hover:border-neon-turquoise"
                   >
-                    <Filter className="mr-2 h-5 w-5" />
-                    Поиск
+                    {sortOrder === "asc" ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
+                  </Button>
+
+                  {/* View Mode Toggle */}
+                  <div className="flex border border-gray-600 rounded-lg overflow-hidden">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setViewMode("grid")}
+                      className={`${viewMode === "grid" ? "bg-neon-turquoise text-black" : "text-gray-300 hover:text-white"} rounded-none`}
+                    >
+                      <Grid3X3 className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setViewMode("list")}
+                      className={`${viewMode === "list" ? "bg-neon-turquoise text-black" : "text-gray-300 hover:text-white"} rounded-none`}
+                    >
+                      <List className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  {/* Advanced Filters Toggle */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                    className="border-gray-600 text-gray-300 hover:text-white hover:border-neon-turquoise"
+                  >
+                    <SlidersHorizontal className="h-4 w-4 mr-2" />
+                    Фильтры
                   </Button>
                 </div>
+
+                {/* Advanced Filters */}
+                {showAdvancedFilters && (
+                  <div className="border-t border-gray-600 pt-4 mt-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Rating Filter */}
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-300">Минимальный рейтинг: {minRating}</label>
+                        <input
+                          type="range"
+                          min="0"
+                          max="5"
+                          step="0.5"
+                          value={minRating}
+                          onChange={(e) => setMinRating(parseFloat(e.target.value))}
+                          className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                        />
+                        <div className="flex justify-between text-xs text-gray-400">
+                          <span>0</span>
+                          <span>2.5</span>
+                          <span>5</span>
+                        </div>
+                      </div>
+
+                      {/* Preparation Time Filter */}
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-300">
+                          Время приготовления: {maxPreparationTime === 30 ? "любое" : `до ${maxPreparationTime} мин`}
+                        </label>
+                        <input
+                          type="range"
+                          min="5"
+                          max="30"
+                          step="5"
+                          value={maxPreparationTime}
+                          onChange={(e) => setMaxPreparationTime(parseInt(e.target.value))}
+                          className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                        />
+                        <div className="flex justify-between text-xs text-gray-400">
+                          <span>5 мин</span>
+                          <span>15 мин</span>
+                          <span>30+ мин</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Reset Filters */}
+                    <div className="flex justify-end mt-4">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setMinRating(0);
+                          setMaxPreparationTime(30);
+                          setSelectedCategory("all");
+                          setSelectedDifficulty("all");
+                          setSearchQuery("");
+                        }}
+                        className="border-gray-600 text-gray-300 hover:text-white hover:border-red-500"
+                      >
+                        Сбросить все фильтры
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
 
-          {/* Cocktails Grid */}
-          {filteredCocktails.length === 0 ? (
+          {/* Results Info */}
+          {filteredCocktailsData.length > 0 && (
+            <div className="flex justify-between items-center mb-6">
+              <p className="text-gray-400">
+                Показано {displayedCocktails.length} из {filteredCocktailsData.length} рецептов
+              </p>
+              {(searchQuery || selectedCategory !== "all" || selectedDifficulty !== "all" || minRating > 0 || maxPreparationTime < 30) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setMinRating(0);
+                    setMaxPreparationTime(30);
+                    setSelectedCategory("all");
+                    setSelectedDifficulty("all");
+                    setSearchQuery("");
+                  }}
+                  className="text-gray-400 hover:text-white"
+                >
+                  Очистить фильтры
+                </Button>
+              )}
+            </div>
+          )}
+
+          {/* Cocktails Display */}
+          {filteredCocktailsData.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-400 text-lg">Рецепты не найдены</p>
-              <p className="text-gray-500 mt-2">Попробуйте изменить параметры поиска</p>
+              <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10 max-w-md mx-auto">
+                <Search className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+                <p className="text-gray-400 text-lg mb-2">Рецепты не найдены</p>
+                <p className="text-gray-500">Попробуйте изменить параметры поиска</p>
+              </div>
             </div>
           ) : (
             <>
-              {/* Адаптивная сетка с фиксированным лейаутом */}
-              <div 
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 auto-rows-fr"
-                style={{ 
-                  containIntrinsicSize: '300px 400px', 
-                  contentVisibility: 'auto',
-                  gridAutoFlow: 'row dense'
-                }}
-              >
-                {displayedCocktails.map((cocktail) => (
-                  <CocktailCard
-                    key={cocktail.id}
-                    cocktail={cocktail}
-                    onFavorite={handleFavorite}
-                    isFavorite={userFavorites.has(cocktail.id)}
-                  />
+              {/* Grid or List View */}
+              <div className={
+                viewMode === "grid" 
+                  ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 auto-rows-fr"
+                  : "space-y-4"
+              }>
+                {displayedCocktails.map((cocktail, index) => (
+                  <div key={cocktail.id} className={viewMode === "list" ? "flex" : ""}>
+                    <CocktailCard
+                      cocktail={cocktail}
+                      onFavorite={handleFavorite}
+                      isFavorite={userFavorites.has(cocktail.id)}
+                      priority={index < 4}
+                    />
+                  </div>
                 ))}
               </div>
 
               {/* Load More Button */}
-              {displayedItems < filteredCocktails.length && (
+              {displayedItems < filteredCocktailsData.length && (
                 <div className="text-center mt-12">
                   <Button
                     onClick={handleLoadMore}
@@ -316,7 +525,7 @@ export default function Catalog() {
                     }}
                   >
                     <TrendingUp className="mr-2 h-4 w-4" />
-                    Показать еще ({filteredCocktails.length - displayedItems} осталось)
+                    Показать еще ({filteredCocktailsData.length - displayedItems} осталось)
                   </Button>
                 </div>
               )}

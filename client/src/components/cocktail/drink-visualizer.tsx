@@ -89,8 +89,8 @@ export default function DrinkVisualizer() {
     }, 0);
     
     const glassHeight = 192; // 48 * 4 = 192px
-    // Увеличиваем максимальную высоту заполнения до 95%
-    const filledHeight = Math.min(glassHeight * 0.95, (totalVolume / selectedGlass.capacity) * glassHeight);
+    // Максимальная высота заполнения 100%
+    const filledHeight = Math.min(glassHeight, (totalVolume / selectedGlass.capacity) * glassHeight);
     const isFull = totalVolume >= selectedGlass.capacity;
 
     let currentHeight = 0;
@@ -108,17 +108,7 @@ export default function DrinkVisualizer() {
       return layer;
     });
     
-    // Добавляем последний слой для полного заполнения верха (пирамиды)
-    if (layers.length > 0 && currentHeight < glassHeight * 0.95) {
-      const topLayerColor = layers[layers.length - 1].color;
-      layers.push({
-        height: (glassHeight * 0.95) - currentHeight,
-        bottom: currentHeight,
-        color: topLayerColor + '44', // Полупрозрачность
-        name: 'Пена',
-        id: 'top-layer'
-      });
-    }
+    // Убираем дополнительный слой - заполнение теперь идет до 100%
 
     return (
       <div className="flex justify-center">
@@ -143,14 +133,21 @@ export default function DrinkVisualizer() {
           )}
           
           <div 
-            className="relative w-32 h-48 bg-gradient-to-b from-gray-700/20 to-gray-900/40 border-2 border-gray-500 overflow-hidden shadow-2xl transition-all duration-1000 ease-out"
+            className="relative w-32 h-48 overflow-hidden transition-all duration-1000 ease-out"
             style={{ 
-              clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)',
-              borderRadius: '0 0 8px 8px',
-              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.1)',
-              filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))',
+              borderRadius: '12px',
+              border: '2px solid rgba(156, 163, 175, 0.4)',
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5), 0 6px 15px rgba(0, 0, 0, 0.4)',
+              filter: 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3))',
+              background: 'linear-gradient(to bottom, rgba(55, 65, 81, 0.3), rgba(17, 24, 39, 0.5))',
             }}
           >
+            <div
+              className="absolute inset-0"
+              style={{
+                clipPath: 'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)',
+              }}
+            >
             {/* Liquid layers */}
             {layers.map((layer, index) => (
               <div
@@ -178,8 +175,7 @@ export default function DrinkVisualizer() {
             
             {/* Subtle inner highlight */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-5 w-2"></div>
-            
-
+            </div>
           </div>
           
           {/* Tooltip removed - now shown above visualization */}
@@ -202,7 +198,7 @@ export default function DrinkVisualizer() {
 
   return (
     <div className="flex flex-col h-full">
-      <h3 className="text-2xl font-semibold mb-4 text-foreground">
+      <h3 className="text-2xl font-semibold mb-4 text-foreground text-center">
         Визуализация
       </h3>
       
@@ -240,8 +236,8 @@ export default function DrinkVisualizer() {
             className="text-sm md:text-lg font-bold animate-fadeInUp"
             style={{
               color: '#22c55e',
-              textShadow: '0 0 10px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.5), 0 0 30px rgba(34, 197, 94, 0.3)',
-              filter: 'drop-shadow(0 2px 4px rgba(34, 197, 94, 0.4))'
+              textShadow: '0 0 4px rgba(34, 197, 94, 0.6), 0 0 8px rgba(34, 197, 94, 0.3)',
+              filter: 'drop-shadow(0 1px 2px rgba(34, 197, 94, 0.3))'
             }}
           >
             Стакан заполнен
@@ -252,8 +248,8 @@ export default function DrinkVisualizer() {
             className="text-sm md:text-lg font-bold animate-fadeInUp"
             style={{
               color: '#ef4444',
-              textShadow: '0 0 10px rgba(239, 68, 68, 0.8), 0 0 20px rgba(239, 68, 68, 0.5), 0 0 30px rgba(239, 68, 68, 0.3)',
-              filter: 'drop-shadow(0 2px 4px rgba(239, 68, 68, 0.4))'
+              textShadow: '0 0 4px rgba(239, 68, 68, 0.6), 0 0 8px rgba(239, 68, 68, 0.3)',
+              filter: 'drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))'
             }}
           >
             Стакан переполнен

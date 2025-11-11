@@ -172,7 +172,7 @@ export default function Profile() {
     }
     updateProfileMutation.mutate({ 
       nickname: nickname.trim(),
-      profileImageUrl: profileImage || (user as User)?.profileImageUrl || undefined
+      profileImageUrl: profileImage || undefined
     });
   };
 
@@ -198,8 +198,13 @@ export default function Profile() {
 
   const favoriteMutation = useMutation({
     mutationFn: async ({ recipeId, isFavorite }: { recipeId: string; isFavorite: boolean }) => {
-      // Demo mode - just show toast
-      return Promise.resolve();
+      if (isFavorite) {
+        // Remove from favorites
+        return await apiRequest("DELETE", `/api/favorites/${recipeId}`);
+      } else {
+        // Add to favorites
+        return await apiRequest("POST", "/api/favorites", { recipeId });
+      }
     },
     onSuccess: (_, { recipeId, isFavorite }) => {
       const newFavorites = new Set(userFavorites);
@@ -210,6 +215,7 @@ export default function Profile() {
       }
       setUserFavorites(newFavorites);
       
+      queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
       queryClient.invalidateQueries({ queryKey: ["/api/recipes"] });
       
       toast({
@@ -276,7 +282,7 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-night-blue text-ice-white">
       <Header />
-      <section className="pt-32 pb-16 bg-gradient-to-b from-night-blue to-charcoal">
+      <section className="pt-48 pb-16 bg-gradient-to-b from-night-blue to-charcoal">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
@@ -346,26 +352,15 @@ export default function Profile() {
                             onChange={handlePhotoUpload}
                           />
                         </div>
-                        <div className="flex gap-2 mt-6">
+                        <div className="mt-6">
                           <Button
                             size="sm"
                             onClick={handleSaveProfile}
                             disabled={updateProfileMutation.isPending}
-                            className="flex-1 bg-gradient-to-r from-neon-turquoise to-electric text-black"
+                            className="w-full bg-gradient-to-r from-neon-turquoise to-electric text-black"
                           >
                             <Save className="h-4 w-4 mr-1" />
                             Сохранить
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => {
-                              setEditingProfile(false);
-                              setNickname((user as any)?.nickname || '');
-                            }}
-                            className="flex-1 border-white/20 text-white hover:bg-white/10"
-                          >
-                            Отмена
                           </Button>
                         </div>
                       </div>
@@ -412,9 +407,9 @@ export default function Profile() {
               </Card>
 
               {/* Stats Cards */}
-              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-turquoise/10 to-electric/5 border border-neon-turquoise/20 backdrop-blur-md shadow-md shadow-cyan-500/10 hover:shadow-lg hover:shadow-cyan-500/15 transition-all duration-300">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-turquoise/10 to-electric/5 border border-neon-turquoise/20 backdrop-blur-md shadow-md shadow-cyan-500/10 hover:shadow-lg hover:shadow-cyan-500/15 transition-all duration-300 flex items-center">
                 <div className="absolute inset-0 bg-gradient-to-br from-neon-turquoise/5 to-transparent"></div>
-                <CardContent className="relative p-6 text-center">
+                <CardContent className="relative p-6 text-center w-full">
                   <div className="bg-gradient-to-br from-neon-turquoise/20 to-electric/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <TrendingUp className="text-neon-turquoise text-2xl" />
                   </div>
@@ -425,9 +420,9 @@ export default function Profile() {
                 </CardContent>
               </Card>
               
-              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-amber/10 to-yellow-500/5 border border-neon-amber/20 backdrop-blur-md shadow-md shadow-yellow-500/10 hover:shadow-lg hover:shadow-yellow-500/15 transition-all duration-300">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-amber/10 to-yellow-500/5 border border-neon-amber/20 backdrop-blur-md shadow-md shadow-yellow-500/10 hover:shadow-lg hover:shadow-yellow-500/15 transition-all duration-300 flex items-center">
                 <div className="absolute inset-0 bg-gradient-to-br from-neon-amber/5 to-transparent"></div>
-                <CardContent className="relative p-6 text-center">
+                <CardContent className="relative p-6 text-center w-full">
                   <div className="bg-gradient-to-br from-neon-amber/20 to-yellow-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Trophy className="text-neon-amber text-2xl" />
                   </div>
@@ -438,9 +433,9 @@ export default function Profile() {
                 </CardContent>
               </Card>
               
-              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-pink/10 to-purple-500/5 border border-neon-pink/20 backdrop-blur-md shadow-md shadow-pink-500/10 hover:shadow-lg hover:shadow-pink-500/15 transition-all duration-300">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-neon-pink/10 to-purple-500/5 border border-neon-pink/20 backdrop-blur-md shadow-md shadow-pink-500/10 hover:shadow-lg hover:shadow-pink-500/15 transition-all duration-300 flex items-center">
                 <div className="absolute inset-0 bg-gradient-to-br from-neon-pink/5 to-transparent"></div>
-                <CardContent className="relative p-6 text-center">
+                <CardContent className="relative p-6 text-center w-full">
                   <div className="bg-gradient-to-br from-neon-pink/20 to-purple-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Clock className="text-neon-pink text-2xl" />
                   </div>

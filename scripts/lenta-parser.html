@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Парсер товаров Lenta.com</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #e63946 0%, #f77f00 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    h1 {
+      color: #e63946;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    .step {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border-left: 4px solid #e63946;
+    }
+    .step h2 {
+      color: #333;
+      font-size: 18px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .step-number {
+      background: #e63946;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    button {
+      background: linear-gradient(135deg, #e63946 0%, #f77f00 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin: 5px;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(230, 57, 70, 0.4);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    textarea {
+      width: 100%;
+      min-height: 300px;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      resize: vertical;
+      margin-top: 10px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .stat-card {
+      background: linear-gradient(135deg, #e63946 0%, #f77f00 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .success {
+      background: #10b981;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      display: none;
+    }
+    .code-block {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+    .warning {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      color: #856404;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .category-selector {
+      display: flex;
+      gap: 10px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+    .category-btn {
+      padding: 8px 16px;
+      background: #f0f0f0;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .category-btn.active {
+      background: #e63946;
+      color: white;
+      border-color: #e63946;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      margin: 5px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🛒 Парсер товаров Lenta.com</h1>
+    <p class="subtitle">Инструмент для ручного сбора данных с lenta.com</p>
+
+    <div class="warning">
+      <strong>⚠️ Важно!</strong> Откройте страницу каталога lenta.com в другой вкладке, затем используйте bookmarklet ниже для сбора данных.
+    </div>
+
+    <!-- Шаг 1: Выбор категории -->
+    <div class="step">
+      <h2>
+        <span class="step-number">1</span>
+        Выберите категорию товаров
+      </h2>
+      <div class="category-selector">
+        <button class="category-btn" data-category="cold-tea">Холодный чай</button>
+        <button class="category-btn" data-category="bitters">Биттеры</button>
+        <button class="category-btn" data-category="nectars">Нектары</button>
+        <button class="category-btn" data-category="energy">Энергетики</button>
+      </div>
+      <div id="selected-category" style="margin-top: 10px; color: #666;"></div>
+    </div>
+
+    <!-- Шаг 2: Bookmarklet -->
+    <div class="step">
+      <h2>
+        <span class="step-number">2</span>
+        Создайте закладку для сбора данных
+      </h2>
+      <p style="margin-bottom: 15px;">Перетащите эту ссылку в панель закладок браузера:</p>
+      <p style="margin: 15px 0; background: #f0f0f0; padding: 15px; border-radius: 8px; text-align: center;">
+        <a href="javascript:(function(){const products=[];const cards=document.querySelectorAll('[data-product-card], .product-card, .sku-card-small, [class*=product], [class*=item]');console.log('Найдено карточек:',cards.length);cards.forEach(card=>{const nameEl=card.querySelector('[data-product-name], .product-name, .sku-card-small__title, h3, h4, [class*=title]');const priceEl=card.querySelector('[data-price], .price, .sku-card-small__price, [class*=price]');const linkEl=card.querySelector('a[href*=product], a[href*=catalog]');const imgEl=card.querySelector('img[src*=product], img[src*=catalog], img[data-src]');if(!nameEl||!linkEl)return;const name=nameEl.textContent.trim();const priceText=priceEl?priceEl.textContent.trim():'0';const price=parseInt(priceText.replace(/\D/g,''))||0;const url=linkEl.href;const img=imgEl?(imgEl.src||imgEl.dataset.src||''):'';const volumeMatch=name.match(/(\d+(?:[.,]\d+)?)\s*(л|мл|ml|l)/i);let volume=volumeMatch?volumeMatch[0]:'';const abvMatch=name.match(/(\d+(?:[.,]\d+)?)\s*%/);let abv=abvMatch?parseFloat(abvMatch[1].replace(',','.')):0;products.push({name,price,url,volume,abv,imageUrl:img});});if(products.length===0){alert('Товары не найдены! Попробуйте другие селекторы.');return;}const json=JSON.stringify(products,null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='lenta-products.json';a.click();console.log('Собрано товаров:',products.length);alert('Собрано '+products.length+' товаров! Файл lenta-products.json скачан.');})();" 
+           style="font-size: 18px; font-weight: bold; color: #e63946; text-decoration: none; padding: 10px 20px; background: white; border: 2px dashed #e63946; border-radius: 8px; display: inline-block;">
+          📥 Собрать товары с Lenta
+        </a>
+      </p>
+      <p style="color: #666; font-size: 13px; margin-top: 10px;">
+        💡 <strong>Как использовать:</strong><br>
+        1. Перетащите ссылку выше в панель закладок<br>
+        2. Откройте любую страницу каталога lenta.com<br>
+        3. Нажмите на созданную закладку<br>
+        4. Файл с данными скачается автоматически
+      </p>
+    </div>
+
+    <!-- Шаг 3: Вставка JSON -->
+    <div class="step">
+      <h2>
+        <span class="step-number">3</span>
+        Вставьте собранные данные (JSON)
+      </h2>
+      <textarea id="jsonInput" placeholder='[
+  {
+    "name": "Холодный чай Липтон 0.5л",
+    "price": 89,
+    "url": "https://lenta.com/product/...",
+    "volume": "0.5 л",
+    "abv": 0,
+    "imageUrl": "https://..."
+  }
+]'></textarea>
+      <button onclick="processData()">Обработать данные</button>
+    </div>
+
+    <!-- Шаг 4: Результат -->
+    <div class="step" id="resultStep" style="display: none;">
+      <h2>
+        <span class="step-number">4</span>
+        Результат обработки
+      </h2>
+      <div class="stats" id="stats"></div>
+      <div class="code-block" id="output"></div>
+      <div style="margin-top: 15px;">
+        <button onclick="copyToClipboard()">📋 Копировать код</button>
+        <button onclick="downloadFile()">💾 Скачать .ts файл</button>
+      </div>
+      <div class="success" id="successMsg"></div>
+    </div>
+  </div>
+
+  <script>
+    let selectedCategory = '';
+    let processedCode = '';
+    let categoryConfig = {
+      'cold-tea': {
+        name: 'LENTA_COLD_TEA',
+        category: 'soda',
+        file: 'lenta-cold-tea.ts',
+        description: 'Холодный чай с lenta.com',
+        color: '#D2691E'
+      },
+      'bitters': {
+        name: 'LENTA_BITTERS',
+        category: 'bitter',
+        file: 'lenta-bitters.ts',
+        description: 'Биттеры с lenta.com',
+        color: '#8B0000'
+      },
+      'nectars': {
+        name: 'LENTA_NECTARS',
+        category: 'juice',
+        file: 'lenta-nectars.ts',
+        description: 'Нектары с lenta.com',
+        color: '#FFA500'
+      },
+      'energy': {
+        name: 'LENTA_ENERGY_DRINKS',
+        category: 'mixer',
+        file: 'lenta-energy-drinks.ts',
+        description: 'Энергетики с lenta.com',
+        color: '#00CED1'
+      }
+    };
+
+    // Category selection
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedCategory = this.dataset.category;
+        document.getElementById('selected-category').textContent = 
+          `Выбрана категория: ${categoryConfig[selectedCategory].description}`;
+      });
+    });
+
+    function parseVolume(volumeText) {
+      if (!volumeText) return 0;
+      const match = volumeText.match(/(\d+(?:[.,]\d+)?)\s*(л|мл|ml|l)/i);
+      if (!match) return 0;
+      
+      const value = parseFloat(match[1].replace(',', '.'));
+      const unit = match[2].toLowerCase();
+      
+      return unit === 'л' || unit === 'l' ? value * 1000 : value;
+    }
+
+    function detectTasteProfile(name, category) {
+      const nameLower = name.toLowerCase();
+      
+      if (category === 'bitter') {
+        return { sweet: 1, sour: 0, bitter: 9, alcohol: 8 };
+      }
+      
+      if (category === 'mixer') { // энергетики
+        return { sweet: 7, sour: 2, bitter: 1, alcohol: 0 };
+      }
+      
+      if (category === 'juice') { // нектары
+        if (nameLower.includes('апельсин') || nameLower.includes('orange')) {
+          return { sweet: 7, sour: 3, bitter: 0, alcohol: 0 };
+        }
+        if (nameLower.includes('яблок') || nameLower.includes('apple')) {
+          return { sweet: 7, sour: 2, bitter: 0, alcohol: 0 };
+        }
+        if (nameLower.includes('персик') || nameLower.includes('peach')) {
+          return { sweet: 8, sour: 1, bitter: 0, alcohol: 0 };
+        }
+        return { sweet: 7, sour: 2, bitter: 0, alcohol: 0 };
+      }
+      
+      // холодный чай
+      return { sweet: 6, sour: 3, bitter: 1, alcohol: 0 };
+    }
+
+    function cleanName(name) {
+      return name
+        .replace(/\s+/g, ' ')
+        .replace(/\(.*?\)/g, '')
+        .trim();
+    }
+
+    function processData() {
+      if (!selectedCategory) {
+        alert('Выберите категорию товаров!');
+        return;
+      }
+
+      const input = document.getElementById('jsonInput').value;
+      
+      if (!input.trim()) {
+        alert('Вставьте JSON с данными!');
+        return;
+      }
+
+      try {
+        const rawData = JSON.parse(input);
+        const config = categoryConfig[selectedCategory];
+        
+        let tsCode = `import type { Ingredient } from "@shared/schema";\n\n`;
+        tsCode += `/**\n * ${config.description}\n`;
+        tsCode += ` * Данные собраны вручную (${new Date().toLocaleDateString('ru-RU')})\n`;
+        tsCode += ` * Категория: ${config.category}\n`;
+        tsCode += ` */\n\n`;
+        tsCode += `export const ${config.name}: Partial<Ingredient>[] = [\n`;
+        
+        rawData.forEach((item, index) => {
+          const volumeMl = parseVolume(item.volume);
+          const pricePerLiter = volumeMl > 0 ? Math.round((item.price / volumeMl) * 1000) : 0;
+          const cleanedName = cleanName(item.name);
+          const tasteProfile = detectTasteProfile(item.name, config.category);
+          
+          tsCode += `  { `;
+          tsCode += `name: "${cleanedName}", `;
+          tsCode += `category: "${config.category}", `;
+          tsCode += `color: "${config.color}", `;
+          tsCode += `abv: ${item.abv || 0}, `;
+          tsCode += `pricePerLiter: ${pricePerLiter}, `;
+          if (volumeMl > 0) tsCode += `volume: ${volumeMl}, `;
+          tsCode += `tasteProfile: { sweet: ${tasteProfile.sweet}, sour: ${tasteProfile.sour}, bitter: ${tasteProfile.bitter}, alcohol: ${tasteProfile.alcohol} }, `;
+          tsCode += `unit: "ml", `;
+          tsCode += `sourceUrl: "${item.url}", `;
+          tsCode += `sourceName: "Lenta", `;
+          tsCode += `sourceIcon: "https://lenta.com/favicon.ico"`;
+          if (item.imageUrl) tsCode += `, imageUrl: "${item.imageUrl}"`;
+          tsCode += ` }`;
+          tsCode += index < rawData.length - 1 ? ',\n' : '\n';
+        });
+        
+        tsCode += `];\n`;
+        
+        processedCode = tsCode;
+        
+        // Show results
+        document.getElementById('resultStep').style.display = 'block';
+        document.getElementById('output').textContent = tsCode;
+        
+        // Show stats
+        const statsHtml = `
+          <div class="stat-card">
+            <div class="stat-value">${rawData.length}</div>
+            <div class="stat-label">Товаров обработано</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${config.category}</div>
+            <div class="stat-label">Категория</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${config.file}</div>
+            <div class="stat-label">Имя файла</div>
+          </div>
+        `;
+        document.getElementById('stats').innerHTML = statsHtml;
+        
+        // Scroll to result
+        document.getElementById('resultStep').scrollIntoView({ behavior: 'smooth' });
+        
+      } catch (error) {
+        alert('Ошибка обработки JSON: ' + error.message);
+      }
+    }
+
+    function copyToClipboard() {
+      navigator.clipboard.writeText(processedCode).then(() => {
+        const msg = document.getElementById('successMsg');
+        msg.textContent = '✅ Код скопирован в буфер обмена!';
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 3000);
+      });
+    }
+
+    function downloadFile() {
+      if (!selectedCategory) return;
+      
+      const config = categoryConfig[selectedCategory];
+      const blob = new Blob([processedCode], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = config.file;
+      a.click();
+      
+      const msg = document.getElementById('successMsg');
+      msg.textContent = `✅ Файл ${config.file} скачан!`;
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    }
+  </script>
+</body>
+</html>

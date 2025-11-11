@@ -14,25 +14,34 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Save, RotateCcw, Share2, AlertCircle } from "lucide-react";
+import { Save, RotateCcw, Share2, AlertCircle, GlassWater, FileText, Martini } from "lucide-react";
 import { useCocktailStore } from "@/store/cocktail-store";
 import { generateCocktailName, validateCocktailIngredients, calculateCocktailStats } from "@/lib/cocktail-utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Constructor() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [showSaveDialog, setShowSaveDialog] = useState(false);
-  const [recipeName, setRecipeName] = useState("");
-  const [recipeDescription, setRecipeDescription] = useState("");
-
+  
   const {
     selectedGlass,
     ingredients,
     cocktailStats,
     clearIngredients,
-    recalculateStats
+    recalculateStats,
+    recipeName: storeName,
+    recipeDescription: storeDescription
   } = useCocktailStore();
+
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [recipeName, setRecipeName] = useState(storeName || "");
+  const [recipeDescription, setRecipeDescription] = useState(storeDescription || "");
+
+  // Update local state when store values change
+  useEffect(() => {
+    if (storeName) setRecipeName(storeName);
+    if (storeDescription) setRecipeDescription(storeDescription);
+  }, [storeName, storeDescription]);
   
   const currentStats = calculateCocktailStats(ingredients);
 
@@ -48,12 +57,35 @@ export default function Constructor() {
       setShowSaveDialog(false);
       queryClient.invalidateQueries({ queryKey: ["/api/recipes"] });
     },
-    onError: (error) => {
-      toast({
-        title: "Ошибка сохранения",
-        description: "Не удалось сохранить рецепт. Попробуйте еще раз.",
-        variant: "destructive",
-      });
+    onError: (error: any) => {
+      // Check if it's an authentication error
+      const isAuthError = error?.message?.includes('Not authenticated') || 
+                          error?.message?.includes('401') ||
+                          error?.status === 401;
+      
+      if (isAuthError) {
+        toast({
+          title: (
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4" />
+              Требуется авторизация
+            </div>
+          ),
+          description: "Чтобы сохранить рецепт нужно зарегистрироваться/войти в аккаунт",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: (
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4" />
+              Ошибка сохранения
+            </div>
+          ),
+          description: error?.message || "Не удалось сохранить рецепт. Попробуйте еще раз.",
+          variant: "destructive",
+        });
+      }
     },
   });
 
@@ -142,32 +174,52 @@ export default function Constructor() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       
-      <section className="pt-32 pb-16 bg-gradient-to-br from-purple-950 via-purple-900 to-blue-950">
+      <section className="pt-56 pb-16 bg-gradient-to-br from-purple-950/90 via-purple-900/80 to-blue-950/90 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
+            <div className="flex justify-center mb-6">
+              <div className="relative">
+                <Martini 
+                  className="w-16 h-16 text-purple-400" 
+                  strokeWidth={1.5}
+                  style={{
+                    filter: 'drop-shadow(0 0 20px rgba(168, 85, 247, 0.6)) drop-shadow(0 0 40px rgba(168, 85, 247, 0.3))'
+                  }}
+                />
+                <div 
+                  className="absolute inset-0 rounded-full blur-xl opacity-30"
+                  style={{
+                    background: 'radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, transparent 70%)'
+                  }}
+                />
+              </div>
+            </div>
             <h2 
               className="text-4xl font-bold mb-4 text-white drop-shadow-lg shadow-black" 
               style={{textShadow: '0 6px 12px rgba(0, 0, 0, 0.8), 0 12px 24px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 255, 255, 0.1)'}}
             >
               Конструктор Коктейлей
             </h2>
-            <p className="text-xl text-zinc max-w-2xl mx-auto">
+            <p className="text-xl text-zinc max-w-2xl mx-auto mb-6">
               Создавайте уникальные напитки слой за слоем с автоматическим расчетом параметров
             </p>
+            <div className="max-w-3xl mx-auto">
+              <div className="h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent"></div>
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-12 gap-4 min-h-[600px]">
-            {/* Left Sidebar - Ingredients */}
-            <div className="lg:col-span-4 flex flex-col">
+            {/* Left Sidebar - Ingredients - order-3 on mobile */}
+            <div className="lg:col-span-4 flex flex-col order-3 lg:order-1">
               <div className="bg-card border border-border rounded-lg p-4 flex-1 overflow-hidden">
                 <IngredientRecommendations />
               </div>
             </div>
 
-            {/* Center Content - Reduced width */}
-            <div className="lg:col-span-4 flex flex-col space-y-4">
+            {/* Center Content - Reduced width - order-1 on mobile (Glass first) */}
+            <div className="lg:col-span-4 flex flex-col space-y-4 order-1 lg:order-2">
               {/* Glass Selector or Drink Visualizer */}
-              <div className="bg-card border border-border rounded-lg p-6 flex-1">
+              <div className="bg-card/80 backdrop-blur-sm border border-border rounded-lg p-6 flex-1">
                 {!selectedGlass ? (
                   <CompactGlassSelector />
                 ) : (
@@ -175,8 +227,8 @@ export default function Constructor() {
                 )}
               </div>
               
-              {/* Added Ingredients - show on mobile as third element */}
-              <div className="bg-card border border-border rounded-lg p-4 lg:hidden overflow-hidden">
+              {/* Added Ingredients - show on mobile as third element - order-2 on mobile */}
+              <div className="bg-card border border-border rounded-lg p-4 lg:hidden overflow-hidden order-2 lg:order-none">
                 <IngredientSelector />
               </div>
               
@@ -254,8 +306,8 @@ export default function Constructor() {
               </div>
             </div>
 
-            {/* Right Sidebar - Metrics and Ingredients */}
-            <div className="lg:col-span-4 flex flex-col space-y-4 h-full">
+            {/* Right Sidebar - Metrics and Ingredients - order-4 on mobile */}
+            <div className="lg:col-span-4 flex flex-col space-y-4 h-full order-4 lg:order-3">
               {/* Cocktail Metrics */}
               <div className="bg-card border border-border rounded-lg p-4 flex-shrink-0">
                 <CocktailMetrics />
@@ -406,11 +458,14 @@ export default function Constructor() {
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
         <DialogContent className="bg-card border-border">
           <DialogHeader>
-            <DialogTitle className="text-foreground">Сохранить рецепт</DialogTitle>
+            <DialogTitle className="text-neon-purple text-center text-2xl font-bold">Сохранить рецепт</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div>
-              <Label htmlFor="recipe-name" className="text-foreground">Название коктейля</Label>
+              <Label htmlFor="recipe-name" className="text-foreground text-base font-semibold mb-3 flex items-center gap-2">
+                <GlassWater className="h-4 w-4" />
+                Название коктейля
+              </Label>
               <Input
                 id="recipe-name"
                 value={recipeName}
@@ -420,7 +475,10 @@ export default function Constructor() {
               />
             </div>
             <div>
-              <Label htmlFor="recipe-description" className="text-foreground">Описание (необязательно)</Label>
+              <Label htmlFor="recipe-description" className="text-foreground text-base font-semibold mb-3 flex items-center gap-2">
+                <FileText className="h-4 w-4" />
+                Описание (необязательно)
+              </Label>
               <Textarea
                 id="recipe-description"
                 value={recipeDescription}
@@ -430,7 +488,7 @@ export default function Constructor() {
                 rows={3}
               />
             </div>
-            <div className="flex justify-end space-x-2">
+            <div className="flex justify-center space-x-3 pt-2">
               <Button
                 variant="outline"
                 onClick={() => setShowSaveDialog(false)}

@@ -14,9 +14,9 @@ import { registerSchema, loginSchema } from '@shared/schema';
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
   
-  // Use memory store if no database URL is provided (demo mode)
+  // Use PostgreSQL store only for production PostgreSQL, otherwise use memory store
   let sessionStore;
-  if (process.env.DATABASE_URL) {
+  if (process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('postgresql')) {
     const pgStore = connectPg(session);
     sessionStore = new pgStore({
       conString: process.env.DATABASE_URL,
@@ -26,13 +26,13 @@ export function getSession() {
     });
     console.log('Using PostgreSQL session store');
   } else {
-    // Use memory store for demo mode
+    // Use memory store for development/SQLite
     const MemStore = MemoryStore(session);
     sessionStore = new MemStore({
       checkPeriod: 86400000, // prune expired entries every 24h
       ttl: sessionTtl,
     });
-    console.log('Using memory session store (demo mode)');
+    console.log('Using memory session store (development mode)');
   }
   
   return session({
@@ -64,7 +64,9 @@ export async function setupAuth(app: Express) {
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     const callbackURL = process.env.REPLIT_DOMAINS
       ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}/api/auth/google/callback`
-      : "http://localhost:5000/api/auth/google/callback";
+      : `http://localhost:${process.env.PORT || 3000}/api/auth/google/callback`;
+    
+    console.log('Google OAuth configured with callback URL:', callbackURL);
     
     passport.use(new GoogleStrategy({
       clientID: process.env.GOOGLE_CLIENT_ID,
@@ -109,6 +111,7 @@ export async function setupAuth(app: Express) {
         });
       }
       
+      console.log('Google OAuth successful for user:', user.email);
       return done(null, user);
     } catch (error) {
       console.error('Google OAuth error:', error);
@@ -172,6 +175,7 @@ export async function setupAuth(app: Express) {
       passport.authenticate('google', { failureRedirect: '/auth?error=google_auth_failed' }),
       (req, res) => {
         // Successful authentication, redirect to home
+        console.log('Google OAuth callback successful, user:', req.user?.email);
         res.redirect('/');
       }
     );
@@ -322,32 +326,6 @@ export async function setupAuth(app: Express) {
         res.json({ user: userWithoutPassword });
       });
     })(req, res, next);
-  });
-
-  // Guest login
-  app.post('/api/auth/guest', async (req, res) => {
-    try {
-      const guestUser = await storage.upsertUser({
-        id: nanoid(),
-        email: null,
-        nickname: 'Гость',
-        profileImageUrl: null,
-        googleId: null,
-        passwordHash: null,
-        emailVerified: false,
-      });
-      
-      req.login(guestUser, (err) => {
-        if (err) {
-          console.error('Guest login error:', err);
-          return res.status(500).json({ error: 'Failed to login as guest' });
-        }
-        res.json({ user: guestUser });
-      });
-    } catch (error) {
-      console.error('Guest login error:', error);
-      res.status(500).json({ error: 'Failed to create guest user' });
-    }
   });
 }
 

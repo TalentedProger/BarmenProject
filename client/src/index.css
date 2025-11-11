@@ -40,6 +40,78 @@
   --night-blue: hsl(240, 23%, 11%);
 }
 
+/* Popular recipes card glow wrapper - prevents shadow clipping and follows radius */
+.popular-card-wrapper {
+  position: relative;
+  border-radius: 1rem; /* ~rounded-2xl */
+  overflow: visible; /* allow outer glow */
+  isolation: isolate; /* create stacking context for pseudo-element layering */
+}
+
+.popular-card-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: -16px; /* give more space for glow on all sides */
+  border-radius: inherit;
+  background: radial-gradient(60% 60% at 50% 50%, rgba(6, 182, 212, 0.42) 0%, rgba(139, 92, 246, 0.34) 48%, rgba(0,0,0,0) 75%);
+  filter: blur(20px);
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 220ms ease;
+  z-index: 0; /* visible within wrapper stacking context */
+}
+
+.popular-card-wrapper:hover::before,
+.popular-card-wrapper:focus-within::before {
+  opacity: 0.75;
+  transform: scale(1.06);
+}
+
+/* Secondary thin after-glow ring */
+.popular-card-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: radial-gradient(55% 55% at 50% 50%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 55%, rgba(0,0,0,0) 80%);
+  filter: blur(10px);
+  opacity: 0.35;
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 220ms ease;
+  z-index: 0;
+}
+
+.popular-card-wrapper:hover::after,
+.popular-card-wrapper:focus-within::after {
+  opacity: 0.5;
+  transform: scale(1.04);
+}
+
+/* Ensure Swiper doesn't clip the outer glows */
+.popular-recipes-swiper,
+.popular-recipes-swiper .swiper,
+.popular-recipes-swiper .swiper-wrapper,
+.popular-recipes-swiper .swiper-slide {
+  overflow: visible !important;
+}
+
+/* Inner card shadow that respects border radius */
+.popular-card-inner {
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.35),
+    0 0 24px rgba(6, 182, 212, 0.16),
+    0 0 36px rgba(139, 92, 246, 0.14);
+  will-change: transform, box-shadow;
+}
+
+.popular-card-wrapper:hover .popular-card-inner,
+.popular-card-wrapper:focus-within .popular-card-inner {
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.45),
+    0 0 34px rgba(6, 182, 212, 0.24),
+    0 0 48px rgba(139, 92, 246, 0.22);
+}
+
 /* Анимации для страницы рецепта */
 @keyframes fadeInUp {
   from {
@@ -54,6 +126,11 @@
 
 .animate-fadeInUp {
   animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
 }
 
 /* Анимация переливающегося фона для кнопок */
@@ -72,10 +149,16 @@
 /* Hover эффекты для карточек коктейлей - оптимизированы */
 .cocktail-card {
   will-change: transform;
+  position: relative;
+  overflow: hidden;
 }
 
 .cocktail-image {
   will-change: transform;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cocktail-card:has(.recipe-button:hover) {
@@ -180,14 +263,136 @@
     @apply border-border;
   }
   
+  html {
+    overflow-y: scroll !important; /* Always show scrollbar on html */
+    overflow-x: hidden !important;
+    scrollbar-width: auto; /* Firefox scrollbar - normal width */
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  }
+  
+  /* Prevent Radix from manipulating html element */
+  html[style] {
+    overflow-y: scroll !important;
+    overflow-x: hidden !important;
+  }
+  
   body {
     @apply bg-background text-foreground;
     font-family: 'Rubik', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow: visible !important;
+    overflow-x: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+  }
+  
+  #root {
+    min-height: 100vh;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* CRITICAL: Prevent ALL Radix UI inline style manipulations */
+  body[style] {
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+  }
+  
+  /* Force consistent scrollbar visibility (Webkit/Chromium) */
+  html::-webkit-scrollbar {
+    width: 15px; /* Consistent scrollbar width */
+  }
+  
+  html::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  html::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  
+  html::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+    background-clip: content-box;
   }
   
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 600;
+  }
+  
+  /* Prevent all Radix UI portals from adding scrollbar compensation */
+  [data-radix-portal] {
+    position: fixed !important;
+  }
+  
+  /* Additional protection for specific Radix UI states */
+  body:has([data-radix-select-content]),
+  body:has([data-radix-dropdown-menu-content]) {
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+  
+  /* FINAL DEFENSE: Block any width/overflow changes on core elements */
+  html, html *[style*="overflow"],
+  body, body *[style*="overflow"],
+  #root, #root *[style*="overflow"] {
+    box-sizing: border-box !important;
+  }
+  
+  /* Prevent Radix overlays from blocking content */
+  [data-radix-portal] [role="dialog"],
+  [data-radix-portal] [role="menu"] {
+    position: fixed !important;
+  }
+  
+  /* Ensure overlays don't interfere with scrollbar */
+  [data-radix-dialog-overlay],
+  [data-radix-sheet-overlay],
+  [data-radix-alert-dialog-overlay] {
+    position: fixed !important;
+    pointer-events: none !important;
+  }
+  
+  /* CRITICAL: Prevent Select/DropdownMenu from affecting page scroll */
+  [data-radix-select-content],
+  [data-radix-dropdown-menu-content] {
+    position: fixed !important;
+    overflow-y: auto !important;
+    max-height: var(--radix-select-content-available-height, 400px) !important;
+    z-index: 9999 !important;
+    scroll-behavior: smooth !important;
+    overscroll-behavior: contain !important;
+  }
+  
+  /* Smooth scrolling for Select viewport */
+  [data-radix-select-viewport] {
+    scroll-behavior: smooth !important;
+    overscroll-behavior: contain !important;
+  }
+  
+  /* Hide scroll arrows in Select components */
+  [data-radix-scroll-area-scrollbar] {
+    display: none !important;
+  }
+  
+  button[data-radix-scroll-area-scrollbar-thumb],
+  button[data-radix-scroll-area-scrollbar-visible-button] {
+    display: none !important;
   }
 }
 
@@ -500,6 +705,19 @@
   .animate-pulse-slow {
     animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
 }
 
 @keyframes fadeIn {
@@ -558,4 +776,168 @@
   50% {
     box-shadow: 0 0 30px rgba(139, 69, 255, 0.8), 0 0 60px rgba(255, 20, 147, 0.6), 0 8px 40px rgba(0, 0, 0, 0.4);
   }
+}
+
+/* Slider styles for advanced filters */
+.slider {
+  background: linear-gradient(to right, #374151 0%, #6b7280 100%);
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #06ffa5, #00d4ff);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(6, 255, 165, 0.5);
+  transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(6, 255, 165, 0.8);
+}
+
+.slider::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #06ffa5, #00d4ff);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 10px rgba(6, 255, 165, 0.5);
+  transition: all 0.2s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(6, 255, 165, 0.8);
+}
+
+/* Smooth transitions for interactive elements only */
+button, a, input, select, textarea {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, 
+              transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+/* Page transition animations */
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Hover animations for cards */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Glow effect for buttons */
+.glow-on-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-on-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.glow-on-hover:hover::before {
+  left: 100%;
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Stagger animation for lists */
+.stagger-item {
+  animation: slideInFromRight 0.6s ease forwards;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0.1s; }
+.stagger-item:nth-child(2) { animation-delay: 0.2s; }
+.stagger-item:nth-child(3) { animation-delay: 0.3s; }
+.stagger-item:nth-child(4) { animation-delay: 0.4s; }
+.stagger-item:nth-child(5) { animation-delay: 0.5s; }
+.stagger-item:nth-child(6) { animation-delay: 0.6s; }
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus states for accessibility */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #06ffa5;
+  outline-offset: 2px;
 }

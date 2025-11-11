@@ -2,6 +2,8 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated, optionalAuth } from "./auth";
+import { generateRandomRecipe } from "./cocktail-generator";
+import { registerAdminRoutes } from "./admin-routes";
 import { 
   insertIngredientSchema,
   insertGlassTypeSchema,
@@ -22,6 +24,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(req.user);
     } else {
       res.status(401).json({ error: 'Not authenticated' });
+    }
+  });
+
+  app.patch('/api/auth/profile', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: 'Not authenticated' });
+      }
+
+      const { nickname, profileImageUrl } = req.body;
+
+      // Validate input
+      if (!nickname || nickname.trim().length < 2) {
+        return res.status(400).json({ error: 'Nickname must be at least 2 characters' });
+      }
+
+      // Update user profile
+      const updatedUser = await storage.updateUserProfile(userId, {
+        nickname: nickname.trim(),
+        profileImageUrl: profileImageUrl || undefined
+      });
+
+      if (!updatedUser) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      res.status(500).json({ error: 'Failed to update profile' });
     }
   });
 
@@ -246,19 +279,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/users/:userId/favorites', async (req: any, res) => {
+  app.post('/api/favorites', isAuthenticated, async (req: any, res) => {
     try {
-      // For demo purposes, return success but don't actually save
-      res.status(201).json({ message: "Favorite added (demo mode)" });
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: 'Not authenticated' });
+      }
+      
+      const { recipeId } = req.body;
+      if (!recipeId) {
+        return res.status(400).json({ error: 'Recipe ID is required' });
+      }
+
+      // Check if recipe exists
+      const recipe = await storage.getRecipe(recipeId);
+      if (!recipe) {
+        return res.status(404).json({ error: 'Recipe not found' });
+      }
+
+      // Check if already in favorites
+      const isAlreadyFavorite = await storage.isUserFavorite(userId, recipeId);
+      if (isAlreadyFavorite) {
+        return res.status(409).json({ error: 'Recipe already in favorites' });
+      }
+
+      const favorite = await storage.addUserFavorite(userId, recipeId);
+      res.status(201).json({ 
+        message: "Recipe added to favorites",
+        favorite: favorite
+      });
     } catch (error) {
       console.error("Error adding favorite:", error);
       res.status(500).json({ message: "Failed to add favorite" });
     }
   });
 
-  app.delete('/api/users/:userId/favorites/:recipeId', async (req: any, res) => {
+  app.delete('/api/favorites/:recipeId', isAuthenticated, async (req: any, res) => {
     try {
-      // For demo purposes, return success but don't actually remove
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: 'Not authenticated' });
+      }
+      
+      const { recipeId } = req.params;
+      
+      // Check if recipe is in favorites
+      const isInFavorites = await storage.isUserFavorite(userId, recipeId);
+      if (!isInFavorites) {
+        return res.status(404).json({ error: 'Recipe not found in favorites' });
+      }
+
+      await storage.removeUserFavorite(userId, recipeId);
       res.status(204).send();
     } catch (error) {
       console.error("Error removing favorite:", error);
@@ -277,166 +348,144 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/recipes/:recipeId/ratings', async (req: any, res) => {
+  app.post('/api/recipes/:recipeId/ratings', isAuthenticated, async (req: any, res) => {
     try {
-      // For demo purposes, return success but don't actually save
-      res.status(201).json({ message: "Rating added (demo mode)" });
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: 'Not authenticated' });
+      }
+      
+      const { recipeId } = req.params;
+      const { rating, review } = req.body;
+      
+      // Validate rating
+      if (!rating || rating < 1 || rating > 5) {
+        return res.status(400).json({ error: 'Rating must be between 1 and 5' });
+      }
+
+      // Check if recipe exists
+      const recipe = await storage.getRecipe(recipeId);
+      if (!recipe) {
+        return res.status(404).json({ error: 'Recipe not found' });
+      }
+
+      // Check if user already rated this recipe
+      const existingRating = await storage.getUserRecipeRating(userId, recipeId);
+      
+      let result;
+      if (existingRating) {
+        // Update existing rating
+        result = await storage.updateRecipeRating(userId, recipeId, rating, review);
+        res.json({ 
+          message: "Rating updated successfully",
+          rating: result
+        });
+      } else {
+        // Create new rating
+        result = await storage.createRecipeRating({
+          userId,
+          recipeId,
+          rating,
+          review: review || null
+        });
+        res.status(201).json({ 
+          message: "Rating added successfully",
+          rating: result
+        });
+      }
     } catch (error) {
       console.error("Error creating/updating rating:", error);
       res.status(500).json({ message: "Failed to create/update rating" });
     }
   });
 
-  // Random recipe generator
+  // Get user's rating for a specific recipe
+  app.get('/api/recipes/:recipeId/ratings/my', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: 'Not authenticated' });
+      }
+      
+      const { recipeId } = req.params;
+      const rating = await storage.getUserRecipeRating(userId, recipeId);
+      
+      if (!rating) {
+        return res.status(404).json({ error: 'No rating found for this recipe' });
+      }
+      
+      res.json(rating);
+    } catch (error) {
+      console.error("Error fetching user rating:", error);
+      res.status(500).json({ message: "Failed to fetch user rating" });
+    }
+  });
+
+  // Check if recipe is in user's favorites
+  app.get('/api/favorites/:recipeId/check', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: 'Not authenticated' });
+      }
+      
+      const { recipeId } = req.params;
+      const isFavorite = await storage.isUserFavorite(userId, recipeId);
+      
+      res.json({ isFavorite });
+    } catch (error) {
+      console.error("Error checking favorite status:", error);
+      res.status(500).json({ message: "Failed to check favorite status" });
+    }
+  });
+
+  // Enhanced recipe generator with filters
   app.post('/api/recipes/generate', async (req, res) => {
     try {
-      const { mode = 'classic' } = req.body;
+      const { 
+        mode = 'classic',
+        requiredIngredients,
+        excludedIngredients,
+        maxAlcoholContent,
+        minAlcoholContent,
+        maxPrice,
+        preferredCategories,
+        glassType,
+        complexity,
+        tastePreferences
+      } = req.body;
       
       // Get all ingredients and glass types
       const ingredients = await storage.getIngredients();
       const glassTypes = await storage.getGlassTypes();
       
-      // Generate random recipe based on mode
-      const generatedRecipe = generateRandomRecipe(ingredients, glassTypes, mode);
+      // Generate recipe with enhanced algorithm
+      const generatedRecipe = generateRandomRecipe(ingredients, glassTypes, mode, {
+        requiredIngredients,
+        excludedIngredients,
+        maxAlcoholContent,
+        minAlcoholContent,
+        maxPrice,
+        preferredCategories,
+        glassType,
+        complexity,
+        tastePreferences
+      });
       
       res.json(generatedRecipe);
     } catch (error) {
       console.error("Error generating recipe:", error);
-      res.status(500).json({ message: "Failed to generate recipe" });
+      res.status(500).json({ 
+        message: error.message || "Failed to generate recipe" 
+      });
     }
   });
+
+  // Регистрируем админ маршруты
+  registerAdminRoutes(app);
 
   const httpServer = createServer(app);
   return httpServer;
 }
 
-// Helper function to generate random recipes
-function generateRandomRecipe(ingredients: any[], glassTypes: any[], mode: string) {
-  const alcoholIngredients = ingredients.filter(i => i.category === 'alcohol');
-  const juiceIngredients = ingredients.filter(i => i.category === 'juice');
-  const syrupIngredients = ingredients.filter(i => i.category === 'syrup');
-  const fruitIngredients = ingredients.filter(i => i.category === 'fruit');
-  
-  let selectedIngredients = [];
-  let glassType = glassTypes[Math.floor(Math.random() * glassTypes.length)];
-  
-  switch (mode) {
-    case 'classic':
-      selectedIngredients = [
-        alcoholIngredients[Math.floor(Math.random() * alcoholIngredients.length)],
-        juiceIngredients[Math.floor(Math.random() * juiceIngredients.length)],
-        syrupIngredients[Math.floor(Math.random() * syrupIngredients.length)]
-      ];
-      break;
-    case 'crazy':
-      selectedIngredients = [
-        alcoholIngredients[Math.floor(Math.random() * alcoholIngredients.length)],
-        alcoholIngredients[Math.floor(Math.random() * alcoholIngredients.length)],
-        juiceIngredients[Math.floor(Math.random() * juiceIngredients.length)],
-        syrupIngredients[Math.floor(Math.random() * syrupIngredients.length)],
-        fruitIngredients[Math.floor(Math.random() * fruitIngredients.length)]
-      ];
-      break;
-    case 'summer':
-      selectedIngredients = [
-        alcoholIngredients.filter(i => i.name.toLowerCase().includes('rum') || i.name.toLowerCase().includes('vodka'))[0] || alcoholIngredients[0],
-        juiceIngredients.filter(i => i.name.toLowerCase().includes('pineapple') || i.name.toLowerCase().includes('orange'))[0] || juiceIngredients[0],
-        fruitIngredients[Math.floor(Math.random() * fruitIngredients.length)]
-      ];
-      break;
-    case 'nonalcoholic':
-      selectedIngredients = [
-        juiceIngredients[Math.floor(Math.random() * juiceIngredients.length)],
-        juiceIngredients[Math.floor(Math.random() * juiceIngredients.length)],
-        syrupIngredients[Math.floor(Math.random() * syrupIngredients.length)]
-      ];
-      break;
-    case 'shot':
-      glassType = glassTypes.find(g => g.shape === 'shot') || glassTypes[0];
-      selectedIngredients = [
-        alcoholIngredients[Math.floor(Math.random() * alcoholIngredients.length)]
-      ];
-      break;
-    default:
-      selectedIngredients = [
-        alcoholIngredients[Math.floor(Math.random() * alcoholIngredients.length)],
-        juiceIngredients[Math.floor(Math.random() * juiceIngredients.length)]
-      ];
-  }
-  
-  // Combine duplicate ingredients
-  const combinedIngredients = combineDuplicateIngredients(selectedIngredients.filter(Boolean));
-  
-  // Generate amounts with 100% filling and multiple of 5
-  const totalCapacity = glassType.capacity;
-  const numIngredients = combinedIngredients.length;
-  
-  // Base amount per ingredient (multiple of 5)
-  const baseAmount = Math.floor((totalCapacity / numIngredients) / 5) * 5;
-  
-  // Calculate remaining volume to distribute
-  let remainingVolume = totalCapacity - (baseAmount * numIngredients);
-  
-  // Ensure remaining volume is multiple of 5
-  remainingVolume = Math.floor(remainingVolume / 5) * 5;
-  
-  const recipeIngredients = combinedIngredients.map((ingredient, index) => {
-    let finalAmount = baseAmount;
-    
-    // Distribute remaining volume randomly but in multiples of 5
-    if (remainingVolume > 0 && Math.random() > 0.5) {
-      const additionalAmount = Math.min(remainingVolume, Math.floor(Math.random() * 4 + 1) * 5); // 5-20ml extra
-      finalAmount += additionalAmount;
-      remainingVolume -= additionalAmount;
-    }
-    
-    return {
-      ingredient,
-      amount: finalAmount,
-      unit: 'ml',
-      order: index + 1
-    };
-  });
-  
-  // If there's still remaining volume, add it to the first ingredient
-  if (remainingVolume > 0) {
-    recipeIngredients[0].amount += remainingVolume;
-  }
-  
-  return {
-    name: generateRandomName(),
-    description: `A ${mode} cocktail with ${combinedIngredients.map(i => i.name).join(', ')}`,
-    glass: glassType,
-    ingredients: recipeIngredients,
-    totalVolume: recipeIngredients.reduce((sum, ri) => sum + ri.amount, 0),
-    category: mode
-  };
-}
-
-// Helper function to combine duplicate ingredients
-function combineDuplicateIngredients(ingredients: any[]): any[] {
-  const ingredientMap = new Map();
-  
-  for (const ingredient of ingredients) {
-    if (ingredientMap.has(ingredient.id)) {
-      // If ingredient already exists, we'll handle volume combining later
-      // For now, just track that it's a duplicate
-      const existing = ingredientMap.get(ingredient.id);
-      existing.count = (existing.count || 1) + 1;
-    } else {
-      ingredientMap.set(ingredient.id, { ...ingredient, count: 1 });
-    }
-  }
-  
-  return Array.from(ingredientMap.values());
-}
-
-function generateRandomName(): string {
-  const adjectives = ['Tropical', 'Midnight', 'Golden', 'Crimson', 'Azure', 'Emerald', 'Sunset', 'Storm', 'Fire', 'Ice'];
-  const nouns = ['Breeze', 'Thunder', 'Wave', 'Dream', 'Spark', 'Flame', 'Mist', 'Rush', 'Bliss', 'Punch'];
-  
-  const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-  const noun = nouns[Math.floor(Math.random() * nouns.length)];
-  
-  return `${adjective} ${noun}`;
-}
+// Old helper functions removed - now using enhanced cocktail-generator.ts

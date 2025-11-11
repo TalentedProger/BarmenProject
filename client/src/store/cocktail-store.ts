@@ -11,6 +11,8 @@ interface CocktailStore {
   selectedGlass: GlassType | null;
   ingredients: CocktailIngredient[];
   cocktailStats: CocktailCalculation;
+  recipeName: string;
+  recipeDescription: string;
   
   // Actions
   setSelectedGlass: (glass: GlassType | null) => void;
@@ -19,7 +21,9 @@ interface CocktailStore {
   removeIngredient: (index: number) => void;
   clearIngredients: () => void;
   reorderIngredients: (startIndex: number, endIndex: number) => void;
-  loadRecipe: (glass: GlassType, ingredients: { ingredient: Ingredient; amount: number; unit: string }[]) => void;
+  loadRecipe: (glass: GlassType, ingredients: { ingredient: Ingredient; amount: number; unit: string }[], name?: string, description?: string) => void;
+  setRecipeName: (name: string) => void;
+  setRecipeDescription: (description: string) => void;
   
   // Computed
   recalculateStats: () => void;
@@ -34,6 +38,8 @@ export const useCocktailStore = create<CocktailStore>((set, get) => ({
     totalCost: 0,
     tasteBalance: { sweet: 0, sour: 0, bitter: 0, alcohol: 0 }
   },
+  recipeName: '',
+  recipeDescription: '',
   
   setSelectedGlass: (glass) => set({ selectedGlass: glass }),
   
@@ -109,7 +115,7 @@ export const useCocktailStore = create<CocktailStore>((set, get) => ({
     set({ cocktailStats: stats });
   },
   
-  loadRecipe: (glass, recipeIngredients) => {
+  loadRecipe: (glass, recipeIngredients, name = '', description = '') => {
     const cocktailIngredients: CocktailIngredient[] = recipeIngredients.map((item, index) => ({
       id: Date.now() + index,
       recipeId: '',
@@ -123,9 +129,14 @@ export const useCocktailStore = create<CocktailStore>((set, get) => ({
     
     set({ 
       selectedGlass: glass,
-      ingredients: cocktailIngredients
+      ingredients: cocktailIngredients,
+      recipeName: name,
+      recipeDescription: description
     });
     
     get().recalculateStats();
-  }
+  },
+  
+  setRecipeName: (name) => set({ recipeName: name }),
+  setRecipeDescription: (description) => set({ recipeDescription: description }),
 }));

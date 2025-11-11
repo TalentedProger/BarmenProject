@@ -22,18 +22,31 @@ import {
   type InsertRecipeRating,
 } from "@shared/schema";
 import { nanoid } from "nanoid";
+import { SAMPLE_INGREDIENTS } from "../client/src/lib/ingredients-data";
 
 export interface IStorage {
   // User operations (mandatory for authentication)
   getUser(id: string): Promise<User | undefined>;
+  getUserById(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserByGoogleId(googleId: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  updateUserProfile(userId: string, data: { nickname?: string; profileImageUrl?: string }): Promise<User | undefined>;
+  
+  // Admin user operations
+  getUsers?(): Promise<User[]>;
+  getUsersCount?(): Promise<number>;
+  getRecentUsers?(limit: number): Promise<User[]>;
 
   // Ingredient operations
   getIngredients(): Promise<Ingredient[]>;
   getIngredientsByCategory(category: string): Promise<Ingredient[]>;
   createIngredient(ingredient: InsertIngredient): Promise<Ingredient>;
+  
+  // Admin ingredient operations
+  updateIngredient?(id: number, ingredient: Partial<InsertIngredient>): Promise<Ingredient | undefined>;
+  deleteIngredient?(id: number): Promise<boolean>;
+  getIngredientsCount?(): Promise<number>;
 
   // Glass type operations
   getGlassTypes(): Promise<GlassType[]>;
@@ -48,6 +61,10 @@ export interface IStorage {
   createRecipe(recipe: InsertRecipe): Promise<Recipe>;
   updateRecipe(id: string, recipe: Partial<InsertRecipe>): Promise<Recipe>;
   deleteRecipe(id: string): Promise<void>;
+  
+  // Admin recipe operations
+  getRecipesCount?(): Promise<number>;
+  getRecentRecipes?(limit: number): Promise<Recipe[]>;
   searchRecipes(query: string, category?: string, difficulty?: string): Promise<Recipe[]>;
 
   // Recipe ingredient operations
@@ -83,153 +100,24 @@ export class MemoryStorage implements IStorage {
   }
 
   private initializeData() {
-    // Initialize enhanced ingredients database (3 per category)
-    const sampleIngredients: InsertIngredient[] = [
-      // Alcohol (3 items)
-      {
-        name: "Водка Premium",
-        category: "alcohol",
-        color: "#FFFFFF",
-        abv: "40.00",
-        pricePerLiter: "1200.00",
-        tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 9 },
-        unit: "ml"
-      },
-      {
-        name: "Белый ром Bacardi",
-        category: "alcohol", 
-        color: "#FFFACD",
-        abv: "40.00",
-        pricePerLiter: "1500.00",
-        tasteProfile: { sweet: 2, sour: 0, bitter: 0, alcohol: 8 },
-        unit: "ml"
-      },
-      {
-        name: "Джин Bombay",
-        category: "alcohol",
-        color: "#F8F8FF", 
-        abv: "42.00",
-        pricePerLiter: "1800.00",
-        tasteProfile: { sweet: 0, sour: 0, bitter: 3, alcohol: 9 },
-        unit: "ml"
-      },
-
-      // Juices (3 items)  
-      {
-        name: "Апельсиновый сок",
-        category: "juice",
-        color: "#FFA500",
-        abv: "0.00",
-        pricePerLiter: "200.00",
-        tasteProfile: { sweet: 7, sour: 3, bitter: 0, alcohol: 0 },
-        unit: "ml"
-      },
-      {
-        name: "Ананасовый сок", 
-        category: "juice",
-        color: "#FFE135",
-        abv: "0.00",
-        pricePerLiter: "250.00", 
-        tasteProfile: { sweet: 8, sour: 2, bitter: 0, alcohol: 0 },
-        unit: "ml"
-      },
-      {
-        name: "Клюквенный сок",
-        category: "juice",
-        color: "#DC143C",
-        abv: "0.00", 
-        pricePerLiter: "300.00",
-        tasteProfile: { sweet: 4, sour: 6, bitter: 1, alcohol: 0 },
-        unit: "ml"
-      },
-
-      // Syrups (3 items)
-      {
-        name: "Простой сироп",
-        category: "syrup",
-        color: "#FFFFFF",
-        abv: "0.00",
-        pricePerLiter: "150.00",
-        tasteProfile: { sweet: 10, sour: 0, bitter: 0, alcohol: 0 },
-        unit: "ml"
-      },
-      {
-        name: "Сироп граната",
-        category: "syrup",
-        color: "#B22222",
-        abv: "0.00",
-        pricePerLiter: "350.00",
-        tasteProfile: { sweet: 9, sour: 1, bitter: 0, alcohol: 0 },
-        unit: "ml"
-      },
-      {
-        name: "Кокосовый сироп",
-        category: "syrup", 
-        color: "#FFFACD",
-        abv: "0.00",
-        pricePerLiter: "400.00",
-        tasteProfile: { sweet: 8, sour: 0, bitter: 0, alcohol: 0 },
-        unit: "ml"
-      },
-
-      // Fruits (3 items) - price per kg  
-      {
-        name: "Лайм свежий",
-        category: "fruit",
-        color: "#32CD32", 
-        abv: "0.00",
-        pricePerLiter: "500.00", // per kg
-        tasteProfile: { sweet: 2, sour: 7, bitter: 0, alcohol: 0 },
-        unit: "kg"
-      },
-      {
-        name: "Лимон свежий",
-        category: "fruit",
-        color: "#FFFF00",
-        abv: "0.00",
-        pricePerLiter: "400.00", // per kg
-        tasteProfile: { sweet: 2, sour: 8, bitter: 0, alcohol: 0 },
-        unit: "kg"
-      },
-      {
-        name: "Мята свежая",
-        category: "fruit",
-        color: "#00FF00",
-        abv: "0.00", 
-        pricePerLiter: "800.00", // per kg
-        tasteProfile: { sweet: 1, sour: 0, bitter: 3, alcohol: 0 },
-        unit: "kg" 
-      },
-
-      // Ice (3 items)
-      {
-        name: "Лёд кубиками",
-        category: "ice",
-        color: "#E0E0E0",
-        abv: "0.00",
-        pricePerLiter: "50.00", // per kg
-        tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 0 },
-        unit: "kg"
-      },
-      {
-        name: "Лёд дроблёный",
-        category: "ice", 
-        color: "#D3D3D3",
-        abv: "0.00",
-        pricePerLiter: "60.00", // per kg
-        tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 0 },
-        unit: "kg"
-      },
-      {
-        name: "Лёд сферический",
-        category: "ice",
-        color: "#F0F8FF", 
-        abv: "0.00",
-        pricePerLiter: "100.00", // per kg
-        tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 0 },
-        unit: "kg"
-      }
-    ];
+    // Initialize ingredients database from SAMPLE_INGREDIENTS
+    // Includes 90 real Alkoteka products and all other ingredients
+    const sampleIngredients: InsertIngredient[] = SAMPLE_INGREDIENTS.map(ing => ({
+      name: ing.name!,
+      category: ing.category!,
+      color: ing.color!,
+      abv: String(ing.abv || 0),
+      pricePerLiter: String(ing.pricePerLiter || 0),
+      tasteProfile: ing.tasteProfile!,
+      unit: ing.unit!,
+      sourceUrl: ing.sourceUrl || null,
+      sourceName: ing.sourceName || null,
+      sourceIcon: ing.sourceIcon || null,
+      imageUrl: ing.imageUrl || null,
+      volume: ing.volume || null
+    }));
+    
+    console.log(`🍹 Инициализация MemoryStorage: загружено ${sampleIngredients.length} ингредиентов`);
 
     sampleIngredients.forEach(ingredient => {
       const id = this.nextId.ingredient++;
@@ -297,6 +185,23 @@ export class MemoryStorage implements IStorage {
     };
     this.users.set(userData.id, user);
     return user;
+  }
+
+  async updateUserProfile(userId: string, data: { nickname?: string; profileImageUrl?: string }): Promise<User | undefined> {
+    const user = this.users.get(userId);
+    if (!user) {
+      return undefined;
+    }
+
+    const updatedUser: User = {
+      ...user,
+      nickname: data.nickname !== undefined ? data.nickname : user.nickname,
+      profileImageUrl: data.profileImageUrl !== undefined ? data.profileImageUrl : user.profileImageUrl,
+      updatedAt: new Date()
+    };
+
+    this.users.set(userId, updatedUser);
+    return updatedUser;
   }
 
   // Ingredient operations
@@ -590,7 +495,355 @@ export class MemoryStorage implements IStorage {
     const ratings = this.recipeRatings.get(recipeId) || [];
     return ratings.find(r => r.userId === userId);
   }
+
+  // Admin methods for MemoryStorage
+  async getUserById(id: string): Promise<User | undefined> {
+    return this.getUser(id);
+  }
+
+  async getUsers(): Promise<User[]> {
+    return Array.from(this.users.values()).sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }
+
+  async getUsersCount(): Promise<number> {
+    return this.users.size;
+  }
+
+  async getRecentUsers(limit: number): Promise<User[]> {
+    const users = await this.getUsers();
+    return users.slice(0, limit);
+  }
+
+  async updateIngredient(id: number, ingredient: Partial<InsertIngredient>): Promise<Ingredient | undefined> {
+    const existing = this.ingredients.get(id);
+    if (!existing) return undefined;
+
+    const updated: Ingredient = {
+      ...existing,
+      ...ingredient,
+      id,
+      createdAt: existing.createdAt
+    };
+    this.ingredients.set(id, updated);
+    return updated;
+  }
+
+  async deleteIngredient(id: number): Promise<boolean> {
+    return this.ingredients.delete(id);
+  }
+
+  async getIngredientsCount(): Promise<number> {
+    return this.ingredients.size;
+  }
+
+  async getRecipesCount(): Promise<number> {
+    return this.recipes.size;
+  }
+
+  async getRecentRecipes(limit: number): Promise<Recipe[]> {
+    const recipes = Array.from(this.recipes.values())
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return recipes.slice(0, limit);
+  }
 }
 
-// Use memory storage for Replit environment migration
-export const storage = new MemoryStorage();
+import { db } from "./db";
+import { eq, and, like, desc, sql } from "drizzle-orm";
+
+export class PostgresStorage implements IStorage {
+  // User operations
+  async getUser(id: string): Promise<User | undefined> {
+    const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
+    return result[0];
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const result = await db.select().from(users).where(eq(users.email, email)).limit(1);
+    return result[0];
+  }
+
+  async getUserByGoogleId(googleId: string): Promise<User | undefined> {
+    const result = await db.select().from(users).where(eq(users.googleId, googleId)).limit(1);
+    return result[0];
+  }
+
+  async upsertUser(user: UpsertUser): Promise<User> {
+    const existingUser = user.email ? await this.getUserByEmail(user.email) : 
+                        user.googleId ? await this.getUserByGoogleId(user.googleId) : null;
+    
+    if (existingUser) {
+      const result = await db.update(users)
+        .set({ ...user, updatedAt: new Date() })
+        .where(eq(users.id, existingUser.id))
+        .returning();
+      return result[0];
+    } else {
+      const newUser = {
+        ...user,
+        id: user.id || nanoid(),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      const result = await db.insert(users).values(newUser).returning();
+      return result[0];
+    }
+  }
+
+т  // Ingredient operations
+  async getIngredients(): Promise<Ingredient[]> {
+    return await db.select().from(ingredients);
+  }
+
+  async getIngredientsByCategory(category: string): Promise<Ingredient[]> {
+    return await db.select().from(ingredients).where(eq(ingredients.category, category));
+  }
+
+  async createIngredient(ingredient: InsertIngredient): Promise<Ingredient> {
+    const result = await db.insert(ingredients).values(ingredient).returning();
+    return result[0];
+  }
+
+  // Glass type operations
+  async getGlassTypes(): Promise<GlassType[]> {
+    return await db.select().from(glassTypes);
+  }
+
+  async getGlassType(id: number): Promise<GlassType | undefined> {
+    const result = await db.select().from(glassTypes).where(eq(glassTypes.id, id)).limit(1);
+    return result[0];
+  }
+
+  async createGlassType(glassType: InsertGlassType): Promise<GlassType> {
+    const result = await db.insert(glassTypes).values(glassType).returning();
+    return result[0];
+  }
+
+  // Recipe operations
+  async getRecipes(limit = 50, offset = 0): Promise<Recipe[]> {
+    return await db.select().from(recipes)
+      .orderBy(desc(recipes.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async getRecipe(id: string): Promise<Recipe | undefined> {
+    const result = await db.select().from(recipes).where(eq(recipes.id, id)).limit(1);
+    return result[0];
+  }
+
+  async getRecipeWithIngredients(id: string): Promise<(Recipe & { ingredients: (RecipeIngredient & { ingredient: Ingredient })[] }) | undefined> {
+    const recipe = await this.getRecipe(id);
+    if (!recipe) return undefined;
+
+    const recipeIngredientsData = await db
+      .select()
+      .from(recipeIngredients)
+      .leftJoin(ingredients, eq(recipeIngredients.ingredientId, ingredients.id))
+      .where(eq(recipeIngredients.recipeId, id))
+      .orderBy(recipeIngredients.order);
+
+    const ingredientsWithData = recipeIngredientsData.map(row => ({
+      ...row.recipe_ingredients,
+      ingredient: row.ingredients!
+    }));
+
+    return {
+      ...recipe,
+      ingredients: ingredientsWithData
+    };
+  }
+
+  async getUserRecipes(userId: string): Promise<Recipe[]> {
+    return await db.select().from(recipes)
+      .where(eq(recipes.createdBy, userId))
+      .orderBy(desc(recipes.createdAt));
+  }
+
+  async createRecipe(recipe: InsertRecipe): Promise<Recipe> {
+    const newRecipe = {
+      ...recipe,
+      id: recipe.id || nanoid(),
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    const result = await db.insert(recipes).values(newRecipe).returning();
+    return result[0];
+  }
+
+  async updateRecipe(id: string, recipe: Partial<InsertRecipe>): Promise<Recipe> {
+    const result = await db.update(recipes)
+      .set({ ...recipe, updatedAt: new Date() })
+      .where(eq(recipes.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteRecipe(id: string): Promise<void> {
+    await db.delete(recipes).where(eq(recipes.id, id));
+  }
+
+  async searchRecipes(query: string, category?: string, difficulty?: string): Promise<Recipe[]> {
+    let queryBuilder = db.select().from(recipes);
+    
+    const conditions = [];
+    
+    if (query) {
+      conditions.push(
+        sql`${recipes.name} ILIKE ${'%' + query + '%'} OR ${recipes.description} ILIKE ${'%' + query + '%'}`
+      );
+    }
+    
+    if (category) {
+      conditions.push(eq(recipes.category, category));
+    }
+    
+    if (difficulty) {
+      conditions.push(eq(recipes.difficulty, difficulty));
+    }
+
+    if (conditions.length > 0) {
+      queryBuilder = queryBuilder.where(and(...conditions));
+    }
+
+    return await queryBuilder
+      .orderBy(desc(recipes.rating), desc(recipes.createdAt))
+      .limit(50);
+  }
+
+  // Recipe ingredient operations
+  async getRecipeIngredients(recipeId: string): Promise<(RecipeIngredient & { ingredient: Ingredient })[]> {
+    const result = await db
+      .select()
+      .from(recipeIngredients)
+      .leftJoin(ingredients, eq(recipeIngredients.ingredientId, ingredients.id))
+      .where(eq(recipeIngredients.recipeId, recipeId))
+      .orderBy(recipeIngredients.order);
+
+    return result.map(row => ({
+      ...row.recipe_ingredients,
+      ingredient: row.ingredients!
+    }));
+  }
+
+  async createRecipeIngredient(recipeIngredient: InsertRecipeIngredient): Promise<RecipeIngredient> {
+    const result = await db.insert(recipeIngredients).values(recipeIngredient).returning();
+    return result[0];
+  }
+
+  async deleteRecipeIngredients(recipeId: string): Promise<void> {
+    await db.delete(recipeIngredients).where(eq(recipeIngredients.recipeId, recipeId));
+  }
+
+  // User favorite operations
+  async getUserFavorites(userId: string): Promise<(UserFavorite & { recipe: Recipe })[]> {
+    const result = await db
+      .select()
+      .from(userFavorites)
+      .leftJoin(recipes, eq(userFavorites.recipeId, recipes.id))
+      .where(eq(userFavorites.userId, userId))
+      .orderBy(desc(userFavorites.createdAt));
+
+    return result.map(row => ({
+      ...row.user_favorites,
+      recipe: row.recipes!
+    }));
+  }
+
+  async addUserFavorite(userId: string, recipeId: string): Promise<UserFavorite> {
+    const favorite = {
+      userId,
+      recipeId,
+      createdAt: new Date()
+    };
+    const result = await db.insert(userFavorites).values(favorite).returning();
+    return result[0];
+  }
+
+  async removeUserFavorite(userId: string, recipeId: string): Promise<void> {
+    await db.delete(userFavorites)
+      .where(and(
+        eq(userFavorites.userId, userId),
+        eq(userFavorites.recipeId, recipeId)
+      ));
+  }
+
+  async isUserFavorite(userId: string, recipeId: string): Promise<boolean> {
+    const result = await db.select()
+      .from(userFavorites)
+      .where(and(
+        eq(userFavorites.userId, userId),
+        eq(userFavorites.recipeId, recipeId)
+      ))
+      .limit(1);
+    return result.length > 0;
+  }
+
+  // Recipe rating operations
+  async getRecipeRatings(recipeId: string): Promise<RecipeRating[]> {
+    return await db.select()
+      .from(recipeRatings)
+      .where(eq(recipeRatings.recipeId, recipeId))
+      .orderBy(desc(recipeRatings.createdAt));
+  }
+
+  async createRecipeRating(rating: InsertRecipeRating): Promise<RecipeRating> {
+    const newRating = {
+      ...rating,
+      createdAt: new Date()
+    };
+    const result = await db.insert(recipeRatings).values(newRating).returning();
+    
+    // Update average rating for the recipe
+    await this.updateRecipeAverageRating(rating.recipeId);
+    
+    return result[0];
+  }
+
+  async updateRecipeRating(userId: string, recipeId: string, rating: number, review?: string): Promise<RecipeRating> {
+    const result = await db.update(recipeRatings)
+      .set({ rating, review })
+      .where(and(
+        eq(recipeRatings.userId, userId),
+        eq(recipeRatings.recipeId, recipeId)
+      ))
+      .returning();
+    
+    // Update average rating for the recipe
+    await this.updateRecipeAverageRating(recipeId);
+    
+    return result[0];
+  }
+
+  async getUserRecipeRating(userId: string, recipeId: string): Promise<RecipeRating | undefined> {
+    const result = await db.select()
+      .from(recipeRatings)
+      .where(and(
+        eq(recipeRatings.userId, userId),
+        eq(recipeRatings.recipeId, recipeId)
+      ))
+      .limit(1);
+    return result[0];
+  }
+
+  private async updateRecipeAverageRating(recipeId: string): Promise<void> {
+    const ratings = await this.getRecipeRatings(recipeId);
+    if (ratings.length > 0) {
+      const avgRating = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
+      await db.update(recipes)
+        .set({
+          rating: avgRating.toFixed(2),
+          ratingCount: ratings.length
+        })
+        .where(eq(recipes.id, recipeId));
+    }
+  }
+}
+
+// Use PostgresStorage if database is available, otherwise fallback to MemoryStorage
+export const storage = process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('postgresql')
+  ? new PostgresStorage()
+  : new MemoryStorage();
+
+console.log(`Using ${storage.constructor.name} for data persistence`);

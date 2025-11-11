@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Парсер газированных напитков</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    h1 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    .step {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border-left: 4px solid #667eea;
+    }
+    .step h2 {
+      color: #333;
+      font-size: 18px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .step-number {
+      background: #667eea;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    textarea {
+      width: 100%;
+      min-height: 300px;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      resize: vertical;
+      margin-top: 10px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .success {
+      background: #10b981;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      display: none;
+    }
+    .code-block {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+    .warning {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      color: #856404;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🥤 Парсер газированных напитков</h1>
+    <p class="subtitle">Инструмент для сбора данных с krasnoeibeloe.ru</p>
+
+    <div class="warning">
+      <strong>⚠️ Важно!</strong> Откройте эту страницу в той же вкладке, где открыт каталог krasnoeibeloe.ru, 
+      или используйте bookmarklet ниже.
+    </div>
+
+    <!-- Шаг 1: Bookmarklet -->
+    <div class="step">
+      <h2>
+        <span class="step-number">1</span>
+        Создайте закладку в браузере
+      </h2>
+      <p>Перетащите эту ссылку в панель закладок:</p>
+      <p style="margin: 15px 0;">
+        <a href="javascript:(function(){const products=[];const links=document.querySelectorAll('a[href*=%22/gazirovannaya-voda/%22]');links.forEach(link=>{const href=link.href;if(products.some(p=>p.url===href))return;const name=link.textContent.trim();const parent=link.closest('[class*=%22item%22]');if(!parent)return;const text=parent.textContent;let country='Россия';if(text.includes('Корея'))country='Корея';const volumeMatch=text.match(/(\d+(?:\.\d+)?)\s*(л|мл)/);let volume='';if(volumeMatch)volume=volumeMatch[0];products.push({name,country,volume,url:href,price:0});});const json=JSON.stringify(products,null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='sodas-links.json';a.click();alert('Найдено '+products.length+' товаров. Файл sodas-links.json скачан!')})();" 
+          style="background: #667eea; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600;">
+          📥 Собрать ссылки
+        </a>
+      </p>
+      <p style="color: #666; font-size: 14px; margin-top: 10px;">
+        Затем откройте каталог газировок и нажмите на эту закладку. Данные автоматически скачаются.
+      </p>
+    </div>
+
+    <!-- Шаг 2: Скрипт для Console -->
+    <div class="step">
+      <h2>
+        <span class="step-number">2</span>
+        Или используйте DevTools Console
+      </h2>
+      <p>Откройте <code>https://krasnoeibeloe.ru/catalog/soki-i-nektary/?...</code> и вставьте в Console (F12):</p>
+      <div class="code-block">
+const products = [];
+const links = document.querySelectorAll('a[href*="/gazirovannaya-voda/"]');
+
+links.forEach(link => {
+  const href = link.href;
+  if (products.some(p => p.url === href)) return;
+  
+  const name = link.textContent.trim();
+  const parent = link.closest('[class*="item"]');
+  if (!parent) return;
+  
+  const text = parent.textContent;
+  let country = 'Россия';
+  if (text.includes('Корея')) country = 'Корея';
+  
+  const volumeMatch = text.match(/(\d+(?:\.\d+)?)\s*(л|мл)/);
+  let volume = volumeMatch ? volumeMatch[0] : '';
+  
+  products.push({
+    name,
+    country,
+    volume,
+    url: href,
+    price: 0  // Заполните вручную
+  });
+});
+
+console.log(`Найдено ${products.length} товаров`);
+console.table(products);
+copy(JSON.stringify(products, null, 2));
+console.log('✅ Данные скопированы в буфер обмена!');
+      </div>
+    </div>
+
+    <!-- Шаг 3: Вставить данные -->
+    <div class="step">
+      <h2>
+        <span class="step-number">3</span>
+        Вставьте собранные данные
+      </h2>
+      <p>Вставьте JSON из буфера обмена или загрузите файл:</p>
+      <textarea id="jsonInput" placeholder='[
+  {
+    "name": "Газ.вода Добрый кола пэт",
+    "country": "Россия",
+    "volume": "0.3 л",
+    "url": "https://krasnoeibeloe.ru/...",
+    "price": 45
+  }
+]'></textarea>
+      <div style="margin-top: 15px; display: flex; gap: 10px;">
+        <button onclick="processData()">🔄 Обработать данные</button>
+        <button onclick="downloadJSON()">💾 Скачать JSON</button>
+        <button onclick="copyToClipboard()">📋 Скопировать</button>
+      </div>
+      <div id="success" class="success"></div>
+    </div>
+
+    <!-- Статистика -->
+    <div class="stats" id="stats" style="display: none;">
+      <div class="stat-card">
+        <div class="stat-value" id="totalCount">0</div>
+        <div class="stat-label">Всего товаров</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="avgPrice">0₽</div>
+        <div class="stat-label">Средняя цена/л</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="typesCount">0</div>
+        <div class="stat-label">Типов газировки</div>
+      </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="step" id="resultStep" style="display: none;">
+      <h2>
+        <span class="step-number">✅</span>
+        TypeScript код готов!
+      </h2>
+      <textarea id="tsOutput" readonly></textarea>
+      <div style="margin-top: 15px;">
+        <button onclick="copyTS()">📋 Скопировать TypeScript</button>
+        <button onclick="downloadTS()">💾 Скачать .ts файл</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let processedData = [];
+
+    function detectType(name) {
+      const lower = name.toLowerCase();
+      if (lower.includes('кола') || lower.includes('cola')) return 'Кола';
+      if (lower.includes('лимон') && lower.includes('лайм')) return 'Лимон-Лайм';
+      if (lower.includes('апельсин')) return 'Апельсиновая';
+      if (lower.includes('лимонад')) return 'Лимонад';
+      if (lower.includes('цитрус')) return 'Цитрус';
+      return 'Фруктовая';
+    }
+
+    function parseVolume(volumeText) {
+      const match = volumeText.match(/(\d+(?:\.\d+)?)\s*(л|мл)/i);
+      if (!match) return 0;
+      const value = parseFloat(match[1]);
+      const unit = match[2].toLowerCase();
+      return unit === 'л' ? value * 1000 : value;
+    }
+
+    function getTasteProfile(type) {
+      const profiles = {
+        'Кола': { sweet: 6, sour: 1, bitter: 0, alcohol: 0 },
+        'Лимонад': { sweet: 5, sour: 4, bitter: 0, alcohol: 0 },
+        'Апельсиновая': { sweet: 7, sour: 2, bitter: 0, alcohol: 0 },
+        'Лимон-Лайм': { sweet: 4, sour: 5, bitter: 0, alcohol: 0 },
+        'Цитрус': { sweet: 5, sour: 5, bitter: 0, alcohol: 0 },
+        'Фруктовая': { sweet: 6, sour: 3, bitter: 0, alcohol: 0 }
+      };
+      return profiles[type] || { sweet: 5, sour: 3, bitter: 0, alcohol: 0 };
+    }
+
+    function cleanName(name, type, volumeMl) {
+      let cleaned = name
+        .replace(/Газ\.вода|Газированный напиток|Напиток|б\/а|ст|пэт|ж\/б/gi, '')
+        .trim();
+      
+      const brandMatch = cleaned.match(/(Добрый|Экспорт.*?Стаил|Fresh\s*Bar|Любимая|Милкис)/i);
+      const brand = brandMatch ? brandMatch[1].trim() : cleaned.split(' ')[0];
+      
+      const volumeText = volumeMl >= 1000 ? `${volumeMl / 1000}л` : `${volumeMl}мл`;
+      return `${type} ${brand} ${volumeText}`;
+    }
+
+    function processData() {
+      try {
+        const input = document.getElementById('jsonInput').value;
+        const rawData = JSON.parse(input);
+        
+        processedData = rawData.map(item => {
+          const volumeMl = parseVolume(item.volume);
+          const type = detectType(item.name);
+          const name = cleanName(item.name, type, volumeMl);
+          const pricePerLiter = volumeMl > 0 ? Math.round((item.price / volumeMl) * 1000) : 0;
+          
+          return {
+            name,
+            category: 'soda',
+            color: '#00BFFF',
+            abv: 0,
+            pricePerLiter,
+            volume: volumeMl,
+            tasteProfile: getTasteProfile(type),
+            unit: 'ml',
+            sourceUrl: item.url,
+            sourceName: 'Красное&Белое',
+            sourceIcon: 'https://krasnoeibeloe.ru/favicon.ico'
+          };
+        });
+
+        // Генерируем TypeScript
+        const date = new Date().toLocaleDateString('ru-RU');
+        const tsCode = `import type { Ingredient } from "@shared/schema";
+
+/**
+ * Газированные напитки с krasnoeibeloe.ru
+ * Данные собраны вручную (${date})
+ * Всего товаров: ${processedData.length}
+ */
+
+export const KRASNOEIBELOE_SODAS: Partial<Ingredient>[] = [
+${processedData.map(item => `  {
+    name: "${item.name}",
+    category: "soda",
+    color: "${item.color}",
+    abv: ${item.abv},
+    pricePerLiter: ${item.pricePerLiter},
+    volume: ${item.volume},
+    tasteProfile: ${JSON.stringify(item.tasteProfile)},
+    unit: "${item.unit}",
+    sourceUrl: "${item.sourceUrl}",
+    sourceName: "${item.sourceName}",
+    sourceIcon: "${item.sourceIcon}"
+  }`).join(',\n')}
+];
+`;
+
+        document.getElementById('tsOutput').value = tsCode;
+        document.getElementById('resultStep').style.display = 'block';
+
+        // Статистика
+        const avgPrice = Math.round(processedData.reduce((s, p) => s + p.pricePerLiter, 0) / processedData.length);
+        const types = new Set(processedData.map(p => detectType(p.name)));
+        
+        document.getElementById('totalCount').textContent = processedData.length;
+        document.getElementById('avgPrice').textContent = avgPrice + '₽';
+        document.getElementById('typesCount').textContent = types.size;
+        document.getElementById('stats').style.display = 'grid';
+
+        const success = document.getElementById('success');
+        success.textContent = `✅ Обработано ${processedData.length} товаров!`;
+        success.style.display = 'block';
+        
+        setTimeout(() => {
+          success.style.display = 'none';
+        }, 3000);
+
+      } catch (error) {
+        alert('Ошибка: ' + error.message);
+      }
+    }
+
+    function copyTS() {
+      const output = document.getElementById('tsOutput');
+      output.select();
+      document.execCommand('copy');
+      alert('TypeScript код скопирован!');
+    }
+
+    function downloadTS() {
+      const content = document.getElementById('tsOutput').value;
+      const blob = new Blob([content], { type: 'text/typescript' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'krasnoeibeloe-sodas.ts';
+      a.click();
+    }
+
+    function downloadJSON() {
+      const content = document.getElementById('jsonInput').value;
+      const blob = new Blob([content], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'sodas-data.json';
+      a.click();
+    }
+
+    function copyToClipboard() {
+      const input = document.getElementById('jsonInput');
+      input.select();
+      document.execCommand('copy');
+      alert('JSON скопирован!');
+    }
+  </script>
+</body>
+</html>

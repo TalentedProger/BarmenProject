@@ -11,6 +11,12 @@ import {
   boolean,
   uuid,
 } from "drizzle-orm/pg-core";
+import {
+  sqliteTable,
+  text as sqliteText,
+  integer as sqliteInteger,
+  real as sqliteReal,
+} from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -48,6 +54,11 @@ export const ingredients = pgTable("ingredients", {
   pricePerLiter: decimal("price_per_liter", { precision: 10, scale: 2 }).notNull(),
   tasteProfile: jsonb("taste_profile").notNull(), // {sweet: 0-10, sour: 0-10, bitter: 0-10, alcohol: 0-10}
   unit: varchar("unit", { length: 10 }).notNull().default("ml"), // ml, g, piece
+  sourceUrl: varchar("source_url", { length: 500 }), // URL товара на сайте источника
+  sourceName: varchar("source_name", { length: 100 }), // Название магазина/источника
+  sourceIcon: varchar("source_icon", { length: 500 }), // URL иконки магазина
+  imageUrl: varchar("image_url", { length: 500 }), // URL изображения товара
+  volume: integer("volume"), // Объем упаковки в мл
   createdAt: timestamp("created_at").defaultNow(),
 });
 
