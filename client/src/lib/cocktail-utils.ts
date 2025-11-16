@@ -41,13 +41,16 @@ export function calculateCocktailStats(
     const tasteProfile = ingredient.tasteProfile as TasteProfile;
 
     // Фрукты и декор измеряются в граммах или килограммах
-    const isFruitOrGarnish = ingredient.category === 'fruit' || ingredient.category === 'garnish';
-    const isKgBased = unit === "kg" || ingredient.unit === "kg";
-    const isGramBased = unit === "g" || ingredient.unit === "g";
-    
-    let volumeInMl = 0;
-    let costCalculation = 0;
-    let weight = 0;
+  const isFruitOrGarnish = ingredient.category === 'fruit' || ingredient.category === 'garnish';
+  // ВАЖНО: Используем единицу измерения самого элемента рецепта, если она есть.
+  // Это предотвращает ситуацию, когда ingredient.unit === 'kg', но сам рецепт хранит 'g'.
+  const effectiveUnit = (unit && unit.trim()) ? unit : (ingredient.unit || "ml");
+  const isKgBased = effectiveUnit === "kg";
+  const isGramBased = effectiveUnit === "g";
+  
+  let volumeInMl = 0;
+  let costCalculation = 0;
+  let weight = 0;
 
     if (isFruitOrGarnish || isGramBased || isKgBased) {
       // Для фруктов и декора:
@@ -55,26 +58,26 @@ export function calculateCocktailStats(
       // - Цена рассчитывается в зависимости от единиц измерения
       
       if (isKgBased) {
-        // Если количество в килограммах (например 0.015 кг = 15г)
-        // pricePerLiter хранится в копейках (24900 = 249₽/кг)
-        // Делим на 100, чтобы получить рубли, затем умножаем на quantity
-        costCalculation = quantity * (pricePerLiter / 100);
-        weight = (quantity * 1000) / 100; // Конвертируем кг в граммы для веса
-        volumeInMl = quantity * 1000; // 1кг = 1000мл для визуализации заполнения
-      } else {
-        // Если количество в граммах
-        // pricePerLiter - это цена за 1кг (1000г) в копейках, делим на 100 для рублей
-        costCalculation = (quantity / 1000) * (pricePerLiter / 100);
-        weight = quantity / 100;
-        volumeInMl = quantity; // 1г = 1мл для визуализации заполнения
-      }
+      // Если количество в килограммах (например 0.015 кг = 15г)
+      // pricePerLiter хранится в копейках (24900 = 249₽/кг)
+      // Делим на 100, чтобы получить рубли, затем умножаем на quantity
+      costCalculation = quantity * (pricePerLiter / 100);
+      weight = (quantity * 1000) / 100; // Конвертируем кг в граммы для веса
+      volumeInMl = quantity * 1000; // 1кг = 1000мл для визуализации заполнения
     } else {
+      // Если количество в граммах
+      // pricePerLiter - это цена за 1кг (1000г) в копейках, делим на 100 для рублей
+      costCalculation = (quantity / 1000) * (pricePerLiter / 100);
+      weight = quantity / 100;
+      volumeInMl = quantity; // 1г = 1мл для визуализации заполнения
+    }
+  } else {
       // Для жидких ингредиентов (мл)
       volumeInMl = quantity;
       costCalculation = (quantity / 1000) * pricePerLiter; // цена за литр (1000мл)
       weight = volumeInMl / 100;
     }
-
+    
     totalVolume += volumeInMl;
     totalAlcohol += (volumeInMl * abv) / 100;
     totalCost += costCalculation;
@@ -93,9 +96,11 @@ export function calculateCocktailStats(
   ingredients.forEach(({ ingredient, amount, unit }) => {
     const quantity = parseFloat(amount.toString());
     const isFruitOrGarnish = ingredient.category === 'fruit' || ingredient.category === 'garnish';
-    const isKgBased = unit === "kg" || ingredient.unit === "kg";
+    const effectiveUnit = (unit && unit.trim()) ? unit : (ingredient.unit || "ml");
+    const isKgBased = effectiveUnit === "kg";
+    const isGramBased = effectiveUnit === "g";
     
-    if (isFruitOrGarnish || isKgBased) {
+    if (isFruitOrGarnish || isKgBased || isGramBased) {
       if (isKgBased) {
         totalIngredientWeight += (quantity * 1000) / 100; // kg to grams weight
       } else {

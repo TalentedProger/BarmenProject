@@ -83,8 +83,9 @@ export default function DrinkVisualizer() {
 
     const totalVolume = ingredients.reduce((sum, item) => {
       const amount = parseFloat(item.amount.toString());
-      // Convert kg to ml for fruits (density approximation)
-      const volumeInMl = item.ingredient.unit === 'kg' ? amount * 1000 : amount;
+      // Prefer the recipe item's unit over ingredient's default
+      const effUnit = (item.unit && item.unit.trim()) ? item.unit : item.ingredient.unit;
+      const volumeInMl = effUnit === 'kg' ? amount * 1000 : amount;
       return sum + volumeInMl;
     }, 0);
     
@@ -149,20 +150,35 @@ export default function DrinkVisualizer() {
               }}
             >
             {/* Liquid layers */}
-            {layers.map((layer, index) => (
-              <div
-                key={index}
-                className="absolute left-0 right-0 liquid-layer opacity-90 cursor-pointer"
-                style={{
-                  height: `${layer.height}px`,
-                  bottom: `${layer.bottom}px`,
-                  background: `linear-gradient(to top, ${layer.color}, ${layer.color}dd)`,
-                  transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}
-                onMouseEnter={() => setHoveredLayer({ name: layer.name, color: layer.color })}
-                onMouseLeave={() => setHoveredLayer(null)}
-              />
-            ))}
+            {layers.map((layer, index) => {
+              // Вычисляем процент заполнения для текущего слоя
+              const layerBottomPercent = (layer.bottom / glassHeight) * 100;
+              const layerTopPercent = ((layer.bottom + layer.height) / glassHeight) * 100;
+              
+              // Вычисляем ширину на основе трапеции: 20% сверху -> 100% снизу
+              const topLeftPercent = 20 - (layerTopPercent / 100) * 20;
+              const topRightPercent = 80 + (layerTopPercent / 100) * 20;
+              const bottomLeftPercent = 20 - (layerBottomPercent / 100) * 20;
+              const bottomRightPercent = 80 + (layerBottomPercent / 100) * 20;
+              
+              return (
+                <div
+                  key={index}
+                  className="absolute liquid-layer opacity-90 cursor-pointer"
+                  style={{
+                    height: `${layer.height}px`,
+                    bottom: `${layer.bottom}px`,
+                    left: 0,
+                    right: 0,
+                    background: `linear-gradient(to top, ${layer.color}, ${layer.color}dd)`,
+                    clipPath: `polygon(${topLeftPercent}% 0%, ${topRightPercent}% 0%, ${bottomRightPercent}% 100%, ${bottomLeftPercent}% 100%)`,
+                    transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+                  }}
+                  onMouseEnter={() => setHoveredLayer({ name: layer.name, color: layer.color })}
+                  onMouseLeave={() => setHoveredLayer(null)}
+                />
+              );
+            })}
             
             {/* Ice cubes effect */}
             {ingredients.some(item => item.ingredient.category === 'ice') && (
@@ -187,7 +203,8 @@ export default function DrinkVisualizer() {
   // Calculate volume and fullness status
   const totalVolume = ingredients.reduce((sum, item) => {
     const amount = parseFloat(item.amount.toString());
-    const volumeInMl = item.ingredient.unit === 'kg' ? amount * 1000 : amount;
+    const effUnit = (item.unit && item.unit.trim()) ? item.unit : item.ingredient.unit;
+    const volumeInMl = effUnit === 'kg' ? amount * 1000 : amount;
     return sum + volumeInMl;
   }, 0);
   

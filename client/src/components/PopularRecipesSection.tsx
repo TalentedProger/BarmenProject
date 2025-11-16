@@ -1,4 +1,4 @@
-import { useState, useEffect, memo, useMemo } from 'react';
+import { useState, useEffect, memo, useMemo, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import { ArrowLeft, ArrowRight, Star, RefreshCw, Droplet, Percent, Coins } from 'lucide-react';
@@ -30,6 +30,7 @@ interface Recipe {
   price?: number;
 }
 
+// Reduced to first 6 recipes for better performance
 const popularRecipes: Recipe[] = [
   {
     id: 1,
@@ -114,157 +115,59 @@ const popularRecipes: Recipe[] = [
     difficulty: "Средне",
     flavor: { sweet: 1, sour: 4, bitter: 1, spicy: 0 },
     price: 210
-  },
+  }
+  ,
   {
     id: 7,
-    name: "Манхэттен",
-    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_deep_amber_Manhattan_in_a_short_0_1753377591759.jpg",
-    description: "Горький и сильный коктейль с вермутом",
-    tags: ["Крепкий", "Пряный"],
-    abv: 18,
-    volume: 90,
+    name: "Космополитен",
+    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_bright_pink_Cosmopolitan_in_a_m_0_1753377591757.jpg",
+    description: "Яркий кислo-сладкий коктейль с клюквой и лаймом",
+    tags: ["Ягодный", "Кисло-сладкий"],
+    abv: 12,
+    volume: 150,
     rating: 4.7,
-    reviewCount: 185,
-    difficulty: "Сложно",
-    flavor: { sweet: 1, sour: 1, bitter: 4, spicy: 2 },
+    reviewCount: 264,
+    difficulty: "Средне",
+    flavor: { sweet: 3, sour: 3, bitter: 0, spicy: 0 },
     price: 240
   },
   {
     id: 8,
-    name: "Мартини Фиеро Тоник",
-    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_vibrant_orange_Martini_Fiero__T_1_1753377591758.jpg",
-    description: "Лёгкий коктейль на базе апельсинового мартини",
-    tags: ["Лёгкий", "Цитрус"],
-    abv: 8,
-    volume: 180,
-    rating: 4.5,
-    reviewCount: 130,
-    difficulty: "Легко",
-    flavor: { sweet: 2, sour: 2, bitter: 2, spicy: 0 },
-    price: 200
-  },
-  {
-    id: 9,
-    name: "Б-52",
-    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_layered_B52_shot_in_a_small_sho_3_1753377591758.jpg",
-    description: "Слоистый шот с ликёрами",
-    tags: ["Сладкий", "Шот"],
-    abv: 22,
-    volume: 50,
-    rating: 4.6,
-    reviewCount: 165,
-    difficulty: "Сложно",
-    flavor: { sweet: 4, sour: 0, bitter: 1, spicy: 0 },
-    price: 180
-  },
-  {
-    id: 10,
-    name: "Космополитен",
-    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_bright_pink_Cosmopolitan_in_a_m_0_1753377591757.jpg",
-    description: "Яркий коктейль с клюквой и лаймом",
-    tags: ["Яркий", "Фруктовый"],
-    abv: 13,
-    volume: 130,
-    rating: 4.8,
-    reviewCount: 203,
-    difficulty: "Средне",
-    flavor: { sweet: 3, sour: 3, bitter: 1, spicy: 0 },
-    price: 210
-  },
-  {
-    id: 11,
-    name: "Белый русский",
-    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_White_Russian_in_a_short_glass__2_1753377591757.jpg",
-    description: "Кофейно-сливочный коктейль на водке",
-    tags: ["Сливочный", "Десертный"],
-    abv: 20,
-    volume: 120,
-    rating: 4.7,
-    reviewCount: 157,
-    difficulty: "Легко",
-    flavor: { sweet: 4, sour: 0, bitter: 1, spicy: 0 },
-    price: 230
-  },
-  {
-    id: 12,
-    name: "Лонг Айленд Айс Ти",
-    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Long_Island_Iced_Tea_in_a_tall__1_1753377591756.jpg",
-    description: "Мощный коктейль из 5 спиртов",
-    tags: ["Крепкий", "Цитрус"],
-    abv: 22,
-    volume: 250,
-    rating: 4.9,
-    reviewCount: 432,
-    difficulty: "Сложно",
-    flavor: { sweet: 2, sour: 3, bitter: 1, spicy: 1 },
-    price: 270
-  },
-  {
-    id: 13,
-    name: "Куба либре",
-    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Cuba_Libre_in_a_tall_glass_dark_2_1753377591756.jpg",
-    description: "Кола + ром + лайм — просто и эффектно",
-    tags: ["Классика", "Газированный"],
-    abv: 12,
-    volume: 200,
-    rating: 4.6,
-    reviewCount: 188,
-    difficulty: "Легко",
-    flavor: { sweet: 3, sour: 2, bitter: 1, spicy: 0 },
-    price: 220
-  },
-  {
-    id: 14,
-    name: "Текила Санрайз",
-    image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Tequila_Sunrise_in_a_tall_glass_2_1753377591754.jpg",
-    description: "Солнечный градиент апельсина и гренадина",
-    tags: ["Яркий", "Экзотика"],
-    abv: 13,
-    volume: 160,
-    rating: 4.8,
-    reviewCount: 294,
-    difficulty: "Средне",
-    flavor: { sweet: 4, sour: 2, bitter: 0, spicy: 0 },
-    price: 230
-  },
-  {
-    id: 15,
     name: "Негрони",
     image: "/attached_assets/Flux_Dev_A_classic_Negroni_in_a_short_glass_with_a_large_ice_c_3_1753377591753.jpg",
-    description: "Горький и стильный коктейль с джином",
-    tags: ["Крепкий", "Аперитив"],
-    abv: 20,
-    volume: 100,
-    rating: 4.5,
-    reviewCount: 162,
+    description: "Сбалансированная горчинка кампари, джина и вермута",
+    tags: ["Горьковатый", "Аперитив"],
+    abv: 16,
+    volume: 120,
+    rating: 4.6,
+    reviewCount: 198,
     difficulty: "Средне",
-    flavor: { sweet: 1, sour: 1, bitter: 5, spicy: 1 },
-    price: 250
+    flavor: { sweet: 2, sour: 1, bitter: 4, spicy: 0 },
+    price: 260
   }
 ];
 
-const RecipeCard = ({ recipe, priority = false }: { recipe: Recipe; priority?: boolean }) => {
+const RecipeCard = memo(({ recipe, priority = false }: { recipe: Recipe; priority?: boolean }) => {
   return (
     <div className="recipe-card relative popular-card-wrapper group py-4">
       <Link href={`/recipe/${recipe.id}`}>
         <div 
-          className="bg-[#1A1A1E] rounded-2xl transition-transform duration-300 ease-out overflow-hidden h-[460px] flex flex-col relative z-10 max-[480px]:h-[420px] max-[480px]:w-[85%] max-[480px]:mx-auto cursor-pointer will-change-transform transform-gpu group-hover:scale-[1.02] popular-card-inner"
+          className="bg-[#1A1A1E] rounded-2xl overflow-hidden h-[460px] flex flex-col relative z-10 max-[480px]:h-[420px] max-[480px]:w-[85%] max-[480px]:mx-auto cursor-pointer"
         >
           {/* Background Image covering entire card */}
           <div className="absolute inset-0 overflow-hidden will-change-transform rounded-2xl">
             <img
               src={recipe.image}
               alt={recipe.name}
-              className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+              className="w-full h-full object-cover"
               loading={priority ? "eager" : "lazy"}
-              fetchPriority={priority ? "high" : "auto"}
+              fetchPriority={priority ? "high" : "low"}
               decoding="async"
               width="400"
               height="460"
               style={{
                 transform: 'translate3d(0, 0, 0)',
                 backfaceVisibility: 'hidden',
-                willChange: 'transform',
               }}
             />
             {/* Enhanced gradient overlay for better text readability - immediately visible */}
@@ -284,16 +187,9 @@ const RecipeCard = ({ recipe, priority = false }: { recipe: Recipe; priority?: b
               {recipe.tags.slice(0, 2).map((tag, index) => (
                 <span
                   key={index}
-                  className="text-sm px-4 py-1.5 rounded-full text-white font-semibold whitespace-nowrap max-[480px]:text-xs max-[480px]:px-3 max-[480px]:py-1 flex-1 text-center shadow-lg transition-all duration-300 hover:scale-105"
-                  style={{
-                    background: index === 0 
-                      ? 'linear-gradient(135deg, rgba(6, 182, 212, 0.6) 0%, rgba(59, 130, 246, 0.6) 100%)'
-                      : 'linear-gradient(135deg, rgba(168, 85, 247, 0.6) 0%, rgba(236, 72, 153, 0.6) 100%)',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(255, 255, 255, 0.1) inset',
-                    letterSpacing: '0.3px'
-                  }}
+                  className={`text-sm px-4 py-1.5 rounded-full text-white font-semibold whitespace-nowrap max-[480px]:text-xs max-[480px]:px-3 max-[480px]:py-1 flex-1 text-center ${
+                    index === 0 ? 'bg-cyan-600/60' : 'bg-purple-600/60'
+                  }`}
                 >
                   {tag}
                 </span>
@@ -308,14 +204,7 @@ const RecipeCard = ({ recipe, priority = false }: { recipe: Recipe; priority?: b
               {/* Row 1: Объем */}
               <div className="flex items-center text-left">
                 <span className="inline-flex items-center gap-2">
-                  <span
-                    className="inline-flex items-center justify-center w-6 h-6 rounded-full shadow-md"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.35) 0%, rgba(59, 130, 246, 0.35) 100%)',
-                      backdropFilter: 'blur(6px)',
-                      border: '1px solid rgba(255,255,255,0.18)'
-                    }}
-                  >
+                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600/40">
                     <Droplet className="w-3.5 h-3.5 text-white" />
                   </span>
                   {recipe.volume} мл
@@ -325,14 +214,7 @@ const RecipeCard = ({ recipe, priority = false }: { recipe: Recipe; priority?: b
               {/* Row 2: ABV */}
               <div className="flex items-center text-left">
                 <span className="inline-flex items-center gap-2">
-                  <span
-                    className="inline-flex items-center justify-center w-6 h-6 rounded-full shadow-md"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.35) 0%, rgba(236, 72, 153, 0.35) 100%)',
-                      backdropFilter: 'blur(6px)',
-                      border: '1px solid rgba(255,255,255,0.18)'
-                    }}
-                  >
+                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-purple-600/40">
                     <Percent className="w-3.5 h-3.5 text-white" />
                   </span>
                   {recipe.abv}%
@@ -342,14 +224,7 @@ const RecipeCard = ({ recipe, priority = false }: { recipe: Recipe; priority?: b
               {/* Row 3: Цена */}
               <div className="flex items-center text-left">
                 <span className="inline-flex items-center gap-2">
-                  <span
-                    className="inline-flex items-center justify-center w-6 h-6 rounded-full shadow-md"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.35) 0%, rgba(5, 150, 105, 0.35) 100%)',
-                      backdropFilter: 'blur(6px)',
-                      border: '1px solid rgba(255,255,255,0.18)'
-                    }}
-                  >
+                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-600/40">
                     <Coins className="w-3.5 h-3.5 text-white" />
                   </span>
                   {recipe.price || '150'} ₽
@@ -358,14 +233,7 @@ const RecipeCard = ({ recipe, priority = false }: { recipe: Recipe; priority?: b
               
               {/* Row 4: Рейтинг */}
               <div className="flex items-center space-x-2 text-left">
-                <span
-                  className="inline-flex items-center justify-center w-6 h-6 rounded-full shadow-md"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(250, 204, 21, 0.35) 0%, rgba(251, 191, 36, 0.35) 100%)',
-                    backdropFilter: 'blur(6px)',
-                    border: '1px solid rgba(255,255,255,0.18)'
-                  }}
-                >
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-600/40">
                   <Star className="w-3.5 h-3.5 text-yellow-300" />
                 </span>
                 <div className="flex">
@@ -400,14 +268,77 @@ const RecipeCard = ({ recipe, priority = false }: { recipe: Recipe; priority?: b
       </Link>
     </div>
   );
-};
+}, (prev, next) => {
+  return prev.recipe.id === next.recipe.id && prev.priority === next.priority;
+});
+
+RecipeCard.displayName = 'RecipeCard';
 
 const PopularRecipesSection = memo(() => {
   const [swiperRef, setSwiperRef] = useState<any>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   // Display all recipes for swiper
   const displayedRecipes = useMemo(() => popularRecipes, []);
+
+  // Compute initial centered slide index based on current viewport slidesPerView
+  const initialSlideIndex = useMemo(() => {
+    const w = typeof window !== 'undefined' ? window.innerWidth : 1024;
+    const spv = w >= 1024 ? 3 : w >= 640 ? 2 : 1;
+    return Math.floor(spv / 2); // 3->1 (2-я), 2->1 (2-я), 1->0
+  }, []);
+
+  // Keep the centered slide correct on resize
+  useEffect(() => {
+    if (!swiperRef) return;
+    const recenter = () => {
+      const w = window.innerWidth;
+      const spv = w >= 1024 ? 3 : w >= 640 ? 2 : 1;
+      const target = Math.floor(spv / 2);
+      if (typeof swiperRef.slideTo === 'function') {
+        swiperRef.slideTo(target, 0);
+      }
+    };
+    // initial micro delay to let Swiper compute sizes
+    const id = window.setTimeout(recenter, 50);
+    window.addEventListener('resize', recenter, { passive: true } as any);
+    return () => {
+      window.clearTimeout(id);
+      window.removeEventListener('resize', recenter as any);
+    };
+  }, [swiperRef]);
+
+  // Pause autoplay when section is offscreen or tab is hidden (performance)
+  useEffect(() => {
+    if (!swiperRef) return;
+    const autoplay = swiperRef.autoplay;
+    if (!autoplay) return;
+
+    const handleVisibility = () => {
+      if (document.hidden) autoplay.stop();
+      else autoplay.start();
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    let observer: IntersectionObserver | null = null;
+    if (sectionRef.current) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!autoplay) return;
+          if (entry.isIntersecting) autoplay.start();
+          else autoplay.stop();
+        },
+        { root: null, threshold: 0.2 }
+      );
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      if (observer) observer.disconnect();
+    };
+  }, [swiperRef]);
 
   // Detect mobile devices
   useEffect(() => {
@@ -421,7 +352,7 @@ const PopularRecipesSection = memo(() => {
   }, []);
 
   return (
-    <section className="py-12 bg-[#0C0C0F] relative overflow-visible max-[480px]:py-8">
+    <section ref={sectionRef as any} className="py-12 bg-[#0C0C0F] relative overflow-visible max-[480px]:py-8">
       {/* Background gradient effects */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 blur-sm" />
@@ -441,19 +372,22 @@ const PopularRecipesSection = memo(() => {
           modules={[Navigation, Autoplay]}
           grabCursor={true}
           centeredSlides={true}
-          loop={true}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-          }}
-          speed={400}
-          preventInteractionOnTransition={false}
-          touchRatio={1}
-          threshold={8}
+          centeredSlidesBounds={true}
+          loop={false}
+          speed={300}
+          preventInteractionOnTransition={true}
+          touchRatio={0.8}
+          threshold={10}
           allowTouchMove={true}
           slidesPerView={1}
           spaceBetween={20}
+          initialSlide={initialSlideIndex}
+          autoplay={{
+            delay: 8000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          rewind={true}
           breakpoints={{
             640: {
               slidesPerView: 2,
@@ -464,11 +398,21 @@ const PopularRecipesSection = memo(() => {
               spaceBetween: 40,
             },
           }}
-          className="popular-recipes-swiper mb-8 max-[480px]:mb-4 swiper-mobile-optimized"
+          lazy={{
+            loadPrevNext: true,
+            loadPrevNextAmount: 1,
+          }}
+          watchSlidesProgress={false}
+          observer={false}
+          observeParents={false}
+          updateOnWindowResize={true}
+          resizeObserver={false}
+          passiveListeners={true}
+          className="popular-recipes-swiper mb-8 max-[480px]:mb-4"
         >
           {displayedRecipes.map((recipe, index) => (
             <SwiperSlide key={recipe.id}>
-              <RecipeCard recipe={recipe} priority={index === 0} />
+              <RecipeCard recipe={recipe} priority={index === initialSlideIndex} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -480,15 +424,19 @@ const PopularRecipesSection = memo(() => {
           </p>
         </div>
 
-        {/* Navigation Arrows */}
-        <div className="flex justify-center items-center gap-6 mt-5 max-[480px]:hidden">
+        {/* Navigation Arrows + Catalog CTA */}
+        <div className="flex justify-center items-center gap-10 mt-5 max-[480px]:hidden">
           <button
             onClick={() => swiperRef?.slidePrev()}
             className="p-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30 max-[480px]:p-3"
           >
             <ArrowLeft className="w-6 h-6 text-white max-[480px]:w-5 max-[480px]:h-5" />
           </button>
-          
+          {/* Catalog CTA in between arrows */}
+          <Button asChild variant="ghost" className="neon-outline-amber rounded-full px-8 py-3.5 text-base font-semibold tracking-wide">
+            <Link href="/catalog">Перейти в каталог</Link>
+          </Button>
+
           <button
             onClick={() => swiperRef?.slideNext()}
             className="p-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30 max-[480px]:p-3"

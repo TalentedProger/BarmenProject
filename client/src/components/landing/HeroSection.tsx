@@ -19,10 +19,10 @@ const HeroSection = memo(({ onGetStarted }: HeroSectionProps) => {
         <div className="grid md:grid-cols-2 gap-12 items-center py-24 max-[480px]:py-12 max-[480px]:gap-6">
           <div className="space-y-4 md:pl-8 flex flex-col justify-center animate-fade-in max-[480px]:text-center max-[480px]:space-y-3">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-platinum leading-tight max-[480px]:text-2xl md:max-w-[450px] lg:max-w-[500px]">
-              Создай свой идеальный коктейль
+              Создай свой идеальный коктейль за пару минут
             </h1>
             <p className="text-sm md:text-base lg:text-lg text-zinc max-w-2xl leading-relaxed max-[480px]:text-xs max-[480px]:px-2">
-              Интерактивный конструктор напитков с реалистичной визуализацией, расчетом крепости и стоимости
+              Попробуй интерактивный конструктор напитков с реалистичной визуализацией, расчетом крепости и стоимости — всё, как за стойкой бара.
             </p>
           </div>
           

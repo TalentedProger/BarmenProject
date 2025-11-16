@@ -174,7 +174,7 @@ export default function Constructor() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       
-      <section className="pt-56 pb-16 bg-gradient-to-br from-purple-950/90 via-purple-900/80 to-blue-950/90 backdrop-blur-sm">
+      <section className="pt-56 pb-16 bg-gradient-to-br from-purple-950 via-purple-950/95 to-blue-950 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <div className="flex justify-center mb-6">
@@ -194,10 +194,7 @@ export default function Constructor() {
                 />
               </div>
             </div>
-            <h2 
-              className="text-4xl font-bold mb-4 text-white drop-shadow-lg shadow-black" 
-              style={{textShadow: '0 6px 12px rgba(0, 0, 0, 0.8), 0 12px 24px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 255, 255, 0.1)'}}
-            >
+            <h2 className="text-4xl font-bold mb-4 text-white">
               Конструктор Коктейлей
             </h2>
             <p className="text-xl text-zinc max-w-2xl mx-auto mb-6">
@@ -219,7 +216,7 @@ export default function Constructor() {
             {/* Center Content - Reduced width - order-1 on mobile (Glass first) */}
             <div className="lg:col-span-4 flex flex-col space-y-4 order-1 lg:order-2">
               {/* Glass Selector or Drink Visualizer */}
-              <div className="bg-card/80 backdrop-blur-sm border border-border rounded-lg p-6 flex-1">
+              <div className="bg-card/40 backdrop-blur-sm border border-border rounded-lg p-6 flex-1">
                 {!selectedGlass ? (
                   <CompactGlassSelector />
                 ) : (

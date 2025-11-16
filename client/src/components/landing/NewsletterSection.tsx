@@ -49,7 +49,7 @@ const NewsletterSection = memo(() => {
           </div>
           
           <div className="flex justify-center">
-            <div className="relative hover:scale-105 transition-all duration-300">
+            <div className="relative">
               <img 
                 src="/attached_assets/Flux_Dev_a_lush_3d_render_of_A_stylized_artistic_illustration__3-Photoroom_1752879813613.png"
                 alt="Стилизованный коктейль"
@@ -131,7 +131,7 @@ const NewsletterSection = memo(() => {
           </div>
           
           <div className="flex-1 flex justify-center md:justify-end">
-            <div className="relative hover:scale-105 transition-all duration-300">
+            <div className="relative">
               <img 
                 src="/attached_assets/Flux_Dev_a_lush_3d_render_of_A_stylized_artistic_illustration__3-Photoroom_1752879813613.png"
                 alt="Стилизованный коктейль"

@@ -213,17 +213,6 @@ body[style] {
 - `client/src/components/admin/IngredientsManager.tsx` - добавлен `modal={false}` к 4 Select
 - `client/src/components/cocktail/ingredient-recommendations.tsx` - заменен нативный select на Select с `modal={false}`, улучшены стили
 
-**Документация:**
-- `docs/Bug_tracking.md` - полная документация проблемы и решения
-
----
-
-## Шаблон для новых багов
-
-**Дата обнаружения:**  
-**Дата исправления:**  
-**Приоритет:**  
-**Статус:**
 
 ### Описание проблемы
 

@@ -35,10 +35,11 @@ const IngredientItem = memo(({
   onDirectChange: (index: number, amount: number) => void;
 }) => {
   const numericAmount = parseFloat(item.amount) || 0;
-  const displayAmount = item.ingredient.unit === 'kg' ? 
-    Math.round(numericAmount * 1000) : 
-    Math.round(numericAmount);
-  const displayUnit = item.ingredient.unit === 'kg' ? 'г' : item.unit;
+  // Используем единицу элемента рецепта, а не исходного ингредиента
+  const isKgUnit = item.unit === 'kg';
+  const isGramUnit = item.unit === 'g';
+  const displayAmount = isKgUnit ? Math.round(numericAmount * 1000) : Math.round(numericAmount);
+  const displayUnit = isKgUnit ? 'г' : item.unit;
   
   return (
     <div className="relative p-3 bg-muted rounded-lg">
@@ -69,16 +70,16 @@ const IngredientItem = memo(({
             variant="outline"
             onClick={() => onUpdateAmount(index, -1)}
             className="h-6 w-6 p-0"
-            disabled={displayAmount <= (item.ingredient.unit === 'kg' ? 10 : 5)}
+            disabled={displayAmount <= (isKgUnit ? 10 : 5)}
           >
             <Minus className="h-3 w-3" />
           </Button>
           
           <EditableAmount
             amount={numericAmount}
-            unit={item.ingredient.unit}
-            minAmount={item.ingredient.unit === 'kg' ? 10 : 5}
-            maxAmount={item.ingredient.unit === 'kg' ? 500 : 500}
+            unit={item.unit}
+            minAmount={isKgUnit ? 10 : 5}
+            maxAmount={isKgUnit ? 500 : 500}
             onAmountChange={(newAmount) => onDirectChange(index, newAmount)}
             displayUnit={displayUnit}
             className="min-w-[50px]"
@@ -102,16 +103,16 @@ const IngredientItem = memo(({
           variant="outline"
           onClick={() => onUpdateAmount(index, -1)}
           className="h-7 w-7 p-0"
-          disabled={displayAmount <= (item.ingredient.unit === 'kg' ? 10 : 5)}
+          disabled={displayAmount <= (isKgUnit ? 10 : 5)}
         >
           <Minus className="h-3 w-3" />
         </Button>
         
         <EditableAmount
           amount={numericAmount}
-          unit={item.ingredient.unit}
-          minAmount={item.ingredient.unit === 'kg' ? 10 : 5}
-          maxAmount={item.ingredient.unit === 'kg' ? 500 : 500}
+          unit={item.unit}
+          minAmount={isKgUnit ? 10 : 5}
+          maxAmount={isKgUnit ? 500 : 500}
           onAmountChange={(newAmount) => onDirectChange(index, newAmount)}
           displayUnit={displayUnit}
           className="min-w-[60px]"
@@ -140,14 +141,25 @@ function IngredientSelector() {
   const handleUpdateAmount = useCallback((index: number, delta: number) => {
     startTransition(() => {
       const currentAmount = parseFloat(ingredients[index].amount) || 0;
-      const unit = ingredients[index].ingredient.unit;
+      // Используем единицу самого элемента рецепта
+      const unit = ingredients[index].unit;
       
       if (unit === 'kg') {
+        // Храним кг во внутреннем состоянии, шаги в граммах (±5 г)
         const gramsAmount = Math.round(currentAmount * 1000);
         const newGrams = Math.max(10, gramsAmount + delta * 5);
         const newKgAmount = newGrams / 1000;
         updateIngredient(index, newKgAmount);
+      } else if (unit === 'g') {
+        // Прямые граммы (±5 г)
+        const gramsAmount = Math.round(currentAmount);
+        const newGrams = Math.max(10, gramsAmount + delta * 5);
+        updateIngredient(index, newGrams);
+      } else if (unit === 'piece') {
+        const newPieces = Math.max(1, Math.round(currentAmount + delta * 1));
+        updateIngredient(index, newPieces);
       } else {
+        // ml и прочие: шаг 5 мл
         const newAmount = Math.max(5, currentAmount + delta * 5);
         updateIngredient(index, newAmount);
       }

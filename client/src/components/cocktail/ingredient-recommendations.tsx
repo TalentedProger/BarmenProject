@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useTransition } from "react";
+import { useState, useMemo, useCallback, useTransition, useDeferredValue, memo, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,12 +9,35 @@ import { calculateCocktailStats } from "@/lib/cocktail-utils";
 import IngredientCard from "./IngredientCard";
 import type { Ingredient } from "@shared/schema";
 
-const CATEGORIES = [
+// Главные категории: только 3 (алкоголь, соки, лёд) для однострочного списка
+const MAIN_CATEGORIES = [
   { id: 'alcohol', label: 'Алкоголь', color: 'bg-neon-turquoise' },
   { id: 'juice', label: 'Соки', color: 'bg-neon-amber' },
-  { id: 'syrup', label: 'Сиропы', color: 'bg-neon-pink' },
   { id: 'ice', label: 'Лёд', color: 'bg-gray-500' },
 ];
+
+// Доп. категории: остальные, включая перенесенные "Сиропы"
+const ADDITIONAL_CATEGORIES = [
+  { id: 'syrup', label: 'Сиропы', color: 'bg-neon-pink' },
+  { id: 'soda', label: 'Газировка', color: 'bg-cyan-500' },
+  { id: 'energy_drink', label: 'Энергетики', color: 'bg-amber-500' },
+  { id: 'fruit', label: 'Фрукты', color: 'bg-neon-purple' },
+  { id: 'bitter', label: 'Биттеры', color: 'bg-red-600' },
+  { id: 'garnish', label: 'Декор', color: 'bg-green-600' },
+];
+
+// Цвет рамки для выбранной категории (соответствует прежнему фону)
+const BORDER_CLASS: Record<string, string> = {
+  alcohol: 'border-neon-turquoise',
+  juice: 'border-neon-amber',
+  syrup: 'border-neon-pink',
+  ice: 'border-gray-500',
+  soda: 'border-cyan-500',
+  energy_drink: 'border-amber-500',
+  fruit: 'border-neon-purple',
+  bitter: 'border-red-600',
+  garnish: 'border-green-600',
+};
 
 const ALCOHOL_TYPES = [
   'Водка', 'Виски', 'Бурбон', 'Джин', 'Ром', 'Текила', 'Бренди', 'Коньяк',
@@ -40,6 +63,16 @@ const ENERGY_DRINK_TYPES = [
   'Red Bull', 'Adrenaline', 'Flash Up', 'Lit Energy', 'Gorilla', 'Burn', 'Tornado', 'Volt Energy'
 ];
 
+// Мемоизированный компонент карточки ингредиента
+const MemoizedIngredientCard = memo(IngredientCard, (prev, next) => {
+  return (
+    prev.ingredient.id === next.ingredient.id &&
+    prev.disabled === next.disabled &&
+    prev.glassCapacity === next.glassCapacity &&
+    prev.currentTotalVolume === next.currentTotalVolume
+  );
+});
+
 export default function IngredientRecommendations() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('alcohol');
@@ -47,6 +80,17 @@ export default function IngredientRecommendations() {
   const [showMoreCategories, setShowMoreCategories] = useState(false);
   const [isPending, startTransition] = useTransition();
   const { ingredients, addIngredient, selectedGlass } = useCocktailStore();
+  const [isWide1535, setIsWide1535] = useState<boolean>(typeof window !== 'undefined' ? window.innerWidth >= 1535 : false);
+
+  useEffect(() => {
+    const onResize = () => setIsWide1535(window.innerWidth >= 1535);
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  
+  // Отложенное значение для поиска - не блокирует UI
+  const deferredSearchQuery = useDeferredValue(searchQuery);
   
   // Вычисляем текущий общий объем для передачи в IngredientCard
   const currentStats = calculateCocktailStats(ingredients);
@@ -108,11 +152,18 @@ export default function IngredientRecommendations() {
   ], [alcoholIngredients, juiceIngredients, syrupIngredients, fruitIngredients, iceIngredients, bitterIngredients, garnishIngredients, sodaIngredients, energyDrinkIngredients]);
 
   // Filter ingredients based on search query and subtype
+  // Используем deferredSearchQuery для неблокирующего поиска
   const filteredIngredients = useMemo(() => {
-    if (searchQuery.trim()) {
-      return allIngredients.filter(ingredient =>
-        ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+    if (deferredSearchQuery.trim()) {
+      const query = deferredSearchQuery.toLowerCase();
+      // Оптимизация: ограничиваем результаты до 50 для быстрого рендеринга
+      const results = [];
+      for (let i = 0; i < allIngredients.length && results.length < 50; i++) {
+        if (allIngredients[i].name.toLowerCase().includes(query)) {
+          results.push(allIngredients[i]);
+        }
+      }
+      return results;
     }
     
     let ingredients = categoryIngredients;
@@ -124,7 +175,7 @@ export default function IngredientRecommendations() {
     }
     
     return ingredients;
-  }, [searchQuery, allIngredients, categoryIngredients, selectedSubtype]);
+  }, [deferredSearchQuery, allIngredients, categoryIngredients, selectedSubtype]);
   
   const getSubtypeOptions = (category: string) => {
     switch (category) {
@@ -148,10 +199,9 @@ export default function IngredientRecommendations() {
     });
   }, [ingredients, addIngredient]);
   
+  // Обработчик поиска без startTransition - используем useDeferredValue вместо этого
   const handleSearchChange = useCallback((value: string) => {
-    startTransition(() => {
-      setSearchQuery(value);
-    });
+    setSearchQuery(value);
   }, []);
   
   const handleCategoryChange = useCallback((category: string) => {
@@ -175,65 +225,71 @@ export default function IngredientRecommendations() {
           value={searchQuery}
           onChange={(e) => handleSearchChange(e.target.value)}
           className="pl-10"
+          autoComplete="off"
         />
+        {isPending && (
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+            <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
       </div>
       
-      {/* Category Tabs - hide when searching */}
+      {/* Category Selection - hide when searching */}
       {!searchQuery.trim() && (
         <div className="mb-4">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex flex-wrap gap-2 flex-1">
-              {CATEGORIES.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => {
-                    setSelectedCategory(category.id);
-                    setSelectedSubtype('');
-                  }}
-                  className={`px-3 py-1.5 text-sm rounded-md transition-colors whitespace-nowrap ${
-                    selectedCategory === category.id
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                  }`}
-                >
-                  {category.label}
-                </button>
-              ))}
+          {/* Collapsed row: однострочно (алкоголь, соки, лёд [+газировка при >=1535]) слева + круглая кнопка раскрытия справа */}
+          <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 flex-1 min-w-0 overflow-x-auto no-scrollbar flex-nowrap">
+              {(() => {
+                const collapsedIds = isWide1535 ? ['alcohol', 'soda', 'juice', 'ice'] : ['alcohol', 'juice', 'ice'];
+                const getCat = (id: string) => MAIN_CATEGORIES.find(c => c.id === id) || ADDITIONAL_CATEGORIES.find(c => c.id === id);
+                const collapsedCats = collapsedIds.map(id => getCat(id)).filter(Boolean) as {id:string,label:string,color:string}[];
+                return collapsedCats.map((category) => {
+                const isActive = selectedCategory === category.id;
+                const borderCls = isActive ? `${BORDER_CLASS[category.id] || ''} border-2 text-white` : 'border border-border text-muted-foreground';
+                return (
+                  <button
+                    key={category.id}
+                    onClick={() => {
+                      setSelectedCategory(category.id);
+                      setSelectedSubtype('');
+                    }}
+                    className={`h-10 px-3 text-sm rounded-lg transition-colors bg-muted flex items-center justify-center font-medium whitespace-nowrap flex-shrink-0 ${borderCls}`}
+                  >
+                    {category.label}
+                  </button>
+                );
+                });
+              })()}
             </div>
-            
             <button
               onClick={() => setShowMoreCategories(!showMoreCategories)}
-              className="ml-auto flex-shrink-0 px-3 py-1.5 text-sm rounded-full bg-neon-purple text-white hover:bg-neon-purple/80 flex items-center justify-center transition-colors font-semibold shadow-md self-start"
+              className="ml-2 w-10 h-10 rounded-full neon-outline-purple flex items-center justify-center flex-shrink-0"
+              aria-expanded={showMoreCategories}
             >
-              {showMoreCategories ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
+              {showMoreCategories ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
             </button>
           </div>
-          
-          {/* Expanded categories */}
+
+          {/* Expanded view: все категории в одну линию с переносами */}
           {showMoreCategories && (
-            <div className="flex flex-wrap gap-2 mb-3">
-              {[
-                { id: 'soda', label: 'Газировка', color: 'bg-cyan-500' },
-                { id: 'energy_drink', label: 'Энергетики', color: 'bg-amber-500' },
-                { id: 'fruit', label: 'Фрукты', color: 'bg-neon-purple' },
-                { id: 'bitter', label: 'Биттеры', color: 'bg-red-600' },
-                { id: 'garnish', label: 'Декор', color: 'bg-green-600' },
-              ].map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => handleCategoryChange(category.id)}
-                  className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                    selectedCategory === category.id
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                  }`}
-                >
-                  {category.label}
-                </button>
-              ))}
+            <div className="flex flex-wrap gap-2 mb-2 w-full">
+              {ADDITIONAL_CATEGORIES.filter(c => !(isWide1535 && c.id === 'soda')).map((category) => {
+                const isActive = selectedCategory === category.id;
+                const borderCls = isActive ? `${BORDER_CLASS[category.id] || ''} border-2 text-white` : 'border border-border text-muted-foreground';
+                return (
+                  <button
+                    key={category.id}
+                    onClick={() => handleCategoryChange(category.id)}
+                    className={`h-10 px-3 text-sm rounded-lg transition-colors bg-muted flex items-center justify-center font-medium whitespace-nowrap ${borderCls}`}
+                  >
+                    {category.label}
+                  </button>
+                );
+              })}
             </div>
           )}
-          
+
           {/* Type selector */}
           {getSubtypeOptions(selectedCategory).length > 0 && (
             <div className="mb-3">
@@ -292,14 +348,14 @@ export default function IngredientRecommendations() {
             </div>
           ) : filteredIngredients.length === 0 ? (
             <p className="text-center text-muted-foreground py-4">
-              {searchQuery.trim() ? 'Ингредиенты не найдены' : 'Нет доступных ингредиентов'}
+              {deferredSearchQuery.trim() ? 'Ингредиенты не найдены' : 'Нет доступных ингредиентов'}
             </p>
           ) : (
             <div className="space-y-2 pb-2">
               {filteredIngredients.map((ingredient) => {
                 const existingIngredient = ingredients.find(item => item.ingredient.id === ingredient.id);
                 return (
-                  <IngredientCard
+                  <MemoizedIngredientCard
                     key={ingredient.id}
                     ingredient={ingredient}
                     onAdd={handleAddIngredient}

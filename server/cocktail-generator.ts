@@ -433,7 +433,7 @@ export class CocktailGenerator {
       return {
         ingredient,
         amount: ingredient.unit === 'piece' ? 1 : amount,
-        unit: ingredient.unit,
+        unit: ingredient.category === 'fruit' ? 'g' : ingredient.unit,
         order: index + 1
       };
     });

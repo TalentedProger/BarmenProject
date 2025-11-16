@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo, useCallback } from 'react';
 import { Plus, Minus, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Ingredient } from "@shared/schema";
@@ -29,7 +29,7 @@ interface IngredientCardProps {
   ingredientIndex?: number; // Индекс для логики первого ингредиента
 }
 
-export default function IngredientCard({ 
+function IngredientCard({ 
   ingredient, 
   onAdd, 
   disabled = false, 
@@ -60,18 +60,20 @@ export default function IngredientCard({
     return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgContent)}`;
   };
 
-  const handleAmountChange = (delta: number) => {
-    if (ingredient.unit === 'kg') {
-      // For fruits: work in grams, 5g increments, minimum 10g
-      const currentGrams = Math.round(amount * 1000);
-      const newGrams = Math.max(10, currentGrams + delta * 5);
-      setAmount(newGrams / 1000); // Convert back to kg
-    } else {
-      // For liquids: 5ml increments, minimum 5ml
-      const newAmount = Math.max(5, amount + delta * 5);
-      setAmount(newAmount);
-    }
-  };
+  const handleIncrement = useCallback(() => {
+    const step = ingredient.unit === 'kg' ? 0.005 : 10; // 5g or 10ml
+    setAmount(prev => Number((prev + step).toFixed(3)));
+  }, [ingredient.unit]);
+
+  const handleDecrement = useCallback(() => {
+    const step = ingredient.unit === 'kg' ? 0.005 : 10;
+    const minAmount = ingredient.unit === 'kg' ? 0.005 : 10;
+    setAmount(prev => Number(Math.max(minAmount, prev - step).toFixed(3)));
+  }, [ingredient.unit]);
+
+  const handleAdd = useCallback(() => {
+    onAdd(ingredient, amount);
+  }, [ingredient, amount, onAdd]);
 
   const formatPrice = (pricePerLiter: string | number, unit: string) => {
     // Convert to number if it's a string
@@ -176,10 +178,10 @@ export default function IngredientCard({
           <Button
             size="sm"
             variant="outline"
-            onClick={() => handleAmountChange(-1)}
+            onClick={handleDecrement}
             disabled={ingredient.unit === 'kg' ? 
               Math.round(amount * 1000) <= 10 : // 10g minimum for fruits
-              amount <= 5 // 5ml minimum for liquids
+              amount <= 10 // 10ml minimum for liquids
             }
             className="h-6 w-6 p-0"
           >
@@ -188,7 +190,7 @@ export default function IngredientCard({
           <EditableAmount
             amount={amount}
             unit={ingredient.unit}
-            minAmount={ingredient.unit === 'kg' ? 10 : 5}
+            minAmount={ingredient.unit === 'kg' ? 10 : 10}
             maxAmount={ingredient.unit === 'kg' ? 500 : 500}
             onAmountChange={setAmount}
             displayUnit={ingredient.unit === 'kg' ? 'г' : 'ml'}
@@ -200,7 +202,7 @@ export default function IngredientCard({
           <Button
             size="sm"
             variant="outline"
-            onClick={() => handleAmountChange(1)}
+            onClick={handleIncrement}
             className="h-6 w-6 p-0"
           >
             <Plus className="h-3 w-3" />
@@ -211,7 +213,7 @@ export default function IngredientCard({
         <div className="flex justify-center">
           <Button
             size="sm"
-            onClick={() => onAdd(ingredient, amount)}
+            onClick={handleAdd}
             disabled={disabled}
             className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 lg:px-2 xl:px-4 h-6 text-xs"
           >
@@ -224,3 +226,5 @@ export default function IngredientCard({
     </div>
   );
 }
+
+export default memo(IngredientCard);

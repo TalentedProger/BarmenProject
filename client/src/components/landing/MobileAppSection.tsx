@@ -32,7 +32,7 @@ const MobileAppSection = memo(() => {
                 <img 
                   src="/attached_assets/ChatGPT Image 18 июл. 2025 г., 23_50_01-Photoroom_1752872369395.png"
                   alt="Cocktailo mobile app"
-                  className="w-96 h-auto object-contain hover:scale-105 transition-all duration-300 relative z-10"
+                  className="w-96 h-auto object-contain relative z-10"
                   loading="lazy"
                   width="384"
                   height="768"
@@ -70,7 +70,7 @@ const MobileAppSection = memo(() => {
                 <img 
                   src="/attached_assets/ChatGPT Image 18 июл. 2025 г., 23_50_01-Photoroom_1752872369395.png"
                   alt="Cocktailo mobile app"
-                  className="w-96 h-auto object-contain hover:scale-105 transition-all duration-300 relative z-10"
+                  className="w-96 h-auto object-contain relative z-10"
                   loading="lazy"
                   width="384"
                   height="768"

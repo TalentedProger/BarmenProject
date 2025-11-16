@@ -296,11 +296,12 @@ export default function Generator() {
       ingredient: {
         ...item.ingredient,
         createdAt: new Date(),
-        category: 'alcohol', // Default category
+        // Сохраняем реальные данные ингредиента вместо принудительного 'alcohol'/'ml'
+        category: (item as any).ingredient.category || 'alcohol',
         abv: item.ingredient.abv.toString(),
         pricePerLiter: item.ingredient.pricePerLiter.toString(),
-        tasteProfile: { sweet: 5, sour: 5, bitter: 5, alcohol: 5 },
-        unit: 'ml'
+        tasteProfile: (item as any).ingredient.tasteProfile || { sweet: 5, sour: 5, bitter: 5, alcohol: 5 },
+        unit: (item as any).ingredient.unit || 'ml'
       },
       amount: item.amount,
       unit: item.unit
