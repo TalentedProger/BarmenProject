@@ -14,7 +14,7 @@ app.use('/attached_assets', express.static(path.join(process.cwd(), 'attached_as
 
 app.use((req, res, next) => {
   const start = Date.now();
-  const path = req.path;
+  const reqPath = req.path;
   let capturedJsonResponse: Record<string, any> | undefined = undefined;
 
   const originalResJson = res.json;
@@ -25,8 +25,8 @@ app.use((req, res, next) => {
 
   res.on("finish", () => {
     const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
+    if (reqPath.startsWith("/api")) {
+      let logLine = `${req.method} ${reqPath} ${res.statusCode} in ${duration}ms`;
       if (capturedJsonResponse) {
         logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
       }
@@ -42,7 +42,13 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
+// Flag to track if app is initialized
+let isInitialized = false;
+
+// Initialize the app (database, routes, etc.)
+async function initializeApp() {
+  if (isInitialized) return app;
+  
   // Initialize database with sample data (only for PostgreSQL)
   if (process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('postgresql')) {
     await seedDatabase();
@@ -62,26 +68,31 @@ app.use((req, res, next) => {
     }
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
+  // Only setup vite/static serving when not in Vercel serverless
+  if (!process.env.VERCEL) {
+    if (app.get("env") === "development") {
+      await setupVite(app, server);
+    } else {
+      serveStatic(app);
+    }
   }
-
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || '5000', 10);
-  const host = process.env.NODE_ENV === 'development' ? 'localhost' : '0.0.0.0';
   
-  const server = app.listen(port, host, () => {
-    log(`serving on ${host}:${port}`);
-  });
-})();
+  isInitialized = true;
+  return app;
+}
 
-// Export app for Vercel
+// Start server only when not running on Vercel
+if (!process.env.VERCEL) {
+  initializeApp().then(() => {
+    const port = parseInt(process.env.PORT || '5000', 10);
+    const host = process.env.NODE_ENV === 'development' ? 'localhost' : '0.0.0.0';
+    
+    app.listen(port, host, () => {
+      log(`serving on ${host}:${port}`);
+    });
+  });
+}
+
+// Export for Vercel serverless
+export { initializeApp };
 export default app;
