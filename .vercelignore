@@ -1,0 +1,45 @@
+# Исключения для Vercel
+.env
+.env.local
+.env.example
+
+# Dev dependencies
+node_modules
+.npm
+
+# Build artifacts  
+dist/
+client/dist/
+
+# Development files
+.replit
+replit.nix
+*.db
+*.sqlite
+
+# Scripts and docs
+scripts/
+docs/
+attached_assets/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+*.log
+
+# Локальные файлы разработки
+dev.db
+debug-page.html
+juice-page.html
+
+# Парсинг данных (не нужны в продакшене)
+ALKOTEKA_*.md
+BEER_*.md
+COGNAC_*.md
+JUICE_*.md
+SODAS_*.md
+SPIRITS_*.md
+*.txt
