@@ -497,6 +497,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Регистрируем админ маршруты
   registerAdminRoutes(app);
 
+  // В Vercel serverless не нужен HTTP сервер
+  if (process.env.VERCEL) {
+    return null as any;
+  }
+
   const httpServer = createServer(app);
   return httpServer;
 }
