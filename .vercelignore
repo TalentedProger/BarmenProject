@@ -20,7 +20,6 @@ replit.nix
 # Scripts and docs
 scripts/
 docs/
-attached_assets/
 
 # Git
 .git/
