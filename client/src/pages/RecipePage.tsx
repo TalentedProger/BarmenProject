@@ -1,4 +1,4 @@
-import { useParams } from "wouter";
+import { useParams, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { 
   Star, ArrowLeft, Heart, Share2, Droplet, Percent, Flame, Coins,
@@ -6,49 +6,7 @@ import {
   Utensils, Pipette, Smile, Brain, Dna, IceCream, GlassWater, Sparkles
 } from "lucide-react";
 import { useState, useEffect } from "react";
-
-// Данные для коктейля Мохито
-const mojitorecipeData = {
-  id: 2,
-  name: "Мохито",
-  image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_refreshing_Mojito_in_a_tall_hig_0_1753377591761.jpg",
-  description: "Освежающий кубинский коктейль с мятой и лаймом",
-  tags: ["Лёгкий", "Мятный", "Освежающий"],
-  abv: 10,
-  volume: 200,
-  calories: 160,
-  price: 240,
-  videoUrl: "https://www.youtube.com/watch?v=Zc_TZ0UWP3I",
-  ingredients: [
-    { name: "Ром", amount: "50 мл", icon: Wine },
-    { name: "Мята", amount: "10 г", icon: Leaf },
-    { name: "Лайм", amount: "½ штуки", icon: Citrus },
-    { name: "Сахар", amount: "2 ч. ложки", icon: Candy },
-    { name: "Содовая", amount: "до 200 мл", icon: Droplets }
-  ],
-  steps: [
-    { icon: Citrus, text: "Разомни мяту и сахар с лаймом", step: 1 },
-    { icon: IceCream, text: "Добавь ром и лёд", step: 2 },
-    { icon: GlassWater, text: "Долей содовую", step: 3 },
-    { icon: Sparkles, text: "Перемешай ложкой", step: 4 }
-  ],
-  equipment: [
-    { name: "Джулеп ложка", icon: Utensils },
-    { name: "Барный стакан", icon: Wine },
-    { name: "Джиггер", icon: Pipette }
-  ],
-  taste: {
-    sweetness: 3,
-    sourness: 3,
-    bitterness: 1,
-    strength: 2,
-    refreshing: 5
-  },
-  recommendations: [
-    { name: "Cuba Libre", image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Cuba_Libre_in_a_tall_glass_dark_2_1753377591756.jpg" },
-    { name: "Margarita", image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_classic_Margarita_cocktail_in_a_0_1753377591761.jpg" }
-  ]
-};
+import { getFullCocktailById, FullCocktailData } from "@/data/cocktails-full";
 
 const TasteSemicircles = ({ taste }: { taste: any }) => {
   const characteristics = [
@@ -166,6 +124,7 @@ const TasteSemicircles = ({ taste }: { taste: any }) => {
 
 export default function RecipePage() {
   const params = useParams();
+  const recipeId = params.id || "1";
   const [currentStep, setCurrentStep] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
   const [userRating, setUserRating] = useState(0);
@@ -173,8 +132,29 @@ export default function RecipePage() {
   const [averageRating, setAverageRating] = useState(0);
   const [reviewCount, setReviewCount] = useState(0);
 
-  const recipe = mojitorecipeData;
-  const recipeId = recipe.id;
+  // Прокрутка страницы вверх при загрузке
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [recipeId]);
+
+  // Загрузка данных коктейля по ID
+  const recipe = getFullCocktailById(recipeId);
+  
+  // Если коктейль не найден
+  if (!recipe) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#0A0A0D] via-[#1B1B1F] to-[#0A0A0D] flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-white mb-4">Коктейль не найден</h1>
+          <p className="text-white/60 mb-6">Такого рецепта пока нет в нашей базе</p>
+          <Button onClick={() => window.history.back()} className="bg-neon-turquoise text-night-blue">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Назад
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   // Загрузка оценок при монтировании компонента
   useEffect(() => {
@@ -266,15 +246,11 @@ export default function RecipePage() {
 
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
+          <img
+            src={recipe.image}
+            alt={recipe.name}
             className="w-full h-full object-cover"
-          >
-            <source src="/attached_assets/IMG_4960_1760139603930.MP4" type="video/mp4" />
-          </video>
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
         </div>
 
@@ -434,12 +410,15 @@ export default function RecipePage() {
                     </div>
                   );
                 })}
-                <div className="text-center p-4 bg-gradient-to-br from-white/5 to-white/10 rounded-xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105 md:flex lg:hidden xl:flex hidden flex-col items-center justify-center">
-                  <div className="mb-3 transform hover:scale-110 transition-transform duration-200">
-                    <Smile className="w-10 h-10 text-pink-400" style={{ filter: 'drop-shadow(0 0 8px rgba(244, 114, 182, 0.6))' }} />
+                {/* Показываем "Хорошее настроение" только если количество оборудования нечётное - для симметрии */}
+                {recipe.equipment.length % 2 !== 0 && (
+                  <div className="text-center p-4 bg-gradient-to-br from-white/5 to-white/10 rounded-xl border border-white/20 hover:border-white/40 hover:from-white/10 hover:to-white/15 transition-all duration-300 transform hover:scale-105 flex flex-col items-center justify-center">
+                    <div className="mb-3 transform hover:scale-110 transition-transform duration-200">
+                      <Smile className="w-10 h-10 text-pink-400" style={{ filter: 'drop-shadow(0 0 8px rgba(244, 114, 182, 0.6))' }} />
+                    </div>
+                    <div className="text-white font-semibold text-base">Хорошее настроение</div>
                   </div>
-                  <div className="text-white font-semibold text-base">Хорошее настроение</div>
-                </div>
+                )}
               </div>
             </div>
           </div>
@@ -597,17 +576,23 @@ export default function RecipePage() {
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               {recipe.recommendations.map((rec, index) => (
-                <div key={index} className="bg-white/5 rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-200 cursor-pointer">
-                  <img
-                    src={rec.image}
-                    alt={rec.name}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                  />
-                  <h3 className="text-white text-xl font-semibold mb-2">{rec.name}</h3>
-                  <Button className="w-full bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600">
-                    Открыть рецепт
-                  </Button>
-                </div>
+                <Link 
+                  key={index} 
+                  href={`/recipe/${rec.id}`}
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                >
+                  <div className="bg-white/5 rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-200 cursor-pointer">
+                    <img
+                      src={rec.image}
+                      alt={rec.name}
+                      className="w-full h-48 object-cover rounded-lg mb-4"
+                    />
+                    <h3 className="text-white text-xl font-semibold mb-2">{rec.name}</h3>
+                    <Button className="w-full bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600">
+                      Открыть рецепт
+                    </Button>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>

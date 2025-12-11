@@ -216,7 +216,7 @@ export default function Constructor() {
             {/* Center Content - Reduced width - order-1 on mobile (Glass first) */}
             <div className="lg:col-span-4 flex flex-col space-y-4 order-1 lg:order-2">
               {/* Glass Selector or Drink Visualizer */}
-              <div className="bg-card/40 backdrop-blur-sm border border-border rounded-lg p-6 flex-1">
+              <div className="bg-card/60 backdrop-blur-sm border border-border rounded-lg p-6 flex-1">
                 {!selectedGlass ? (
                   <CompactGlassSelector />
                 ) : (
@@ -230,72 +230,159 @@ export default function Constructor() {
               </div>
               
               {/* Quick Tips - desktop version with full logic */}
-              <div className="bg-card border border-border rounded-lg p-4 h-32 hidden lg:block">
+              <div className="bg-card border border-border rounded-lg p-4 h-32 hidden lg:block overflow-y-auto">
                 <h4 className="text-lg font-semibold text-foreground mb-2">Быстрые советы</h4>
                 <div className="space-y-1 text-xs">
                   {(() => {
                     const stats = calculateCocktailStats(ingredients);
-                    const recommendations = [];
+                    const recommendations: { text: string; color: string; priority: number }[] = [];
                     
-                    // Check for overflow first - highest priority
+                    // Начальные сценарии - когда ничего не выбрано
+                    if (!selectedGlass && ingredients.length === 0) {
+                      return [{ text: "Выберите стакан, чтобы начать создание коктейля", color: "text-muted-foreground", priority: 0 }];
+                    }
+                    
+                    if (selectedGlass && ingredients.length === 0) {
+                      return [
+                        { text: `${selectedGlass.name} выбран (${selectedGlass.capacity}ml)`, color: "text-blue-400", priority: 0 },
+                        { text: "Добавьте базовый алкоголь из меню слева", color: "text-muted-foreground", priority: 1 }
+                      ];
+                    }
+                    
+                    // КРИТИЧЕСКИЕ проверки (красные) - высший приоритет
                     if (selectedGlass && stats.totalVolume > selectedGlass.capacity) {
+                      const overflow = stats.totalVolume - selectedGlass.capacity;
                       recommendations.push({
-                        text: `Объем превышен! Уменьшите на ${(stats.totalVolume - selectedGlass.capacity).toFixed(0)}ml`,
-                        color: "text-red-500"
-                      });
-                      return recommendations;
-                    }
-                    
-                    if (stats.tasteBalance?.sweet > 7) {
-                      recommendations.push({
-                        text: "Слишком сладко - добавьте кислоты",
-                        color: "text-yellow-400"
+                        text: `⚠️ Переполнение на ${overflow.toFixed(0)}ml! Уменьшите объем`,
+                        color: "text-red-500",
+                        priority: 100
                       });
                     }
                     
-                    if (stats.tasteBalance?.sour > 7) {
+                    if (stats.totalAbv > 40) {
                       recommendations.push({
-                        text: "Слишком кисло - добавьте сладости",
-                        color: "text-yellow-400"
+                        text: "⚠️ Опасно крепкий! Добавьте сок или содовую",
+                        color: "text-red-500",
+                        priority: 99
                       });
                     }
                     
-                    if (stats.tasteBalance?.bitter > 6) {
+                    // ПРЕДУПРЕЖДЕНИЯ (оранжевые/желтые)
+                    if (stats.totalAbv > 30 && stats.totalAbv <= 40) {
                       recommendations.push({
-                        text: "Горьковато - добавьте сладкий сироп",
-                        color: "text-orange-400"
+                        text: "Высокая крепость - разбавьте соком или содовой",
+                        color: "text-orange-400",
+                        priority: 80
                       });
                     }
                     
-                    if (stats.totalAbv > 30) {
+                    if (stats.tasteBalance?.sweet > 8) {
                       recommendations.push({
-                        text: "Высокая крепость - добавьте разбавитель",
-                        color: "text-red-400"
+                        text: "Очень сладко - добавьте цитрус или биттер",
+                        color: "text-yellow-400",
+                        priority: 70
+                      });
+                    } else if (stats.tasteBalance?.sweet > 6) {
+                      recommendations.push({
+                        text: "Сладковато - сбалансируйте лимоном/лаймом",
+                        color: "text-yellow-400",
+                        priority: 60
                       });
                     }
                     
+                    if (stats.tasteBalance?.sour > 8) {
+                      recommendations.push({
+                        text: "Очень кисло - добавьте сироп или ликер",
+                        color: "text-yellow-400",
+                        priority: 70
+                      });
+                    } else if (stats.tasteBalance?.sour > 6) {
+                      recommendations.push({
+                        text: "Кисловато - добавьте немного сладости",
+                        color: "text-yellow-400",
+                        priority: 60
+                      });
+                    }
+                    
+                    if (stats.tasteBalance?.bitter > 7) {
+                      recommendations.push({
+                        text: "Горьковато - смягчите сладким сиропом",
+                        color: "text-orange-400",
+                        priority: 65
+                      });
+                    }
+                    
+                    // ИНФОРМАЦИОННЫЕ советы (синие)
                     if (stats.totalVolume > 0 && selectedGlass && stats.totalVolume < selectedGlass.capacity * 0.3) {
                       recommendations.push({
-                        text: "Мало жидкости - добавьте ингредиенты",
-                        color: "text-blue-400"
+                        text: `Мало жидкости (${Math.round(stats.totalVolume)}/${selectedGlass.capacity}ml)`,
+                        color: "text-blue-400",
+                        priority: 40
                       });
                     }
                     
-                    if (recommendations.length === 0 && stats.totalVolume > 0) {
+                    if (stats.totalVolume > 0 && selectedGlass && stats.totalVolume >= selectedGlass.capacity * 0.7 && stats.totalVolume < selectedGlass.capacity) {
                       recommendations.push({
-                        text: "Отличный баланс!",
-                        color: "text-green-400"
+                        text: `Почти готово! Осталось ${(selectedGlass.capacity - stats.totalVolume).toFixed(0)}ml`,
+                        color: "text-blue-400",
+                        priority: 30
                       });
                     }
                     
-                    if (ingredients.length === 0) {
+                    // Проверка наличия базового алкоголя
+                    const hasBaseAlcohol = ingredients.some(i => 
+                      ['vodka', 'rum', 'gin', 'tequila', 'whiskey', 'brandy'].includes(i.ingredient.category)
+                    );
+                    if (!hasBaseAlcohol && ingredients.length > 0 && stats.totalAbv < 5) {
                       recommendations.push({
-                        text: "Добавьте ингредиенты из левого меню для получения советов",
-                        color: "text-muted-foreground"
+                        text: "Нет базового алкоголя - добавьте для классического коктейля",
+                        color: "text-blue-400",
+                        priority: 35
                       });
                     }
                     
-                    return recommendations;
+                    // Проверка наличия льда для освежающих напитков
+                    const hasIce = ingredients.some(i => i.ingredient.category === 'ice');
+                    if (!hasIce && stats.tasteBalance?.refreshing && stats.tasteBalance.refreshing > 3) {
+                      recommendations.push({
+                        text: "💡 Добавьте лёд для освежающего эффекта",
+                        color: "text-cyan-400",
+                        priority: 25
+                      });
+                    }
+                    
+                    // ПОЗИТИВНЫЕ сообщения (зеленые)
+                    if (recommendations.filter(r => r.priority >= 60).length === 0 && stats.totalVolume > 0) {
+                      if (selectedGlass && stats.totalVolume >= selectedGlass.capacity * 0.8 && stats.totalVolume <= selectedGlass.capacity) {
+                        recommendations.push({
+                          text: "✓ Идеальный объем!",
+                          color: "text-green-400",
+                          priority: 20
+                        });
+                      }
+                      
+                      if (stats.totalAbv >= 10 && stats.totalAbv <= 25) {
+                        recommendations.push({
+                          text: "✓ Оптимальная крепость",
+                          color: "text-green-400",
+                          priority: 19
+                        });
+                      }
+                      
+                      const balance = stats.tasteBalance;
+                      if (balance && balance.sweet <= 6 && balance.sour <= 6 && balance.bitter <= 5) {
+                        recommendations.push({
+                          text: "✓ Отличный баланс вкуса!",
+                          color: "text-green-400",
+                          priority: 18
+                        });
+                      }
+                    }
+                    
+                    // Сортируем по приоритету и берем топ-3
+                    return recommendations
+                      .sort((a, b) => b.priority - a.priority)
+                      .slice(0, 3);
                   })().map((rec, index) => (
                     <p key={index} className={rec.color}>• {rec.text}</p>
                   ))}
@@ -311,72 +398,159 @@ export default function Constructor() {
               </div>
               
               {/* Quick Tips - moved here for mobile */}
-              <div className="bg-card border border-border rounded-lg p-4 h-32 lg:hidden overflow-hidden">
+              <div className="bg-card border border-border rounded-lg p-4 h-32 lg:hidden overflow-y-auto">
                 <h4 className="text-lg font-semibold text-foreground mb-2">Быстрые советы</h4>
                 <div className="space-y-1 text-xs">
                   {(() => {
                     const stats = calculateCocktailStats(ingredients);
-                    const recommendations = [];
+                    const recommendations: { text: string; color: string; priority: number }[] = [];
                     
-                    // Check for overflow first - highest priority
+                    // Начальные сценарии - когда ничего не выбрано
+                    if (!selectedGlass && ingredients.length === 0) {
+                      return [{ text: "Выберите стакан, чтобы начать создание коктейля", color: "text-muted-foreground", priority: 0 }];
+                    }
+                    
+                    if (selectedGlass && ingredients.length === 0) {
+                      return [
+                        { text: `${selectedGlass.name} выбран (${selectedGlass.capacity}ml)`, color: "text-blue-400", priority: 0 },
+                        { text: "Добавьте базовый алкоголь из меню слева", color: "text-muted-foreground", priority: 1 }
+                      ];
+                    }
+                    
+                    // КРИТИЧЕСКИЕ проверки (красные) - высший приоритет
                     if (selectedGlass && stats.totalVolume > selectedGlass.capacity) {
+                      const overflow = stats.totalVolume - selectedGlass.capacity;
                       recommendations.push({
-                        text: `Объем превышен! Уменьшите на ${(stats.totalVolume - selectedGlass.capacity).toFixed(0)}ml`,
-                        color: "text-red-500"
-                      });
-                      return recommendations;
-                    }
-                    
-                    if (stats.tasteBalance?.sweet > 7) {
-                      recommendations.push({
-                        text: "Слишком сладко - добавьте кислоты",
-                        color: "text-yellow-400"
+                        text: `⚠️ Переполнение на ${overflow.toFixed(0)}ml! Уменьшите объем`,
+                        color: "text-red-500",
+                        priority: 100
                       });
                     }
                     
-                    if (stats.tasteBalance?.sour > 7) {
+                    if (stats.totalAbv > 40) {
                       recommendations.push({
-                        text: "Слишком кисло - добавьте сладости",
-                        color: "text-yellow-400"
+                        text: "⚠️ Опасно крепкий! Добавьте сок или содовую",
+                        color: "text-red-500",
+                        priority: 99
                       });
                     }
                     
-                    if (stats.tasteBalance?.bitter > 6) {
+                    // ПРЕДУПРЕЖДЕНИЯ (оранжевые/желтые)
+                    if (stats.totalAbv > 30 && stats.totalAbv <= 40) {
                       recommendations.push({
-                        text: "Горьковато - добавьте сладкий сироп",
-                        color: "text-orange-400"
+                        text: "Высокая крепость - разбавьте соком или содовой",
+                        color: "text-orange-400",
+                        priority: 80
                       });
                     }
                     
-                    if (stats.totalAbv > 30) {
+                    if (stats.tasteBalance?.sweet > 8) {
                       recommendations.push({
-                        text: "Высокая крепость - добавьте разбавитель",
-                        color: "text-red-400"
+                        text: "Очень сладко - добавьте цитрус или биттер",
+                        color: "text-yellow-400",
+                        priority: 70
+                      });
+                    } else if (stats.tasteBalance?.sweet > 6) {
+                      recommendations.push({
+                        text: "Сладковато - сбалансируйте лимоном/лаймом",
+                        color: "text-yellow-400",
+                        priority: 60
                       });
                     }
                     
+                    if (stats.tasteBalance?.sour > 8) {
+                      recommendations.push({
+                        text: "Очень кисло - добавьте сироп или ликер",
+                        color: "text-yellow-400",
+                        priority: 70
+                      });
+                    } else if (stats.tasteBalance?.sour > 6) {
+                      recommendations.push({
+                        text: "Кисловато - добавьте немного сладости",
+                        color: "text-yellow-400",
+                        priority: 60
+                      });
+                    }
+                    
+                    if (stats.tasteBalance?.bitter > 7) {
+                      recommendations.push({
+                        text: "Горьковато - смягчите сладким сиропом",
+                        color: "text-orange-400",
+                        priority: 65
+                      });
+                    }
+                    
+                    // ИНФОРМАЦИОННЫЕ советы (синие)
                     if (stats.totalVolume > 0 && selectedGlass && stats.totalVolume < selectedGlass.capacity * 0.3) {
                       recommendations.push({
-                        text: "Мало жидкости - добавьте ингредиенты",
-                        color: "text-blue-400"
+                        text: `Мало жидкости (${Math.round(stats.totalVolume)}/${selectedGlass.capacity}ml)`,
+                        color: "text-blue-400",
+                        priority: 40
                       });
                     }
                     
-                    if (recommendations.length === 0 && stats.totalVolume > 0) {
+                    if (stats.totalVolume > 0 && selectedGlass && stats.totalVolume >= selectedGlass.capacity * 0.7 && stats.totalVolume < selectedGlass.capacity) {
                       recommendations.push({
-                        text: "Отличный баланс!",
-                        color: "text-green-400"
+                        text: `Почти готово! Осталось ${(selectedGlass.capacity - stats.totalVolume).toFixed(0)}ml`,
+                        color: "text-blue-400",
+                        priority: 30
                       });
                     }
                     
-                    if (ingredients.length === 0) {
+                    // Проверка наличия базового алкоголя
+                    const hasBaseAlcohol = ingredients.some(i => 
+                      ['vodka', 'rum', 'gin', 'tequila', 'whiskey', 'brandy'].includes(i.ingredient.category)
+                    );
+                    if (!hasBaseAlcohol && ingredients.length > 0 && stats.totalAbv < 5) {
                       recommendations.push({
-                        text: "Добавьте ингредиенты из левого меню для получения советов",
-                        color: "text-muted-foreground"
+                        text: "Нет базового алкоголя - добавьте для классического коктейля",
+                        color: "text-blue-400",
+                        priority: 35
                       });
                     }
                     
-                    return recommendations;
+                    // Проверка наличия льда для освежающих напитков
+                    const hasIce = ingredients.some(i => i.ingredient.category === 'ice');
+                    if (!hasIce && stats.tasteBalance?.refreshing && stats.tasteBalance.refreshing > 3) {
+                      recommendations.push({
+                        text: "💡 Добавьте лёд для освежающего эффекта",
+                        color: "text-cyan-400",
+                        priority: 25
+                      });
+                    }
+                    
+                    // ПОЗИТИВНЫЕ сообщения (зеленые)
+                    if (recommendations.filter(r => r.priority >= 60).length === 0 && stats.totalVolume > 0) {
+                      if (selectedGlass && stats.totalVolume >= selectedGlass.capacity * 0.8 && stats.totalVolume <= selectedGlass.capacity) {
+                        recommendations.push({
+                          text: "✓ Идеальный объем!",
+                          color: "text-green-400",
+                          priority: 20
+                        });
+                      }
+                      
+                      if (stats.totalAbv >= 10 && stats.totalAbv <= 25) {
+                        recommendations.push({
+                          text: "✓ Оптимальная крепость",
+                          color: "text-green-400",
+                          priority: 19
+                        });
+                      }
+                      
+                      const balance = stats.tasteBalance;
+                      if (balance && balance.sweet <= 6 && balance.sour <= 6 && balance.bitter <= 5) {
+                        recommendations.push({
+                          text: "✓ Отличный баланс вкуса!",
+                          color: "text-green-400",
+                          priority: 18
+                        });
+                      }
+                    }
+                    
+                    // Сортируем по приоритету и берем топ-3
+                    return recommendations
+                      .sort((a, b) => b.priority - a.priority)
+                      .slice(0, 3);
                   })().map((rec, index) => (
                     <p key={index} className={rec.color}>• {rec.text}</p>
                   ))}
@@ -400,12 +574,25 @@ export default function Constructor() {
                     <h3 className="text-lg font-semibold text-amber-500">Анализ рецепта</h3>
                   </div>
                   <div className="space-y-2">
-                    {validateCocktailIngredients(ingredients, selectedGlass || undefined).map((error, index) => (
-                      <p key={index} className="text-yellow-400 text-sm">• {error}</p>
-                    ))}
-                    {validateCocktailIngredients(ingredients, selectedGlass || undefined).length === 0 && (
-                      <p className="text-green-400 text-sm">✓ Рецепт готов к сохранению</p>
-                    )}
+                    {(() => {
+                      const messages = validateCocktailIngredients(ingredients, selectedGlass || undefined);
+                      return messages.map((msg, index) => {
+                        // Определяем цвет по типу сообщения
+                        let colorClass = "text-yellow-400";
+                        if (msg.startsWith("⚠️") || msg.includes("Опасн") || msg.includes("превышен")) {
+                          colorClass = "text-red-400";
+                        } else if (msg.startsWith("⚡")) {
+                          colorClass = "text-orange-400";
+                        } else if (msg.startsWith("💡")) {
+                          colorClass = "text-blue-400";
+                        } else if (msg.startsWith("✓") || msg.startsWith("✨")) {
+                          colorClass = "text-green-400";
+                        }
+                        return (
+                          <p key={index} className={`text-sm ${colorClass}`}>• {msg}</p>
+                        );
+                      });
+                    })()}
                   </div>
                 </CardContent>
               </Card>
@@ -421,7 +608,9 @@ export default function Constructor() {
                   ingredients.length === 0 || 
                   !selectedGlass || 
                   saveRecipeMutation.isPending ||
-                  validateCocktailIngredients(ingredients, selectedGlass || undefined).length > 0
+                  validateCocktailIngredients(ingredients, selectedGlass || undefined).some(msg => 
+                    msg.startsWith("⚠️") || msg.includes("Добавьте хотя бы") || msg.includes("Слишком маленький") || msg.includes("Опасная крепость")
+                  )
                 }
                 className="bg-primary text-primary-foreground px-8 py-3 hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
               >

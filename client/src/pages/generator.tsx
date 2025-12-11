@@ -8,7 +8,7 @@ import GeneratorFilters, { type GenerationFilters } from "@/components/generator
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Dice2, Crown, Bolt, Sun, Leaf, Flame, Save, Edit, Sparkles, Settings, RotateCcw } from "lucide-react";
+import { Dice2, Crown, Bolt, Sun, Leaf, Flame, Save, Edit, Sparkles, Settings, RotateCcw, AlertCircle } from "lucide-react";
 import { useCocktailStore } from "@/store/cocktail-store";
 import { useLocation } from "wouter";
 
@@ -164,13 +164,35 @@ export default function Generator() {
         description: `Попробуйте ${data.name}`,
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       setIsGenerating(false);
-      toast({
-        title: "Ошибка генерации",
-        description: "Не удалось создать рецепт. Попробуйте еще раз.",
-        variant: "destructive",
-      });
+      // Check if it's an authentication error
+      // Error message format: "401: {"error":"Authentication required"}" or "401: {"error":"Not authenticated"}"
+      const errorMessage = error?.message || '';
+      const isAuthError = errorMessage.includes('401') || 
+                          errorMessage.includes('Not authenticated') ||
+                          errorMessage.includes('Authentication required') ||
+                          errorMessage.includes('Unauthorized') ||
+                          error?.status === 401;
+      
+      if (isAuthError) {
+        toast({
+          title: (
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4" />
+              Требуется авторизация
+            </div>
+          ),
+          description: "Чтобы генерировать коктейли нужно зарегистрироваться/войти в аккаунт",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Ошибка генерации",
+          description: "Не удалось создать рецепт. Попробуйте еще раз.",
+          variant: "destructive",
+        });
+      }
     },
   });
 
@@ -184,25 +206,36 @@ export default function Generator() {
         description: "Созданный коктейль добавлен в ваш профиль",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/recipes"] });
-      // queryClient.invalidateQueries({ queryKey: ["/api/users", user?.id, "recipes"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/recipes/user"] });
     },
-    onError: (error) => {
-      // if (isUnauthorizedError(error)) {
-      //   toast({
-      //     title: "Ошибка авторизации",
-      //     description: "Выполняется перенаправление на страницу входа...",
-      //     variant: "destructive",
-      //   });
-      //   setTimeout(() => {
-      //     window.location.href = "/api/login";
-      //   }, 500);
-      //   return;
-      // }
-      toast({
-        title: "Ошибка сохранения",
-        description: "Не удалось сохранить рецепт. Попробуйте еще раз.",
-        variant: "destructive",
-      });
+    onError: (error: any) => {
+      // Check if it's an authentication error
+      // Error message format: "401: {"error":"Authentication required"}" or "401: {"error":"Not authenticated"}"
+      const errorMessage = error?.message || '';
+      const isAuthError = errorMessage.includes('401') || 
+                          errorMessage.includes('Not authenticated') ||
+                          errorMessage.includes('Authentication required') ||
+                          errorMessage.includes('Unauthorized') ||
+                          error?.status === 401;
+      
+      if (isAuthError) {
+        toast({
+          title: (
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4" />
+              Требуется авторизация
+            </div>
+          ),
+          description: "Чтобы сохранить рецепт нужно зарегистрироваться/войти в аккаунт",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Ошибка сохранения",
+          description: "Не удалось сохранить рецепт. Попробуйте еще раз.",
+          variant: "destructive",
+        });
+      }
     },
   });
 

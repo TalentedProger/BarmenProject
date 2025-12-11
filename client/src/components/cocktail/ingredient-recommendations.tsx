@@ -170,6 +170,7 @@ export default function IngredientRecommendations() {
     
     if (selectedSubtype) {
       ingredients = categoryIngredients.filter(ingredient =>
+        ingredient.subtype?.toLowerCase() === selectedSubtype.toLowerCase() ||
         ingredient.name.toLowerCase().includes(selectedSubtype.toLowerCase())
       );
     }

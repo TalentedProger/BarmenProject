@@ -105,6 +105,7 @@ export class MemoryStorage implements IStorage {
     const sampleIngredients: InsertIngredient[] = SAMPLE_INGREDIENTS.map(ing => ({
       name: ing.name!,
       category: ing.category!,
+      subtype: ing.subtype || null,
       color: ing.color!,
       abv: String(ing.abv || 0),
       pricePerLiter: String(ing.pricePerLiter || 0),

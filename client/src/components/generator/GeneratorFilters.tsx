@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
-import { X, Filter, RotateCcw, ChevronDown, ChevronUp } from "lucide-react";
+import { X, Filter, RotateCcw, ChevronDown, ChevronUp, Wine, GlassWater, Droplets, Beaker, Sparkles, Zap, Apple, FlaskConical, Paintbrush } from "lucide-react";
 import type { Ingredient } from "@shared/schema";
 
 interface GeneratorFiltersProps {
@@ -20,10 +20,14 @@ export interface GenerationFilters {
   mode: string;
   requiredIngredients: number[];
   requiredCategories: string[];
+  excludedIngredients?: number[];     // Запрещённые ингредиенты
+  excludedSubtypes?: string[];        // Запрещённые подкатегории
+  excludedCategories?: string[];      // Запрещённые категории
   maxAlcoholContent: number;
   minAlcoholContent: number;
   maxPrice: number;
   preferredCategories: string[];
+  preferredSubtypes?: string[];       // Предпочитаемые подкатегории
   glassType: string;
   complexity: 'simple' | 'medium' | 'complex';
   tastePreferences: {
@@ -35,15 +39,15 @@ export interface GenerationFilters {
 }
 
 const CATEGORIES = [
-  { id: 'alcohol', label: 'Алкоголь', color: 'bg-red-500' },
-  { id: 'juice', label: 'Соки', color: 'bg-orange-500' },
-  { id: 'syrup', label: 'Сиропы', color: 'bg-pink-500' },
-  { id: 'mixer', label: 'Миксеры', color: 'bg-blue-500' },
-  { id: 'soda', label: 'Газировка', color: 'bg-cyan-500' },
-  { id: 'energy_drink', label: 'Энергетики', color: 'bg-amber-500' },
-  { id: 'fruit', label: 'Фрукты', color: 'bg-green-500' },
-  { id: 'bitter', label: 'Биттеры', color: 'bg-yellow-600' },
-  { id: 'garnish', label: 'Декор', color: 'bg-purple-500' }
+  { id: 'alcohol', label: 'Алкоголь', color: 'bg-red-500', icon: Wine },
+  { id: 'juice', label: 'Соки', color: 'bg-orange-500', icon: GlassWater },
+  { id: 'syrup', label: 'Сиропы', color: 'bg-pink-500', icon: Droplets },
+  { id: 'mixer', label: 'Миксеры', color: 'bg-blue-500', icon: Beaker },
+  { id: 'soda', label: 'Газировка', color: 'bg-cyan-500', icon: Sparkles },
+  { id: 'energy_drink', label: 'Энергетики', color: 'bg-amber-500', icon: Zap },
+  { id: 'fruit', label: 'Фрукты', color: 'bg-green-500', icon: Apple },
+  { id: 'bitter', label: 'Биттеры', color: 'bg-yellow-600', icon: FlaskConical },
+  { id: 'garnish', label: 'Декор', color: 'bg-purple-500', icon: Paintbrush }
 ];
 
 const GLASS_TYPES = [
@@ -201,36 +205,44 @@ export default function GeneratorFilters({ filters, onFiltersChange, onReset }: 
               Предпочитаемые категории
             </Label>
             <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-              {CATEGORIES.slice(0, 5).map((category) => (
-                <Badge
-                  key={category.id}
-                  variant="default"
-                  className={`cursor-pointer transition-all text-sm px-3 py-1.5 ${category.color} text-white border-2 text-center ${
-                    filters.preferredCategories.includes(category.id) 
-                      ? 'border-white shadow-lg opacity-100' 
-                      : 'border-transparent opacity-70 hover:opacity-90'
-                  }`}
-                  onClick={() => toggleCategory(category.id)}
-                >
-                  {category.label}
-                </Badge>
-              ))}
+              {CATEGORIES.slice(0, 5).map((category) => {
+                const Icon = category.icon;
+                return (
+                  <Badge
+                    key={category.id}
+                    variant="default"
+                    className={`cursor-pointer transition-all text-sm px-3 py-1.5 ${category.color} text-white border-2 flex items-center justify-center gap-1.5 ${
+                      filters.preferredCategories.includes(category.id) 
+                        ? 'border-white shadow-lg opacity-100' 
+                        : 'border-transparent opacity-70 hover:opacity-90'
+                    }`}
+                    onClick={() => toggleCategory(category.id)}
+                  >
+                    {category.label}
+                    <Icon className="h-3.5 w-3.5" />
+                  </Badge>
+                );
+              })}
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
-              {CATEGORIES.slice(5).map((category) => (
-                <Badge
-                  key={category.id}
-                  variant="default"
-                  className={`cursor-pointer transition-all text-sm px-3 py-1.5 ${category.color} text-white border-2 text-center ${
-                    filters.preferredCategories.includes(category.id) 
-                      ? 'border-white shadow-lg opacity-100' 
-                      : 'border-transparent opacity-70 hover:opacity-90'
-                  }`}
-                  onClick={() => toggleCategory(category.id)}
-                >
-                  {category.label}
-                </Badge>
-              ))}
+              {CATEGORIES.slice(5).map((category) => {
+                const Icon = category.icon;
+                return (
+                  <Badge
+                    key={category.id}
+                    variant="default"
+                    className={`cursor-pointer transition-all text-sm px-3 py-1.5 ${category.color} text-white border-2 flex items-center justify-center gap-1.5 ${
+                      filters.preferredCategories.includes(category.id) 
+                        ? 'border-white shadow-lg opacity-100' 
+                        : 'border-transparent opacity-70 hover:opacity-90'
+                    }`}
+                    onClick={() => toggleCategory(category.id)}
+                  >
+                    {category.label}
+                    <Icon className="h-3.5 w-3.5" />
+                  </Badge>
+                );
+              })}
             </div>
           </div>
         </div>

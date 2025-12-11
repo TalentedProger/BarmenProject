@@ -148,9 +148,11 @@ export function generateCocktailName(): string {
 
 export function validateCocktailIngredients(
   ingredients: (RecipeIngredient & { ingredient: Ingredient })[],
-  selectedGlass?: { capacity: number }
+  selectedGlass?: { capacity: number; name?: string }
 ): string[] {
   const errors: string[] = [];
+  const warnings: string[] = [];
+  const tips: string[] = [];
   
   if (!ingredients.length) {
     errors.push("Добавьте хотя бы один ингредиент");
@@ -159,30 +161,102 @@ export function validateCocktailIngredients(
 
   const stats = calculateCocktailStats(ingredients);
   
-  // Check for glass overflow first
+  // КРИТИЧЕСКИЕ ОШИБКИ (блокируют сохранение)
+  
+  // Проверка переполнения стакана
   if (selectedGlass && stats.totalVolume > selectedGlass.capacity) {
-    errors.push(`Объем превышает вместимость стакана (${selectedGlass.capacity}ml)`);
+    const overflow = stats.totalVolume - selectedGlass.capacity;
+    errors.push(`⚠️ Объем превышен на ${overflow.toFixed(0)}ml (макс. ${selectedGlass.capacity}ml)`);
   }
   
+  // Минимальный объем
   if (stats.totalVolume < 30) {
-    errors.push("Слишком маленький объем коктейля");
+    errors.push("Слишком маленький объем - добавьте ингредиенты (мин. 30ml)");
   }
   
-  if (stats.totalVolume > 500) {
-    errors.push("Слишком большой объем коктейля");
+  // Слишком крепкий
+  if (stats.totalAbv > 50) {
+    errors.push(`⚠️ Опасная крепость ${stats.totalAbv.toFixed(1)}% - максимум 50%`);
   }
-
+  
+  // ПРЕДУПРЕЖДЕНИЯ (не блокируют, но важны)
+  
+  // Высокая крепость
+  if (stats.totalAbv > 35 && stats.totalAbv <= 50) {
+    warnings.push(`Очень крепкий коктейль (${stats.totalAbv.toFixed(1)}%) - рекомендуется разбавить`);
+  }
+  
+  // Проверка баланса вкуса
   if (stats.tasteBalance.sweet > 8) {
-    errors.push("Слишком много сладких ингредиентов");
+    warnings.push("Избыток сладости - добавьте цитрус или биттер для баланса");
+  }
+  
+  if (stats.tasteBalance.sour > 8) {
+    warnings.push("Избыток кислоты - добавьте сироп или ликер для баланса");
   }
   
   if (stats.tasteBalance.bitter > 7) {
-    errors.push("Слишком много горьких ингредиентов");
+    warnings.push("Избыток горечи - смягчите сладким сиропом или соком");
   }
-
-  if (stats.totalAbv > 50) {
-    errors.push("Слишком крепкий коктейль");
+  
+  // Проверка структуры коктейля
+  const alcoholIngredients = ingredients.filter(i => 
+    ['vodka', 'rum', 'gin', 'tequila', 'whiskey', 'brandy', 'liqueur'].includes(i.ingredient.category)
+  );
+  const mixers = ingredients.filter(i => 
+    ['juice', 'soda', 'tonic', 'sour'].includes(i.ingredient.category)
+  );
+  const syrups = ingredients.filter(i => i.ingredient.category === 'syrup');
+  
+  // Слишком много видов алкоголя
+  if (alcoholIngredients.length > 4) {
+    warnings.push(`Много видов алкоголя (${alcoholIngredients.length}) - вкус может быть нечётким`);
   }
-
-  return errors;
+  
+  // Проверка соотношения алкоголя к миксерам
+  const alcoholVolume = alcoholIngredients.reduce((sum, i) => sum + parseFloat(i.amount.toString()), 0);
+  const mixerVolume = mixers.reduce((sum, i) => sum + parseFloat(i.amount.toString()), 0);
+  
+  if (alcoholVolume > 0 && mixerVolume === 0 && stats.totalAbv > 20) {
+    tips.push("💡 Добавьте миксер (сок, содовую) для более мягкого вкуса");
+  }
+  
+  // Проверка наличия подсластителя при кислых ингредиентах
+  const hasSourIngredients = ingredients.some(i => 
+    i.ingredient.category === 'sour' || i.ingredient.name.toLowerCase().includes('лимон') || i.ingredient.name.toLowerCase().includes('лайм')
+  );
+  if (hasSourIngredients && syrups.length === 0 && stats.tasteBalance.sweet < 3) {
+    tips.push("💡 Кислые ингредиенты лучше сбалансировать сиропом");
+  }
+  
+  // ПОЗИТИВНЫЕ СООБЩЕНИЯ
+  
+  // Идеальный баланс
+  const hasGoodBalance = 
+    stats.tasteBalance.sweet >= 2 && stats.tasteBalance.sweet <= 6 &&
+    stats.tasteBalance.sour >= 1 && stats.tasteBalance.sour <= 5 &&
+    stats.tasteBalance.bitter <= 4;
+  
+  const hasGoodStrength = stats.totalAbv >= 8 && stats.totalAbv <= 25;
+  const hasGoodVolume = selectedGlass && 
+    stats.totalVolume >= selectedGlass.capacity * 0.7 && 
+    stats.totalVolume <= selectedGlass.capacity;
+  
+  // Возвращаем в порядке приоритета: ошибки, предупреждения, советы
+  const allMessages = [
+    ...errors,
+    ...warnings.map(w => `⚡ ${w}`),
+    ...tips
+  ];
+  
+  // Если всё хорошо
+  if (allMessages.length === 0) {
+    if (hasGoodBalance && hasGoodStrength && hasGoodVolume) {
+      return ["✨ Превосходный баланс! Коктейль готов к сохранению"];
+    } else if (hasGoodBalance || hasGoodStrength) {
+      return ["✓ Хороший рецепт! Готов к сохранению"];
+    }
+  }
+  
+  return allMessages;
 }

@@ -49,6 +49,7 @@ export const ingredients = pgTable("ingredients", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
   category: varchar("category", { length: 50 }).notNull(), // alcohol, juice, syrup, fruit, ice, spice
+  subtype: varchar("subtype", { length: 50 }), // Подкатегория: Вино красное, Вино белое, Вермут и т.д.
   color: varchar("color", { length: 7 }).notNull(), // hex color for visualization
   abv: decimal("abv", { precision: 5, scale: 2 }).default("0"), // alcohol by volume percentage
   pricePerLiter: decimal("price_per_liter", { precision: 10, scale: 2 }).notNull(),
@@ -121,6 +122,35 @@ export const recipeRatings = pgTable("recipe_ratings", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Course progress - tracking user's progress through course modules
+export const courseProgress = pgTable("course_progress", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  courseId: varchar("course_id", { length: 50 }).notNull(), // e.g., "mixology-basics"
+  moduleId: integer("module_id").notNull(), // Module number (1-12)
+  lessonId: integer("lesson_id"), // Lesson within module
+  status: varchar("status", { length: 20 }).notNull().default("not_started"), // not_started, in_progress, completed
+  testScore: integer("test_score"), // Score in percentage (0-100)
+  testAttempts: integer("test_attempts").default(0),
+  practiceSubmitted: boolean("practice_submitted").default(false),
+  practiceData: jsonb("practice_data"), // Submitted practice work data
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Course enrollments - tracking which users are enrolled in which courses
+export const courseEnrollments = pgTable("course_enrollments", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  courseId: varchar("course_id", { length: 50 }).notNull(), // e.g., "mixology-basics"
+  enrolledAt: timestamp("enrolled_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+  certificateUrl: varchar("certificate_url", { length: 500 }),
+  overallProgress: integer("overall_progress").default(0), // Percentage 0-100
+  status: varchar("status", { length: 20 }).notNull().default("enrolled"), // enrolled, in_progress, completed, dropped
+});
+
 // Zod schemas
 export const insertIngredientSchema = createInsertSchema(ingredients);
 export const insertGlassTypeSchema = createInsertSchema(glassTypes);
@@ -128,6 +158,8 @@ export const insertRecipeSchema = createInsertSchema(recipes);
 export const insertRecipeIngredientSchema = createInsertSchema(recipeIngredients);
 export const insertUserFavoriteSchema = createInsertSchema(userFavorites);
 export const insertRecipeRatingSchema = createInsertSchema(recipeRatings);
+export const insertCourseProgressSchema = createInsertSchema(courseProgress);
+export const insertCourseEnrollmentSchema = createInsertSchema(courseEnrollments);
 
 // Auth schemas
 export const registerSchema = z.object({
@@ -168,3 +200,7 @@ export type UserFavorite = typeof userFavorites.$inferSelect;
 export type InsertUserFavorite = z.infer<typeof insertUserFavoriteSchema>;
 export type RecipeRating = typeof recipeRatings.$inferSelect;
 export type InsertRecipeRating = z.infer<typeof insertRecipeRatingSchema>;
+export type CourseProgress = typeof courseProgress.$inferSelect;
+export type InsertCourseProgress = z.infer<typeof insertCourseProgressSchema>;
+export type CourseEnrollment = typeof courseEnrollments.$inferSelect;
+export type InsertCourseEnrollment = z.infer<typeof insertCourseEnrollmentSchema>;

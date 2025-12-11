@@ -143,23 +143,20 @@ export default function DrinkVisualizer() {
               background: 'linear-gradient(to bottom, rgba(55, 65, 81, 0.3), rgba(17, 24, 39, 0.5))',
             }}
           >
-            <div
-              className="absolute inset-0"
-              style={{
-                clipPath: 'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)',
-              }}
-            >
-            {/* Liquid layers */}
+            {/* Liquid layers - полная ширина с правильным border-radius */}
             {layers.map((layer, index) => {
-              // Вычисляем процент заполнения для текущего слоя
-              const layerBottomPercent = (layer.bottom / glassHeight) * 100;
-              const layerTopPercent = ((layer.bottom + layer.height) / glassHeight) * 100;
+              // Определяем, является ли слой первым (нижним) или последним (верхним)
+              const isFirstLayer = index === 0;
+              const isLastLayer = index === layers.length - 1;
+              const isOnlyLayer = layers.length === 1;
               
-              // Вычисляем ширину на основе трапеции: 20% сверху -> 100% снизу
-              const topLeftPercent = 20 - (layerTopPercent / 100) * 20;
-              const topRightPercent = 80 + (layerTopPercent / 100) * 20;
-              const bottomLeftPercent = 20 - (layerBottomPercent / 100) * 20;
-              const bottomRightPercent = 80 + (layerBottomPercent / 100) * 20;
+              // Определяем border-radius для каждого слоя
+              let borderRadius = '0';
+              if (isOnlyLayer) {
+                borderRadius = '0 0 10px 10px'; // Скругление только снизу для единственного слоя
+              } else if (isFirstLayer) {
+                borderRadius = '0 0 10px 10px'; // Скругление снизу для первого слоя
+              }
               
               return (
                 <div
@@ -170,8 +167,9 @@ export default function DrinkVisualizer() {
                     bottom: `${layer.bottom}px`,
                     left: 0,
                     right: 0,
+                    width: '100%',
                     background: `linear-gradient(to top, ${layer.color}, ${layer.color}dd)`,
-                    clipPath: `polygon(${topLeftPercent}% 0%, ${topRightPercent}% 0%, ${bottomRightPercent}% 100%, ${bottomLeftPercent}% 100%)`,
+                    borderRadius: borderRadius,
                     transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
                   }}
                   onMouseEnter={() => setHoveredLayer({ name: layer.name, color: layer.color })}
@@ -191,7 +189,6 @@ export default function DrinkVisualizer() {
             
             {/* Subtle inner highlight */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-5 w-2"></div>
-            </div>
           </div>
           
           {/* Tooltip removed - now shown above visualization */}

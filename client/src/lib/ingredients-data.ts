@@ -13,6 +13,9 @@ import { KRASNOEIBELOE_VODKA } from "./krasnoeibeloe-vodka";
 import { KRASNOEIBELOE_WHISKEY } from "./krasnoeibeloe-whiskey";
 import { KRASNOEIBELOE_SPARKLING_WINE } from "./krasnoeibeloe-sparkling-wine";
 import { KRASNOEIBELOE_VERMOUTH } from "./krasnoeibeloe-vermouth";
+import { KRASNOEIBELOE_WINE_RED } from "./krasnoeibeloe-wine-red";
+import { KRASNOEIBELOE_WINE_WHITE } from "./krasnoeibeloe-wine-white";
+import { KRASNOEIBELOE_WINE_ROSE } from "./krasnoeibeloe-wine-rose";
 import { PYATEROCHKA_ENERGY_DRINKS } from "./pyaterochka-energy-drinks";
 import { PYATEROCHKA_FRUITS } from "./pyaterochka-fruits";
 import { PYATEROCHKA_BITTERS } from "./pyaterochka-bitters";
@@ -53,6 +56,15 @@ export const SAMPLE_INGREDIENTS: Partial<Ingredient>[] = [
 
   // === ВЕРМУТ КРАСНОЕ&БЕЛОЕ (8 pozicij) ===
   ...KRASNOEIBELOE_VERMOUTH,
+
+  // === ВИНО КРАСНОЕ КРАСНОЕ&БЕЛОЕ (79 позиций) ===
+  ...KRASNOEIBELOE_WINE_RED,
+
+  // === ВИНО БЕЛОЕ КРАСНОЕ&БЕЛОЕ (78 позиций) ===
+  ...KRASNOEIBELOE_WINE_WHITE,
+
+  // === ВИНО РОЗОВОЕ КРАСНОЕ&БЕЛОЕ (9 позиций) ===
+  ...KRASNOEIBELOE_WINE_ROSE,
 
   // === ГАЗИРОВАННЫЕ НАПИТКИ КРАСНОЕ&БЕЛОЕ (57 позиций) ===
   ...KRASNOEIBELOE_SODAS,

@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated, optionalAuth } from "./auth";
-import { generateRandomRecipe } from "./cocktail-generator";
+import { generateEnhancedRecipe, AVAILABLE_MODES } from "./cocktail-generator-enhanced";
 import { registerAdminRoutes } from "./admin-routes";
 import { 
   insertIngredientSchema,
@@ -445,11 +445,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { 
         mode = 'classic',
         requiredIngredients,
+        requiredCategories,
         excludedIngredients,
+        excludedSubtypes,
+        excludedCategories,
         maxAlcoholContent,
         minAlcoholContent,
         maxPrice,
         preferredCategories,
+        preferredSubtypes,
         glassType,
         complexity,
         tastePreferences
@@ -460,25 +464,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const glassTypes = await storage.getGlassTypes();
       
       // Generate recipe with enhanced algorithm
-      const generatedRecipe = generateRandomRecipe(ingredients, glassTypes, mode, {
+      const generatedRecipe = generateEnhancedRecipe(ingredients, glassTypes, mode, {
         requiredIngredients,
+        requiredCategories,
         excludedIngredients,
+        excludedSubtypes,
+        excludedCategories,
         maxAlcoholContent,
         minAlcoholContent,
         maxPrice,
         preferredCategories,
+        preferredSubtypes,
         glassType,
         complexity,
         tastePreferences
       });
       
       res.json(generatedRecipe);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error generating recipe:", error);
       res.status(500).json({ 
         message: error.message || "Failed to generate recipe" 
       });
     }
+  });
+
+  // Get available generation modes
+  app.get('/api/recipes/generation-modes', async (req, res) => {
+    res.json(AVAILABLE_MODES);
   });
 
   // Регистрируем админ маршруты

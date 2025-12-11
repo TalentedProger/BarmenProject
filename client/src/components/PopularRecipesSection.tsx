@@ -33,7 +33,7 @@ interface Recipe {
 // Reduced to first 6 recipes for better performance
 const popularRecipes: Recipe[] = [
   {
-    id: 1,
+    id: 3,
     name: "Маргарита",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_classic_Margarita_cocktail_in_a_0_1753377591761.jpg",
     description: "Классика текилы с лаймом и солью",
@@ -47,7 +47,7 @@ const popularRecipes: Recipe[] = [
     price: 230
   },
   {
-    id: 2,
+    id: 1,
     name: "Мохито",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_refreshing_Mojito_in_a_tall_hig_0_1753377591761.jpg",
     description: "Мята, лайм и ром — вечная классика",
@@ -61,7 +61,7 @@ const popularRecipes: Recipe[] = [
     price: 240
   },
   {
-    id: 3,
+    id: 11,
     name: "Сангрия",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_vibrant_red_Sangria_in_a_large__1_1753377591760.jpg",
     description: "Фруктово-винный коктейль из Испании",
@@ -75,7 +75,7 @@ const popularRecipes: Recipe[] = [
     price: 260
   },
   {
-    id: 4,
+    id: 12,
     name: "Апероль шприц",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_An_Aperol_Spritz_in_a_large_ballo_0_1753377591760.jpg",
     description: "Итальянская классика с апельсиновыми нотами",
@@ -89,7 +89,7 @@ const popularRecipes: Recipe[] = [
     price: 220
   },
   {
-    id: 5,
+    id: 6,
     name: "Пина Колада",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Pia_Colada_in_a_tall_hurricane__0_1753377591760.jpg",
     description: "Тропический рай из ананаса и кокоса",
@@ -103,7 +103,7 @@ const popularRecipes: Recipe[] = [
     price: 250
   },
   {
-    id: 6,
+    id: 5,
     name: "Дайкири",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_Daiquiri_in_a_sleek_cocktail_gl_0_1753377591759.jpg",
     description: "Минимализм с лаймом и ромом",
@@ -118,7 +118,7 @@ const popularRecipes: Recipe[] = [
   }
   ,
   {
-    id: 7,
+    id: 4,
     name: "Космополитен",
     image: "/attached_assets/Flux_Dev_a_lush_3d_render_of_A_bright_pink_Cosmopolitan_in_a_m_0_1753377591757.jpg",
     description: "Яркий кислo-сладкий коктейль с клюквой и лаймом",
@@ -132,7 +132,7 @@ const popularRecipes: Recipe[] = [
     price: 240
   },
   {
-    id: 8,
+    id: 2,
     name: "Негрони",
     image: "/attached_assets/Flux_Dev_A_classic_Negroni_in_a_short_glass_with_a_large_ice_c_3_1753377591753.jpg",
     description: "Сбалансированная горчинка кампари, джина и вермута",
@@ -316,8 +316,9 @@ const PopularRecipesSection = memo(() => {
     if (!autoplay) return;
 
     const handleVisibility = () => {
-      if (document.hidden) autoplay.stop();
-      else autoplay.start();
+      if (!swiperRef?.autoplay) return;
+      if (document.hidden) swiperRef.autoplay.stop();
+      else swiperRef.autoplay.start();
     };
     document.addEventListener('visibilitychange', handleVisibility);
 
@@ -325,9 +326,9 @@ const PopularRecipesSection = memo(() => {
     if (sectionRef.current) {
       observer = new IntersectionObserver(
         ([entry]) => {
-          if (!autoplay) return;
-          if (entry.isIntersecting) autoplay.start();
-          else autoplay.stop();
+          if (!swiperRef?.autoplay) return;
+          if (entry.isIntersecting) swiperRef.autoplay.start();
+          else swiperRef.autoplay.stop();
         },
         { root: null, threshold: 0.2 }
       );

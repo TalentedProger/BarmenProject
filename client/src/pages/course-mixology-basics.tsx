@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
@@ -18,7 +20,10 @@ import {
   Sparkles,
   FileCheck,
   Shield,
-  CheckCircle2
+  CheckCircle2,
+  Play,
+  Lock,
+  ArrowRight
 } from "lucide-react";
 
 interface Module {
@@ -33,11 +38,41 @@ interface Week {
   image?: string;
 }
 
+// Получение прогресса модуля из localStorage
+function getModuleProgress(moduleNumber: number): { status: 'not-started' | 'in-progress' | 'completed'; testScore?: number } {
+  const saved = localStorage.getItem(`course_module_${moduleNumber}_progress`);
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      // Проверяем завершение модуля
+      if (data.practiceSubmitted && data.testScore !== undefined) {
+        return { status: 'completed', testScore: data.testScore };
+      }
+      // Если есть какой-то прогресс
+      if (data.lessonsCompleted && data.lessonsCompleted.length > 0) {
+        return { status: 'in-progress', testScore: data.testScore };
+      }
+    } catch {}
+  }
+  return { status: 'not-started' };
+}
+
+// Проверка, разблокирован ли модуль
+function isModuleUnlocked(moduleNumber: number, isEnrolled: boolean): boolean {
+  if (!isEnrolled) return false;
+  if (moduleNumber === 1) return true;
+  // Для остальных модулей - предыдущий должен быть завершен
+  const prevProgress = getModuleProgress(moduleNumber - 1);
+  return prevProgress.status === 'completed';
+}
+
 export default function CourseMixologyBasics() {
   const { toast } = useToast();
+  const [, navigate] = useLocation();
   const [expandedWeeks, setExpandedWeeks] = useState<number[]>([1]);
   const [isEnrolling, setIsEnrolling] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [moduleProgresses, setModuleProgresses] = useState<Record<number, { status: 'not-started' | 'in-progress' | 'completed'; testScore?: number }>>({});
 
   // Проверяем статус записи при загрузке
   useEffect(() => {
@@ -45,6 +80,13 @@ export default function CourseMixologyBasics() {
     if (enrolled === 'true') {
       setIsEnrolled(true);
     }
+    
+    // Загружаем прогресс всех модулей
+    const progresses: Record<number, { status: 'not-started' | 'in-progress' | 'completed'; testScore?: number }> = {};
+    for (let i = 1; i <= 12; i++) {
+      progresses[i] = getModuleProgress(i);
+    }
+    setModuleProgresses(progresses);
   }, []);
 
   const toggleWeek = (weekNumber: number) => {
@@ -420,21 +462,120 @@ export default function CourseMixologyBasics() {
                 
                 {expandedWeeks.includes(week.number) && (
                   <CardContent className="space-y-6 pt-6">
-                    {week.modules.map((module) => (
-                      <div key={module.number} className="border-l-4 border-neon-turquoise pl-6 py-2">
-                        <h4 className="text-lg font-semibold text-neon-turquoise mb-3">
-                          Модуль {module.number} — {module.title}
-                        </h4>
-                        <ul className="space-y-2">
-                          {module.topics.map((topic, idx) => (
-                            <li key={idx} className="flex items-start gap-3 text-cream">
-                              <div className="w-1.5 h-1.5 bg-neon-purple rounded-full mt-2 flex-shrink-0"></div>
-                              <span>{topic}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
+                    {week.modules.map((module) => {
+                      const progress = moduleProgresses[module.number] || { status: 'not-started' };
+                      const unlocked = isModuleUnlocked(module.number, isEnrolled);
+                      const isAvailable = module.number === 1; // Пока только модуль 1 реализован
+                      
+                      return (
+                        <div 
+                          key={module.number} 
+                          className={`border-l-4 pl-6 py-4 rounded-r-lg transition-all ${
+                            progress.status === 'completed' 
+                              ? 'border-green-500 bg-green-500/5' 
+                              : progress.status === 'in-progress'
+                              ? 'border-neon-amber bg-neon-amber/5'
+                              : 'border-neon-turquoise'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-4 mb-3">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-1">
+                                <h4 className="text-lg font-semibold text-neon-turquoise">
+                                  Модуль {module.number} — {module.title}
+                                </h4>
+                                {progress.status === 'completed' && (
+                                  <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                                    <CheckCircle2 className="w-3 h-3 mr-1" />
+                                    Пройден
+                                  </Badge>
+                                )}
+                                {progress.status === 'in-progress' && (
+                                  <Badge className="bg-neon-amber/20 text-neon-amber border-neon-amber/30">
+                                    В процессе
+                                  </Badge>
+                                )}
+                              </div>
+                              {progress.status === 'completed' && progress.testScore !== undefined && (
+                                <p className="text-sm text-green-400 mb-2">
+                                  Результат теста: {progress.testScore}%
+                                </p>
+                              )}
+                            </div>
+                            
+                            {/* Кнопка действия */}
+                            {isEnrolled && (
+                              <div className="flex-shrink-0">
+                                {unlocked && isAvailable ? (
+                                  <Button
+                                    onClick={() => navigate(`/course/mixology-basics/module/${module.number}`)}
+                                    className={`gap-2 ${
+                                      progress.status === 'completed'
+                                        ? 'bg-green-600 hover:bg-green-700'
+                                        : progress.status === 'in-progress'
+                                        ? 'bg-neon-amber hover:bg-neon-amber/80 text-night-blue'
+                                        : 'bg-neon-turquoise hover:bg-neon-turquoise/80 text-night-blue'
+                                    }`}
+                                  >
+                                    {progress.status === 'completed' ? (
+                                      <>
+                                        <CheckCircle2 className="w-4 h-4" />
+                                        Повторить
+                                      </>
+                                    ) : progress.status === 'in-progress' ? (
+                                      <>
+                                        <ArrowRight className="w-4 h-4" />
+                                        Продолжить
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Play className="w-4 h-4" />
+                                        Начать
+                                      </>
+                                    )}
+                                  </Button>
+                                ) : unlocked && !isAvailable ? (
+                                  <Button
+                                    disabled
+                                    className="gap-2 bg-gray-600 cursor-not-allowed"
+                                  >
+                                    <Clock className="w-4 h-4" />
+                                    Скоро
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    disabled
+                                    className="gap-2 bg-gray-700 cursor-not-allowed"
+                                  >
+                                    <Lock className="w-4 h-4" />
+                                    Заблокирован
+                                  </Button>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                          
+                          <ul className="space-y-2">
+                            {module.topics.map((topic, idx) => (
+                              <li key={idx} className="flex items-start gap-3 text-cream">
+                                <div className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${
+                                  progress.status === 'completed' ? 'bg-green-500' : 'bg-neon-purple'
+                                }`}></div>
+                                <span>{topic}</span>
+                              </li>
+                            ))}
+                          </ul>
+                          
+                          {!isEnrolled && module.number === 1 && (
+                            <div className="mt-4 p-3 bg-neon-purple/10 border border-neon-purple/30 rounded-lg">
+                              <p className="text-sm text-cream">
+                                <span className="text-neon-purple font-medium">💡 Совет:</span> Запишитесь на курс, чтобы получить доступ к материалам этого модуля
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </CardContent>
                 )}
               </Card>

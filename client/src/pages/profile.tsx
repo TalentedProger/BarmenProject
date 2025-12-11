@@ -238,7 +238,8 @@ export default function Profile() {
   };
 
   const handleViewRecipe = (recipeId: string) => {
-    setLocation(`/recipe/${recipeId}`);
+    // Рецепты пользователя переходят на user-recipe страницу
+    setLocation(`/user-recipe/${recipeId}`);
   };
 
   const handleDeleteRecipe = (recipeId: string) => {
