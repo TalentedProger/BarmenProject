@@ -56,32 +56,32 @@ export default function Courses() {
     {
       name: "Шейкер",
       subtitle: "Boston или Cobbler",
-      image: "/src/assets/recommended-equipment/Shaker.png"
+      image: "/equipment/Shaker.png"
     },
     {
       name: "Барная ложка",
       subtitle: "Для перемешивания",
-      image: "/src/assets/recommended-equipment/Spoon.png"
+      image: "/equipment/Spoon.png"
     },
     {
       name: "Стрейнер",
       subtitle: "Ситечко",
-      image: "/src/assets/recommended-equipment/strainer.png"
+      image: "/equipment/strainer.png"
     },
     {
       name: "Джиггер",
       subtitle: "Мерный стаканчик",
-      image: "/src/assets/recommended-equipment/jigger.png"
+      image: "/equipment/jigger.png"
     },
     {
       name: "Мадлер",
       subtitle: "Пестик",
-      image: "/src/assets/recommended-equipment/Muddler.png"
+      image: "/equipment/Muddler.png"
     },
     {
       name: "Стаканы",
       subtitle: "Различных типов",
-      image: "/src/assets/recommended-equipment/Set_of_glasses.png"
+      image: "/equipment/Set_of_glasses.png"
     }
   ];
 

@@ -1,5 +1,5 @@
 // Vercel Serverless Function Entry Point
-import app, { initializeApp } from '../dist/index.js';
+import app, { initializeApp } from './server.js';
 
 // Initialize the app on first request
 let initialized = false;
