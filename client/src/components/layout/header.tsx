@@ -93,7 +93,10 @@ export default function Header({ useProfileDropdown = true }: HeaderProps = {}) 
           <div className="flex items-center space-x-4">
             {/* Desktop Auth Buttons */}
             <div className="hidden md:flex items-center space-x-3">
-              {!isLoading && !isAuthenticated ? (
+              {isLoading ? (
+                /* Show skeleton button during loading to prevent layout shift */
+                <div className="h-10 w-[72px] bg-white/10 rounded-md animate-pulse" />
+              ) : !isAuthenticated ? (
                 <Link href="/auth">
                   <Button 
                     variant="outline"
@@ -212,7 +215,10 @@ export default function Header({ useProfileDropdown = true }: HeaderProps = {}) 
                   <NavItems currentPath={location} />
                   {/* Mobile Auth Buttons */}
                   <div className="pt-4 border-t border-white/20">
-                    {!isLoading && !isAuthenticated ? (
+                    {isLoading ? (
+                      /* Show skeleton button during loading */
+                      <div className="h-10 w-full bg-white/10 rounded-md animate-pulse" />
+                    ) : !isAuthenticated ? (
                       <>
                         <Link href="/auth">
                           <Button variant="outline" className="w-full border-neon-purple text-neon-purple">

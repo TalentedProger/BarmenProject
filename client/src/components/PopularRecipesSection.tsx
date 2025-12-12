@@ -371,14 +371,16 @@ const PopularRecipesSection = memo(() => {
         <Swiper
           onSwiper={setSwiperRef}
           modules={[Navigation, Autoplay]}
-          grabCursor={true}
+          grabCursor={!isMobile}
           centeredSlides={true}
           centeredSlidesBounds={true}
           loop={false}
-          speed={300}
-          preventInteractionOnTransition={true}
-          touchRatio={0.8}
-          threshold={10}
+          speed={isMobile ? 200 : 300}
+          preventInteractionOnTransition={false}
+          touchRatio={isMobile ? 1.2 : 0.8}
+          threshold={isMobile ? 5 : 10}
+          resistance={true}
+          resistanceRatio={0.85}
           allowTouchMove={true}
           slidesPerView={1}
           spaceBetween={20}
@@ -389,19 +391,22 @@ const PopularRecipesSection = memo(() => {
             pauseOnMouseEnter: true,
           }}
           rewind={true}
+          cssMode={isMobile}
+          touchStartPreventDefault={false}
+          touchMoveStopPropagation={false}
+          followFinger={true}
+          freeMode={false}
           breakpoints={{
             640: {
               slidesPerView: 2,
               spaceBetween: 30,
+              cssMode: false,
             },
             1024: {
               slidesPerView: 3,
               spaceBetween: 40,
+              cssMode: false,
             },
-          }}
-          lazy={{
-            loadPrevNext: true,
-            loadPrevNextAmount: 1,
           }}
           watchSlidesProgress={false}
           observer={false}
