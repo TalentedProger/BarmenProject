@@ -90,6 +90,7 @@ export default function Constructor() {
   });
 
   const handleSaveRecipe = () => {
+    // Only block on critical errors, not warnings or tips
     const validationErrors = validateCocktailIngredients(ingredients, selectedGlass || undefined);
     if (validationErrors.length > 0) {
       toast({
@@ -104,6 +105,15 @@ export default function Constructor() {
       toast({
         title: "Выберите стакан",
         description: "Для сохранения рецепта необходимо выбрать тип стакана",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (ingredients.length === 0) {
+      toast({
+        title: "Добавьте ингредиенты",
+        description: "Невозможно сохранить пустой рецепт",
         variant: "destructive",
       });
       return;

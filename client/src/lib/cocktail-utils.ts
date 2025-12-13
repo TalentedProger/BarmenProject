@@ -242,21 +242,72 @@ export function validateCocktailIngredients(
     stats.totalVolume >= selectedGlass.capacity * 0.7 && 
     stats.totalVolume <= selectedGlass.capacity;
   
-  // Возвращаем в порядке приоритета: ошибки, предупреждения, советы
-  const allMessages = [
-    ...errors,
-    ...warnings.map(w => `⚡ ${w}`),
-    ...tips
-  ];
+  // Return ONLY critical errors that should block saving
+  // Warnings, tips and positive messages should NOT block saving
+  return errors;
+}
+
+// Helper to get all validation messages (errors + warnings + tips) for display
+export function getValidationMessages(
+  ingredients: (RecipeIngredient & { ingredient: Ingredient })[],
+  selectedGlass?: { capacity: number; name?: string }
+): { errors: string[]; warnings: string[]; tips: string[]; isValid: boolean } {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const tips: string[] = [];
   
-  // Если всё хорошо
-  if (allMessages.length === 0) {
-    if (hasGoodBalance && hasGoodStrength && hasGoodVolume) {
-      return ["✨ Превосходный баланс! Коктейль готов к сохранению"];
-    } else if (hasGoodBalance || hasGoodStrength) {
-      return ["✓ Хороший рецепт! Готов к сохранению"];
-    }
+  if (!ingredients.length) {
+    errors.push("Добавьте хотя бы один ингредиент");
+    return { errors, warnings, tips, isValid: false };
+  }
+
+  const stats = calculateCocktailStats(ingredients);
+  
+  // КРИТИЧЕСКИЕ ОШИБКИ
+  if (selectedGlass && stats.totalVolume > selectedGlass.capacity) {
+    const overflow = stats.totalVolume - selectedGlass.capacity;
+    errors.push(`⚠️ Объем превышен на ${overflow.toFixed(0)}ml (макс. ${selectedGlass.capacity}ml)`);
   }
   
-  return allMessages;
+  if (stats.totalVolume < 30) {
+    errors.push("Слишком маленький объем - добавьте ингредиенты (мин. 30ml)");
+  }
+  
+  if (stats.totalAbv > 50) {
+    errors.push(`⚠️ Опасная крепость ${stats.totalAbv.toFixed(1)}% - максимум 50%`);
+  }
+  
+  // ПРЕДУПРЕЖДЕНИЯ
+  if (stats.totalAbv > 35 && stats.totalAbv <= 50) {
+    warnings.push(`Очень крепкий коктейль (${stats.totalAbv.toFixed(1)}%)`);
+  }
+  
+  if (stats.tasteBalance.sweet > 8) {
+    warnings.push("Избыток сладости");
+  }
+  
+  if (stats.tasteBalance.sour > 8) {
+    warnings.push("Избыток кислоты");
+  }
+  
+  if (stats.tasteBalance.bitter > 7) {
+    warnings.push("Избыток горечи");
+  }
+  
+  // СОВЕТЫ
+  const alcoholIngredients = ingredients.filter(i => 
+    ['vodka', 'rum', 'gin', 'tequila', 'whiskey', 'brandy', 'liqueur', 'alcohol'].includes(i.ingredient.category)
+  );
+  const mixers = ingredients.filter(i => 
+    ['juice', 'soda', 'tonic', 'sour', 'mixer'].includes(i.ingredient.category)
+  );
+  
+  const alcoholVolume = alcoholIngredients.reduce((sum, i) => sum + parseFloat(i.amount.toString()), 0);
+  const mixerVolume = mixers.reduce((sum, i) => sum + parseFloat(i.amount.toString()), 0);
+  
+  if (alcoholVolume > 0 && mixerVolume === 0 && stats.totalAbv > 20) {
+    tips.push("💡 Добавьте миксер для более мягкого вкуса");
+  }
+  
+  return { errors, warnings, tips, isValid: errors.length === 0 };
 }
