@@ -62,11 +62,21 @@ export async function setupAuth(app: Express) {
 
   // Google OAuth Strategy - only initialize if credentials are available
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-    const callbackURL = process.env.APP_URL
-      ? `${process.env.APP_URL}/api/auth/google/callback`
-      : process.env.REPLIT_DOMAINS
-        ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}/api/auth/google/callback`
-        : `http://localhost:${process.env.PORT || 3000}/api/auth/google/callback`;
+    // Determine callback URL based on environment
+    let callbackURL: string;
+    
+    if (process.env.APP_URL) {
+      callbackURL = `${process.env.APP_URL}/api/auth/google/callback`;
+    } else if (process.env.VERCEL_URL) {
+      callbackURL = `https://${process.env.VERCEL_URL}/api/auth/google/callback`;
+    } else if (process.env.VERCEL) {
+      // Running on Vercel but no URL set - use hardcoded production URL
+      callbackURL = 'https://coctailomaker.vercel.app/api/auth/google/callback';
+    } else if (process.env.REPLIT_DOMAINS) {
+      callbackURL = `https://${process.env.REPLIT_DOMAINS.split(',')[0]}/api/auth/google/callback`;
+    } else {
+      callbackURL = `http://localhost:${process.env.PORT || 3000}/api/auth/google/callback`;
+    }
     
     console.log('Google OAuth configured with callback URL:', callbackURL);
     

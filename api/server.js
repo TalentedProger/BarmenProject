@@ -6230,7 +6230,18 @@ async function setupAuth(app2) {
   app2.use(passport.initialize());
   app2.use(passport.session());
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-    const callbackURL = process.env.APP_URL ? `${process.env.APP_URL}/api/auth/google/callback` : process.env.REPLIT_DOMAINS ? `https://${process.env.REPLIT_DOMAINS.split(",")[0]}/api/auth/google/callback` : `http://localhost:${process.env.PORT || 3e3}/api/auth/google/callback`;
+    let callbackURL;
+    if (process.env.APP_URL) {
+      callbackURL = `${process.env.APP_URL}/api/auth/google/callback`;
+    } else if (process.env.VERCEL_URL) {
+      callbackURL = `https://${process.env.VERCEL_URL}/api/auth/google/callback`;
+    } else if (process.env.VERCEL) {
+      callbackURL = "https://coctailomaker.vercel.app/api/auth/google/callback";
+    } else if (process.env.REPLIT_DOMAINS) {
+      callbackURL = `https://${process.env.REPLIT_DOMAINS.split(",")[0]}/api/auth/google/callback`;
+    } else {
+      callbackURL = `http://localhost:${process.env.PORT || 3e3}/api/auth/google/callback`;
+    }
     console.log("Google OAuth configured with callback URL:", callbackURL);
     passport.use(new GoogleStrategy({
       clientID: process.env.GOOGLE_CLIENT_ID,
@@ -7699,23 +7710,44 @@ async function registerRoutes(app2) {
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
       }
-      const recipeData = insertRecipeSchema.parse({
-        ...req.body,
-        createdBy: userId
-      });
+      console.log("Creating recipe with data:", JSON.stringify(req.body, null, 2));
+      const recipeInput = {
+        name: req.body.name,
+        description: req.body.description || null,
+        instructions: req.body.instructions || null,
+        createdBy: userId,
+        glassTypeId: req.body.glassTypeId ? Number(req.body.glassTypeId) : null,
+        totalVolume: Number(req.body.totalVolume),
+        totalAbv: String(req.body.totalAbv),
+        totalCost: String(req.body.totalCost),
+        tasteBalance: req.body.tasteBalance,
+        difficulty: req.body.difficulty || "easy",
+        category: req.body.category || "custom",
+        isPublic: req.body.isPublic !== false
+      };
+      const recipeData = insertRecipeSchema.parse(recipeInput);
       const recipe = await storage.createRecipe(recipeData);
       if (req.body.ingredients && Array.isArray(req.body.ingredients)) {
         for (const ingredient of req.body.ingredients) {
           await storage.createRecipeIngredient({
             recipeId: recipe.id,
-            ...ingredient
+            ingredientId: Number(ingredient.ingredientId),
+            amount: String(ingredient.amount),
+            unit: ingredient.unit,
+            order: Number(ingredient.order)
           });
         }
       }
       res.status(201).json(recipe);
     } catch (error) {
       console.error("Error creating recipe:", error);
-      res.status(500).json({ message: "Failed to create recipe" });
+      if (error.name === "ZodError") {
+        return res.status(400).json({
+          message: "Validation error",
+          errors: error.errors
+        });
+      }
+      res.status(500).json({ message: error.message || "Failed to create recipe" });
     }
   });
   app2.put("/api/recipes/:id", async (req, res) => {

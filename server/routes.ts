@@ -181,10 +181,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ error: 'Not authenticated' });
       }
       
-      const recipeData = insertRecipeSchema.parse({
-        ...req.body,
-        createdBy: userId
-      });
+      console.log('Creating recipe with data:', JSON.stringify(req.body, null, 2));
+      
+      // Prepare recipe data with proper types
+      const recipeInput = {
+        name: req.body.name,
+        description: req.body.description || null,
+        instructions: req.body.instructions || null,
+        createdBy: userId,
+        glassTypeId: req.body.glassTypeId ? Number(req.body.glassTypeId) : null,
+        totalVolume: Number(req.body.totalVolume),
+        totalAbv: String(req.body.totalAbv),
+        totalCost: String(req.body.totalCost),
+        tasteBalance: req.body.tasteBalance,
+        difficulty: req.body.difficulty || 'easy',
+        category: req.body.category || 'custom',
+        isPublic: req.body.isPublic !== false,
+      };
+      
+      const recipeData = insertRecipeSchema.parse(recipeInput);
       
       const recipe = await storage.createRecipe(recipeData);
       
@@ -193,15 +208,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         for (const ingredient of req.body.ingredients) {
           await storage.createRecipeIngredient({
             recipeId: recipe.id,
-            ...ingredient
+            ingredientId: Number(ingredient.ingredientId),
+            amount: String(ingredient.amount),
+            unit: ingredient.unit,
+            order: Number(ingredient.order)
           });
         }
       }
       
       res.status(201).json(recipe);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating recipe:", error);
-      res.status(500).json({ message: "Failed to create recipe" });
+      // Return specific validation error messages
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ 
+          message: "Validation error",
+          errors: error.errors 
+        });
+      }
+      res.status(500).json({ message: error.message || "Failed to create recipe" });
     }
   });
 
