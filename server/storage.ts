@@ -663,12 +663,15 @@ export class PostgresStorage implements IStorage {
   }
 
   async createRecipe(recipe: InsertRecipe): Promise<Recipe> {
+    // Don't set id manually - let PostgreSQL generate UUID with defaultRandom()
     const newRecipe = {
       ...recipe,
-      id: recipe.id || nanoid(),
       createdAt: new Date(),
       updatedAt: new Date()
     };
+    // Remove id if it was passed - DB will auto-generate UUID
+    delete (newRecipe as any).id;
+    
     const result = await db.insert(recipes).values(newRecipe).returning();
     return result[0];
   }

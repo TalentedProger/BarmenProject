@@ -4995,10 +4995,10 @@ var init_storage = __esm({
       async createRecipe(recipe) {
         const newRecipe = {
           ...recipe,
-          id: recipe.id || nanoid(),
           createdAt: /* @__PURE__ */ new Date(),
           updatedAt: /* @__PURE__ */ new Date()
         };
+        delete newRecipe.id;
         const result = await db.insert(recipes).values(newRecipe).returning();
         return result[0];
       }
