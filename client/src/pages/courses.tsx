@@ -237,18 +237,18 @@ export default function Courses() {
 
           {/* Equipment Carousel */}
           <div className="mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-center text-neon-purple px-4">Рекомендованное оборудование</h2>
-            <div className="relative max-w-7xl mx-auto">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 text-center text-neon-purple px-4">Рекомендованное оборудование</h2>
+            <div className="relative max-w-7xl mx-auto px-2 sm:px-4">
               <div className="overflow-hidden">
                 <div 
                   ref={carouselRef}
-                  className="flex overflow-x-hidden scroll-smooth"
-                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                  className="flex overflow-x-auto sm:overflow-x-hidden scroll-smooth snap-x snap-mandatory sm:snap-none"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
                 >
                   {equipment.map((item, index) => (
                     <div 
                       key={index} 
-                      className="flex-shrink-0 px-3"
+                      className="flex-shrink-0 px-1.5 sm:px-3 snap-center"
                       style={{ width: 'calc(100% / 3)' }}
                     >
                       <Card className="glass-effect border-none overflow-hidden hover:brightness-125 hover:saturate-150 transition-all duration-300">
@@ -257,13 +257,13 @@ export default function Courses() {
                             <img 
                               src={item.image} 
                               alt={item.name}
-                              className="w-full h-full object-contain p-4"
+                              className="w-full h-full object-contain p-2 sm:p-4"
                               loading="lazy"
                             />
                           </div>
-                          <div className="p-6 text-center">
-                            <h3 className="text-xl font-bold text-white mb-1">{item.name}</h3>
-                            <p className="text-sm text-cream/70">{item.subtitle}</p>
+                          <div className="p-2 sm:p-4 md:p-6 text-center">
+                            <h3 className="text-sm sm:text-base md:text-xl font-bold text-white mb-0.5 sm:mb-1 truncate">{item.name}</h3>
+                            <p className="text-xs sm:text-sm text-cream/70 truncate">{item.subtitle}</p>
                           </div>
                         </CardContent>
                       </Card>
