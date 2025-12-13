@@ -494,6 +494,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(AVAILABLE_MODES);
   });
 
+  // Force seed database endpoint (protected, requires secret key)
+  app.post('/api/admin/force-seed', async (req, res) => {
+    const { secret } = req.body;
+    
+    // Simple secret protection - use env var or default
+    const adminSecret = process.env.ADMIN_SEED_SECRET || 'cocktailo-force-seed-2024';
+    
+    if (secret !== adminSecret) {
+      return res.status(403).json({ error: 'Invalid secret' });
+    }
+    
+    try {
+      const { forceSeedIngredients } = await import('./seed');
+      await forceSeedIngredients();
+      
+      const ingredients = await storage.getIngredients();
+      res.json({ 
+        success: true, 
+        message: `Database re-seeded with ${ingredients.length} ingredients` 
+      });
+    } catch (error: any) {
+      console.error('Force seed error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Регистрируем админ маршруты
   registerAdminRoutes(app);
 

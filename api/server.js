@@ -4551,7 +4551,7 @@ var init_storage = __esm({
         this.initializeData();
       }
       initializeData() {
-        const sampleIngredients2 = SAMPLE_INGREDIENTS.map((ing) => ({
+        const sampleIngredients = SAMPLE_INGREDIENTS.map((ing) => ({
           name: ing.name,
           category: ing.category,
           subtype: ing.subtype || null,
@@ -4566,8 +4566,8 @@ var init_storage = __esm({
           imageUrl: ing.imageUrl || null,
           volume: ing.volume || null
         }));
-        console.log(`\u{1F379} \u0418\u043D\u0438\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044F MemoryStorage: \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043D\u043E ${sampleIngredients2.length} \u0438\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u043E\u0432`);
-        sampleIngredients2.forEach((ingredient) => {
+        console.log(`\u{1F379} \u0418\u043D\u0438\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044F MemoryStorage: \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043D\u043E ${sampleIngredients.length} \u0438\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u043E\u0432`);
+        sampleIngredients.forEach((ingredient) => {
           const id = this.nextId.ingredient++;
           this.ingredients.set(id, {
             id,
@@ -6067,6 +6067,107 @@ var init_init_extended_ingredients = __esm({
         console.error("\u{1F4A5} \u0421\u043A\u0440\u0438\u043F\u0442 \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D \u0441 \u043E\u0448\u0438\u0431\u043A\u043E\u0439:", error);
         process.exit(1);
       });
+    }
+  }
+});
+
+// server/seed.ts
+var seed_exports = {};
+__export(seed_exports, {
+  forceSeedIngredients: () => forceSeedIngredients,
+  seedDatabase: () => seedDatabase
+});
+async function seedDatabase() {
+  try {
+    if (!process.env.DATABASE_URL) {
+      console.log("Running in memory storage mode - database seeding skipped (data preloaded in MemoryStorage)");
+      return;
+    }
+    console.log("\u{1F331} Seeding database with full ingredients data...");
+    console.log(`\u{1F4E6} Total ingredients to seed: ${allIngredients.length}`);
+    const existingIngredients = await db.select().from(ingredients).limit(1);
+    const existingGlassTypes = await db.select().from(glassTypes).limit(1);
+    if (existingIngredients.length === 0) {
+      console.log("\u{1F4E5} Inserting ingredients...");
+      const batchSize = 100;
+      for (let i = 0; i < allIngredients.length; i += batchSize) {
+        const batch = allIngredients.slice(i, i + batchSize);
+        await db.insert(ingredients).values(batch);
+        console.log(`  \u2713 Inserted batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(allIngredients.length / batchSize)} (${batch.length} items)`);
+      }
+      console.log(`\u2705 Inserted ${allIngredients.length} ingredients`);
+    } else {
+      console.log(`\u23ED\uFE0F  Ingredients already exist (${existingIngredients.length}+ found), skipping...`);
+    }
+    if (existingGlassTypes.length === 0) {
+      console.log("\u{1F4E5} Inserting glass types...");
+      await db.insert(glassTypes).values(sampleGlassTypes);
+      console.log(`\u2705 Inserted ${sampleGlassTypes.length} glass types`);
+    } else {
+      console.log("\u23ED\uFE0F  Glass types already exist, skipping...");
+    }
+    console.log("\u{1F389} Database seeded successfully!");
+  } catch (error) {
+    console.error("\u274C Error seeding database:", error);
+    throw error;
+  }
+}
+async function forceSeedIngredients() {
+  if (!process.env.DATABASE_URL) {
+    console.log("No DATABASE_URL - cannot force seed");
+    return;
+  }
+  console.log("\u{1F504} Force re-seeding ingredients...");
+  await db.delete(ingredients);
+  console.log("\u{1F5D1}\uFE0F  Cleared existing ingredients");
+  const batchSize = 100;
+  for (let i = 0; i < allIngredients.length; i += batchSize) {
+    const batch = allIngredients.slice(i, i + batchSize);
+    await db.insert(ingredients).values(batch);
+    console.log(`  \u2713 Inserted batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(allIngredients.length / batchSize)}`);
+  }
+  console.log(`\u2705 Force seeded ${allIngredients.length} ingredients!`);
+}
+var allIngredients, sampleGlassTypes;
+var init_seed = __esm({
+  "server/seed.ts"() {
+    "use strict";
+    init_db();
+    init_schema();
+    init_ingredients_data();
+    allIngredients = SAMPLE_INGREDIENTS.map((ing) => ({
+      name: ing.name,
+      category: ing.category,
+      subtype: ing.subtype || null,
+      color: ing.color,
+      abv: String(ing.abv || 0),
+      pricePerLiter: String(ing.pricePerLiter || 0),
+      tasteProfile: ing.tasteProfile,
+      unit: ing.unit,
+      sourceUrl: ing.sourceUrl || null,
+      sourceName: ing.sourceName || null,
+      sourceIcon: ing.sourceIcon || null,
+      imageUrl: ing.imageUrl || null,
+      volume: ing.volume || null
+    }));
+    sampleGlassTypes = [
+      { name: "\u0428\u043E\u0442", capacity: 50, shape: "shot" },
+      { name: "\u041E\u043B\u0434 \u0424\u044D\u0448\u043D", capacity: 300, shape: "old-fashioned" },
+      { name: "\u0425\u0430\u0439\u0431\u043E\u043B", capacity: 270, shape: "highball" },
+      { name: "\u041A\u043E\u043A\u0442\u0435\u0439\u043B\u044C\u043D\u0430\u044F \u0440\u044E\u043C\u043A\u0430", capacity: 150, shape: "martini" },
+      { name: "\u041C\u0430\u0440\u0433\u0430\u0440\u0438\u0442\u0430", capacity: 250, shape: "margarita" },
+      { name: "\u0425\u0430\u0440\u0440\u0438\u043A\u0435\u0439\u043D", capacity: 450, shape: "hurricane" },
+      { name: "\u0422\u0443\u043C\u0431\u043B\u0435\u0440", capacity: 300, shape: "tumbler" },
+      { name: "\u041A\u043E\u043D\u044C\u044F\u0447\u043D\u044B\u0439 \u0431\u043E\u043A\u0430\u043B", capacity: 350, shape: "snifter" },
+      { name: "\u0424\u0443\u0436\u0435\u0440 \u0434\u043B\u044F \u0448\u0430\u043C\u043F\u0430\u043D\u0441\u043A\u043E\u0433\u043E", capacity: 170, shape: "champagne-flute" },
+      { name: "\u041F\u0438\u0432\u043D\u0430\u044F \u043A\u0440\u0443\u0436\u043A\u0430", capacity: 500, shape: "beer-mug" },
+      { name: "\u0411\u043E\u043A\u0430\u043B \u0434\u043B\u044F \u043A\u0440\u0430\u0441\u043D\u043E\u0433\u043E \u0432\u0438\u043D\u0430", capacity: 300, shape: "red-wine" },
+      { name: "\u0411\u043E\u043A\u0430\u043B \u0434\u043B\u044F \u0431\u0435\u043B\u043E\u0433\u043E \u0432\u0438\u043D\u0430", capacity: 260, shape: "white-wine" },
+      { name: "\u0411\u043E\u043A\u0430\u043B \u0441\u0430\u0443\u044D\u0440", capacity: 120, shape: "sour" },
+      { name: "\u0427\u0430\u0448\u0430 \u0434\u043B\u044F \u0448\u0430\u043C\u043F\u0430\u043D\u0441\u043A\u043E\u0433\u043E", capacity: 180, shape: "champagne-saucer" }
+    ];
+    if (import.meta.url === `file://${process.argv[1]}`) {
+      seedDatabase();
     }
   }
 });
@@ -7846,6 +7947,25 @@ async function registerRoutes(app2) {
   app2.get("/api/recipes/generation-modes", async (req, res) => {
     res.json(AVAILABLE_MODES);
   });
+  app2.post("/api/admin/force-seed", async (req, res) => {
+    const { secret } = req.body;
+    const adminSecret = process.env.ADMIN_SEED_SECRET || "cocktailo-force-seed-2024";
+    if (secret !== adminSecret) {
+      return res.status(403).json({ error: "Invalid secret" });
+    }
+    try {
+      const { forceSeedIngredients: forceSeedIngredients2 } = await Promise.resolve().then(() => (init_seed(), seed_exports));
+      await forceSeedIngredients2();
+      const ingredients2 = await storage.getIngredients();
+      res.json({
+        success: true,
+        message: `Database re-seeded with ${ingredients2.length} ingredients`
+      });
+    } catch (error) {
+      console.error("Force seed error:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
   registerAdminRoutes(app2);
   if (process.env.VERCEL) {
     return null;
@@ -7854,75 +7974,8 @@ async function registerRoutes(app2) {
   return httpServer;
 }
 
-// server/seed.ts
-init_db();
-init_schema();
-var sampleIngredients = [
-  // Alcohol
-  { name: "\u0412\u043E\u0434\u043A\u0430", category: "alcohol", color: "#ffffff", abv: "40", pricePerLiter: "1500", tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 10 }, unit: "ml" },
-  { name: "\u0414\u0436\u0438\u043D", category: "alcohol", color: "#f0f0f0", abv: "40", pricePerLiter: "2000", tasteProfile: { sweet: 0, sour: 0, bitter: 2, alcohol: 10 }, unit: "ml" },
-  { name: "\u0420\u043E\u043C", category: "alcohol", color: "#d4af37", abv: "40", pricePerLiter: "1800", tasteProfile: { sweet: 3, sour: 0, bitter: 0, alcohol: 10 }, unit: "ml" },
-  { name: "\u0422\u0435\u043A\u0438\u043B\u0430", category: "alcohol", color: "#f5f5dc", abv: "40", pricePerLiter: "2200", tasteProfile: { sweet: 0, sour: 1, bitter: 1, alcohol: 10 }, unit: "ml" },
-  { name: "\u0412\u0438\u0441\u043A\u0438", category: "alcohol", color: "#b8860b", abv: "40", pricePerLiter: "3000", tasteProfile: { sweet: 1, sour: 0, bitter: 3, alcohol: 10 }, unit: "ml" },
-  { name: "\u041A\u043E\u043A\u043E\u0441\u043E\u0432\u044B\u0439 \u043B\u0438\u043A\u0435\u0440", category: "alcohol", color: "#f8f8ff", abv: "21", pricePerLiter: "1200", tasteProfile: { sweet: 8, sour: 0, bitter: 0, alcohol: 6 }, unit: "ml" },
-  // Juices
-  { name: "\u0410\u043F\u0435\u043B\u044C\u0441\u0438\u043D\u043E\u0432\u044B\u0439 \u0441\u043E\u043A", category: "juice", color: "#ffa500", abv: "0", pricePerLiter: "200", tasteProfile: { sweet: 7, sour: 3, bitter: 0, alcohol: 0 }, unit: "ml" },
-  { name: "\u041B\u0438\u043C\u043E\u043D\u043D\u044B\u0439 \u0441\u043E\u043A", category: "juice", color: "#fff700", abv: "0", pricePerLiter: "300", tasteProfile: { sweet: 1, sour: 9, bitter: 0, alcohol: 0 }, unit: "ml" },
-  { name: "\u041B\u0430\u0439\u043C\u043E\u0432\u044B\u0439 \u0441\u043E\u043A", category: "juice", color: "#32cd32", abv: "0", pricePerLiter: "350", tasteProfile: { sweet: 1, sour: 8, bitter: 0, alcohol: 0 }, unit: "ml" },
-  { name: "\u041A\u043B\u044E\u043A\u0432\u0435\u043D\u043D\u044B\u0439 \u0441\u043E\u043A", category: "juice", color: "#dc143c", abv: "0", pricePerLiter: "400", tasteProfile: { sweet: 5, sour: 6, bitter: 1, alcohol: 0 }, unit: "ml" },
-  { name: "\u0410\u043D\u0430\u043D\u0430\u0441\u043E\u0432\u044B\u0439 \u0441\u043E\u043A", category: "juice", color: "#ffff00", abv: "0", pricePerLiter: "250", tasteProfile: { sweet: 8, sour: 2, bitter: 0, alcohol: 0 }, unit: "ml" },
-  // Syrups
-  { name: "\u0421\u0430\u0445\u0430\u0440\u043D\u044B\u0439 \u0441\u0438\u0440\u043E\u043F", category: "syrup", color: "#ffffff", abv: "0", pricePerLiter: "150", tasteProfile: { sweet: 10, sour: 0, bitter: 0, alcohol: 0 }, unit: "ml" },
-  { name: "\u0413\u0440\u0435\u043D\u0430\u0434\u0438\u043D", category: "syrup", color: "#ff0000", abv: "0", pricePerLiter: "300", tasteProfile: { sweet: 8, sour: 1, bitter: 0, alcohol: 0 }, unit: "ml" },
-  { name: "\u041A\u043B\u0435\u043D\u043E\u0432\u044B\u0439 \u0441\u0438\u0440\u043E\u043F", category: "syrup", color: "#d2691e", abv: "0", pricePerLiter: "800", tasteProfile: { sweet: 9, sour: 0, bitter: 0, alcohol: 0 }, unit: "ml" },
-  // Fruits
-  { name: "\u041B\u0438\u043C\u043E\u043D", category: "fruit", color: "#fff700", abv: "0", pricePerLiter: "100", tasteProfile: { sweet: 1, sour: 8, bitter: 1, alcohol: 0 }, unit: "g" },
-  { name: "\u041B\u0430\u0439\u043C", category: "fruit", color: "#32cd32", abv: "0", pricePerLiter: "120", tasteProfile: { sweet: 1, sour: 7, bitter: 0, alcohol: 0 }, unit: "g" },
-  { name: "\u0410\u043F\u0435\u043B\u044C\u0441\u0438\u043D", category: "fruit", color: "#ffa500", abv: "0", pricePerLiter: "80", tasteProfile: { sweet: 6, sour: 3, bitter: 0, alcohol: 0 }, unit: "g" },
-  { name: "\u0412\u0438\u0448\u043D\u044F", category: "fruit", color: "#dc143c", abv: "0", pricePerLiter: "200", tasteProfile: { sweet: 7, sour: 2, bitter: 0, alcohol: 0 }, unit: "g" },
-  // Ice
-  { name: "\u041B\u0435\u0434", category: "ice", color: "#e6f3ff", abv: "0", pricePerLiter: "50", tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 0 }, unit: "ml" },
-  // Spices
-  { name: "\u041C\u044F\u0442\u0430", category: "spice", color: "#90ee90", abv: "0", pricePerLiter: "500", tasteProfile: { sweet: 0, sour: 0, bitter: 3, alcohol: 0 }, unit: "piece" },
-  { name: "\u0421\u043E\u043B\u044C", category: "spice", color: "#ffffff", abv: "0", pricePerLiter: "100", tasteProfile: { sweet: 0, sour: 0, bitter: 0, alcohol: 0 }, unit: "g" }
-];
-var sampleGlassTypes = [
-  { name: "\u041E\u043B\u0434-\u0444\u044D\u0448\u043D", capacity: 300, shape: "old-fashioned" },
-  { name: "\u0425\u0430\u0439\u0431\u043E\u043B", capacity: 350, shape: "highball" },
-  { name: "\u041C\u0430\u0440\u0442\u0438\u043D\u0438", capacity: 180, shape: "martini" },
-  { name: "\u0428\u043E\u0442", capacity: 50, shape: "shot" },
-  { name: "\u041A\u043E\u043B\u043B\u0438\u043D\u0437", capacity: 400, shape: "collins" },
-  { name: "\u041A\u0443\u043F\u0435", capacity: 200, shape: "coupe" },
-  { name: "\u0412\u0438\u043D\u043D\u044B\u0439 \u0431\u043E\u043A\u0430\u043B", capacity: 250, shape: "wine" },
-  { name: "\u041F\u0438\u0432\u043D\u0430\u044F \u043A\u0440\u0443\u0436\u043A\u0430", capacity: 500, shape: "beer" }
-];
-async function seedDatabase() {
-  try {
-    if (!process.env.DATABASE_URL) {
-      console.log("Running in memory storage mode - database seeding skipped (data preloaded in MemoryStorage)");
-      return;
-    }
-    console.log("Seeding database...");
-    const existingIngredients = await db.select().from(ingredients).limit(1);
-    const existingGlassTypes = await db.select().from(glassTypes).limit(1);
-    if (existingIngredients.length === 0) {
-      console.log("Inserting ingredients...");
-      await db.insert(ingredients).values(sampleIngredients);
-    }
-    if (existingGlassTypes.length === 0) {
-      console.log("Inserting glass types...");
-      await db.insert(glassTypes).values(sampleGlassTypes);
-    }
-    console.log("Database seeded successfully!");
-  } catch (error) {
-    console.error("Error seeding database:", error);
-  }
-}
-if (import.meta.url === `file://${process.argv[1]}`) {
-  seedDatabase();
-}
-
 // server/vercel-entry.ts
+init_seed();
 var app = express();
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: false, limit: "10mb" }));
