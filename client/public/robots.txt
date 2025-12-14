@@ -1,0 +1,23 @@
+# Robots.txt for Cocktailo Maker
+# https://www.cocktailomaker.ru
+
+User-agent: *
+Allow: /
+
+# Allow all pages
+Allow: /constructor
+Allow: /generator
+Allow: /catalog
+Allow: /courses
+Allow: /recipe/*
+
+# Disallow admin and auth pages
+Disallow: /admin
+Disallow: /auth
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://www.cocktailomaker.ru/sitemap.xml
+
+# Crawl delay (optional, for polite crawling)
+Crawl-delay: 1
