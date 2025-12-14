@@ -5,9 +5,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { lazy, Suspense } from "react";
 
-// Lazy load страницы для code splitting
+// Landing загружаем сразу - это главная страница
+import Landing from "@/pages/landing";
+
+// Lazy load остальные страницы для code splitting
 const NotFound = lazy(() => import("@/pages/not-found"));
-const Landing = lazy(() => import("@/pages/landing"));
 const Home = lazy(() => import("@/pages/home"));
 const Constructor = lazy(() => import("@/pages/constructor"));
 const Generator = lazy(() => import("@/pages/generator"));
@@ -22,18 +24,20 @@ const Courses = lazy(() => import("@/pages/courses"));
 const CourseMixologyBasics = lazy(() => import("@/pages/course-mixology-basics"));
 const CourseModule1 = lazy(() => import("@/pages/courses/module1"));
 
-// Loading компонент
+// Простой загрузчик без анимаций для мобильных
 const PageLoader = () => (
   <div className="min-h-screen bg-night-blue flex items-center justify-center">
-    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-neon-turquoise"></div>
+    <div className="text-neon-turquoise text-lg">Загрузка...</div>
   </div>
 );
 
 function Router() {
   return (
-    <Suspense fallback={<PageLoader />}>
-      <Switch>
-        <Route path="/" component={Landing} />
+    <Switch>
+      {/* Landing грузится сразу без Suspense */}
+      <Route path="/" component={Landing} />
+      {/* Остальные страницы lazy loaded */}
+      <Suspense fallback={<PageLoader />}>
         <Route path="/auth" component={Auth} />
         <Route path="/home" component={Home} />
         <Route path="/constructor" component={Constructor} />
@@ -48,8 +52,8 @@ function Router() {
         <Route path="/course/mixology-basics" component={CourseMixologyBasics} />
         <Route path="/course/mixology-basics/module/:moduleId" component={CourseModule1} />
         <Route component={NotFound} />
-      </Switch>
-    </Suspense>
+      </Suspense>
+    </Switch>
   );
 }
 
