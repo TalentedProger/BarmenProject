@@ -1,62 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Главная страница -->
   <url>
     <loc>https://www.cocktailomaker.ru/</loc>
     <lastmod>2024-12-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.cocktailomaker.ru/og-image.png</image:loc>
+      <image:title>Cocktailo Maker - конструктор коктейлей</image:title>
+      <image:caption>Бесплатный онлайн конструктор рецептов коктейлей</image:caption>
+    </image:image>
   </url>
   
-  <!-- Main Features -->
+  <!-- Конструктор коктейлей -->
   <url>
     <loc>https://www.cocktailomaker.ru/constructor</loc>
     <lastmod>2024-12-14</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
   </url>
   
+  <!-- Генератор рецептов -->
   <url>
     <loc>https://www.cocktailomaker.ru/generator</loc>
     <lastmod>2024-12-14</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
   </url>
   
+  <!-- Каталог коктейлей -->
   <url>
     <loc>https://www.cocktailomaker.ru/catalog</loc>
     <lastmod>2024-12-14</lastmod>
     <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Курсы миксологии -->
+  <url>
+    <loc>https://www.cocktailomaker.ru/courses</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  
+  <!-- Основы миксологии -->
+  <url>
+    <loc>https://www.cocktailomaker.ru/course/mixology-basics</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
-  <!-- Courses -->
+  <!-- Модули курсов -->
   <url>
-    <loc>https://www.cocktailomaker.ru/courses</loc>
+    <loc>https://www.cocktailomaker.ru/course/mixology-basics/module/1</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.cocktailomaker.ru/course/mixology-basics/module/2</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.cocktailomaker.ru/course/mixology-basics/module/3</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  
+  <!-- Избранное -->
+  <url>
+    <loc>https://www.cocktailomaker.ru/favorites</loc>
     <lastmod>2024-12-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
-  <url>
-    <loc>https://www.cocktailomaker.ru/course/mixology-basics</loc>
-    <lastmod>2024-12-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <!-- User Features -->
-  <url>
-    <loc>https://www.cocktailomaker.ru/favorites</loc>
-    <lastmod>2024-12-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
+  <!-- Домашняя страница (для авторизованных) -->
   <url>
     <loc>https://www.cocktailomaker.ru/home</loc>
     <lastmod>2024-12-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
+  
+  <!-- Профиль -->
+  <url>
+    <loc>https://www.cocktailomaker.ru/profile</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 </urlset>

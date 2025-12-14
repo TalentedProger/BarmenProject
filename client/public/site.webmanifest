@@ -1,13 +1,21 @@
 {
-  "name": "Cocktailo Maker",
+  "name": "Cocktailo Maker — Рецепты коктейлей",
   "short_name": "Cocktailo",
-  "description": "Конструктор коктейлей онлайн - создавай уникальные рецепты напитков",
+  "description": "Бесплатный конструктор коктейлей онлайн. Создавайте рецепты алкогольных и безалкогольных напитков, изучайте миксологию.",
   "start_url": "/",
+  "id": "/",
   "display": "standalone",
   "background_color": "#0A0A0D",
   "theme_color": "#0A0A0D",
   "orientation": "portrait-primary",
+  "scope": "/",
   "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
     {
       "src": "/favicon-192x192.png",
       "sizes": "192x192",
@@ -19,6 +27,31 @@
       "type": "image/png"
     }
   ],
-  "categories": ["food", "lifestyle", "entertainment"],
-  "lang": "ru"
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Конструктор",
+      "short_name": "Конструктор",
+      "description": "Создать свой коктейль",
+      "url": "/constructor",
+      "icons": [{ "src": "/favicon.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Генератор",
+      "short_name": "Генератор",
+      "description": "Сгенерировать рецепт",
+      "url": "/generator",
+      "icons": [{ "src": "/favicon.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Каталог",
+      "short_name": "Каталог",
+      "description": "Каталог коктейлей",
+      "url": "/catalog",
+      "icons": [{ "src": "/favicon.svg", "sizes": "96x96" }]
+    }
+  ],
+  "categories": ["food", "lifestyle", "entertainment", "education"],
+  "lang": "ru",
+  "dir": "ltr"
 }
