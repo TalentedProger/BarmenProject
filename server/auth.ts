@@ -43,7 +43,12 @@ export function getSession() {
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax',
       maxAge: sessionTtl,
+      // Allow cookies to work across www and non-www
+      domain: process.env.NODE_ENV === 'production' && process.env.COOKIE_DOMAIN 
+        ? process.env.COOKIE_DOMAIN 
+        : undefined,
     },
   });
 }
@@ -71,7 +76,7 @@ export async function setupAuth(app: Express) {
       callbackURL = `https://${process.env.VERCEL_URL}/api/auth/google/callback`;
     } else if (process.env.VERCEL) {
       // Running on Vercel but no URL set - use hardcoded production URL
-      callbackURL = 'https://coctailomaker.vercel.app/api/auth/google/callback';
+      callbackURL = 'https://cocktailomaker.vercel.app/api/auth/google/callback';
     } else if (process.env.REPLIT_DOMAINS) {
       callbackURL = `https://${process.env.REPLIT_DOMAINS.split(',')[0]}/api/auth/google/callback`;
     } else {

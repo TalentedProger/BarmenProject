@@ -130,20 +130,152 @@ export function getIngredientColor(ingredient: Ingredient): string {
   return ingredient.color || "#888888";
 }
 
-export function generateCocktailName(): string {
-  const adjectives = [
-    "Тропический", "Полуночный", "Золотой", "Алый", "Лазурный", 
-    "Изумрудный", "Закатный", "Штормовой", "Огненный", "Ледяной"
-  ];
-  const nouns = [
-    "Бриз", "Гром", "Волна", "Сон", "Искра", 
-    "Пламя", "Туман", "Порыв", "Блаженство", "Пунш"
-  ];
+// Типы для системы склонений
+type Gender = 'masculine' | 'feminine' | 'neuter';
+
+interface Adjective {
+  masculine: string;
+  feminine: string;
+  neuter: string;
+}
+
+interface Noun {
+  word: string;
+  gender: Gender;
+}
+
+// Прилагательные с формами для всех родов
+const adjectives: Adjective[] = [
+  // Природные/атмосферные
+  { masculine: "Тропический", feminine: "Тропическая", neuter: "Тропическое" },
+  { masculine: "Полуночный", feminine: "Полуночная", neuter: "Полуночное" },
+  { masculine: "Закатный", feminine: "Закатная", neuter: "Закатное" },
+  { masculine: "Штормовой", feminine: "Штормовая", neuter: "Штормовое" },
+  { masculine: "Рассветный", feminine: "Рассветная", neuter: "Рассветное" },
+  { masculine: "Туманный", feminine: "Туманная", neuter: "Туманное" },
+  { masculine: "Морской", feminine: "Морская", neuter: "Морское" },
+  { masculine: "Лунный", feminine: "Лунная", neuter: "Лунное" },
+  { masculine: "Звёздный", feminine: "Звёздная", neuter: "Звёздное" },
+  { masculine: "Ночной", feminine: "Ночная", neuter: "Ночное" },
   
+  // Цвета
+  { masculine: "Золотой", feminine: "Золотая", neuter: "Золотое" },
+  { masculine: "Алый", feminine: "Алая", neuter: "Алое" },
+  { masculine: "Лазурный", feminine: "Лазурная", neuter: "Лазурное" },
+  { masculine: "Изумрудный", feminine: "Изумрудная", neuter: "Изумрудное" },
+  { masculine: "Рубиновый", feminine: "Рубиновая", neuter: "Рубиновое" },
+  { masculine: "Янтарный", feminine: "Янтарная", neuter: "Янтарное" },
+  { masculine: "Багровый", feminine: "Багровая", neuter: "Багровое" },
+  { masculine: "Серебряный", feminine: "Серебряная", neuter: "Серебряное" },
+  { masculine: "Медный", feminine: "Медная", neuter: "Медное" },
+  { masculine: "Пурпурный", feminine: "Пурпурная", neuter: "Пурпурное" },
+  
+  // Температура/состояние
+  { masculine: "Огненный", feminine: "Огненная", neuter: "Огненное" },
+  { masculine: "Ледяной", feminine: "Ледяная", neuter: "Ледяное" },
+  { masculine: "Жгучий", feminine: "Жгучая", neuter: "Жгучее" },
+  { masculine: "Прохладный", feminine: "Прохладная", neuter: "Прохладное" },
+  { masculine: "Пылающий", feminine: "Пылающая", neuter: "Пылающее" },
+  { masculine: "Морозный", feminine: "Морозная", neuter: "Морозное" },
+  
+  // Характер/настроение
+  { masculine: "Дерзкий", feminine: "Дерзкая", neuter: "Дерзкое" },
+  { masculine: "Нежный", feminine: "Нежная", neuter: "Нежное" },
+  { masculine: "Страстный", feminine: "Страстная", neuter: "Страстное" },
+  { masculine: "Таинственный", feminine: "Таинственная", neuter: "Таинственное" },
+  { masculine: "Бархатный", feminine: "Бархатная", neuter: "Бархатное" },
+  { masculine: "Шёлковый", feminine: "Шёлковая", neuter: "Шёлковое" },
+  { masculine: "Райский", feminine: "Райская", neuter: "Райское" },
+  { masculine: "Дикий", feminine: "Дикая", neuter: "Дикое" },
+  { masculine: "Запретный", feminine: "Запретная", neuter: "Запретное" },
+  { masculine: "Роковой", feminine: "Роковая", neuter: "Роковое" },
+  
+  // Особые/экзотика
+  { masculine: "Карибский", feminine: "Карибская", neuter: "Карибское" },
+  { masculine: "Кубинский", feminine: "Кубинская", neuter: "Кубинское" },
+  { masculine: "Гаванский", feminine: "Гаванская", neuter: "Гаванское" },
+  { masculine: "Венецианский", feminine: "Венецианская", neuter: "Венецианское" },
+  { masculine: "Восточный", feminine: "Восточная", neuter: "Восточное" },
+  { masculine: "Сказочный", feminine: "Сказочная", neuter: "Сказочное" },
+  
+  // Вкусовые ощущения
+  { masculine: "Сладкий", feminine: "Сладкая", neuter: "Сладкое" },
+  { masculine: "Пряный", feminine: "Пряная", neuter: "Пряное" },
+  { masculine: "Освежающий", feminine: "Освежающая", neuter: "Освежающее" },
+  { masculine: "Бодрящий", feminine: "Бодрящая", neuter: "Бодрящее" },
+  { masculine: "Терпкий", feminine: "Терпкая", neuter: "Терпкое" },
+  { masculine: "Искрящийся", feminine: "Искрящаяся", neuter: "Искрящееся" },
+];
+
+// Существительные с указанием рода
+const nouns: Noun[] = [
+  // Мужской род
+  { word: "Бриз", gender: 'masculine' },
+  { word: "Гром", gender: 'masculine' },
+  { word: "Порыв", gender: 'masculine' },
+  { word: "Пунш", gender: 'masculine' },
+  { word: "Рай", gender: 'masculine' },
+  { word: "Закат", gender: 'masculine' },
+  { word: "Рассвет", gender: 'masculine' },
+  { word: "Шторм", gender: 'masculine' },
+  { word: "Поцелуй", gender: 'masculine' },
+  { word: "Секрет", gender: 'masculine' },
+  { word: "Соблазн", gender: 'masculine' },
+  { word: "Вечер", gender: 'masculine' },
+  { word: "Восход", gender: 'masculine' },
+  { word: "Танец", gender: 'masculine' },
+  { word: "Бархат", gender: 'masculine' },
+  { word: "Шёпот", gender: 'masculine' },
+  { word: "Мираж", gender: 'masculine' },
+  { word: "Фламинго", gender: 'masculine' },
+  { word: "Вулкан", gender: 'masculine' },
+  { word: "Оазис", gender: 'masculine' },
+  
+  // Женский род  
+  { word: "Волна", gender: 'feminine' },
+  { word: "Искра", gender: 'feminine' },
+  { word: "Роза", gender: 'feminine' },
+  { word: "Страсть", gender: 'feminine' },
+  { word: "Мечта", gender: 'feminine' },
+  { word: "Ночь", gender: 'feminine' },
+  { word: "Заря", gender: 'feminine' },
+  { word: "Луна", gender: 'feminine' },
+  { word: "Звезда", gender: 'feminine' },
+  { word: "Тайна", gender: 'feminine' },
+  { word: "Нега", gender: 'feminine' },
+  { word: "Сказка", gender: 'feminine' },
+  { word: "Грёза", gender: 'feminine' },
+  { word: "Лагуна", gender: 'feminine' },
+  { word: "Амазонка", gender: 'feminine' },
+  { word: "Комета", gender: 'feminine' },
+  { word: "Муза", gender: 'feminine' },
+  { word: "Сирена", gender: 'feminine' },
+  
+  // Средний род
+  { word: "Пламя", gender: 'neuter' },
+  { word: "Блаженство", gender: 'neuter' },
+  { word: "Солнце", gender: 'neuter' },
+  { word: "Море", gender: 'neuter' },
+  { word: "Сияние", gender: 'neuter' },
+  { word: "Наслаждение", gender: 'neuter' },
+  { word: "Очарование", gender: 'neuter' },
+  { word: "Сердце", gender: 'neuter' },
+  { word: "Золото", gender: 'neuter' },
+  { word: "Серебро", gender: 'neuter' },
+  { word: "Небо", gender: 'neuter' },
+  { word: "Чудо", gender: 'neuter' },
+  { word: "Счастье", gender: 'neuter' },
+  { word: "Озеро", gender: 'neuter' },
+];
+
+export function generateCocktailName(): string {
   const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
   const noun = nouns[Math.floor(Math.random() * nouns.length)];
   
-  return `${adjective} ${noun}`;
+  // Выбираем форму прилагательного в соответствии с родом существительного
+  const adjectiveForm = adjective[noun.gender];
+  
+  return `${adjectiveForm} ${noun.word}`;
 }
 
 export function validateCocktailIngredients(
