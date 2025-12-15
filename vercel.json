@@ -16,6 +16,12 @@
           "value": "cocktailomaker.ru"
         }
       ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "__yandex"
+        }
+      ],
       "destination": "https://www.cocktailomaker.ru/:path*",
       "permanent": true
     }
@@ -71,7 +77,7 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/((?!api/|robots.txt|sitemap.xml|favicon|manifest|.*\\.png|.*\\.svg).*)",
+      "source": "/((?!api/|robots.txt|sitemap.xml|yandex_|favicon|manifest|.*\\.png|.*\\.svg|.*\\.html$).*)",
       "destination": "/index.html"
     }
   ],

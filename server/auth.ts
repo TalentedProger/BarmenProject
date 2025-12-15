@@ -75,8 +75,8 @@ export async function setupAuth(app: Express) {
     } else if (process.env.VERCEL_URL) {
       callbackURL = `https://${process.env.VERCEL_URL}/api/auth/google/callback`;
     } else if (process.env.VERCEL) {
-      // Running on Vercel but no URL set - use hardcoded production URL
-      callbackURL = 'https://cocktailomaker.vercel.app/api/auth/google/callback';
+      // Running on Vercel but no APP_URL set - use www domain
+      callbackURL = 'https://www.cocktailomaker.ru/api/auth/google/callback';
     } else if (process.env.REPLIT_DOMAINS) {
       callbackURL = `https://${process.env.REPLIT_DOMAINS.split(',')[0]}/api/auth/google/callback`;
     } else {
