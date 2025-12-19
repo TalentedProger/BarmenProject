@@ -6239,7 +6239,7 @@ async function setupAuth(app2) {
     } else if (process.env.VERCEL_URL) {
       callbackURL = `https://${process.env.VERCEL_URL}/api/auth/google/callback`;
     } else if (process.env.VERCEL) {
-      callbackURL = "https://cocktailomaker.vercel.app/api/auth/google/callback";
+      callbackURL = "https://www.cocktailomaker.ru/api/auth/google/callback";
     } else if (process.env.REPLIT_DOMAINS) {
       callbackURL = `https://${process.env.REPLIT_DOMAINS.split(",")[0]}/api/auth/google/callback`;
     } else {

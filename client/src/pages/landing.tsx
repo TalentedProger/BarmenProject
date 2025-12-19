@@ -1,8 +1,12 @@
-import { lazy, Suspense, useCallback, memo } from "react";
+import { lazy, Suspense, useCallback, memo, useEffect } from "react";
 import Header from "@/components/layout/header";
+
+console.log('[LOAD] landing.tsx module loading...');
 
 // Критически важные компоненты загружаем сразу
 import HeroSection from "@/components/landing/HeroSection";
+
+console.log('[LOAD] HeroSection imported');
 
 // Остальные секции загружаем лениво
 const FeaturesSection = lazy(() => import("@/components/landing/FeaturesSection"));
@@ -21,6 +25,12 @@ const SectionLoader = memo(() => (
 SectionLoader.displayName = "SectionLoader";
 
 function Landing() {
+  useEffect(() => {
+    console.log('[LOAD] Landing component mounted');
+  }, []);
+
+  console.log('[LOAD] Landing rendering...');
+
   const handleGetStarted = useCallback(() => {
     window.location.href = "/constructor";
   }, []);

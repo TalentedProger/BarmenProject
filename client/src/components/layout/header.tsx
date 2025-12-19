@@ -8,17 +8,25 @@ import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useEffect } from "react";
 import { useLocation } from "wouter";
+
+console.log('[LOAD] header.tsx module loaded');
 
 interface HeaderProps {
   useProfileDropdown?: boolean;
 }
 
 export default function Header({ useProfileDropdown = true }: HeaderProps = {}) {
+  console.log('[LOAD] Header rendering...');
+  
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const [location] = useLocation();
+
+  useEffect(() => {
+    console.log('[LOAD] Header mounted, isLoading:', isLoading, 'isAuthenticated:', isAuthenticated);
+  }, [isLoading, isAuthenticated]);
 
   const userDisplayData = useMemo(() => {
     if (!user) return null;

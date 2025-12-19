@@ -282,6 +282,70 @@
         <p>Создавайте рецепты алкогольных и безалкогольных напитков: Мохито, Маргарита, Космополитен и другие!</p>
       </div>
     </noscript>
+    
+    <!-- Начальный загрузчик - показывается пока React не загрузится -->
+    <div id="initial-loader" style="position:fixed;inset:0;background:#0A0A0D;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:system-ui,sans-serif;z-index:9999;">
+      <div style="color:#00D9FF;font-size:24px;margin-bottom:16px;">🍸 Cocktailo Maker</div>
+      <div id="load-status" style="color:#888;font-size:14px;">Загрузка приложения...</div>
+      <div id="load-progress" style="margin-top:12px;width:200px;height:4px;background:#333;border-radius:2px;overflow:hidden;">
+        <div id="load-bar" style="width:10%;height:100%;background:#00D9FF;transition:width 0.3s;"></div>
+      </div>
+      <div id="load-debug" style="color:#666;font-size:11px;margin-top:20px;max-width:90%;text-align:center;"></div>
+    </div>
+    
+    <script>
+      // Диагностика загрузки
+      window.loadStart = Date.now();
+      window.loadSteps = [];
+      
+      function logStep(step) {
+        var time = Date.now() - window.loadStart;
+        window.loadSteps.push(time + 'ms: ' + step);
+        console.log('[LOAD]', time + 'ms:', step);
+        
+        var status = document.getElementById('load-status');
+        var debug = document.getElementById('load-debug');
+        var bar = document.getElementById('load-bar');
+        
+        if (status) status.textContent = step;
+        if (debug) debug.textContent = window.loadSteps.slice(-3).join(' → ');
+        
+        // Прогресс бар
+        if (bar) {
+          var progress = Math.min(90, window.loadSteps.length * 15);
+          bar.style.width = progress + '%';
+        }
+      }
+      
+      logStep('HTML parsed');
+      
+      // Скрываем загрузчик когда React загрузится
+      window.hideLoader = function() {
+        var loader = document.getElementById('initial-loader');
+        if (loader) {
+          var bar = document.getElementById('load-bar');
+          if (bar) bar.style.width = '100%';
+          setTimeout(function() {
+            loader.style.opacity = '0';
+            loader.style.transition = 'opacity 0.3s';
+            setTimeout(function() { loader.remove(); }, 300);
+          }, 200);
+        }
+      };
+      
+      // Таймаут на случай если что-то зависнет
+      setTimeout(function() {
+        var loader = document.getElementById('initial-loader');
+        if (loader) {
+          var debug = document.getElementById('load-debug');
+          if (debug) {
+            debug.style.color = '#ff6b6b';
+            debug.textContent = 'Загрузка занимает много времени. Шаги: ' + window.loadSteps.join(' → ');
+          }
+        }
+      }, 10000);
+    </script>
+    
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
