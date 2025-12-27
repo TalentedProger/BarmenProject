@@ -181,14 +181,33 @@ export default function Constructor() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div 
+      className="min-h-screen bg-background text-foreground"
+      style={{ 
+        overflowX: 'hidden', 
+        maxWidth: '100vw',
+        width: '100%'
+      }}
+    >
       <Header />
       
-      <section className="pt-56 pb-16 bg-gradient-to-br from-purple-950 via-purple-950/95 to-blue-950 backdrop-blur-sm overflow-hidden">
-        <div className="container mx-auto px-4 overflow-hidden">
+      <section 
+        className="pt-56 pb-16 bg-gradient-to-br from-purple-950 via-purple-950/95 to-blue-950 backdrop-blur-sm"
+        style={{ 
+          overflowX: 'hidden',
+          maxWidth: '100%'
+        }}
+      >
+        <div 
+          className="container mx-auto px-4"
+          style={{ 
+            overflowX: 'hidden',
+            maxWidth: '100%'
+          }}
+        >
           <div className="text-center mb-16">
             <div className="flex justify-center mb-6">
-              <div className="relative">
+              <div className="relative" style={{ contain: 'layout' }}>
                 <Martini 
                   className="w-16 h-16 text-purple-400" 
                   strokeWidth={1.5}
@@ -197,9 +216,11 @@ export default function Constructor() {
                   }}
                 />
                 <div 
-                  className="absolute inset-0 rounded-full blur-xl opacity-30"
+                  className="absolute inset-0 rounded-full opacity-30"
                   style={{
-                    background: 'radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, transparent 70%)'
+                    background: 'radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, transparent 70%)',
+                    filter: 'blur(16px)',
+                    contain: 'paint'
                   }}
                 />
               </div>
@@ -215,18 +236,24 @@ export default function Constructor() {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-4 min-h-[600px]">
+          <div className="grid lg:grid-cols-12 gap-4 min-h-[600px]" style={{ maxWidth: '100%' }}>
             {/* Left Sidebar - Ingredients - order-3 on mobile */}
-            <div className="lg:col-span-4 flex flex-col order-3 lg:order-1">
+            <div className="lg:col-span-4 flex flex-col order-3 lg:order-1" style={{ minWidth: 0 }}>
               <div className="bg-card border border-border rounded-lg p-4 flex-1 overflow-hidden">
                 <IngredientRecommendations />
               </div>
             </div>
 
             {/* Center Content - Reduced width - order-1 on mobile (Glass first) */}
-            <div className="lg:col-span-4 flex flex-col space-y-4 order-1 lg:order-2 overflow-hidden">
+            <div className="lg:col-span-4 flex flex-col space-y-4 order-1 lg:order-2" style={{ minWidth: 0, overflow: 'hidden' }}>
               {/* Glass Selector or Drink Visualizer */}
-              <div className="bg-card/60 backdrop-blur-sm border border-border rounded-lg p-6 flex-1 overflow-hidden">
+              <div 
+                className="bg-card/60 backdrop-blur-sm border border-border rounded-lg p-4 sm:p-6 flex-1"
+                style={{ 
+                  overflow: 'hidden',
+                  contain: 'layout style paint'
+                }}
+              >
                 {!selectedGlass ? (
                   <CompactGlassSelector />
                 ) : (

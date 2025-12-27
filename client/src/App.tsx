@@ -35,28 +35,38 @@ const PageLoader = () => (
   </div>
 );
 
+// Обёртка для lazy компонентов
+const LazyRoute = ({ component: Component, ...props }: { component: React.LazyExoticComponent<any>; path?: string }) => (
+  <Route {...props}>
+    {() => (
+      <Suspense fallback={<PageLoader />}>
+        <Component />
+      </Suspense>
+    )}
+  </Route>
+);
+
 function Router() {
   return (
     <Switch>
       {/* Landing грузится сразу без Suspense */}
       <Route path="/" component={Landing} />
-      {/* Остальные страницы lazy loaded */}
-      <Suspense fallback={<PageLoader />}>
-        <Route path="/auth" component={Auth} />
-        <Route path="/home" component={Home} />
-        <Route path="/constructor" component={Constructor} />
-        <Route path="/generator" component={Generator} />
-        <Route path="/catalog" component={Catalog} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/favorites" component={Favorites} />
-        <Route path="/recipe/:id" component={RecipePage} />
-        <Route path="/user-recipe/:id" component={UserRecipePage} />
-        <Route path="/admin" component={AdminDashboard} />
-        <Route path="/courses" component={Courses} />
-        <Route path="/course/mixology-basics" component={CourseMixologyBasics} />
-        <Route path="/course/mixology-basics/module/:moduleId" component={CourseModule1} />
-        <Route component={NotFound} />
-      </Suspense>
+      {/* Остальные страницы lazy loaded с Suspense */}
+      <LazyRoute path="/auth" component={Auth} />
+      <LazyRoute path="/home" component={Home} />
+      <LazyRoute path="/constructor" component={Constructor} />
+      <LazyRoute path="/generator" component={Generator} />
+      <LazyRoute path="/catalog" component={Catalog} />
+      <LazyRoute path="/profile" component={Profile} />
+      <LazyRoute path="/favorites" component={Favorites} />
+      <LazyRoute path="/recipe/:id" component={RecipePage} />
+      <LazyRoute path="/user-recipe/:id" component={UserRecipePage} />
+      <LazyRoute path="/admin" component={AdminDashboard} />
+      <LazyRoute path="/courses" component={Courses} />
+      <LazyRoute path="/course/mixology-basics" component={CourseMixologyBasics} />
+      <LazyRoute path="/course/mixology-basics/module/:moduleId" component={CourseModule1} />
+      {/* 404 - отдельно в конце */}
+      <LazyRoute component={NotFound} />
     </Switch>
   );
 }

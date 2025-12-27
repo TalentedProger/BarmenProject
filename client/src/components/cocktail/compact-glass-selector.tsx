@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCocktailStore } from '@/store/cocktail-store';
@@ -49,7 +49,7 @@ export function CompactGlassSelector() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Предзагрузка изображений для плавной анимации
+  // Предзагрузка изображений
   useEffect(() => {
     glassTypes.forEach(glass => {
       const img = new Image();
@@ -57,153 +57,232 @@ export function CompactGlassSelector() {
     });
   }, []);
 
-  const nextGlass = (e: React.MouseEvent) => {
+  const nextGlass = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (isTransitioning) return;
     setIsTransitioning(true);
     setCurrentIndex((prev) => (prev + 1) % glassTypes.length);
-    setTimeout(() => setIsTransitioning(false), 300);
-  };
+    setTimeout(() => setIsTransitioning(false), 200);
+  }, [isTransitioning]);
 
-  const prevGlass = (e: React.MouseEvent) => {
+  const prevGlass = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (isTransitioning) return;
     setIsTransitioning(true);
     setCurrentIndex((prev) => (prev - 1 + glassTypes.length) % glassTypes.length);
-    setTimeout(() => setIsTransitioning(false), 300);
-  };
+    setTimeout(() => setIsTransitioning(false), 200);
+  }, [isTransitioning]);
 
-  const selectCurrentGlass = (e: React.MouseEvent) => {
+  const selectCurrentGlass = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const glass = glassTypes[currentIndex];
     setSelectedGlass({
-      id: currentIndex + 1, // Convert to numeric ID for database compatibility
+      id: currentIndex + 1,
       name: glass.name,
       capacity: glass.capacity,
-      shape: glass.id, // Use string ID as shape
+      shape: glass.id,
       createdAt: new Date()
     });
-  };
+  }, [currentIndex, setSelectedGlass]);
+
+  const goToIndex = useCallback((index: number, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isTransitioning || index === currentIndex) return;
+    setIsTransitioning(true);
+    setCurrentIndex(index);
+    setTimeout(() => setIsTransitioning(false), 200);
+  }, [isTransitioning, currentIndex]);
 
   const currentGlass = glassTypes[currentIndex];
   const isSelected = selectedGlass?.shape === currentGlass.id;
 
   return (
-    <div className="relative flex flex-col items-center h-full justify-between overflow-hidden">
-      {/* Navigation buttons - contained within parent */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={prevGlass}
-        disabled={isTransitioning}
-        className={`absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-16 sm:h-16 z-30 p-0 transition-opacity duration-300 text-white hover:text-white hover:bg-transparent ${
-          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
-        }`}
-        style={{ background: 'transparent', transform: 'translateY(-50%)' }}
-      >
-        <ChevronLeft className="h-10 w-10 sm:h-16 sm:w-16" strokeWidth={3} />
-      </Button>
+    <div 
+      className="flex flex-col items-center w-full"
+      style={{ 
+        contain: 'layout style paint',
+        isolation: 'isolate',
+        maxWidth: '100%',
+        overflow: 'hidden'
+      }}
+    >
+      <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
+        Выберите стакан
+      </h3>
       
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={nextGlass}
-        disabled={isTransitioning}
-        className={`absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-16 sm:h-16 z-30 p-0 transition-opacity duration-300 text-white hover:text-white hover:bg-transparent ${
-          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
-        }`}
-        style={{ background: 'transparent', transform: 'translateY(-50%)' }}
+      {/* Carousel container - fixed height, no overflow */}
+      <div 
+        className="relative w-full flex items-center justify-center"
+        style={{ 
+          height: '260px',
+          maxWidth: '100%',
+          contain: 'layout style',
+          overflow: 'hidden'
+        }}
       >
-        <ChevronRight className="h-10 w-10 sm:h-16 sm:w-16" strokeWidth={3} />
+        {/* Left button - inside container bounds */}
+        <button
+          type="button"
+          onClick={prevGlass}
+          disabled={isTransitioning}
+          aria-label="Предыдущий стакан"
+          className="absolute z-10 flex items-center justify-center text-white/80 hover:text-white disabled:opacity-50"
+          style={{ 
+            left: '4px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: '40px',
+            height: '40px',
+            background: 'transparent',
+            border: 'none',
+            cursor: isTransitioning ? 'not-allowed' : 'pointer',
+            padding: 0
+          }}
+        >
+          <ChevronLeft style={{ width: '32px', height: '32px' }} strokeWidth={2.5} />
+        </button>
+        
+        {/* Glass image container - centered, contained */}
+        <div 
+          style={{ 
+            width: '160px',
+            height: '200px',
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            contain: 'layout style paint',
+            overflow: 'hidden'
+          }}
+        >
+          {/* Simple glow - contained within bounds */}
+          <div 
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              width: '120px',
+              height: '120px',
+              transform: 'translate(-50%, -50%)',
+              background: 'radial-gradient(circle, rgba(138, 43, 226, 0.25) 0%, transparent 70%)',
+              borderRadius: '50%',
+              filter: 'blur(20px)',
+              pointerEvents: 'none',
+              zIndex: 0
+            }}
+          />
+          
+          {/* Glass image */}
+          <img
+            src={currentGlass.image}
+            alt={currentGlass.name}
+            width={140}
+            height={180}
+            loading="eager"
+            decoding="async"
+            style={{ 
+              maxWidth: '140px',
+              maxHeight: '180px',
+              width: 'auto',
+              height: 'auto',
+              objectFit: 'contain',
+              position: 'relative',
+              zIndex: 1,
+              opacity: isTransitioning ? 0.7 : 1,
+              transition: 'opacity 150ms ease-out',
+              filter: 'drop-shadow(0 15px 30px rgba(138, 43, 226, 0.35))'
+            }}
+          />
+        </div>
+        
+        {/* Right button - inside container bounds */}
+        <button
+          type="button"
+          onClick={nextGlass}
+          disabled={isTransitioning}
+          aria-label="Следующий стакан"
+          className="absolute z-10 flex items-center justify-center text-white/80 hover:text-white disabled:opacity-50"
+          style={{ 
+            right: '4px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: '40px',
+            height: '40px',
+            background: 'transparent',
+            border: 'none',
+            cursor: isTransitioning ? 'not-allowed' : 'pointer',
+            padding: 0
+          }}
+        >
+          <ChevronRight style={{ width: '32px', height: '32px' }} strokeWidth={2.5} />
+        </button>
+      </div>
+
+      {/* Glass info */}
+      <div className="text-center mt-3">
+        <h4 className="text-foreground font-medium text-lg">{currentGlass.name}</h4>
+        <p className="text-muted-foreground text-sm">{currentGlass.capacity}ml</p>
+      </div>
+
+      {/* Select button */}
+      <Button
+        type="button"
+        onClick={selectCurrentGlass}
+        className={`mt-4 ${
+          isSelected
+            ? 'bg-green-600 hover:bg-green-700 text-white'
+            : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+        }`}
+        style={{ 
+          minWidth: '140px', 
+          maxWidth: '180px',
+          paddingLeft: '24px',
+          paddingRight: '24px'
+        }}
+      >
+        {isSelected ? (
+          <>
+            <Check className="h-4 w-4 mr-2" />
+            Выбран
+          </>
+        ) : (
+          'Выбрать'
+        )}
       </Button>
 
-      <div className="flex flex-col items-center space-y-6 w-full px-12 sm:px-16">
-        <h3 className="text-lg font-semibold text-foreground mb-4">Выберите стакан</h3>
-        
-        {/* Glass Image - centered without navigation interference */}
-        <div className="flex items-center justify-center w-full">          
-          <div className="flex flex-col items-center space-y-8">
-            {/* Enlarged glass image with animation and elegant shadows */}
-            <div className="w-48 h-56 sm:w-64 sm:h-72 flex items-center justify-center overflow-hidden relative pointer-events-none">
-              <div className="relative w-full h-full flex items-center justify-center">
-                <img
-                  src={currentGlass.image}
-                  alt={currentGlass.name}
-                  className={`max-w-full max-h-full object-contain relative z-10 transition-all duration-300 ease-in-out ${
-                    isTransitioning ? 'scale-95 opacity-70' : 'scale-100 opacity-100'
-                  }`}
-                  loading="eager"
-                  decoding="async"
-                  width="256"
-                  height="288"
-                  style={{ 
-                    imageRendering: 'crisp-edges',
-                    filter: 'drop-shadow(0 30px 60px rgba(138, 43, 226, 0.5)) drop-shadow(0 20px 40px rgba(0, 255, 255, 0.4))'
-                  }}
-                />
-                
-                {/* Enhanced glow effects behind the glass - contained */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 sm:w-64 sm:h-64 bg-gradient-to-r from-purple-500/30 to-cyan-400/30 rounded-full blur-3xl -z-10"></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 sm:w-56 sm:h-56 bg-gradient-to-br from-pink-400/25 to-blue-400/25 rounded-full blur-2xl -z-20"></div>
-                
-                {/* Enhanced base shadow */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-4 sm:w-32 sm:h-6 bg-black/30 rounded-full blur-lg -z-40"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Glass name closer to button */}
-        <div className={`text-center transition-opacity duration-300 ease-in-out ${
-          isTransitioning ? 'opacity-70' : 'opacity-100'
-        }`}>
-          <h4 className="text-foreground font-medium text-lg">{currentGlass.name}</h4>
-          <p className="text-muted-foreground text-sm">{currentGlass.capacity}ml</p>
-        </div>
-
-        {/* Selection Button - smaller width with glowing shadow */}
-        <Button
-          onClick={selectCurrentGlass}
-          className={`w-[70%] max-w-[200px] mt-4 transition-all duration-300 ${
-            isSelected
-              ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-500/50'
-              : 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/50 hover:shadow-primary/70'
-          }`}
-        >
-          {isSelected ? (
-            <>
-              <Check className="h-4 w-4 mr-2" />
-              Выбран
-            </>
-          ) : (
-            'Выбрать'
-          )}
-        </Button>
-
-        {/* Dots Indicator - moved below button */}
-        <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 mt-4 max-w-full px-4">
-          {glassTypes.map((_, index) => (
-            <button
-              key={index}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (isTransitioning) return;
-                setIsTransitioning(true);
-                setCurrentIndex(index);
-                setTimeout(() => setIsTransitioning(false), 300);
-              }}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === currentIndex
-                  ? 'bg-primary scale-125'
-                  : 'bg-muted-foreground hover:bg-muted-foreground/80'
-              }`}
-            />
-          ))}
-        </div>
+      {/* Dots indicator - contained */}
+      <div 
+        className="flex flex-wrap justify-center gap-1.5 mt-4"
+        style={{ 
+          maxWidth: '100%',
+          padding: '0 8px',
+          overflow: 'hidden'
+        }}
+      >
+        {glassTypes.map((_, index) => (
+          <button
+            key={index}
+            type="button"
+            onClick={(e) => goToIndex(index, e)}
+            aria-label={`Стакан ${index + 1}`}
+            style={{ 
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              border: 'none',
+              cursor: 'pointer',
+              flexShrink: 0,
+              background: index === currentIndex 
+                ? 'hsl(var(--primary))' 
+                : 'hsl(var(--muted-foreground) / 0.5)',
+              transition: 'background 150ms ease'
+            }}
+          />
+        ))}
       </div>
     </div>
   );

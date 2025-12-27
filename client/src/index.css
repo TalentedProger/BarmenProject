@@ -394,6 +394,38 @@
   button[data-radix-scroll-area-scrollbar-visible-button] {
     display: none !important;
   }
+  
+  /* MOBILE: Critical overflow containment */
+  @media (max-width: 768px) {
+    html, body, #root {
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+      width: 100% !important;
+    }
+    
+    /* Force all containers to respect bounds */
+    .container {
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+      padding-left: 16px !important;
+      padding-right: 16px !important;
+    }
+    
+    /* Prevent any element from causing horizontal scroll */
+    section, main, article, div, nav, header, footer {
+      max-width: 100vw;
+    }
+    
+    /* Force images to stay within bounds */
+    img {
+      max-width: 100% !important;
+    }
+    
+    /* Fix blur effects causing overflow */
+    [class*="blur-"] {
+      contain: paint;
+    }
+  }
 }
 
 @layer components {
