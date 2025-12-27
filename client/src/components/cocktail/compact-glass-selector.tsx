@@ -57,21 +57,27 @@ export function CompactGlassSelector() {
     });
   }, []);
 
-  const nextGlass = () => {
+  const nextGlass = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (isTransitioning) return;
     setIsTransitioning(true);
     setCurrentIndex((prev) => (prev + 1) % glassTypes.length);
     setTimeout(() => setIsTransitioning(false), 300);
   };
 
-  const prevGlass = () => {
+  const prevGlass = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (isTransitioning) return;
     setIsTransitioning(true);
     setCurrentIndex((prev) => (prev - 1 + glassTypes.length) % glassTypes.length);
     setTimeout(() => setIsTransitioning(false), 300);
   };
 
-  const selectCurrentGlass = () => {
+  const selectCurrentGlass = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     const glass = glassTypes[currentIndex];
     setSelectedGlass({
       id: currentIndex + 1, // Convert to numeric ID for database compatibility
@@ -86,19 +92,19 @@ export function CompactGlassSelector() {
   const isSelected = selectedGlass?.shape === currentGlass.id;
 
   return (
-    <div className="relative flex flex-col items-center h-full justify-between">
-      {/* Navigation buttons positioned at main container edges with higher z-index */}
+    <div className="relative flex flex-col items-center h-full justify-between overflow-hidden">
+      {/* Navigation buttons - contained within parent */}
       <Button
         variant="ghost"
         size="icon"
         onClick={prevGlass}
         disabled={isTransitioning}
-        className={`absolute left-2 top-1/2 -translate-y-1/2 w-16 h-16 z-50 p-0 transition-all duration-300 text-white hover:text-white ${
-          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
+        className={`absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-16 sm:h-16 z-30 p-0 transition-opacity duration-300 text-white hover:text-white hover:bg-transparent ${
+          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
         }`}
-        style={{ background: 'transparent' }}
+        style={{ background: 'transparent', transform: 'translateY(-50%)' }}
       >
-        <ChevronLeft className="h-16 w-16" strokeWidth={3} />
+        <ChevronLeft className="h-10 w-10 sm:h-16 sm:w-16" strokeWidth={3} />
       </Button>
       
       <Button
@@ -106,27 +112,27 @@ export function CompactGlassSelector() {
         size="icon"
         onClick={nextGlass}
         disabled={isTransitioning}
-        className={`absolute right-2 top-1/2 -translate-y-1/2 w-16 h-16 z-50 p-0 transition-all duration-300 text-white hover:text-white ${
-          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
+        className={`absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-16 sm:h-16 z-30 p-0 transition-opacity duration-300 text-white hover:text-white hover:bg-transparent ${
+          isTransitioning ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
         }`}
-        style={{ background: 'transparent' }}
+        style={{ background: 'transparent', transform: 'translateY(-50%)' }}
       >
-        <ChevronRight className="h-16 w-16" strokeWidth={3} />
+        <ChevronRight className="h-10 w-10 sm:h-16 sm:w-16" strokeWidth={3} />
       </Button>
 
-      <div className="flex flex-col items-center space-y-6">
+      <div className="flex flex-col items-center space-y-6 w-full px-12 sm:px-16">
         <h3 className="text-lg font-semibold text-foreground mb-4">Выберите стакан</h3>
         
         {/* Glass Image - centered without navigation interference */}
         <div className="flex items-center justify-center w-full">          
           <div className="flex flex-col items-center space-y-8">
             {/* Enlarged glass image with animation and elegant shadows */}
-            <div className="w-64 h-72 flex items-center justify-center overflow-visible relative pointer-events-none">
-              <div className="relative">
+            <div className="w-48 h-56 sm:w-64 sm:h-72 flex items-center justify-center overflow-hidden relative pointer-events-none">
+              <div className="relative w-full h-full flex items-center justify-center">
                 <img
                   src={currentGlass.image}
                   alt={currentGlass.name}
-                  className={`w-full h-full object-contain relative z-10 transition-all duration-300 ease-in-out ${
+                  className={`max-w-full max-h-full object-contain relative z-10 transition-all duration-300 ease-in-out ${
                     isTransitioning ? 'scale-95 opacity-70' : 'scale-100 opacity-100'
                   }`}
                   loading="eager"
@@ -135,26 +141,24 @@ export function CompactGlassSelector() {
                   height="288"
                   style={{ 
                     imageRendering: 'crisp-edges',
-                    willChange: 'transform, opacity',
                     filter: 'drop-shadow(0 30px 60px rgba(138, 43, 226, 0.5)) drop-shadow(0 20px 40px rgba(0, 255, 255, 0.4))'
                   }}
                 />
                 
-                {/* Enhanced glow effects behind the glass - more expressive */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-purple-500/30 to-cyan-400/30 rounded-full blur-3xl -z-10 animate-pulse"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-pink-400/25 to-blue-400/25 rounded-full blur-2xl -z-20"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-t from-violet-400/35 to-cyan-300/35 rounded-full blur-xl -z-30"></div>
+                {/* Enhanced glow effects behind the glass - contained */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 sm:w-64 sm:h-64 bg-gradient-to-r from-purple-500/30 to-cyan-400/30 rounded-full blur-3xl -z-10"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 sm:w-56 sm:h-56 bg-gradient-to-br from-pink-400/25 to-blue-400/25 rounded-full blur-2xl -z-20"></div>
                 
                 {/* Enhanced base shadow */}
-                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black/30 rounded-full blur-lg -z-40"></div>
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-4 sm:w-32 sm:h-6 bg-black/30 rounded-full blur-lg -z-40"></div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Glass name closer to button */}
-        <div className={`text-center transition-all duration-300 ease-in-out ${
-          isTransitioning ? 'opacity-70 transform translate-y-1' : 'opacity-100 transform translate-y-0'
+        <div className={`text-center transition-opacity duration-300 ease-in-out ${
+          isTransitioning ? 'opacity-70' : 'opacity-100'
         }`}>
           <h4 className="text-foreground font-medium text-lg">{currentGlass.name}</h4>
           <p className="text-muted-foreground text-sm">{currentGlass.capacity}ml</p>
@@ -163,7 +167,7 @@ export function CompactGlassSelector() {
         {/* Selection Button - smaller width with glowing shadow */}
         <Button
           onClick={selectCurrentGlass}
-          className={`w-[70%] mt-4 transition-all duration-300 ${
+          className={`w-[70%] max-w-[200px] mt-4 transition-all duration-300 ${
             isSelected
               ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-500/50'
               : 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/50 hover:shadow-primary/70'
@@ -180,11 +184,13 @@ export function CompactGlassSelector() {
         </Button>
 
         {/* Dots Indicator - moved below button */}
-        <div className="flex space-x-2 mt-4">
+        <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 mt-4 max-w-full px-4">
           {glassTypes.map((_, index) => (
             <button
               key={index}
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 if (isTransitioning) return;
                 setIsTransitioning(true);
                 setCurrentIndex(index);
@@ -193,7 +199,7 @@ export function CompactGlassSelector() {
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
                 index === currentIndex
                   ? 'bg-primary scale-125'
-                  : 'bg-muted-foreground hover:bg-muted-foreground/80 hover:scale-110'
+                  : 'bg-muted-foreground hover:bg-muted-foreground/80'
               }`}
             />
           ))}

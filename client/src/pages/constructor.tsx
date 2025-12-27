@@ -181,11 +181,11 @@ export default function Constructor() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Header />
       
-      <section className="pt-56 pb-16 bg-gradient-to-br from-purple-950 via-purple-950/95 to-blue-950 backdrop-blur-sm">
-        <div className="container mx-auto px-4">
+      <section className="pt-56 pb-16 bg-gradient-to-br from-purple-950 via-purple-950/95 to-blue-950 backdrop-blur-sm overflow-hidden">
+        <div className="container mx-auto px-4 overflow-hidden">
           <div className="text-center mb-16">
             <div className="flex justify-center mb-6">
               <div className="relative">
@@ -224,9 +224,9 @@ export default function Constructor() {
             </div>
 
             {/* Center Content - Reduced width - order-1 on mobile (Glass first) */}
-            <div className="lg:col-span-4 flex flex-col space-y-4 order-1 lg:order-2">
+            <div className="lg:col-span-4 flex flex-col space-y-4 order-1 lg:order-2 overflow-hidden">
               {/* Glass Selector or Drink Visualizer */}
-              <div className="bg-card/60 backdrop-blur-sm border border-border rounded-lg p-6 flex-1">
+              <div className="bg-card/60 backdrop-blur-sm border border-border rounded-lg p-6 flex-1 overflow-hidden">
                 {!selectedGlass ? (
                   <CompactGlassSelector />
                 ) : (
