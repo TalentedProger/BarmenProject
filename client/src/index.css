@@ -420,10 +420,11 @@
     img {
       max-width: 100% !important;
     }
-    
-    /* Fix blur effects causing overflow */
+
+    /* Blur elements - позиционируем относительно родителя */
     [class*="blur-"] {
-      contain: paint;
+      position: absolute;
+      /* НЕ используем contain:paint - ломает blur на мобильных */
     }
   }
 }

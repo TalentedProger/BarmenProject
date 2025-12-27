@@ -27,6 +27,21 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "client", "dist"),
     emptyOutDir: true,
+    // Оптимизация для мобильных
+    target: 'es2020',
+    minify: 'esbuild',
+    cssMinify: true,
+    rollupOptions: {
+      output: {
+        // Разделяем чанки для лучшего кэширования
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-router': ['wouter'],
+          'vendor-query': ['@tanstack/react-query'],
+          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tooltip'],
+        },
+      },
+    },
   },
   server: {
     fs: {

@@ -8,7 +8,7 @@ import HeroSection from "@/components/landing/HeroSection";
 
 console.log('[LOAD] HeroSection imported');
 
-// Остальные секции загружаем лениво
+// Остальные секции загружаем лениво с preload
 const FeaturesSection = lazy(() => import("@/components/landing/FeaturesSection"));
 const PopularRecipesSection = lazy(() => import("@/components/PopularRecipesSection"));
 const CoursesSection = lazy(() => import("@/components/landing/courses-section"));
@@ -18,8 +18,8 @@ const FooterSection = lazy(() => import("@/components/landing/FooterSection"));
 
 // Простой Loading компонент без анимаций для мобильных
 const SectionLoader = memo(() => (
-  <div className="flex items-center justify-center py-16">
-    <div className="text-neon-turquoise/60 text-sm">Загрузка...</div>
+  <div className="flex items-center justify-center py-8 min-h-[100px]">
+    <div className="text-neon-turquoise/40 text-xs">•••</div>
   </div>
 ));
 SectionLoader.displayName = "SectionLoader";

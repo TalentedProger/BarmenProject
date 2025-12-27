@@ -60,6 +60,9 @@
     <meta name="theme-color" content="#0A0A0D" />
     <meta name="msapplication-TileColor" content="#0A0A0D" />
     
+    <!-- Preload критически важного Hero изображения -->
+    <link rel="preload" as="image" href="/attached_assets/Leonardo_Phoenix_10_A_futuristic_interactive_cocktail_creation_0 (1)_1752851226590.png" fetchpriority="high" />
+    
     <!-- Structured Data: WebSite with SearchAction (для появления поиска в Google) -->
     <script type="application/ld+json">
     {
@@ -338,12 +341,27 @@
         var loader = document.getElementById('initial-loader');
         if (loader) {
           var debug = document.getElementById('load-debug');
+          var status = document.getElementById('load-status');
           if (debug) {
             debug.style.color = '#ff6b6b';
             debug.textContent = 'Загрузка занимает много времени. Шаги: ' + window.loadSteps.join(' → ');
           }
+          if (status) {
+            status.innerHTML = 'Медленное соединение... <button onclick="location.reload()" style="margin-left:8px;padding:4px 12px;background:#00D9FF;border:none;border-radius:4px;color:#000;cursor:pointer;">Обновить</button>';
+          }
         }
-      }, 10000);
+      }, 8000);
+      
+      // Критический таймаут - перезагрузка
+      setTimeout(function() {
+        var loader = document.getElementById('initial-loader');
+        if (loader) {
+          var status = document.getElementById('load-status');
+          if (status) {
+            status.innerHTML = '<div style="text-align:center;"><div style="color:#ff6b6b;margin-bottom:12px;">Не удалось загрузить приложение</div><button onclick="location.reload()" style="padding:8px 20px;background:#00D9FF;border:none;border-radius:6px;color:#000;cursor:pointer;font-weight:500;">Попробовать снова</button></div>';
+          }
+        }
+      }, 20000);
     </script>
     
     <div id="root"></div>

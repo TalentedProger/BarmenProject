@@ -49,6 +49,10 @@ export const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
       staleTime: Infinity,
       retry: false,
+      // Оптимизация для мобильных - не грузим всё сразу
+      refetchOnMount: false,
+      // Используем placeholder пока грузим данные
+      networkMode: 'offlineFirst',
     },
     mutations: {
       retry: false,

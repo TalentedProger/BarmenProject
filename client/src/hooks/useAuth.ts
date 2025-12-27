@@ -3,9 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 console.log('[LOAD] useAuth.ts module loaded');
 
 export function useAuth() {
-  console.log('[LOAD] useAuth hook called');
-  
-  const { data: user, isLoading, error } = useQuery({
+  const { data: user, isLoading, error, isFetching } = useQuery({
     queryKey: ["/api/auth/user"],
     queryFn: async () => {
       console.log('[AUTH] Starting auth check...');
@@ -13,8 +11,8 @@ export function useAuth() {
       try {
         const res = await fetch("/api/auth/user", { 
           credentials: "include",
-          // Добавляем таймаут для мобильных
-          signal: AbortSignal.timeout(5000)
+          // Короткий таймаут для мобильных - не блокируем UI
+          signal: AbortSignal.timeout(3000)
         });
         console.log('[AUTH] Response received in', Date.now() - startTime, 'ms, status:', res.status);
         if (res.status === 401) {
@@ -40,6 +38,11 @@ export function useAuth() {
     throwOnError: false,
     // Добавляем networkMode для offline-first
     networkMode: 'offlineFirst',
+    // Рефетч только при фокусе, не автоматически
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    // Placeholder пока грузится - показываем как "не авторизован"
+    placeholderData: null,
   });
 
   const isAuthenticated = !!user && !error;
