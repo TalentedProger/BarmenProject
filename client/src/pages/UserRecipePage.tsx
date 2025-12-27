@@ -43,6 +43,36 @@ const glassImageMap: Record<string, string> = {
   'champagne-saucer': champagneSaucer,
 };
 
+// Функция для перевода категорий ингредиентов на русский
+const getCategoryLabel = (category: string): string => {
+  const translations: Record<string, string> = {
+    'alcohol': 'алкоголь',
+    'juice': 'сок',
+    'syrup': 'сироп',
+    'fruit': 'фрукты',
+    'ice': 'лёд',
+    'mixer': 'миксер',
+    'bitter': 'биттер',
+    'garnish': 'декор',
+    'soda': 'газировка',
+    'energy_drink': 'энергетики',
+    'wine': 'вино',
+    'beer': 'пиво',
+    'liqueur': 'ликёр',
+    'vermouth': 'вермут',
+    'cream': 'сливки',
+    'milk': 'молоко',
+    'egg': 'яйцо',
+    'coffee': 'кофе',
+    'tea': 'чай',
+    'spice': 'специи',
+    'herb': 'травы',
+    'sauce': 'соус',
+    'other': 'другое'
+  };
+  return translations[category.toLowerCase()] || category;
+};
+
 interface RecipeIngredient {
   id: string;
   ingredientId: number;
@@ -273,25 +303,31 @@ export default function UserRecipePage() {
                     .map((item, index) => (
                       <div 
                         key={item.id || index}
-                        className="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+                        className="flex items-start sm:items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors gap-2"
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-start sm:items-center gap-2 sm:gap-3 flex-1 min-w-0">
                           <div 
-                            className="w-4 h-4 rounded-full"
+                            className="w-3 h-3 sm:w-4 sm:h-4 rounded-full flex-shrink-0 mt-1 sm:mt-0"
                             style={{ backgroundColor: item.ingredient?.color || '#666' }}
                           />
-                          <span className="text-white font-medium">
-                            {item.ingredient?.name || `Ингредиент #${item.ingredientId}`}
-                          </span>
-                          {item.ingredient?.category && (
-                            <span className="text-xs text-white/50 bg-white/10 px-2 py-0.5 rounded">
-                              {item.ingredient.category}
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <span className="text-white font-medium text-sm sm:text-base truncate" title={item.ingredient?.name}>
+                              {(item.ingredient?.name || `Ингредиент #${item.ingredientId}`).length > 64 
+                                ? (item.ingredient?.name || `Ингредиент #${item.ingredientId}`).substring(0, 64) + '...' 
+                                : (item.ingredient?.name || `Ингредиент #${item.ingredientId}`)}
                             </span>
-                          )}
+                            {item.ingredient?.category && (
+                              <span className="text-xs text-white/50 bg-white/10 px-2 py-0.5 rounded w-fit mt-1">
+                                {getCategoryLabel(item.ingredient.category)}
+                              </span>
+                            )}
+                          </div>
                         </div>
-                        <span className="text-cyan-400 font-semibold">
-                          {item.amount} {item.unit}
-                        </span>
+                        <div className="flex flex-col items-end flex-shrink-0">
+                          <span className="text-cyan-400 font-semibold text-sm sm:text-base whitespace-nowrap">
+                            {item.amount} {item.unit}
+                          </span>
+                        </div>
                       </div>
                     ))}
                 </div>

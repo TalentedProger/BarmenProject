@@ -114,11 +114,11 @@ export function CompactGlassSelector() {
         Выберите стакан
       </h3>
       
-      {/* Carousel container - fixed height, no overflow */}
+      {/* Carousel container - responsive height */}
       <div 
         className="relative w-full flex items-center justify-center"
         style={{ 
-          height: '260px',
+          height: 'clamp(260px, 40vh, 340px)',
           maxWidth: '100%',
           contain: 'layout style',
           overflow: 'hidden'
@@ -135,22 +135,23 @@ export function CompactGlassSelector() {
             left: '4px',
             top: '50%',
             transform: 'translateY(-50%)',
-            width: '40px',
-            height: '40px',
+            width: 'clamp(40px, 8vw, 64px)',
+            height: 'clamp(40px, 8vw, 64px)',
             background: 'transparent',
             border: 'none',
             cursor: isTransitioning ? 'not-allowed' : 'pointer',
             padding: 0
           }}
         >
-          <ChevronLeft style={{ width: '32px', height: '32px' }} strokeWidth={2.5} />
+          <ChevronLeft className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16" strokeWidth={2.5} />
         </button>
         
-        {/* Glass image container - centered, contained */}
+        {/* Glass image container - responsive size */}
         <div 
+          className="glass-image-container"
           style={{ 
-            width: '160px',
-            height: '200px',
+            width: 'clamp(160px, 30vw, 280px)',
+            height: 'clamp(200px, 35vh, 320px)',
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
@@ -159,34 +160,34 @@ export function CompactGlassSelector() {
             overflow: 'hidden'
           }}
         >
-          {/* Simple glow - contained within bounds */}
+          {/* Glow effect - responsive size */}
           <div 
+            className="glow-effect"
             style={{
               position: 'absolute',
               top: '50%',
               left: '50%',
-              width: '120px',
-              height: '120px',
+              width: 'clamp(120px, 20vw, 200px)',
+              height: 'clamp(120px, 20vw, 200px)',
               transform: 'translate(-50%, -50%)',
-              background: 'radial-gradient(circle, rgba(138, 43, 226, 0.25) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(138, 43, 226, 0.3) 0%, rgba(0, 255, 255, 0.2) 50%, transparent 70%)',
               borderRadius: '50%',
-              filter: 'blur(20px)',
+              filter: 'blur(25px)',
               pointerEvents: 'none',
               zIndex: 0
             }}
           />
           
-          {/* Glass image */}
+          {/* Glass image - responsive */}
           <img
             src={currentGlass.image}
             alt={currentGlass.name}
-            width={140}
-            height={180}
             loading="eager"
             decoding="async"
+            className="glass-image"
             style={{ 
-              maxWidth: '140px',
-              maxHeight: '180px',
+              maxWidth: 'clamp(140px, 25vw, 256px)',
+              maxHeight: 'clamp(180px, 30vh, 288px)',
               width: 'auto',
               height: 'auto',
               objectFit: 'contain',
@@ -194,7 +195,7 @@ export function CompactGlassSelector() {
               zIndex: 1,
               opacity: isTransitioning ? 0.7 : 1,
               transition: 'opacity 150ms ease-out',
-              filter: 'drop-shadow(0 15px 30px rgba(138, 43, 226, 0.35))'
+              filter: 'drop-shadow(0 20px 50px rgba(138, 43, 226, 0.45)) drop-shadow(0 15px 35px rgba(0, 255, 255, 0.35))'
             }}
           />
         </div>
@@ -210,15 +211,15 @@ export function CompactGlassSelector() {
             right: '4px',
             top: '50%',
             transform: 'translateY(-50%)',
-            width: '40px',
-            height: '40px',
+            width: 'clamp(40px, 8vw, 64px)',
+            height: 'clamp(40px, 8vw, 64px)',
             background: 'transparent',
             border: 'none',
             cursor: isTransitioning ? 'not-allowed' : 'pointer',
             padding: 0
           }}
         >
-          <ChevronRight style={{ width: '32px', height: '32px' }} strokeWidth={2.5} />
+          <ChevronRight className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16" strokeWidth={2.5} />
         </button>
       </div>
 
