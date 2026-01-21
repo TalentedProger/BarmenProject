@@ -1,5 +1,5 @@
-import { lazy, Suspense, useCallback, memo, useEffect } from "react";
-import Header from "@/components/layout/header";
+import { lazy, Suspense, useCallback, memo, useEffect, useRef, useState } from "react";
+import PublicHeader from "@/components/layout/public-header";
 
 console.log('[LOAD] landing.tsx module loading...');
 
@@ -24,6 +24,48 @@ const SectionLoader = memo(() => (
 ));
 SectionLoader.displayName = "SectionLoader";
 
+function LazyOnVisible({
+  children,
+  minHeight = 240,
+  rootMargin = "200px",
+}: {
+  children: React.ReactNode;
+  minHeight?: number;
+  rootMargin?: string;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (isVisible) return;
+    const el = ref.current;
+    if (!el) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setIsVisible(true);
+        }
+      },
+      { root: null, rootMargin, threshold: 0.01 },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isVisible, rootMargin]);
+
+  return (
+    <div ref={ref} style={{ minHeight }}>
+      {isVisible ? <Suspense fallback={<SectionLoader />}>{children}</Suspense> : null}
+    </div>
+  );
+}
+
 function Landing() {
   useEffect(() => {
     console.log('[LOAD] Landing component mounted');
@@ -37,35 +79,35 @@ function Landing() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header useProfileDropdown={false} />
+      <PublicHeader />
 
       {/* Hero загружается сразу - критически важен для первого экрана */}
       <HeroSection onGetStarted={handleGetStarted} />
 
-      {/* Остальные секции загружаются по мере прокрутки */}
-      <Suspense fallback={<SectionLoader />}>
+      {/* Остальные секции: реально грузим только когда пользователь докрутил */}
+      <LazyOnVisible minHeight={260}>
         <FeaturesSection />
-      </Suspense>
+      </LazyOnVisible>
 
-      <Suspense fallback={<SectionLoader />}>
+      <LazyOnVisible minHeight={340}>
         <PopularRecipesSection />
-      </Suspense>
+      </LazyOnVisible>
 
-      <Suspense fallback={<SectionLoader />}>
+      <LazyOnVisible minHeight={300}>
         <CoursesSection />
-      </Suspense>
+      </LazyOnVisible>
 
-      <Suspense fallback={<SectionLoader />}>
+      <LazyOnVisible minHeight={260}>
         <NewsletterSection />
-      </Suspense>
+      </LazyOnVisible>
 
-      <Suspense fallback={<SectionLoader />}>
+      <LazyOnVisible minHeight={260}>
         <MobileAppSection />
-      </Suspense>
+      </LazyOnVisible>
 
-      <Suspense fallback={<SectionLoader />}>
+      <LazyOnVisible minHeight={240} rootMargin="600px">
         <FooterSection />
-      </Suspense>
+      </LazyOnVisible>
     </div>
   );
 }

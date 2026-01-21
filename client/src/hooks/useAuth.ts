@@ -2,6 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 
 console.log('[LOAD] useAuth.ts module loaded');
 
+function createTimeoutSignal(timeoutMs: number): AbortSignal | undefined {
+  if (typeof AbortSignal !== "undefined" && typeof (AbortSignal as any).timeout === "function") {
+    return (AbortSignal as any).timeout(timeoutMs);
+  }
+  if (typeof AbortController === "undefined") return undefined;
+  const controller = new AbortController();
+  setTimeout(() => controller.abort(), timeoutMs);
+  return controller.signal;
+}
+
 export function useAuth() {
   console.log('[LOAD] useAuth hook called');
   
@@ -14,7 +24,7 @@ export function useAuth() {
         const res = await fetch("/api/auth/user", { 
           credentials: "include",
           // Добавляем таймаут для мобильных
-          signal: AbortSignal.timeout(5000)
+          signal: createTimeoutSignal(5000)
         });
         console.log('[AUTH] Response received in', Date.now() - startTime, 'ms, status:', res.status);
         if (res.status === 401) {
