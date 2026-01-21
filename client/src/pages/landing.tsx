@@ -4,10 +4,10 @@ if (typeof window !== 'undefined' && (window as any).logStep) {
 }
 
 import { lazy, Suspense, useCallback, memo, useEffect, useRef, useState } from "react";
-import PublicHeader from "@/components/layout/public-header";
+import Header from "@/components/layout/header";
 
 if (typeof window !== 'undefined' && (window as any).logStep) {
-  (window as any).logStep('PublicHeader loaded');
+  (window as any).logStep('Header loaded');
 }
 
 // Критически важные компоненты загружаем сразу
@@ -88,7 +88,7 @@ function Landing() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <PublicHeader />
+      <Header />
 
       {/* Hero загружается сразу - критически важен для первого экрана */}
       <HeroSection onGetStarted={handleGetStarted} />
