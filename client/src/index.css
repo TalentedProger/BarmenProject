@@ -421,15 +421,8 @@
       max-width: 100% !important;
     }
     
-    /* Fix blur effects causing overflow */
-    [class*="blur-"] {
-      contain: paint;
-    }
-  }
-}
-
-@layer components {
-  .bg-steel {
+    /* Blur effects - НЕ используем contain:paint, это ломает blur на мобильных! */
+    /* Вместо этого родительские контейнеры должны иметь overflow:hidden */
     background-color: var(--steel);
   }
   

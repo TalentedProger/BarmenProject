@@ -90,7 +90,7 @@ export default function Header({ useProfileDropdown = true }: HeaderProps = {}) 
           <Link href="/">
             <div className="flex items-center space-x-3 cursor-pointer">
               <Martini className="text-electric text-2xl" />
-              <h1 className="text-xl font-bold text-platinum whitespace-nowrap">Cocktailo Maker</h1>
+              <h1 className="text-xl font-bold text-platinum whitespace-nowrap" translate="no">Cocktailo Maker</h1>
             </div>
           </Link>
           
