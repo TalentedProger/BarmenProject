@@ -411,9 +411,24 @@
     <!-- Отслеживаем загрузку модуля ДО его выполнения -->
     <script>
       logStep('Starting module load');
+      
+      // Проверяем что модули поддерживаются
+      var supportsModules = 'noModule' in document.createElement('script');
+      if (!supportsModules) {
+        logStep('ERROR: ES modules not supported');
+        document.getElementById('load-debug').innerHTML = 
+          '<div style="color:#ff6b6b;">Ваш браузер не поддерживает современный JavaScript.<br>Обновите браузер.</div>';
+      }
     </script>
     
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+    
+    <!-- Главный модуль с обработкой ошибок загрузки -->
+    <script type="module" src="/src/main.tsx" onerror="window.logStep && window.logStep('MODULE LOAD ERROR')"></script>
+    
+    <!-- Fallback для браузеров без ES modules -->
+    <script nomodule>
+      document.getElementById('load-status').innerHTML = 
+        '<div style="color:#ff6b6b;">Ваш браузер устарел. Пожалуйста, обновите его для использования приложения.</div>';
+      document.getElementById('load-debug').textContent = 'ES modules not supported';
+    </script>
