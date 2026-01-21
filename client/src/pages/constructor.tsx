@@ -219,8 +219,7 @@ export default function Constructor() {
                   className="absolute inset-0 rounded-full opacity-30"
                   style={{
                     background: 'radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, transparent 70%)',
-                    filter: 'blur(16px)',
-                    contain: 'paint'
+                    filter: 'blur(16px)'
                   }}
                 />
               </div>
@@ -250,8 +249,7 @@ export default function Constructor() {
               <div 
                 className="bg-card/60 backdrop-blur-sm border border-border rounded-lg p-4 sm:p-6 flex-1"
                 style={{ 
-                  overflow: 'hidden',
-                  contain: 'layout style paint'
+                  overflow: 'hidden'
                 }}
               >
                 {!selectedGlass ? (

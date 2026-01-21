@@ -104,7 +104,6 @@ export function CompactGlassSelector() {
     <div 
       className="flex flex-col items-center w-full"
       style={{ 
-        contain: 'layout style paint',
         isolation: 'isolate',
         maxWidth: '100%',
         overflow: 'hidden'
@@ -120,7 +119,6 @@ export function CompactGlassSelector() {
         style={{ 
           height: 'clamp(260px, 40vh, 340px)',
           maxWidth: '100%',
-          contain: 'layout style',
           overflow: 'hidden'
         }}
       >
@@ -156,8 +154,7 @@ export function CompactGlassSelector() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            contain: 'layout style paint',
-            overflow: 'hidden'
+            overflow: 'visible' // НЕ используем contain и overflow:hidden - ломает blur!
           }}
         >
           {/* Glow effect - responsive size */}
