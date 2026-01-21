@@ -53,19 +53,21 @@ const CocktailCard = React.memo(({
 }) => {
 
   return (
-    <Card className="cocktail-card group relative glass-effect border-none shadow-xl transition-all duration-300 ease-out bg-gradient-to-b from-slate-800/50 to-slate-900/50 w-full max-w-sm mx-auto">
-      {/* Фоновое изображение */}
-      <div className="absolute inset-0">
+    <Card className="cocktail-card group relative glass-effect border-none shadow-xl bg-gradient-to-b from-slate-800/50 to-slate-900/50 w-full max-w-sm mx-auto" style={{ height: '420px', minHeight: '420px' }}>
+      {/* Фоновое изображение с фиксированными размерами для предотвращения CLS */}
+      <div className="absolute inset-0" style={{ aspectRatio: '3/4' }}>
         <img 
           src={cocktail.image} 
           alt={cocktail.name}
-          className="cocktail-image w-full h-full object-cover transition-transform duration-300 ease-out"
+          className="cocktail-image w-full h-full object-cover"
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "low"}
           decoding="async"
-          style={{ contentVisibility: 'auto', willChange: 'transform' }}
+          width="320"
+          height="420"
+          style={{ contentVisibility: 'auto' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 transition-all duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
       </div>
 
       {/* Кнопка избранного */}
@@ -80,9 +82,9 @@ const CocktailCard = React.memo(({
         />
       </Button>
 
-      <CardContent className="relative z-10 p-0 h-[420px] sm:h-[400px] flex flex-col">
+      <CardContent className="relative z-10 p-0 h-[420px] flex flex-col">
         {/* Заголовок и описание - более компактный */}
-        <div className="bg-black/60 backdrop-blur-sm p-3 text-center border-b border-white/10">
+        <div className="bg-black/60 backdrop-blur-sm p-3 text-center border-b border-white/10" style={{ minHeight: '72px' }}>
           <h3 className="text-white text-lg font-bold mb-1 drop-shadow-lg">
             {cocktail.name}
           </h3>
@@ -92,7 +94,7 @@ const CocktailCard = React.memo(({
         </div>
 
         {/* Теги */}
-        <div className="flex gap-2 p-2 min-h-[50px] items-start">
+        <div className="flex gap-2 p-2 items-start" style={{ minHeight: '50px' }}>
           <span className="flex-1 text-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-800/90 text-neon-amber border border-neon-amber/60 shadow-lg backdrop-blur-sm"
             style={{
               textShadow: '0 0 8px rgba(255, 193, 7, 0.8)',
@@ -132,10 +134,10 @@ const CocktailCard = React.memo(({
         </div>
 
         {/* Кнопка просмотра */}
-        <div className="p-3 pt-2 flex justify-center">
+        <div className="p-3 pt-2 flex justify-center" style={{ minHeight: '56px' }}>
           <Link href={`/recipe/${cocktail.id}`} className="w-3/5">
             <Button 
-              className="recipe-button w-full text-white font-medium transition-all duration-500 text-sm py-2 rounded-lg shadow-lg relative overflow-hidden"
+              className="recipe-button w-full text-white font-medium text-sm py-2 rounded-lg shadow-lg relative overflow-hidden"
               style={{
                 background: 'linear-gradient(45deg, rgba(139, 69, 255, 0.9), rgba(0, 247, 239, 0.9), rgba(255, 20, 147, 0.9), rgba(139, 69, 255, 0.9))',
                 backgroundSize: '300% 300%',
@@ -144,7 +146,6 @@ const CocktailCard = React.memo(({
               }}
             >
               <span className="relative z-10">Открыть рецепт</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
             </Button>
           </Link>
         </div>
@@ -152,6 +153,7 @@ const CocktailCard = React.memo(({
     </Card>
   );
 });
+CocktailCard.displayName = 'CocktailCard';
 
 export default function Catalog() {
   const { toast } = useToast();

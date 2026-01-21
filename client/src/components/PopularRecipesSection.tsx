@@ -149,13 +149,14 @@ const popularRecipes: Recipe[] = [
 
 const RecipeCard = memo(({ recipe, priority = false }: { recipe: Recipe; priority?: boolean }) => {
   return (
-    <div className="recipe-card relative popular-card-wrapper group py-4">
+    <div className="recipe-card relative popular-card-wrapper group py-4" style={{ minHeight: '460px' }}>
       <Link href={`/recipe/${recipe.id}`}>
         <div 
-          className="bg-[#1A1A1E] rounded-2xl overflow-hidden h-[460px] flex flex-col relative z-10 max-[480px]:h-[420px] max-[480px]:w-[85%] max-[480px]:mx-auto cursor-pointer"
+          className="bg-[#1A1A1E] rounded-2xl overflow-hidden flex flex-col relative z-10 cursor-pointer"
+          style={{ height: '460px' }}
         >
           {/* Background Image covering entire card */}
-          <div className="absolute inset-0 overflow-hidden will-change-transform rounded-2xl">
+          <div className="absolute inset-0 overflow-hidden rounded-2xl">
             <img
               src={recipe.image}
               alt={recipe.name}
@@ -165,19 +166,10 @@ const RecipeCard = memo(({ recipe, priority = false }: { recipe: Recipe; priorit
               decoding="async"
               width="400"
               height="460"
-              style={{
-                transform: 'translate3d(0, 0, 0)',
-                backfaceVisibility: 'hidden',
-              }}
+              style={{ transform: 'translateZ(0)' }}
             />
-            {/* Enhanced gradient overlay for better text readability - immediately visible */}
-            <div 
-              className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 pointer-events-none"
-              style={{
-                transform: 'translate3d(0, 0, 0)',
-                willChange: 'auto',
-              }}
-            />
+            {/* Enhanced gradient overlay for better text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 pointer-events-none" />
           </div>
 
           {/* Content overlay */}

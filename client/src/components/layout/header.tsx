@@ -8,25 +8,47 @@ import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { useCallback, useMemo, useEffect } from "react";
+import { useCallback, useMemo, useEffect, memo } from "react";
 import { useLocation } from "wouter";
-
-console.log('[LOAD] header.tsx module loaded');
 
 interface HeaderProps {
   useProfileDropdown?: boolean;
 }
 
-export default function Header({ useProfileDropdown = true }: HeaderProps = {}) {
-  console.log('[LOAD] Header rendering...');
-  
+// Мемоизированные навигационные ссылки - вынесены наружу для стабильности
+const navItems = [
+  { href: '/', label: 'Главная', hideBelowLg: true },
+  { href: '/constructor', label: 'Конструктор', hideBelowLg: false },
+  { href: '/generator', label: 'Генератор', hideBelowLg: false },
+  { href: '/catalog', label: 'Каталог', hideBelowLg: false }
+] as const;
+
+// Мемоизированный компонент навигации
+const NavItems = memo(({ currentPath }: { currentPath: string }) => (
+  <>
+    {navItems.map((item) => (
+      <Link key={item.href} href={item.href}>
+        <Button variant="ghost" className={`text-white/70 hover:text-white hover:bg-white/5 transition-colors duration-150 rounded-lg ${
+          currentPath === item.href ? 'bg-white/10 text-white' : ''
+        } ${item.hideBelowLg ? 'hidden lg:inline-flex' : ''}`}>
+          {item.label}
+        </Button>
+      </Link>
+    ))}
+  </>
+));
+NavItems.displayName = 'NavItems';
+
+// Skeleton для кнопки авторизации с фиксированными размерами для предотвращения CLS
+const AuthButtonSkeleton = memo(() => (
+  <div className="h-10 w-[72px] bg-white/10 rounded-md animate-pulse" style={{ minWidth: '72px' }} />
+));
+AuthButtonSkeleton.displayName = 'AuthButtonSkeleton';
+
+function Header({ useProfileDropdown = true }: HeaderProps) {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const [location] = useLocation();
-
-  useEffect(() => {
-    console.log('[LOAD] Header mounted, isLoading:', isLoading, 'isAuthenticated:', isAuthenticated);
-  }, [isLoading, isAuthenticated]);
 
   const userDisplayData = useMemo(() => {
     if (!user) return null;
@@ -60,36 +82,13 @@ export default function Header({ useProfileDropdown = true }: HeaderProps = {}) 
     logoutMutation.mutate();
   }, [logoutMutation]);
 
-  const NavItems = ({ currentPath }: { currentPath?: string }) => {
-    const navItems = [
-      { href: '/', label: 'Главная', icon: 'Home', hideBelowLg: true },
-      { href: '/constructor', label: 'Конструктор', icon: 'WandSparkles', hideBelowLg: false },
-      { href: '/generator', label: 'Генератор', icon: 'Dice2', hideBelowLg: false },
-      { href: '/catalog', label: 'Каталог', icon: 'BookOpen', hideBelowLg: false }
-    ];
-    
-    return (
-      <>
-        {navItems.map((item) => (
-          <Link key={item.href} href={item.href}>
-            <Button variant="ghost" className={`text-white/70 hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg ${
-              currentPath === item.href ? 'bg-white/10 text-white' : ''
-            } ${item.hideBelowLg ? 'hidden lg:inline-flex' : ''}`}>
-              {item.label}
-            </Button>
-          </Link>
-        ))}
-      </>
-    );
-  };
-
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-graphite border-b border-border">
-      <nav className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-graphite border-b border-border" style={{ height: '72px' }}>
+      <nav className="container mx-auto px-4 py-4 h-full">
+        <div className="flex items-center justify-between h-full">
           <Link href="/">
             <div className="flex items-center space-x-3 cursor-pointer">
-              <Martini className="text-electric text-2xl" />
+              <Martini className="text-electric text-2xl" style={{ width: '24px', height: '24px' }} />
               <h1 className="text-xl font-bold text-platinum whitespace-nowrap" translate="no">Cocktailo Maker</h1>
             </div>
           </Link>
@@ -98,17 +97,17 @@ export default function Header({ useProfileDropdown = true }: HeaderProps = {}) 
             <NavItems currentPath={location} />
           </div>
           
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4" style={{ minHeight: '40px' }}>
             {/* Desktop Auth Buttons */}
-            <div className="hidden md:flex items-center space-x-3">
+            <div className="hidden md:flex items-center space-x-3" style={{ minWidth: '72px' }}>
               {isLoading ? (
-                /* Show skeleton button during loading to prevent layout shift */
-                <div className="h-10 w-[72px] bg-white/10 rounded-md animate-pulse" />
+                <AuthButtonSkeleton />
               ) : !isAuthenticated ? (
                 <Link href="/auth">
                   <Button 
                     variant="outline"
-                    className="border-neon-purple text-neon-purple hover:bg-neon-purple/10 hover:text-white transition-all duration-300 hover:scale-105"
+                    className="border-neon-purple text-neon-purple hover:bg-neon-purple/10 hover:text-white transition-colors duration-150"
+                    style={{ minWidth: '72px' }}
                   >
                     Вход
                   </Button>
@@ -257,3 +256,5 @@ export default function Header({ useProfileDropdown = true }: HeaderProps = {}) 
     </header>
   );
 }
+
+export default memo(Header);
