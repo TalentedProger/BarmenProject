@@ -297,6 +297,7 @@
       // Диагностика загрузки
       window.loadStart = Date.now();
       window.loadSteps = [];
+      window.loadErrors = [];
       
       function logStep(step) {
         var time = Date.now() - window.loadStart;
@@ -317,7 +318,40 @@
         }
       }
       
+      window.logStep = logStep;
+      
+      // Глобальный перехватчик ошибок
+      window.onerror = function(msg, url, line, col, error) {
+        var errMsg = msg + ' at ' + (url || 'unknown') + ':' + line;
+        window.loadErrors.push(errMsg);
+        console.error('[LOAD ERROR]', errMsg, error);
+        logStep('ERROR: ' + msg);
+        
+        var debug = document.getElementById('load-debug');
+        if (debug) {
+          debug.style.color = '#ff6b6b';
+          debug.innerHTML = 'JS Error: ' + msg + '<br><small>' + (url || '') + ':' + line + '</small>';
+        }
+        return false;
+      };
+      
+      // Перехватчик необработанных промисов
+      window.onunhandledrejection = function(event) {
+        var reason = event.reason ? (event.reason.message || event.reason) : 'Unknown';
+        window.loadErrors.push('Promise rejected: ' + reason);
+        console.error('[LOAD] Unhandled rejection:', reason);
+        logStep('PROMISE ERROR: ' + reason);
+      };
+      
       logStep('HTML parsed');
+      
+      // Проверяем поддержку ES modules
+      try {
+        new Function('import.meta');
+        logStep('ES modules supported');
+      } catch(e) {
+        logStep('WARNING: ES modules may not be supported');
+      }
       
       // Скрываем загрузчик когда React загрузится
       window.hideLoader = function() {
@@ -333,17 +367,50 @@
         }
       };
       
-      // Таймаут на случай если что-то зависнет
+      // Таймаут 8 секунд - показываем предупреждение
       setTimeout(function() {
         var loader = document.getElementById('initial-loader');
         if (loader) {
           var debug = document.getElementById('load-debug');
+          var status = document.getElementById('load-status');
+          
+          var errorInfo = window.loadErrors.length > 0 
+            ? '<br><span style="color:#ff6b6b">Errors: ' + window.loadErrors.join('; ') + '</span>' 
+            : '';
+          
           if (debug) {
             debug.style.color = '#ff6b6b';
-            debug.textContent = 'Загрузка занимает много времени. Шаги: ' + window.loadSteps.join(' → ');
+            debug.innerHTML = 'Загрузка занимает много времени.<br>Шаги: ' + window.loadSteps.join(' → ') + errorInfo;
+          }
+          if (status) {
+            status.innerHTML = 'Медленное соединение... <button onclick="location.reload()" style="margin-left:8px;padding:4px 12px;background:#00D9FF;border:none;border-radius:4px;color:#000;cursor:pointer;">Обновить</button>';
           }
         }
-      }, 10000);
+      }, 8000);
+      
+      // Критический таймаут 20 секунд
+      setTimeout(function() {
+        var loader = document.getElementById('initial-loader');
+        if (loader) {
+          var status = document.getElementById('load-status');
+          var debug = document.getElementById('load-debug');
+          
+          var diagInfo = 'Steps: ' + window.loadSteps.length + ', Errors: ' + window.loadErrors.length;
+          var userAgent = navigator.userAgent.substring(0, 100);
+          
+          if (status) {
+            status.innerHTML = '<div style="text-align:center;"><div style="color:#ff6b6b;margin-bottom:12px;">Не удалось загрузить приложение</div><button onclick="location.reload()" style="padding:8px 20px;background:#00D9FF;border:none;border-radius:6px;color:#000;cursor:pointer;font-weight:500;">Попробовать снова</button></div>';
+          }
+          if (debug) {
+            debug.innerHTML = '<div style="font-size:10px;color:#666;margin-top:12px;">' + diagInfo + '<br>UA: ' + userAgent + '</div>';
+          }
+        }
+      }, 20000);
+    </script>
+    
+    <!-- Отслеживаем загрузку модуля ДО его выполнения -->
+    <script>
+      logStep('Starting module load');
     </script>
     
     <div id="root"></div>

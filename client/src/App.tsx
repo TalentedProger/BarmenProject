@@ -1,3 +1,8 @@
+// Логируем начало загрузки App.tsx
+if (typeof window !== 'undefined' && (window as any).logStep) {
+  (window as any).logStep('App.tsx start');
+}
+
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -5,12 +10,16 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { lazy, Suspense, useEffect } from "react";
 
-console.log('[LOAD] App.tsx module loaded');
+if (typeof window !== 'undefined' && (window as any).logStep) {
+  (window as any).logStep('App imports done');
+}
 
 // Landing загружаем сразу - это главная страница
 import Landing from "@/pages/landing";
 
-console.log('[LOAD] Landing imported');
+if (typeof window !== 'undefined' && (window as any).logStep) {
+  (window as any).logStep('Landing imported');
+}
 
 // Lazy load остальные страницы для code splitting
 const NotFound = lazy(() => import("@/pages/not-found"));
