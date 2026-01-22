@@ -333,6 +333,12 @@
       
       // Глобальный перехватчик ошибок
       window.onerror = function(msg, url, line, col, error) {
+        // "Script error." без деталей - это CORS, игнорируем
+        if (msg === 'Script error.' && !url) {
+          console.warn('[LOAD] CORS script error (no details available)');
+          return true; // Подавляем ошибку
+        }
+        
         var errMsg = msg + ' at ' + (url || 'unknown') + ':' + line;
         window.loadErrors.push(errMsg);
         console.error('[LOAD ERROR]', errMsg, error);
@@ -356,11 +362,11 @@
       
       logStep('HTML parsed');
       
-      // Проверяем поддержку ES modules
-      try {
-        new Function('import.meta');
+      // Проверяем поддержку ES modules безопасно
+      var modulesSupported = 'noModule' in document.createElement('script');
+      if (modulesSupported) {
         logStep('ES modules supported');
-      } catch(e) {
+      } else {
         logStep('WARNING: ES modules may not be supported');
       }
       
@@ -434,8 +440,8 @@
     
     <div id="root"></div>
     
-    <!-- Главный модуль с обработкой ошибок загрузки -->
-    <script type="module" src="/src/main.tsx" onerror="window.logStep && window.logStep('MODULE LOAD ERROR')"></script>
+    <!-- Главный модуль с crossorigin для правильных сообщений об ошибках -->
+    <script type="module" src="/src/main.tsx" crossorigin="anonymous" onerror="window.logStep && window.logStep('MODULE LOAD ERROR')"></script>
     
     <!-- Fallback для браузеров без ES modules -->
     <script nomodule>
