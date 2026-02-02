@@ -9,6 +9,17 @@
   },
   "redirects": [
     {
+      "source": "/api/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "cocktailomaker.ru"
+        }
+      ],
+      "destination": "/api/:path*",
+      "permanent": false
+    },
+    {
       "source": "/:path*",
       "has": [
         {
@@ -20,6 +31,10 @@
         {
           "type": "query",
           "key": "__yandex"
+        },
+        {
+          "type": "header",
+          "key": "x-api-request"
         }
       ],
       "destination": "https://www.cocktailomaker.ru/:path*",

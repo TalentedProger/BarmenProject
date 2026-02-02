@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { memo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Martini, Dice2, BookOpen, GraduationCap, LucideIcon } from "lucide-react";
 
@@ -36,52 +36,20 @@ const features: Feature[] = [
   }
 ];
 
-const FeatureCard = memo(({ feature, index }: { feature: Feature; index: number }) => {
+// Простой компонент без хуков - анимация через CSS
+function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
   const IconComponent = feature.icon;
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const reduce = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) {
-      setVisible(true);
-      return;
-    }
-
-    const el = ref.current;
-    if (!el) return;
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            io.unobserve(entry.target);
-          }
-        }
-      },
-      { threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
 
   return (
     <div 
-      ref={ref}
-      className={`p-2 h-full ${visible ? 'animate-fade-in-up' : 'opacity-0 translate-y-4'}`}
+      className="p-2 h-full animate-fade-in-up"
       style={{
         animationDelay: `${index * 150}ms`,
-        animationFillMode: 'both',
-        willChange: 'opacity, transform'
+        animationFillMode: 'both'
       }}
     >
       <Card 
         className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-transform duration-300 rounded-2xl overflow-hidden hover:-translate-y-1 w-full h-full"
-        style={{
-          transform: 'translate3d(0, 0, 0)',
-          willChange: 'transform'
-        }}
       >
         <CardContent className="p-8 text-center h-full flex flex-col items-center justify-center">
           <div className={`w-16 h-16 ${feature.bgColor} rounded-full flex items-center justify-center mx-auto mb-4 hover:scale-110 transition-transform duration-200 shadow-lg`}>
@@ -93,9 +61,7 @@ const FeatureCard = memo(({ feature, index }: { feature: Feature; index: number 
       </Card>
     </div>
   );
-});
-
-FeatureCard.displayName = "FeatureCard";
+}
 
 const FeaturesSection = memo(() => {
   return (
