@@ -3,7 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 
 // ВСЕ страницы lazy loaded для минимального критического пути
 const Landing = lazy(() => import("@/pages/landing"));
@@ -51,6 +51,72 @@ const LazyRoute = ({ component: Component, ...props }: { component: React.LazyEx
   </Route>
 );
 
+class AppErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { error: unknown }
+> {
+  state = { error: null as unknown };
+
+  static getDerivedStateFromError(error: unknown) {
+    return { error };
+  }
+
+  componentDidCatch(error: unknown) {
+    console.error("[APP] ErrorBoundary caught:", error);
+  }
+
+  render() {
+    if (this.state.error) {
+      const message =
+        this.state.error instanceof Error
+          ? this.state.error.message
+          : typeof this.state.error === "string"
+            ? this.state.error
+            : "Неизвестная ошибка";
+
+      return (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "#0A0A0D",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            fontFamily: "system-ui, -apple-system, sans-serif",
+            padding: 20,
+          }}
+        >
+          <div style={{ fontSize: 48, marginBottom: 16 }}>🍸</div>
+          <div style={{ color: "#00D9FF", fontSize: 18, fontWeight: 600, marginBottom: 8 }}>
+            Ошибка загрузки
+          </div>
+          <div style={{ color: "#888", fontSize: 14, maxWidth: 520, textAlign: "center", marginBottom: 16 }}>
+            {message}
+          </div>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              padding: "12px 24px",
+              background: "#00D9FF",
+              border: "none",
+              borderRadius: 8,
+              color: "#000",
+              cursor: "pointer",
+              fontWeight: 600,
+            }}
+          >
+            Перезагрузить
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 function Router() {
   return (
     <Switch>
@@ -76,14 +142,16 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <div className="min-h-screen bg-background text-foreground">
-          <Toaster />
-          <Router />
-        </div>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <AppErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <div className="min-h-screen bg-background text-foreground">
+            <Toaster />
+            <Router />
+          </div>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </AppErrorBoundary>
   );
 }
 
