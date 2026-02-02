@@ -279,33 +279,13 @@
     }
     </script>
     
-    <!-- КРИТИЧНО: Загрузочный скрипт ДОЛЖЕН быть в head ДО того как Vite вставит свой module -->
+    <!-- Минимальный скрипт - только для fallback на случай если JS не загрузится -->
     <script>
-      // === ПРОСТАЯ СИСТЕМА ЗАГРУЗКИ ===
-      window.appReady = false;
-      
-      // Функция для скрытия загрузчика
-      window.hideLoader = function() {
-        if (window.appReady) return;
-        window.appReady = true;
-        clearTimeout(window.appLoadTimeout);
-        var loader = document.getElementById('initial-loader');
-        if (loader) {
-          loader.style.opacity = '0';
-          loader.style.transition = 'opacity 0.3s ease';
-          setTimeout(function() {
-            loader.style.display = 'none';
-          }, 300);
-        }
-      };
-      
-      // Таймаут безопасности - 10 секунд
-      window.appLoadTimeout = setTimeout(function() {
-        if (window.appReady) return;
-        // Просто скрываем лоадер, даже если что-то пошло не так
-        // React приложение скорее всего уже загрузилось
-        window.hideLoader();
-      }, 10000);
+      // Fallback: скрыть лоадер через 5 сек если JS не выполнился
+      setTimeout(function() {
+        var l = document.getElementById('initial-loader');
+        if (l) l.style.display = 'none';
+      }, 5000);
     </script>
     
     <!-- Fonts - загружаем асинхронно чтобы не блокировать рендеринг -->
