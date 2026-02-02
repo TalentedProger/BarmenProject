@@ -9,39 +9,39 @@
   },
   "redirects": [
     {
-      "source": "/api/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "cocktailomaker.ru"
-        }
-      ],
-      "destination": "/api/:path*",
-      "permanent": false
-    },
-    {
       "source": "/:path*",
       "has": [
         {
           "type": "host",
-          "value": "cocktailomaker.ru"
+          "value": "www.cocktailomaker.ru"
         }
       ],
-      "missing": [
-        {
-          "type": "query",
-          "key": "__yandex"
-        },
-        {
-          "type": "header",
-          "key": "x-api-request"
-        }
-      ],
-      "destination": "https://www.cocktailomaker.ru/:path*",
+      "destination": "https://cocktailomaker.ru/:path*",
       "permanent": true
     }
   ],
   "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://cocktailomaker.ru"
+        },
+        {
+          "key": "Access-Control-Allow-Credentials",
+          "value": "true"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    },
     {
       "source": "/assets/(.*)",
       "headers": [
