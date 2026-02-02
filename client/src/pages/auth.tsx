@@ -180,8 +180,8 @@ export default function Auth() {
     }
   };
 
-  const handleGoogleLoginClick = async () => {
-    await handleGoogleLogin();
+  const handleGoogleLoginClick = () => {
+    handleGoogleLogin();
   };
 
   return (
