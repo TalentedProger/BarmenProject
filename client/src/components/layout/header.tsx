@@ -11,15 +11,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useCallback, useMemo, useEffect, memo } from "react";
 import { useLocation } from "wouter";
 
-// Логирование этапа загрузки
-const logStep = (step: string) => {
-  if (typeof window !== 'undefined' && (window as any).logLoadStep) {
-    (window as any).logLoadStep(step);
-  }
-};
-
-logStep('header.tsx module loaded');
-
 interface HeaderProps {
   useProfileDropdown?: boolean;
 }

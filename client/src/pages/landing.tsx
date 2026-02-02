@@ -1,19 +1,8 @@
-import { lazy, Suspense, useEffect } from "react";
-
-// Логирование этапа загрузки
-const logStep = (step: string) => {
-  if (typeof window !== 'undefined' && (window as any).logLoadStep) {
-    (window as any).logLoadStep(step);
-  }
-};
-
-logStep('landing.tsx module started');
+import { lazy, Suspense } from "react";
 
 // Синхронные компоненты - критически важные для первого рендера
 import Header from "@/components/layout/header";
 import HeroSection from "@/components/landing/HeroSection";
-
-logStep('landing.tsx: Header and HeroSection imported');
 
 // Остальные секции загружаем лениво
 const FeaturesSection = lazy(() => import("@/components/landing/FeaturesSection"));
@@ -33,10 +22,6 @@ function SectionLoader() {
 }
 
 export default function Landing() {
-  useEffect(() => {
-    logStep('Landing component mounted');
-  }, []);
-  
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />

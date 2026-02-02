@@ -58,6 +58,33 @@ function translateCategory(category: string): string {
   return translations[category] || category;
 }
 
+/**
+ * Рассчитывает стоимость ингредиента с учётом единицы измерения
+ * Для жидкостей (unit: 'ml'): pricePerLiter в рублях за литр
+ * Для фруктов/твёрдых (unit: 'kg'/'g'): pricePerLiter в копейках за кг
+ * @param amount - количество в мл или граммах
+ * @param pricePerLiter - цена за литр/кг
+ * @param unit - единица измерения ингредиента из базы ('ml', 'kg', 'g', 'piece')
+ */
+function calculateIngredientCost(amount: number, pricePerLiter: number, unit: string): number {
+  // Для штучных товаров - полная цена за штуку
+  if (unit === 'piece') {
+    return pricePerLiter;
+  }
+  
+  // Базовый расчёт: (количество / 1000) * цена
+  // Для жидкостей: amount в мл, pricePerLiter в ₽/л -> (мл/1000)*₽/л = рубли
+  // Для фруктов: amount в г, pricePerLiter в коп/кг -> (г/1000)*коп/кг = копейки
+  const baseCost = (amount / 1000) * pricePerLiter;
+  
+  // Для фруктов (kg/g) цена хранится в копейках - делим на 100 для получения рублей
+  if (unit === 'kg' || unit === 'g') {
+    return baseCost / 100;
+  }
+  
+  return baseCost;
+}
+
 interface GeneratedRecipe {
   name: string;
   description: string;
@@ -286,8 +313,9 @@ export default function Generator() {
       return sum + (item.amount * (item.ingredient.abv / 100));
     }, 0);
     const totalAbv = totalVolume > 0 ? (totalAlcohol / totalVolume) * 100 : 0;
+    // Используем функцию calculateIngredientCost для правильного расчёта с учётом единицы измерения
     const totalCost = generatedRecipe.ingredients.reduce((sum, item) => {
-      return sum + (item.amount / 1000) * item.ingredient.pricePerLiter;
+      return sum + calculateIngredientCost(item.amount, item.ingredient.pricePerLiter, item.unit);
     }, 0);
 
     const recipeData = {
@@ -528,7 +556,7 @@ export default function Generator() {
                         <div>
                           <div className="text-lg font-bold" style={{ color: '#22c55e' }}>
                             {generatedRecipe.ingredients.reduce((sum, item) => {
-                              return sum + (item.amount / 1000) * item.ingredient.pricePerLiter;
+                              return sum + calculateIngredientCost(item.amount, item.ingredient.pricePerLiter, item.unit);
                             }, 0).toFixed(0)}₽
                           </div>
                           <div className="text-sm text-cream">Стоимость</div>

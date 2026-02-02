@@ -1,5 +1,32 @@
 import type { Ingredient, GlassType } from '@shared/schema';
 
+/**
+ * Рассчитывает стоимость ингредиента с учётом единицы измерения
+ * Для жидкостей (unit: 'ml'): pricePerLiter в рублях за литр
+ * Для фруктов/твёрдых (unit: 'kg'/'g'): pricePerLiter в копейках за кг
+ * @param amount - количество в мл или граммах
+ * @param pricePerLiter - цена за литр/кг (может быть string или number из БД)
+ * @param unit - единица измерения ингредиента из базы ('ml', 'kg', 'g', 'piece')
+ */
+function calculateIngredientCost(amount: number, pricePerLiter: string | number, unit: string): number {
+  const price = typeof pricePerLiter === 'string' ? parseFloat(pricePerLiter) : pricePerLiter;
+  
+  // Для штучных товаров - полная цена за штуку
+  if (unit === 'piece') {
+    return price;
+  }
+  
+  // Базовый расчёт: (количество / 1000) * цена
+  const baseCost = (amount / 1000) * price;
+  
+  // Для фруктов (kg/g) цена хранится в копейках - делим на 100 для получения рублей
+  if (unit === 'kg' || unit === 'g') {
+    return baseCost / 100;
+  }
+  
+  return baseCost;
+}
+
 // Интерфейсы для генератора
 export interface GenerationFilters {
   mode: string;
@@ -257,8 +284,9 @@ export class CocktailGenerator {
       return sum + (item.amount * (parseFloat(item.ingredient.abv.toString()) / 100));
     }, 0);
     const totalAbv = totalVolume > 0 ? (totalAlcohol / totalVolume) * 100 : 0;
+    // Используем функцию calculateIngredientCost для правильного расчёта с учётом единицы измерения
     const totalCost = recipeIngredients.reduce((sum, item) => {
-      return sum + (item.amount / 1000) * parseFloat(item.ingredient.pricePerLiter.toString());
+      return sum + calculateIngredientCost(item.amount, item.ingredient.pricePerLiter, item.ingredient.unit);
     }, 0);
 
     // Рассчитываем вкусовой баланс

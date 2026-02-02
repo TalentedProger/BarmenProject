@@ -3,25 +3,10 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import React, { lazy, Suspense, useEffect } from "react";
-
-// Логирование этапа загрузки
-const logStep = (step: string) => {
-  if (typeof window !== 'undefined' && window.logLoadStep) {
-    window.logLoadStep(step);
-  }
-};
-
-logStep('App.tsx module started');
+import React, { lazy, Suspense } from "react";
 
 // ВСЕ страницы lazy loaded для минимального критического пути
-const Landing = lazy(() => {
-  logStep('Loading Landing chunk');
-  return import("@/pages/landing").then(m => {
-    logStep('Landing chunk loaded');
-    return m;
-  });
-});
+const Landing = lazy(() => import("@/pages/landing"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 const Home = lazy(() => import("@/pages/home"));
 const Constructor = lazy(() => import("@/pages/constructor"));
@@ -156,10 +141,6 @@ function Router() {
 }
 
 function App() {
-  useEffect(() => {
-    logStep('App component mounted');
-  }, []);
-  
   return (
     <AppErrorBoundary>
       <QueryClientProvider client={queryClient}>
