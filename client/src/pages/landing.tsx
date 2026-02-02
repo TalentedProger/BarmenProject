@@ -1,21 +1,8 @@
-// Логируем начало загрузки landing
-if (typeof window !== 'undefined' && (window as any).logStep) {
-  (window as any).logStep('landing.tsx start');
-}
-
 import { lazy, Suspense, useCallback, memo, useEffect, useRef, useState } from "react";
 import Header from "@/components/layout/header";
 
-if (typeof window !== 'undefined' && (window as any).logStep) {
-  (window as any).logStep('Header loaded');
-}
-
 // Критически важные компоненты загружаем сразу
 import HeroSection from "@/components/landing/HeroSection";
-
-if (typeof window !== 'undefined' && (window as any).logStep) {
-  (window as any).logStep('HeroSection loaded');
-}
 
 // Остальные секции загружаем лениво
 const FeaturesSection = lazy(() => import("@/components/landing/FeaturesSection"));

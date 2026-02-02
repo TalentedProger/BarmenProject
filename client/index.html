@@ -279,6 +279,41 @@
     }
     </script>
     
+    <!-- КРИТИЧНО: Загрузочный скрипт ДОЛЖЕН быть в head ДО того как Vite вставит свой module -->
+    <script>
+      // Инициализация глобальных переменных ДО загрузки любых модулей
+      window.appLoadStart = Date.now();
+      window.appReady = false;
+      
+      // Функция для скрытия загрузчика
+      window.hideLoader = function() {
+        window.appReady = true;
+        var loader = document.getElementById('initial-loader');
+        if (loader) {
+          loader.style.opacity = '0';
+          loader.style.transition = 'opacity 0.3s';
+          setTimeout(function() { 
+            if (loader.parentNode) loader.parentNode.removeChild(loader); 
+          }, 300);
+        }
+      };
+      
+      // Таймаут безопасности - если за 30 секунд приложение не загрузилось
+      window.appLoadTimeout = setTimeout(function() {
+        if (window.appReady) return;
+        var loader = document.getElementById('initial-loader');
+        if (loader) {
+          var loadTime = ((Date.now() - window.appLoadStart) / 1000).toFixed(1);
+          loader.innerHTML = '<div style="text-align:center;padding:20px;">' +
+            '<div style="color:#00D9FF;font-size:24px;margin-bottom:16px;">🍸 Cocktailo Maker</div>' +
+            '<div style="color:#ff6b6b;margin-bottom:12px;">Не удалось загрузить приложение</div>' +
+            '<div style="color:#888;font-size:12px;margin-bottom:16px;">Время: ' + loadTime + 's</div>' +
+            '<button onclick="location.reload()" style="padding:10px 24px;background:#00D9FF;border:none;border-radius:8px;color:#000;cursor:pointer;font-weight:500;">Попробовать снова</button>' +
+            '</div>';
+        }
+      }, 30000);
+    </script>
+    
     <!-- Fonts - загружаем асинхронно чтобы не блокировать рендеринг -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -294,158 +329,36 @@
       </div>
     </noscript>
     
-    <!-- Начальный загрузчик - показывается пока React не загрузится -->
-    <div id="initial-loader" style="position:fixed;inset:0;background:#0A0A0D;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:system-ui,sans-serif;z-index:9999;">
-      <div style="color:#00D9FF;font-size:24px;margin-bottom:16px;">🍸 Cocktailo Maker</div>
-      <div id="load-status" style="color:#888;font-size:14px;">Загрузка приложения...</div>
-      <div id="load-progress" style="margin-top:12px;width:200px;height:4px;background:#333;border-radius:2px;overflow:hidden;">
-        <div id="load-bar" style="width:10%;height:100%;background:#00D9FF;transition:width 0.3s;"></div>
+    <!-- Простой загрузчик - минимум логики, максимум надёжности -->
+    <div id="initial-loader" style="position:fixed;inset:0;background:#0A0A0D;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:system-ui,-apple-system,sans-serif;z-index:9999;">
+      <div style="font-size:48px;margin-bottom:16px;">🍸</div>
+      <div style="color:#00D9FF;font-size:20px;font-weight:500;margin-bottom:8px;">Cocktailo Maker</div>
+      <div style="color:#888;font-size:14px;">Загрузка...</div>
+      <div style="margin-top:16px;width:120px;height:3px;background:#333;border-radius:2px;overflow:hidden;">
+        <div style="width:30%;height:100%;background:linear-gradient(90deg,#00D9FF,#00FFB2);animation:loading 1.5s ease-in-out infinite;"></div>
       </div>
-      <div id="load-debug" style="color:#666;font-size:11px;margin-top:20px;max-width:90%;text-align:center;"></div>
+      <style>
+        @keyframes loading {
+          0% { transform: translateX(-100%); }
+          50% { transform: translateX(250%); }
+          100% { transform: translateX(-100%); }
+        }
+      </style>
     </div>
-    
-    <script>
-      // Диагностика загрузки
-      window.loadStart = Date.now();
-      window.loadSteps = [];
-      window.loadErrors = [];
-      
-      function logStep(step) {
-        var time = Date.now() - window.loadStart;
-        window.loadSteps.push(time + 'ms: ' + step);
-        console.log('[LOAD]', time + 'ms:', step);
-        
-        var status = document.getElementById('load-status');
-        var debug = document.getElementById('load-debug');
-        var bar = document.getElementById('load-bar');
-        
-        if (status) status.textContent = step;
-        if (debug) debug.textContent = window.loadSteps.slice(-3).join(' → ');
-        
-        // Прогресс бар
-        if (bar) {
-          var progress = Math.min(90, window.loadSteps.length * 15);
-          bar.style.width = progress + '%';
-        }
-      }
-      
-      window.logStep = logStep;
-      
-      // Глобальный перехватчик ошибок
-      window.onerror = function(msg, url, line, col, error) {
-        // "Script error." без деталей - это CORS, игнорируем
-        if (msg === 'Script error.' && !url) {
-          console.warn('[LOAD] CORS script error (no details available)');
-          return true; // Подавляем ошибку
-        }
-        
-        var errMsg = msg + ' at ' + (url || 'unknown') + ':' + line;
-        window.loadErrors.push(errMsg);
-        console.error('[LOAD ERROR]', errMsg, error);
-        logStep('ERROR: ' + msg);
-        
-        var debug = document.getElementById('load-debug');
-        if (debug) {
-          debug.style.color = '#ff6b6b';
-          debug.innerHTML = 'JS Error: ' + msg + '<br><small>' + (url || '') + ':' + line + '</small>';
-        }
-        return false;
-      };
-      
-      // Перехватчик необработанных промисов
-      window.onunhandledrejection = function(event) {
-        var reason = event.reason ? (event.reason.message || event.reason) : 'Unknown';
-        window.loadErrors.push('Promise rejected: ' + reason);
-        console.error('[LOAD] Unhandled rejection:', reason);
-        logStep('PROMISE ERROR: ' + reason);
-      };
-      
-      logStep('HTML parsed');
-      
-      // Проверяем поддержку ES modules безопасно
-      var modulesSupported = 'noModule' in document.createElement('script');
-      if (modulesSupported) {
-        logStep('ES modules supported');
-      } else {
-        logStep('WARNING: ES modules may not be supported');
-      }
-      
-      // Скрываем загрузчик когда React загрузится
-      window.hideLoader = function() {
-        var loader = document.getElementById('initial-loader');
-        if (loader) {
-          var bar = document.getElementById('load-bar');
-          if (bar) bar.style.width = '100%';
-          setTimeout(function() {
-            loader.style.opacity = '0';
-            loader.style.transition = 'opacity 0.3s';
-            setTimeout(function() { loader.remove(); }, 300);
-          }, 200);
-        }
-      };
-      
-      // Таймаут 8 секунд - показываем предупреждение
-      setTimeout(function() {
-        var loader = document.getElementById('initial-loader');
-        if (loader) {
-          var debug = document.getElementById('load-debug');
-          var status = document.getElementById('load-status');
-          
-          var errorInfo = window.loadErrors.length > 0 
-            ? '<br><span style="color:#ff6b6b">Errors: ' + window.loadErrors.join('; ') + '</span>' 
-            : '';
-          
-          if (debug) {
-            debug.style.color = '#ff6b6b';
-            debug.innerHTML = 'Загрузка занимает много времени.<br>Шаги: ' + window.loadSteps.join(' → ') + errorInfo;
-          }
-          if (status) {
-            status.innerHTML = 'Медленное соединение... <button onclick="location.reload()" style="margin-left:8px;padding:4px 12px;background:#00D9FF;border:none;border-radius:4px;color:#000;cursor:pointer;">Обновить</button>';
-          }
-        }
-      }, 8000);
-      
-      // Критический таймаут 20 секунд
-      setTimeout(function() {
-        var loader = document.getElementById('initial-loader');
-        if (loader) {
-          var status = document.getElementById('load-status');
-          var debug = document.getElementById('load-debug');
-          
-          var diagInfo = 'Steps: ' + window.loadSteps.length + ', Errors: ' + window.loadErrors.length;
-          var userAgent = navigator.userAgent.substring(0, 100);
-          
-          if (status) {
-            status.innerHTML = '<div style="text-align:center;"><div style="color:#ff6b6b;margin-bottom:12px;">Не удалось загрузить приложение</div><button onclick="location.reload()" style="padding:8px 20px;background:#00D9FF;border:none;border-radius:6px;color:#000;cursor:pointer;font-weight:500;">Попробовать снова</button></div>';
-          }
-          if (debug) {
-            debug.innerHTML = '<div style="font-size:10px;color:#666;margin-top:12px;">' + diagInfo + '<br>UA: ' + userAgent + '</div>';
-          }
-        }
-      }, 20000);
-    </script>
-    
-    <!-- Отслеживаем загрузку модуля ДО его выполнения -->
-    <script>
-      logStep('Starting module load');
-      
-      // Проверяем что модули поддерживаются
-      var supportsModules = 'noModule' in document.createElement('script');
-      if (!supportsModules) {
-        logStep('ERROR: ES modules not supported');
-        document.getElementById('load-debug').innerHTML = 
-          '<div style="color:#ff6b6b;">Ваш браузер не поддерживает современный JavaScript.<br>Обновите браузер.</div>';
-      }
-    </script>
     
     <div id="root"></div>
     
-    <!-- Главный модуль с crossorigin для правильных сообщений об ошибках -->
-    <script type="module" src="/src/main.tsx" crossorigin="anonymous" onerror="window.logStep && window.logStep('MODULE LOAD ERROR')"></script>
+    <!-- Главный модуль приложения -->
+    <script type="module" src="/src/main.tsx"></script>
     
     <!-- Fallback для браузеров без ES modules -->
     <script nomodule>
-      document.getElementById('load-status').innerHTML = 
-        '<div style="color:#ff6b6b;">Ваш браузер устарел. Пожалуйста, обновите его для использования приложения.</div>';
-      document.getElementById('load-debug').textContent = 'ES modules not supported';
+      document.getElementById('initial-loader').innerHTML = 
+        '<div style="text-align:center;padding:20px;color:#ff6b6b;font-family:system-ui,sans-serif;">' +
+        '<div style="font-size:48px;margin-bottom:16px;">🍸</div>' +
+        '<div style="margin-bottom:12px;">Ваш браузер устарел</div>' +
+        '<div style="color:#888;font-size:12px;">Обновите браузер для использования приложения</div>' +
+        '</div>';
     </script>
+  </body>
+</html>
