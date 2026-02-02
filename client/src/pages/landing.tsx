@@ -1,5 +1,7 @@
 import { lazy, Suspense, useCallback, memo, useEffect, useRef, useState } from "react";
-import Header from "@/components/layout/header";
+
+// Header lazy loaded для быстрого первого рендера
+const Header = lazy(() => import("@/components/layout/header"));
 
 // Критически важные компоненты загружаем сразу
 import HeroSection from "@/components/landing/HeroSection";
@@ -11,6 +13,26 @@ const CoursesSection = lazy(() => import("@/components/landing/courses-section")
 const NewsletterSection = lazy(() => import("@/components/landing/NewsletterSection"));
 const MobileAppSection = lazy(() => import("@/components/landing/MobileAppSection"));
 const FooterSection = lazy(() => import("@/components/landing/FooterSection"));
+
+// Placeholder для header пока грузится
+const HeaderPlaceholder = memo(() => (
+  <header style={{
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '72px',
+    background: '#121215',
+    borderBottom: '1px solid #2a2a2e',
+    zIndex: 50,
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0 16px'
+  }}>
+    <div style={{ color: '#00D9FF', fontSize: '20px', fontWeight: 500 }}>🍸 Cocktailo Maker</div>
+  </header>
+));
+HeaderPlaceholder.displayName = 'HeaderPlaceholder';
 
 // Простой Loading компонент без анимаций для мобильных
 const SectionLoader = memo(() => (
@@ -63,19 +85,15 @@ function LazyOnVisible({
 }
 
 function Landing() {
-  useEffect(() => {
-    console.log('[LOAD] Landing component mounted');
-  }, []);
-
-  console.log('[LOAD] Landing rendering...');
-
   const handleGetStarted = useCallback(() => {
     window.location.href = "/constructor";
   }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
+      <Suspense fallback={<HeaderPlaceholder />}>
+        <Header />
+      </Suspense>
 
       {/* Hero загружается сразу - критически важен для первого экрана */}
       <HeroSection onGetStarted={handleGetStarted} />
