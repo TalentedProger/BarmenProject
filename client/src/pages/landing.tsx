@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, memo } from "react";
+import { lazy, Suspense } from "react";
 
 // Синхронные компоненты - критически важные для первого рендера
 import Header from "@/components/layout/header";
@@ -13,24 +13,21 @@ const MobileAppSection = lazy(() => import("@/components/landing/MobileAppSectio
 const FooterSection = lazy(() => import("@/components/landing/FooterSection"));
 
 // Простой Loading компонент
-const SectionLoader = memo(() => (
-  <div className="flex items-center justify-center py-16">
-    <div className="text-neon-turquoise/60 text-sm">Загрузка...</div>
-  </div>
-));
-SectionLoader.displayName = "SectionLoader";
+function SectionLoader() {
+  return (
+    <div className="flex items-center justify-center py-16">
+      <div className="text-neon-turquoise/60 text-sm">Загрузка...</div>
+    </div>
+  );
+}
 
-function Landing() {
-  const handleGetStarted = useCallback(() => {
-    window.location.href = "/constructor";
-  }, []);
-
+export default function Landing() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
 
       {/* Hero загружается сразу - критически важен для первого экрана */}
-      <HeroSection onGetStarted={handleGetStarted} />
+      <HeroSection onGetStarted={() => { window.location.href = "/constructor"; }} />
 
       {/* Остальные секции загружаем лениво */}
       <Suspense fallback={<SectionLoader />}>
@@ -59,5 +56,3 @@ function Landing() {
     </div>
   );
 }
-
-export default memo(Landing);

@@ -7,26 +7,14 @@
     "VERCEL": "1",
     "NODE_ENV": "production"
   },
-  "redirects": [
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.cocktailomaker.ru"
-        }
-      ],
-      "destination": "https://cocktailomaker.ru/:path*",
-      "permanent": true
-    }
-  ],
+  "redirects": [],
   "headers": [
     {
       "source": "/api/(.*)",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://cocktailomaker.ru"
+          "value": "*"
         },
         {
           "key": "Access-Control-Allow-Credentials",
