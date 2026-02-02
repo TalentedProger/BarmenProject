@@ -285,16 +285,14 @@
       window.appLoadStart = Date.now();
       window.appReady = false;
       
-      // Функция для скрытия загрузчика - просто скрываем, не удаляем из DOM
+      // Функция для скрытия загрузчика
       window.hideLoader = function() {
         if (window.appReady) return;
         window.appReady = true;
         clearTimeout(window.appLoadTimeout);
         var loader = document.getElementById('initial-loader');
         if (loader) {
-          loader.style.opacity = '0';
-          loader.style.pointerEvents = 'none';
-          loader.style.transition = 'opacity 0.3s';
+          loader.style.display = 'none';
         }
       };
       
