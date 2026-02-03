@@ -29,67 +29,70 @@ const PageLoader = () => null; // Просто ничего не показыв�
 
 class AppErrorBoundary extends React.Component<
   { children: React.ReactNode },
-  { error: unknown }
+  { error: unknown; hasError: boolean }
 > {
-  state = { error: null as unknown };
+  state = { error: null as unknown, hasError: false };
 
   static getDerivedStateFromError(error: unknown) {
-    return { error };
+    console.error("[APP] ErrorBoundary caught:", error);
+    return { error, hasError: true };
   }
 
-  componentDidCatch(error: unknown) {
-    console.error("[APP] ErrorBoundary caught:", error);
+  componentDidCatch(error: unknown, errorInfo: any) {
+    console.error("[APP] ErrorBoundary details:", error, errorInfo);
   }
 
   render() {
-    if (this.state.error) {
-      const message =
-        this.state.error instanceof Error
-          ? this.state.error.message
-          : typeof this.state.error === "string"
-            ? this.state.error
-            : "Неизвестная ошибка";
-
-      return (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "#0A0A0D",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            fontFamily: "system-ui, -apple-system, sans-serif",
-            padding: 20,
-          }}
-        >
-          <div style={{ fontSize: 48, marginBottom: 16 }}>🍸</div>
-          <div style={{ color: "#00D9FF", fontSize: 18, fontWeight: 600, marginBottom: 8 }}>
-            Ошибка загрузки
-          </div>
-          <div style={{ color: "#888", fontSize: 14, maxWidth: 520, textAlign: "center", marginBottom: 16 }}>
-            {message}
-          </div>
-          <button
-            onClick={() => window.location.reload()}
-            style={{
-              padding: "12px 24px",
-              background: "#00D9FF",
-              border: "none",
-              borderRadius: 8,
-              color: "#000",
-              cursor: "pointer",
-              fontWeight: 600,
-            }}
-          >
-            Перезагрузить
-          </button>
-        </div>
-      );
+    // Only show error UI if we actually have an error
+    if (!this.state.hasError || !this.state.error) {
+      return this.props.children;
     }
 
-    return this.props.children;
+    const message =
+      this.state.error instanceof Error
+        ? this.state.error.message
+        : typeof this.state.error === "string"
+          ? this.state.error
+          : "Неизвестная ошибка";
+
+    return (
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          background: "#0A0A0D",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "system-ui, -apple-system, sans-serif",
+          padding: 20,
+          zIndex: 9999,
+        }}
+      >
+        <div style={{ fontSize: 48, marginBottom: 16 }}>🍸</div>
+        <div style={{ color: "#00D9FF", fontSize: 18, fontWeight: 600, marginBottom: 8 }}>
+          Ошибка загрузки
+        </div>
+        <div style={{ color: "#888", fontSize: 14, maxWidth: 520, textAlign: "center", marginBottom: 16 }}>
+          {message}
+        </div>
+        <button
+          onClick={() => window.location.reload()}
+          style={{
+            padding: "12px 24px",
+            background: "#00D9FF",
+            border: "none",
+            borderRadius: 8,
+            color: "#000",
+            cursor: "pointer",
+            fontWeight: 600,
+          }}
+        >
+          Перезагрузить
+        </button>
+      </div>
+    );
   }
 }
 

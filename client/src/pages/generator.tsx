@@ -490,11 +490,16 @@ export default function Generator() {
                       <div className="flex justify-center items-center gap-18 mb-4">
                         {/* Glass Image */}
                         <div className="flex-shrink-0">
-                          <div className="relative w-32 h-48">
+                          <div 
+                            className="relative w-32 h-48"
+                            style={{
+                              filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.15)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))'
+                            }}
+                          >
                             <img
                               src={glassImageMap[generatedRecipe.glass?.shape] || glassImageMap['old-fashioned']}
                               alt={generatedRecipe.glass?.name || 'Glass'}
-                              className="w-full h-full object-contain transition-all duration-1000"
+                              className="w-full h-full object-contain"
                             />
                           </div>
                         </div>
@@ -502,7 +507,7 @@ export default function Generator() {
                         {/* Pyramid Visualization */}
                         <div className="flex-shrink-0">
                           <div 
-                            className="relative w-32 h-48 bg-gradient-to-b from-gray-700/20 to-gray-900/40 border-2 border-gray-500 overflow-hidden shadow-2xl transition-all duration-1000 ease-out"
+                            className="relative w-32 h-48 bg-gradient-to-b from-gray-700/20 to-gray-900/40 border-2 border-gray-500 overflow-hidden"
                             style={{ 
                               clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)',
                               borderRadius: '0 0 8px 8px',

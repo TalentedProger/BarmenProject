@@ -17,7 +17,8 @@
         }
       ],
       "destination": "https://cocktailomaker.ru/:path*",
-      "permanent": true
+      "permanent": true,
+      "statusCode": 308
     }
   ],
   "headers": [
