@@ -1,5 +1,5 @@
 # Robots.txt for Cocktailo Maker
-# https://www.cocktailomaker.ru
+# https://cocktailomaker.ru
 # Рецепты коктейлей, алкогольные и безалкогольные напитки
 
 User-agent: *
@@ -20,10 +20,11 @@ Disallow: /auth
 Disallow: /api/
 Disallow: /user-recipe/
 
-# Yandex specific
+# Yandex specific - ВАЖНО для индексации
 User-agent: Yandex
 Allow: /
 Crawl-delay: 0.5
+Clean-param: utm_source&utm_medium&utm_campaign&yclid&gclid
 
 # Google specific  
 User-agent: Googlebot
@@ -33,8 +34,12 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
-# Sitemap location
-Sitemap: https://www.cocktailomaker.ru/sitemap.xml
+# Mail.ru bot
+User-agent: Mail.RU_Bot
+Allow: /
 
-# Host directive for Yandex
-Host: https://www.cocktailomaker.ru
+# Sitemap location (ВАЖНО: без www!)
+Sitemap: https://cocktailomaker.ru/sitemap.xml
+
+# Host directive for Yandex (ГЛАВНЫЙ ДОМЕН - без www)
+Host: https://cocktailomaker.ru
