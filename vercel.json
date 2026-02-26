@@ -18,9 +18,61 @@
       ],
       "destination": "https://cocktailomaker.ru/:path*",
       "statusCode": 308
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "coctailomaker.vercel.app"
+        }
+      ],
+      "destination": "https://cocktailomaker.ru/:path*",
+      "statusCode": 301
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "cocktailomaker.vercel.app"
+        }
+      ],
+      "destination": "https://cocktailomaker.ru/:path*",
+      "statusCode": 301
     }
   ],
   "headers": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "coctailomaker.vercel.app"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "cocktailomaker.vercel.app"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
     {
       "source": "/",
       "headers": [

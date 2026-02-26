@@ -1,6 +1,7 @@
 # Robots.txt for Cocktailo Maker
 # https://cocktailomaker.ru
 # Рецепты коктейлей, алкогольные и безалкогольные напитки
+# Индексация: только cocktailomaker.ru (vercel.app заблокирован через X-Robots-Tag в vercel.json)
 
 User-agent: *
 Allow: /
@@ -38,8 +39,8 @@ Allow: /
 User-agent: Mail.RU_Bot
 Allow: /
 
-# Sitemap location (ВАЖНО: без www!)
+# Sitemap location (БЕЗ www!)
 Sitemap: https://cocktailomaker.ru/sitemap.xml
 
-# Host directive for Yandex (ГЛАВНЫЙ ДОМЕН - без www)
+# Host directive for Yandex (ГЛАВНЫЙ ДОМЕН - единственный домен для индексации)
 Host: https://cocktailomaker.ru
