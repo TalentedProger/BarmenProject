@@ -17,7 +17,18 @@
         }
       ],
       "destination": "https://cocktailomaker.ru/:path*",
-      "statusCode": 308
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.cocktailomaker.ru"
+        }
+      ],
+      "destination": "https://cocktailomaker.ru/",
+      "permanent": true
     },
     {
       "source": "/:path*",
@@ -28,7 +39,7 @@
         }
       ],
       "destination": "https://cocktailomaker.ru/:path*",
-      "statusCode": 301
+      "permanent": true
     },
     {
       "source": "/:path*",
@@ -39,7 +50,12 @@
         }
       ],
       "destination": "https://cocktailomaker.ru/:path*",
-      "statusCode": 301
+      "permanent": true
+    },
+    {
+      "source": "/course/mixology-basics",
+      "destination": "https://cocktailomaker.ru/course/mixology-basics",
+      "permanent": false
     }
   ],
   "headers": [

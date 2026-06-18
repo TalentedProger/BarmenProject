@@ -21,7 +21,9 @@
     "init:alkoteka": "tsx scripts/init-alkoteka-wines.ts",
     "parse:alkoteka": "tsx scripts/parse-alkoteka-product.ts",
     "parse:batch": "tsx scripts/parse-batch-alkoteka.ts",
-    "parse:catalog": "tsx scripts/parse-alkoteka-catalog.ts"
+    "parse:catalog": "tsx scripts/parse-alkoteka-catalog.ts",
+    "generate:sitemap": "tsx scripts/generate-sitemap.ts",
+    "seo:check": "echo 'Проверка SEO...' && npm run generate:sitemap"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

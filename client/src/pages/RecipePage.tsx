@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getFullCocktailById, FullCocktailData } from "@/data/cocktails-full";
+import RecipeStructuredData from "@/components/RecipeStructuredData";
+import RecipeMeta from "@/components/RecipeMeta";
 
 const TasteSemicircles = ({ taste }: { taste: any }) => {
   const characteristics = [
@@ -234,6 +236,27 @@ export default function RecipePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0A0A0D] via-[#1B1B1F] to-[#0A0A0D]">
+      {/* Динамические мета-теги для SEO */}
+      <RecipeMeta 
+        recipe={recipe}
+        rating={{
+          average: averageRating,
+          count: reviewCount
+        }}
+      />
+      
+      {/* Структурированные данные для SEO */}
+      <RecipeStructuredData 
+        recipe={recipe}
+        rating={{
+          average: averageRating,
+          count: reviewCount
+        }}
+        author="Cocktailo Maker"
+        prepTime="PT5M"
+        totalTime="PT10M"
+      />
+      
       <div className="absolute top-6 left-6 z-20 md:top-6 md:left-6">
         <Button
           onClick={() => window.history.back()}
