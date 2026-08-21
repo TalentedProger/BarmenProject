@@ -20,8 +20,7 @@ const STATIC_PAGES = [
   { url: '/catalog', priority: '0.9', changefreq: 'daily' },
   { url: '/courses', priority: '0.85', changefreq: 'weekly' },
   { url: '/course/mixology-basics', priority: '0.8', changefreq: 'monthly' },
-  { url: '/favorites', priority: '0.7', changefreq: 'weekly' },
-  { url: '/home', priority: '0.7', changefreq: 'daily' },
+  // Исключены: /favorites, /home - личные страницы
 ];
 
 // Модули курса

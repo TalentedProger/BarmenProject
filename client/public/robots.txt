@@ -4,18 +4,20 @@
 # Индексация: только cocktailomaker.ru (vercel.app заблокирован через X-Robots-Tag в vercel.json)
 
 User-agent: *
-Allow: /
-Allow: /constructor
-Allow: /generator
+
+# ДОЛЖНЫ ИНДЕКСИРОВАТЬСЯ - важные SEO страницы
 Allow: /catalog
 Allow: /courses
-Allow: /course/
+Allow: /course/mixology-basics
+Allow: /course/mixology-basics/module/1
+Allow: /course/mixology-basics/module/2
+Allow: /course/mixology-basics/module/3
 Allow: /recipe/
-Allow: /favorites
-Allow: /home
-Allow: /profile
+Allow: /constructor
+Allow: /generator
 
-# Disallow admin, auth and API
+# НЕ ДОЛЖНЫ ИНДЕКСИРОВАТЬСЯ - личные и служебные страницы
+Disallow: /profile
 Disallow: /admin
 Disallow: /auth
 Disallow: /api/
