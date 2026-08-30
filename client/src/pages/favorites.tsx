@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useLocation } from "wouter";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import PageMeta from "@/components/PageMeta";
 import RecipeCard from "@/components/recipe/recipe-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -78,6 +79,11 @@ export default function Favorites() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0A0A0D] via-[#1B1B1F] to-[#0A0A0D]">
+      <PageMeta 
+        title="Избранные рецепты коктейлей — моя коллекция напитков | Cocktailo Maker"
+        description="Ваша персональная коллекция избранных рецептов коктейлей. Сохраняйте любимые алкогольные и безалкогольные напитки, создавайте собственную барную карту и делитесь с друзьями."
+        keywords="избранные коктейли, мои рецепты, сохраненные коктейли, коллекция напитков, любимые коктейли, favorite cocktails, saved recipes, cocktail collection"
+      />
       <Header />
       
       <main className="container mx-auto px-4 py-8 pt-32">

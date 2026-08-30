@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import PageMeta from "@/components/PageMeta";
 import { BookOpen, Clock, Users, Award, TrendingUp, Youtube, Star, ExternalLink, WandSparkles } from "lucide-react";
 import { Link } from "wouter";
 import { useEffect, useRef, useState } from "react";
@@ -135,6 +136,11 @@ export default function Courses() {
 
   return (
     <div className="min-h-screen bg-night-blue text-ice-white">
+      <PageMeta 
+        title="Курсы миксологии и барменского дела онлайн — обучение с сертификатом | Cocktailo Maker"
+        description="Профессиональные курсы миксологии и барменского дела онлайн. Изучите техники приготовления коктейлей, историю напитков, декор и флейринг. Обучение от ведущих барменов с выдачей сертификата."
+        keywords="курсы миксологии, курсы барменов, обучение барменскому делу, школа барменов онлайн, курсы коктейлей, миксология обучение, bartender course, mixology course, сертификат бармена"
+      />
       <Header />
       
       {/* Hero Section */}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback, useDeferredValue, use
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import PageMeta from "@/components/PageMeta";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -256,6 +257,11 @@ export default function Catalog() {
 
   return (
     <div className="min-h-screen bg-night-blue text-ice-white">
+      <PageMeta 
+        title="Каталог коктейлей — 1000+ рецептов алкогольных и безалкогольных напитков | Cocktailo Maker"
+        description="Полный каталог рецептов коктейлей: Мохито, Маргарита, Космополитен, Негрони, Пина Колада, Aperol Spritz и 1000+ других напитков. Рецепты с фото, пошаговыми инструкциями, рейтингами и отзывами."
+        keywords="каталог коктейлей, рецепты коктейлей, алкогольные коктейли, безалкогольные коктейли, классические коктейли, IBA коктейли, мохито, маргарита, космополитен, пина колада, cocktail catalog, cocktail recipes"
+      />
       <Header />
       
       <section className="pt-48 pb-16 bg-gradient-to-b from-night-blue to-charcoal">

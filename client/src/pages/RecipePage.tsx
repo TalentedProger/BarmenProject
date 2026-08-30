@@ -10,6 +10,13 @@ import { getFullCocktailById, FullCocktailData } from "@/data/cocktails-full";
 import RecipeStructuredData from "@/components/RecipeStructuredData";
 import RecipeMeta from "@/components/RecipeMeta";
 
+// Валидация structured data в dev режиме
+if (import.meta.env.DEV) {
+  import("@/utils/validateStructuredData").then(({ logValidationResults }) => {
+    window.validateRecipeData = logValidationResults;
+  });
+}
+
 const TasteSemicircles = ({ taste }: { taste: any }) => {
   const characteristics = [
     { label: "Сладость", value: taste.sweetness, color: "#FF006E", shadowColor: "rgba(255, 0, 110, 0.6)" },

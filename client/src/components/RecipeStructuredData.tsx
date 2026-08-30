@@ -54,16 +54,34 @@ export default function RecipeStructuredData({
 }: RecipeStructuredDataProps) {
   
   useEffect(() => {
+    // Формируем полный URL изображения
+    const getFullImageUrl = (imagePath: string): string => {
+      if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        return imagePath;
+      }
+      // Убираем начальный слэш если есть
+      const cleanPath = imagePath.startsWith('/') ? imagePath.substring(1) : imagePath;
+      return `https://cocktailomaker.ru/${cleanPath}`;
+    };
+
+    const imageUrl = getFullImageUrl(recipe.image);
+    
     // Формируем структурированные данные
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "Recipe",
       "name": recipe.name,
       "description": recipe.description || `${recipe.name} - рецепт коктейля с пошаговыми инструкциями. ${recipe.tags.join(', ')}.`,
+      
+      // КРИТИЧЕСКИ ВАЖНО: image должен быть массивом с абсолютными URL
       "image": [
-        `https://cocktailomaker.ru${recipe.image}`,
-        // Можно добавить дополнительные размеры изображений
+        imageUrl,
+        // Google рекомендует предоставлять изображения в разных форматах
+        imageUrl, // 1x1
+        imageUrl, // 4x3
+        imageUrl  // 16x9
       ],
+      
       "author": {
         "@type": "Organization",
         "name": author,
@@ -78,17 +96,18 @@ export default function RecipeStructuredData({
       "recipeCuisine": "Международная",
       "keywords": recipe.tags.join(', '),
       
-      // Ингредиенты
+      // Ингредиенты - ОБЯЗАТЕЛЬНОЕ ПОЛЕ
       "recipeIngredient": recipe.ingredients.map(ing => 
         `${ing.amount} ${ing.name}`
       ),
       
-      // Пошаговые инструкции
+      // Пошаговые инструкции - ОБЯЗАТЕЛЬНОЕ ПОЛЕ
       "recipeInstructions": recipe.steps.map(step => ({
         "@type": "HowToStep",
         "position": step.step,
         "text": step.text,
-        "name": `Шаг ${step.step}`
+        "name": `Шаг ${step.step}`,
+        "url": `https://cocktailomaker.ru/recipe/${recipe.id}#step-${step.step}`
       })),
       
       // Оборудование

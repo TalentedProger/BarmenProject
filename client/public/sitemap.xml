@@ -39,6 +39,12 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>https://cocktailomaker.ru/favorites</loc>
+    <lastmod>2026-08-21</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://cocktailomaker.ru/course/mixology-basics</loc>
     <lastmod>2026-08-21</lastmod>
     <priority>0.8</priority>

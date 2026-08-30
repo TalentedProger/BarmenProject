@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import PageMeta from "@/components/PageMeta";
 import { CompactGlassSelector } from "@/components/cocktail/compact-glass-selector";
 import IngredientSelector from "@/components/cocktail/ingredient-selector";
 import IngredientRecommendations from "@/components/cocktail/ingredient-recommendations";
@@ -189,6 +190,11 @@ export default function Constructor() {
         width: '100%'
       }}
     >
+      <PageMeta 
+        title="Конструктор коктейлей онлайн — создай свой рецепт напитка | Cocktailo Maker"
+        description="Бесплатный онлайн конструктор коктейлей с 800+ ингредиентами. Создавайте авторские рецепты алкогольных и безалкогольных напитков с визуализацией, автоматическим расчётом крепости и пропорций."
+        keywords="конструктор коктейлей, создать коктейль, рецепт коктейля онлайн, калькулятор крепости, cocktail builder, create cocktail, миксология онлайн, cocktail creator"
+      />
       <Header />
       
       <section 

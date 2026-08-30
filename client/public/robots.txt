@@ -8,15 +8,15 @@ User-agent: *
 # ДОЛЖНЫ ИНДЕКСИРОВАТЬСЯ - важные SEO страницы
 Allow: /catalog
 Allow: /courses
-Allow: /course/mixology-basics
-Allow: /course/mixology-basics/module/1
-Allow: /course/mixology-basics/module/2
-Allow: /course/mixology-basics/module/3
+Allow: /course/
 Allow: /recipe/
 Allow: /constructor
 Allow: /generator
+Allow: /favorites
 
 # НЕ ДОЛЖНЫ ИНДЕКСИРОВАТЬСЯ - личные и служебные страницы
+Disallow: /home
+Disallow: /mobile
 Disallow: /profile
 Disallow: /admin
 Disallow: /auth

@@ -48,21 +48,6 @@
       "has": [
         {
           "type": "host",
-          "value": "www.cocktailomaker.ru"
-        }
-      ],
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
           "value": "coctailomaker.vercel.app"
         }
       ],
@@ -190,7 +175,7 @@
       ]
     },
     {
-      "source": "/favorites",
+      "source": "/profile",
       "headers": [
         {
           "key": "X-Robots-Tag",
@@ -199,7 +184,16 @@
       ]
     },
     {
-      "source": "/home/mobile",
+      "source": "/home",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/mobile",
       "headers": [
         {
           "key": "X-Robots-Tag",
@@ -209,6 +203,15 @@
     },
     {
       "source": "/user-recipe/:path*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/auth/:path*",
       "headers": [
         {
           "key": "X-Robots-Tag",

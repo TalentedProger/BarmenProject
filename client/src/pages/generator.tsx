@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import PageMeta from "@/components/PageMeta";
 import GeneratorFilters, { type GenerationFilters } from "@/components/generator/GeneratorFilters";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -377,6 +378,11 @@ export default function Generator() {
 
   return (
     <div className="min-h-screen bg-night-blue text-ice-white">
+      <PageMeta 
+        title="Генератор коктейлей — автоматическое создание рецептов напитков | Cocktailo Maker"
+        description="Умный генератор коктейлей с AI. Создавайте уникальные рецепты алкогольных и безалкогольных напитков по вашим предпочтениям: крепость, вкус, ингредиенты, цена. Персонализированные рекомендации коктейлей."
+        keywords="генератор коктейлей, создать коктейль автоматически, AI коктейли, рецепт по ингредиентам, подбор коктейля, cocktail generator, random cocktail, персональный коктейль"
+      />
       <Header />
       
       <section className="pt-48 pb-16 bg-gradient-to-b from-graphite to-night-blue">

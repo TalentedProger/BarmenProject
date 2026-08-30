@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import PageMeta from "@/components/PageMeta";
 import { 
   BookOpen, 
   Clock, 
@@ -297,6 +298,11 @@ export default function CourseMixologyBasics() {
 
   return (
     <div className="min-h-screen bg-night-blue text-ice-white">
+      <PageMeta 
+        title="Основы миксологии — профессиональный курс барменского дела онлайн | Cocktailo Maker"
+        description="Полный курс основ миксологии: 12 модулей, 6 недель обучения. Изучите техники приготовления коктейлей, историю напитков, работу с ингредиентами, барное оборудование. Сертификат бармена после окончания."
+        keywords="основы миксологии, курс барменов, обучение миксологии, школа барменов, как стать барменом, миксология для начинающих, bartender basics, mixology course online"
+      />
       <Header />
       
       {/* Hero Section */}
